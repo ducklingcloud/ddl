@@ -1,0 +1,56 @@
+<html>
+<head>
+	<title>科研在线-文档库</title>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+	<style>
+		table.shareFile {font-family: Helvetica, Arial, sans-serif, 微软雅黑 !important; width: 600px; font-size:13px; margin:0 auto;}
+		table.shareFile tr td {padding:10px 30px;}
+	</style>
+</head>
+<body>
+	<table cellspacing="0" cellpadding="0" class="shareFile">
+		<tr>
+			<td>
+			<script>
+			</script>
+				<table width="100%" style="background: #333; padding: 0;">
+					<tr>
+						<td width="542" height="40">
+						<img style="border: 0; outline: 0; margin: 0 0 2px 2px; padding: 0;" width="180" height="30" title="科研在线" alt="科研在线" src="http://ddl.escience.cn/jsp/aone/images/logo-lion-w.png" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="font-family: LucidaGrande, tahoma, verdana, arial, sans-serif, 微软雅黑; padding: 10px 30px;">
+				<table width="100%">
+					<tr>
+						<td>
+							<span>尊敬的用户#@userName@#</span>
+						</td>
+					</tr>
+					<tr>
+						<td >
+							<span>您的文件已成功分享给：</span>
+							<span>#@shareUser@#</span>
+						</td>
+					</tr>
+					<tr>
+						<td >
+							<span>文档下载链接如下:</span>
+						</td>
+					</tr>
+					<for items="#@fileInfos@#" var="fileInfo">
+						<tr>
+							<td>
+								<a href="#@fileInfo.fileUrl@#" target="_blank">#@fileInfo.fileName@#</a>
+							</td>
+						</tr>
+					</for>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+/*banner*/
+a#logo .caret {
+    background:url(../images/trigle.png);
+    width:24px; height:40px;
+    display:inline-block; margin:4px 0 0 155px; padding:0;
+    float:left;
+    border:none;
+}
+/* PullDown Main Menu */
+.headerBar {
+	background:#1D1D1D; padding:40px 40px 40px 0; 
+	position:fixed; top:25px; left:0; right:0;
+	z-index:99999; border-radius:0;
+}
+.headerBar li {float:left; list-style:none; margin-right:30px;}
+.headerBar li a {padding:3px 20px; text-decoration:none;}
+.headerBar .header-block {display:block; width:120px; height:120px; }
+.headerBar .header-block .logo {background:url(../images/escience-big-icon-l.png) 10px 0 no-repeat; width:100px; height:100px; display:block;}
+.headerBar .header-block.escience {background:url(../images/escience.png) 20px 30px #da8302 no-repeat;}
+.headerBar .header-block.escience .logo{background-position:10px 100px;}
+.headerBar .header-block.dhome {background:#71AA00;}
+.headerBar .header-block.dhome .logo {background-position:10px -400px;}
+.headerBar .header-block.ddl {background:#4084C9;}
+.headerBar .header-block.ddl .logo {background-position:10px 0;}
+.headerBar .header-block.csp {background:#CC0033;}
+.headerBar .header-block.csp .logo {background-position:10px -100px;}
+.headerBar .header-block.rol {background:#640F6C;}
+.headerBar .header-block.rol .logo {background-position:10px -200px;}
+.headerBar .header-block .header-text {
+	display:block; color:#fff; text-align:center; 
+	position:relative; top:-5px;
+}
+.headerBar ul li {float:left; margin-right:40px;}

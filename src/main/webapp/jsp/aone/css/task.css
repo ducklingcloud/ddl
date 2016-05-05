@@ -1,0 +1,147 @@
+@charset 'utf-8';
+
+#editform {padding:3em 2em 5em;}
+table#taskTable {width:100%; margin:0 auto;}
+table#taskTable th, table#taskTable td {padding-top:2em;}
+table#taskTable th {font-weight:bold; width:8em; text-align:right; padding-right:2em; vertical-align:top;}
+table#taskTable ul.taskPersonList {
+	list-style:none; margin:0; padding:0;
+}
+table#taskTable ul.taskPersonList li {
+	float:left; margin:0 10px 10px 0px;
+}
+table#taskTable #taskTitle,table#taskTable #newTaskContent,table#taskTable textarea[name="newTaskContent"],
+table#taskTable textarea[name="taskContent"],table#taskTable #personList {width:395px;}
+
+table#taskTable ul#personList,table#taskTable ul.token-input-list-facebook {
+	min-height:25px; 
+	list-style:none; float:left;
+	padding:0; margin:0; 
+	border:1px solid #8496BA;
+}
+
+table#taskTable #memberList {line-height:2em; padding-left:2em; display:inline-block;}
+table#taskTable ul#personList li,table#taskTable ul.token-input-list-facebook li {
+	border:1px solid #CCD5E4; border-radius:5px; 
+	float:left; margin:3px; padding:1px 3px;
+}
+table#taskTable ul.token-input-list-facebook li.token-input-input-token-facebook {border:none; background:none; margin:0; padding:0;}
+table#taskTable ul#personList li .deleteName，,table#taskTable ul.token-input-list-facebook li .deleteName {
+	width:10px; padding:1px 3px; margin-left:5px; 
+	color:#A6B3CF; cursor:pointer;
+}
+table#taskTable input[name="addTaskItems"],table#taskTable input[name="deleteTaskItems"] {vertical-align:top;}
+div.token-input-dropdown-facebook {width:600px;}
+#slider div.token-input-dropdown-facebook {width:200px;}
+/*task_items.jsp listView*/
+ul.taskList {list-style:none; padding:0; margin:0;}
+ul.taskList li {
+	border:1px solid #ddd; margin:10px;
+	border-top-left-radius:5px; border-top-right-radius:5px; 
+	padding-bottom:-1em;
+	cursor:pointer;
+}
+ul.taskList li:last-child {}
+ul.taskList li.taskHeader {background:#eee;}
+ul.taskList li .task_main {float:left; padding:0.8em;}
+ul.taskList li .task_main.checked{text-decoration:line-through;}
+ul.taskList li .task_main.checked .task_title h2,ul.taskList li .task_main.checked {color:#999;}
+ul.taskList li .task_main.task_left {width:60%; padding:1em 0em 0.5em 3em; }
+ul.taskList li .task_main.task_mid {width:20%; padding:1em 0em}
+ul.taskList li .task_main.task_right {float:right; padding:1em 2em 0.5em 0em;}
+ul.taskList li.taskHeader div {font:bold 10pt "宋体"; }
+
+ul.taskList li .task_status {
+	background:url(../images/task_icons.png) 0 -3px no-repeat;
+	height:23px; color:#333; line-height:23px; 
+	cursor:pointer;
+}
+ul.taskList li .task_status.unchecked {}
+ul.taskList li .task_status.checked {
+	background-position:0 -33px; color:#ccc; 
+	text-decoration:line-through;
+}
+ul.taskList li div.task_status.unchecked, 
+ul.taskList li div.task_status.checked {padding-left:3em;  margin-left:1em;}
+ul.taskList li div.task_status.unlocked,
+ul.taskList li div.task_status.locked
+ {
+	float:right; 
+	background-position:0 -213px; 
+	width:250px; padding-left:3em; 
+	opacity:0.5; filter: alpha(opacity=50);
+}
+ul.taskList li div.task_status.locked
+ {
+	background-position:0 -183px; 
+}
+ul.taskList li .task_title h2{ padding:0; margin:0; font:bold 1.3em "微软雅黑"; color:#333;}
+ul.taskList li .task_type {float:left;}
+ul.taskList li .type.text {font:normal 12px "宋体";}
+ul.taskList li .task_type .type {
+	margin-left:-30px;
+	background:url(../images/task_icons.png) 0 -243px no-repeat;
+	width:30px; height:30px; display:block;
+	opacity:0.6; filter: alpha(opacity=60);
+	line-height:2.5em; height:2.5em;
+	float:left;
+}
+ul.taskList li .task_type .type.independent {}
+ul.taskList li .task_type .type.share {background-position:0 -276px;}
+ul.taskList li .task_time {}
+ul.taskList li .task_owner {margin-top:0.5em; color:#999;}
+ul.taskList li .task_executor h4 {margin:0; padding:0;}
+ul.taskList li .task_oper {float:right;}
+ul.taskList li .task_oper a {
+	background:url(../images/task_icons.png) 0 -66px no-repeat; 
+	width:30px; height:20px; display:inline-block; float:left;
+	opacity:0.1; filter: alpha(opacity=10);
+}
+ul.taskList li .task_oper a.task_showDetail {}
+ul.taskList li .task_oper a.task_delete {background-position:0 -96px;}
+ul.taskList li .task_oper a.task_edit {background-position:0 -126px;}
+ul.taskList li .task_oper a.task_setting {background-position:0 -156px;}
+
+ul.taskList li:hover .task_oper a  {opacity:0.8; filter: alpha(opacity=80);}
+
+ul.taskList li.task_detail {
+	margin:-1em 10px 0 10px; padding:0.8em; 
+	border-radius:0;
+	border-bottom-left-radius:5px; border-bottom-right-radius:5px; 
+	background:#f9f9f9;
+}
+/* ul.taskList li:hover .task_detail {background:transparent;} */
+ul.taskList li.task_detail ul {list-style:none; margin-bottom:0; padding:0;}
+ul.taskList li.task_detail ul li {padding:0em 0 0em 3em;  border:none;}
+ul.taskList li.task_detail ul li a {float:left;}
+ul.taskList li.task_detail ul.task_detail_content {float:left; width:60%; margin-left:2em; border-right:1px solid #eee;}
+ul.taskList li.task_detail ul.task_detail_content li div {float:left; margin-left:1em; line-height:2em;}
+ul.taskList li.task_detail ul.task_detail_content li div.acceptOrNot {margin-left:-3em;}
+ul.taskList li.task_detail ul.task_detail_process {float:left; width:30%; border-left:1px solid #eee; margin-left:-1px;}
+ul.taskList li.task_detail ul.task_detail_process li {padding:0;}
+ul.taskList li.task_detail .acceptOrNot span {color:#f90; margin-left:-2em;}
+
+ul.taskList li.taskListShow a {color:#333; display:block; padding:0; margin:0;}
+/* ul.taskList li.taskListShow:hover {background:#f5f5ff; } */
+
+.executor {float:left; margin:5px 10px 5px 0; width:100px; text-align:right;}
+.ui-progressbar { 
+	height:15px; width:120px; line-height:1em;
+	text-align: left; overflow: hidden; 
+	margin:8px 10px; 
+	float:left;
+}
+#taskTable a.task_delete {
+	background:url(../images/task_icons.png) 0 -96px no-repeat; 
+	width:30px; height:20px; display:inline-block;
+}
+
+#pagecontent h1 {border-bottom:1px solid #ccc; padding:0.5em;}
+.newFunc {
+    background: url("../images/newFunc-small.png") no-repeat scroll right top transparent;
+    height: 21px;
+    position: relative;
+    right: -27px;
+    top: -15px;
+    width: 21px;
+}

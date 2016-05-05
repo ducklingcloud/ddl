@@ -1,0 +1,14 @@
+@charset 'utf-8';
+/* IE 7 and lower hack */
+
+#macro-innerWrapper { float:left; width:auto; }
+
+.iconLynx { display:block; width:25px; padding-right:0; }
+.iconLynxTag { display:block; width:20px; padding-right:0; }
+.icon13 { display:block; width:13px; padding-right:0; }
+
+#navigation #stdNav a { position:relative; }
+#navigation #resMore { position:absolute; right:0; top:0; margin:0; padding:0; }
+
+.toolHolder { overflow-y: auto; }
+#tagQueryHolder { height:50px; }

@@ -1,0 +1,794 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="http://localhost:8080/dct/help/lynxIntro/lynxIntro.css" type="text/css" />
+<script type="text/javascript">
+	/* Localized javascript strings: LocalizedStrings[] */
+	var LocalizedStrings = {
+"javascript.site.properties.siteconfig":"站点应用配置",
+"javascript.slimbox.error":"<h2>错误</h2>您的请求执行时有问题。<br />请重试。",
+"javascript.slimbox.remoteRequest":"{1} 的远程请求 {0}",
+"javascript.grant.write":"写权限",
+"javascript.update.choosetag":"请选择标签!",
+"javascript.public.fullscreen.cancel":"退出全屏",
+"javascript.searchclb.grant.condition":"请选择授权的条件！",
+"javascript.grant.tip.adduser":"选择用户/用户组",
+"javascript.sort.descending":"降序，点击反向排序",
+"javascript.window.info":"提示",
+"javascript.grant.select.noadd":"请选择要添加的用户/组后再执行添加操作！",
+"javascript.searchclb.addpage":"添加到页面",
+"javascript.quick.bottom":"末节",
+"javascript.newpage.new":"创建新页面",
+"javascript.grant.noselect":"请选择要删除的用户后再执行删除权限操作！",
+"javascript.addpage.enter":"页面名称不能为空，请重新输入！",
+"javascript.grant.tree.title":"虚拟组织树",
+"javascript.grant.name":"用户/组名称",
+"javascript.hint.emptycombo":"请选择上级页面（按向下键可以列出所有页面）",
+"javascript.button.submit":"确定",
+"javascript.page.alledit.tip":"授权所有人可查看和可编辑权限",
+"javascript.page.view.text":"查看",
+"javascript.quick.top":"首节",
+"javascript.edit.areyousure":"没有点击保存按钮，您的修改将会丢失。 您确信需要退出页面吗？",
+"javascript.error.sms.fail":"发送短信失败，可能是系统太忙！",
+"javascript.grant.delete.error":"删除权限时出错！",
+"javascript.grant.tip.add":"添加权限",
+"javascript.slimbox.directLink":"直接链接到目标",
+"javascript.grant.window.delete":"取消所选用户/用户组",
+"javascript.searchclb.taget":"请选择目标页面！",
+"javascript.site.properties.sysconfig":"系统参数配置",
+"javascript.grant.select.nodelete":"请选择要取消的用户/组后再执行取消操作！",
+"javascript.page.warning.priv":"请选择授予的权限类型！",
+"javascript.error.sms.nomobile":"此用户在本系统中没有保存手机号，无法发送短信，请联系该用户将手机号输入到本系统中！",
+"javascript.grant.button.grant.tip":"授权选择对象文档访问权限",
+"javascript.myresult.confirm":"确实要删除所选中的文档吗?",
+"javascript.tip.default.title":"更多...",
+"javascript.edit.findandreplace.nomatch":"没有找到匹配结果！",
+"javascript.searchclb.choose":"请选择文档!",
+"javascript.info.samename":"重命名页面名称不能和原有页面相同！",
+"javascript.sort.ascending":"升序，点击反向排序",
+"javascript.upload.choose.title":"请输入标题！",
+"javascript.grant.window.deleteall":"取消所有用户/用户组",
+"javascript.info.renameto":"重命名页面名称不能为空！",
+"javascript.version.noright":"没有任何实体拥有此文档权限，不能修改权限",
+"javascript.grant.read":"读权限",
+"javascript.quick.previous":"前一节",
+"javascript.myresult.remove":"确实要将所选中的文档从个人结果集中移除吗?",
+"javascript.dmlform.savewaring":"保存失败,内容中有form只能使用保存退出",
+"javascript.grant.confirm":"您确信需要删除这些权限吗？",
+"javascript.pagename.rules.tip":"(页面名只允许.a-zA-Z_-和语言字符,字符数不大于255)",
+"javascript.searchclb.myresult":"确实要将所选中的文档放入个人结果集中吗?",
+"javascript.upload.addtag":"请输入标签名!",
+"javascript.version.modify":"修改权限",
+"javascript.navpage.hint.emptycombo":"请选择导航页面（按向下键可以列出所有页面）",
+"javascript.grant.list.title":"已选用户/用户组列表",
+"javascript.grant.window.title":"授权虚拟组织文档权限",
+"javascript.page.edit.text":"编辑",
+"javascript.newpage.maxlength":"页面名称长度不能超多32字符（英文字符长度），请重新输入！",
+"javascript.edit.startOfPage":"( 页首 )",
+"javascript.grant.tip.delete":"删除权限",
+"javascript.grant.button.grantread":"授予读权限",
+"javascript.site.properties.emailconfig":"电子邮件配置",
+"javascript.myresult.target":"请选择目标页面！",
+"javascript.leftMenu.hint.emptycombo":"请选择左页面（按向下键可以列出所有页面）",
+"javascript.page.alledit.error":"执行所有人可编辑操作时出错！",
+"javascript.quick.edit":"编辑此节",
+"javascript.plain.choose.operation":"请选择操作类型！",
+"javascript.sharepage.email":"请输入用户邮件地址！",
+"javascript.upload.choose.file.maxsize":"文件长度超过64字节，请重新选择文件!",
+"javascript.grant.user":"用户",
+"javascript.page.title":"页面权限设置",
+"javascript.configevents.big":"您输入的数字太大，不能超过999！",
+"javascript.upload.closeadd":"关闭添加",
+"javascript.update.confirm":"您确信只更新文档标签吗？否则请选择文档所在路径！",
+"javascript.expand":"[显示]",
+"javascript.group.validName":"请提供合法的新建组名称",
+"javascript.window.warning":"警告",
+"javascript.page.window.title":"授权虚拟组织页面访问权限",
+"javascript.grant.type":"用户类型",
+"javascript.configtag.remove":"确实要删除该标签吗？请注意，如果已经有文档使用了该标签，会导致此操作失败！",
+"javascript.grant.button.grant":"确认授权",
+"javascript.page.alledit":"公开可编辑",
+"javascript.grant.button.cancel.tip":"取消授权操作",
+"javascript.TAG_ADD_ERROR":"新标签添加失败，可能该标签已存在。",
+"javascript.configevents.numeric":"您输入的字段应为数字，请重新输入！",
+"javascript.plain.overwrite.changed":"您曾在{0}编辑过本页面，并且没有保存，但是该页面已被其他用户更新过。您是否要恢复您当时编辑的内容？",
+"javascript.grant.title":"文档权限列表",
+"javascript.page.warning.entity":"请选择用户/用户组！",
+"javascript.newpage.empty":"请输入英文字符（A-Z,a-z）、数字或者汉字（长度不超过32英文字符）",
+"javascript.slimbox.next":"后一页&raquo;",
+"javascript.public.fullscreen":"全屏",
+"javascript.search.hint":"正在搜索中...",
+"javascript.page.button.grant.tip":"授权选择对象页面访问权限",
+"javascript.filter.all":"( 所有 )",
+"javascript.configtag.confirm":"确实要从常用标签中移除吗？",
+"javascript.site.properties.domainconfig":"站点域名配置",
+"javascript.grant.status.ready":"准备就绪",
+"javascript.grant.status.hint":"当授权为空时继承上级页面访问权限",
+"javascript.grant.button.grantedit":"授予编辑权限",
+"javascript.page.type.text":"选择权限类型：",
+"javascript.upload.choose.file":"请选择文档所在路径！",
+"javascript.page.allentities":"所有人(All)",
+"javascript.searchclb.confirm":"确实要删除所选中的文档吗?",
+"javascript.sbox.clone.suffix":"-New",
+"javascript.slimbox.info":"{1} 的图片 {0}",
+"javascript.version.right":"请选择权限!",
+"javascript.site.properties.clbconfig":"文档管理工具配置",
+"javascript.upload.newtag":"添加新标签",
+"javascript.PRIVILEGE_ERROR":"您没有权限访问该资源或者访问该功能。",
+"javascript.edit.resize":"拖拽方式改变文本区大小",
+"javascript.grant.group":"用户组",
+"javascript.grant.status.complete":"操作完成",
+"javascript.sharepage.error.email":"输入的邮件地址格式，或者分隔符错误。请以“,”分隔，中间不要加空格！",
+"javascript.edit.toolbar.makeSelection":"请先选择一个选项。",
+"javascript.plain.confirm":"您确信执行这个操作吗？它将会使用模板内容覆盖您当前编辑的页面。",
+"javascript.searchclb.enter":"请输入搜索条件！",
+"javascript.grant.button.grantwrite":"授予写权限",
+"javascript.upload.warning.add":"不能同时使用“批量上载文档”功能和“自动加入页面”功能！",
+"javascript.upload.warning.zip":"您上载的文件不是zip文件，无法使用批量上载功能！",
+"javascript.slimbox.previous":"&laquo;前一页",
+"javascript.grant.button.grantview":"授予查看权限",
+"javascript.error.sms.empty":"短信内容为空，请输入短信！",
+"javascript.grant.confirm.title":"确认",
+"javascript.collapse":"[隐藏]",
+"javascript.quick.next":"下一节",
+"javascript.error.sms.exceed":"你发送的短信内容长度超过一条短信的长度，请裁剪内容！",
+"javascript.plain.choose.grant":"请选择所需授权的对象！",
+"javascript.grant.button.cancel":"取消授权",
+"javascript.button.cancel":"取消",
+"javascript.configtag.entertag":"请填写新增标签名！",
+"javascript.version.close":"关闭修改",
+"javascript.plain.overwrite.nochange":"您曾在{0}编辑过本页面，并且没有保存。您是否要恢复当时编辑的内容？",
+"javascript.page.allview":"公开可查看",
+"javascript.upload.choose.tag":"请选择标签！",
+"javascript.sort.click":"点击排序",
+"javascript.hint.stastics.emptycombo":"请选择查询页面（按向下键可以列出所有页面）",
+"javascript.sharepage.vo":"请填写用户",
+"javascript.grant.status.failure":"操作失败"
+};
+
+/* INCLUDERESOURCES (jsfunction) */
+</script>
+
+<script type="text/javascript"  src="/dct/scripts/jquery/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="/dct/scripts/jquery/jquery-ui-1.8.16.custom.min.js"></script>
+
+<script type="text/javascript"  src="/dct/scripts/jquery/jquery.tmpl.js"></script>
+<script type="text/javascript"  src="/dct/scripts/jquery/jquery.pagination.js"></script>
+<script type="text/javascript" src="/dct/scripts/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="/dct/scripts/ajax/ajax.js"></script>
+<script type="text/javascript" src="/dct/scripts/jquery.attachmenu.js"></script>
+<script type="text/javascript" src="/dct/scripts/DUI/autosearch/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="/dct/scripts/site.js?v=DCT 6.2.2"></script>
+<script type="text/javascript" src="/dct/scripts/DucklingCommon.js?v=DCT 6.2.2"></script>
+<script type="text/javascript" src="/dct/jsp/aone/js/uiLib-jQuery.js?v=DCT 6.2.2"></script>
+
+<script type="text/javascript" src="/dct/jsp/aone/js/global.js?v=DCT 6.2.2"></script>
+<script type="text/javascript">
+	site.init({params:{
+"%U":"http://wiki.cerc.cnic.cn/dct"
+,"%u":"/dct"
+,"%t":"cerc"
+,"%p":"/dct"},
+patterns:{
+"diff":"%u/%t/infoPage?pid=%n&func=diff"
+,"tag":"%u/%t/tag"
+,"myspace":"%u/myspace"
+,"adminCollection":"%u/%t/adminCollection"
+,"download":"%u/%t/download/%n"
+,"adminFeedback":"%U/aone/admin/feedback"
+,"quitteam":"%u/system/quitTeam"
+,"contacts":"%u/dashboard/contacts"
+,"info":"%u/%t/infoPage?pid=%n"
+,"feedback":"%u/system/feedback"
+,"search":"%u/%t/search"
+,"file":"%u/%t/file/%n"
+,"bundle":"%u/%t/bundle/%n"
+,"login":"%U/system/login"
+,"downloadCache":"%u/%t/download/%n?func=cache"
+,"reclogging":"%u/system/reclogger"
+,"cachable":"%u/%t/cachable/%n"
+,"logging":"%u/system/logger"
+,"team":"%u/%t/%n"
+,"preview":"%u/%t/editPage?func=previewToEdit&pid=%n"
+,"shareAgain":"%u/system/shareAgain"
+,"createTeam":"%u/system/createTeam"
+,"view":"%u/%t/page/%n"
+,"comment":"%u/%t/comment"
+,"dashboard":"%u/dashboard"
+,"portlet":"%u/%t/portal/%n"
+,"createPage":"%u/%t/createPage?cid=%n"
+,"shareFileSuccess":"%u/system/shareFileSuccess"
+,"switchTeam":"%u/system/switch"
+,"home":"%u/home"
+,"viewCollection":"%u/%t/collection/%n"
+,"simple":"%U/%t/portal/%n"
+,"configTeam":"%u/system/configTeam?tid=%n"
+,"quick":"%u/%t/quick"
+,"teamHome":"%u/%t"
+,"recommend":"%u/%t/recommend"
+,"upload":"%u/%t/upload"
+,"createCollection":"%u/%t/createCollection"
+,"share":"%u/%t/sharePage?pid=%n"
+,"checkServerState":"%u/system/check"
+,"nineGrid":"%u/%t/home"
+,"configCollection":"%u/%t/configCollection"
+,"subscribe":"%u/%t/subscribePage?pid=%n"
+,"regist":"%u/system/regist"
+,"feed":"%u/%t/feed"
+,"notice":"%u/%t/notice"
+,"plain":"%u/%n"
+,"activation":"%u/system/activation/%n"
+,"direct":"%u/direct/%n"
+,"invite":"%u/system/invite/%n"
+,"createBundle":"%u/%t/createBundle"
+,"datasync":"%u/system/data/synchronized"
+,"export":"%u/%t/exportPage?pid=%n"
+,"resource":"%u/%t/resource"
+,"edit":"%u/%t/editPage?pid=%n"
+,"copyfile":"%u/copyfile/%n"
+,"shareFile":"%u/system/shareFile"
+,"editCollections":"%u/%t/editCollections"
+,"logout":"%U/system/logout"
+,"attach":"%u/%t/attach/%n"
+,"configTag":"%u/%t/config/tag"
+,"starmark":"%u/%t/starmark"
+,"user":"%u/system/user/%n"
+,"navbar":"%u/%t/navbar"},
+reversePattern:[{type:'viewCollection', pattern:/\/collection\/(\w+)/}
+,{type:'file', pattern:/\/file\/(\w+)/}
+,{type:'cachable', pattern:/\/cachable\/(\w+)/}
+,{type:'attach', pattern:/\/attach\/(\w+)/}
+,{type:'edit', pattern:/\/editPage\?pid=(\w+)/}
+,{type:'download', pattern:/\/download\/(\w+)/}
+,{type:'view', pattern:/\/page\/(\w+)/}
+,{type:'downloadCache', pattern:/\/download\/(\w+)?func=cache/}
+,{type:'portlet', pattern:/\/portal\/(\w+)/}
+],
+absoluteTeambase:"http://wiki.cerc.cnic.cn/dct/cerc",
+relativeTeambase:"/dct/cerc"
+}
+);
+</script>
+<script type="text/javascript">
+		var Wiki = {
+			'BaseUrl': 'http://wiki.cerc.cnic.cn/dct',
+			'PageUrl': '/dct/cerc/page/%23%24%25',
+			'TemplateDir': '/dct/',
+			'PageName': '',
+			'UserName': '', 
+			'JsonUrl' : '/dct/JSON-RPC'
+			}
+	</script>
+	<!--  script type="text/javascript"  src="/dct/skins/admin/skin.js"></script>-->
+	<META NAME="ROBOTS" CONTENT="all">
+ <link rel="start"  href="/dct/cerc"  title="Front page" />
+<link rel="shortcut icon" type="image/x-icon" href="/dct/images/favicon.ico" /><meta name="keywords" content="云计算服务,科研管理,协同办公,移动互联网,科研在线" />
+		<link rel="stylesheet" href="/dct/jsp/aone/css/fileuploader.css" type="text/css"/>	
+		<link rel="stylesheet" href="/dct/jsp/aone/css/lynx.css?v=DCT 6.2.2" type="text/css" />
+		<link rel="stylesheet" href="/dct/jsp/aone/css/uiLib-0.9.2.css?v=DCT 6.2.2" type="text/css" />
+
+<!--[if lte IE 7]>
+		<link rel="stylesheet" href="/dct/jsp/aone/css/lynx.iehack.css?v=DCT 6.2.2" type="text/css" />
+<![endif]-->
+
+		<script type="text/javascript" src="/dct/jsp/aone/js/fileuploader.js"></script>
+		<script type="text/javascript" src="/dct/jsp/aone/js/search-jQuery.js?v=DCT 6.2.2"></script>
+		<script type="text/javascript" src="/dct/jsp/aone/js/uiLib-0.9.2-jquery.js?v=DCT 6.2.2"></script>
+		
+		<script type="text/javascript" src="/dct/jsp/aone/js/lynx-jquery.js"></script>
+		
+		<title>
+			新功能展示</title>
+
+	</head>
+	<body class='common-space'>
+		
+		<div id="macroNav" class="ui-wrap wrapperFull">
+	<a id="logo" title="科研在线"></a>
+	<div id="macro-innerWrapper" class="wrapper1280">
+		<ul id="staticNav" class="spaceNav">
+			<li >
+				<a href="/dct/dashboard">首页</a>
+
+			</li>
+			<li >
+				<a href="/dct/system/switch">个人空间</a>
+			</li>
+		</ul>
+		<ul id="spaceNav" class="sortableList spaceNav">
+	 		<li class="current"><a href='/dct/system/switch?func=jump&team=cerc'>我的团队</a></li>
+	 		<li ><a href='/dct/system/switch?func=jump&team=paper'>另一个团队</a></li>
+
+	 		</ul>
+		<ul id="spaceNavMore" class="spaceNav">
+			<li class="moreSpace"><a title="更多"><span class="iconLynx icon-more"></span></a></li>
+			<li class="createSpace"><a href="/dct/system/createTeam" title="创建团队"><span class="iconLynx icon-create"></span></a></li>
+		</ul>
+		<ul id="userBox">
+			<li class="search"><div id="globalSearch"></div></li>
+		<li class="msgNotification msgCount0">
+				<a href="javascript:void(0)"><span id="noticeCount">0</span>通知</a>
+
+		 	</li>
+		 	<li class="userMe">
+		 		<a href="javascript:void(0)">your name</a>
+			</li>
+		</ul>
+		<div id="msgMenu" class="pulldownMenu" style="width:120px;">
+			<ul>
+				<li><a href="/dct/dashboard?func=teamNotice">团队邀请<span id="top-focus-state" class="msgCount0 count">0</span></a></li>
+
+		 		<li><a href="/dct/dashboard?func=personNotice">我的消息<span id="top-recommend-count" class="msgCount0 count">0</span></a></li>
+		 		<li><a href="/dct/dashboard?func=monitorNotice">我的关注<span id="top-focus-state" class="msgCount0 count">0</span></a></li>
+		 	</ul>
+		</div>
+		<div id="userMeMenu" class="pulldownMenu">
+			<ul>
+				<li><a href="/dct/dashboard?func=profile">个人资料</a></li>
+
+				<li><a href="http://wiki.cerc.cnic.cn/dct/system/logout"
+					title="<fmt:message key='actions.logout.title'/>">注销</a>
+				</li>
+			</ul>
+		</div>
+		</div>
+	<div id="spaceNavMenu" class="pulldownMenu"></div>
+</div>
+	
+<div id="masthead">
+	<div id="banner" class="ui-wrap wrapperFull">
+
+		<div id="banner-photo"><img src="/dct/jsp/aone/images/banner-leaf.jpg" /></div>
+		<div id="banner-insetShadow"></div>
+		<div id="banner-innerWrapper" class="wrapper1280">
+			<h1><a href="/dct/cerc">我的团队空间</a></h1>
+			</div>
+	</div>
+	<div id="navigation" class="ui-wrap wrapperFull">
+			<div id="navigation-innerWrapper" class="wrapper1280">
+
+				<ul id="stdNav" class="switch">
+					<li><a href="/dct/cerc/notice?func=teamNotice">动态</a></li>
+					<li><a href="/dct/cerc/tag">资料<span id="resMore" class="icon13 icon-pulldownMore" title="更多"></span></a></li>
+					<li><a href="/dct/cerc/starmark" title="星标"><span class="iconLynxTag icon-checkStar checked"></span></a></li>
+				</ul>
+				<ul id="opNav" class="switch">
+					<li><a href="/dct/cerc/quick?func=createPage" title="编写页面"><span class="iconLynx icon-page"></span> 编写页面</a></li>
+
+					<li><a href="/dct/cerc/quick?func=uploadFiles&bid=0" title="上传文件"><span class="iconLynx icon-upload"></span> 上传文件</a></li>
+				</ul>
+				<ul id="customNav">
+					</ul>
+				<ul id="customNavMore">
+					<li class="moreSpace"><a>更多快捷</a></li>
+				</ul>
+
+				<div id="resourceMenu" class="pulldownMenu">
+					<ul>
+						<li><a href="/dct/cerc">常用</a></li>
+						<li><a href="/dct/cerc#trace">历史记录</a></li>
+					</ul>
+				</div>
+				<div id="customNavMenu" class="pulldownMenu" style="width:560px;"></div>
+			</div>
+
+		</div>
+	</div>
+	
+<script type="text/javascript">
+$(document).ready(function(){
+	spaceNavAdjust();
+	customNavAdjust();
+	localNav_bind();
+	
+	$('#stdNav #resMore').pulldownMenu({
+		'menu': $('#resourceMenu'),
+		'block': true,
+		'anchor': $('#stdNav #resMore').parent()
+	});
+	
+	$('li.msgNotification>a').pulldownMenu({ 'menu': $('#msgMenu') });
+	$('li.userMe>a').pulldownMenu({ 'menu': $('#userMeMenu') });
+	
+	$("a.delete-nvitem-link").live('click', function(){
+		 var $a = $(this);
+		 var params = {"func":"delete","id":$a.attr("value")};
+		 ajaxRequest(site.getURL("navbar",null),params,function(data){
+			 $('#customNav #' + $a.parent().attr('id')).remove();
+			 if (typeof($a.parent())!='undefined') {
+				$a.parent().remove(); 
+			 }
+			 customNavAdjust('refresh');
+		 });
+	});
+	
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	/* GLOBAL SEARCH */
+	var globalSearch = new SearchBox('globalSearch', '搜索', false, false, false);
+	
+	globalSearch.setPullDown('未找到相关资源', '搜索引擎错误', '350px');
+	
+	globalSearch.searchInput.focus(function(){
+		globalSearch.container.addClass('loaded');
+		globalSearch.container.parent().addClass('loaded');
+	});
+	globalSearch.searchInput.blur(function(){
+		if (globalSearch.searchResultState==false) {
+			globalSearch.container.removeClass('loaded');
+		}
+		globalSearch.container.parent().removeClass('loaded');
+	});
+	
+	function renderCollectionResult(data){
+		var html = '<li class="type">集合（'+data.size+'）</li>';
+		for(var i=0;i<data.content.length;i++)
+			html += '<li><a href="' + data["content"][i].url + '">' + data["content"][i].title + '</a></li>';
+		return html;
+	};
+		
+	function renderPageResult(data){
+		var html = '<li class="type">页面（'+data.size+'）</li>';
+		for(var i=0;i<data.content.length;i++)
+			html += '<li><a href="' + data["content"][i].url + '">' + data["content"][i].title +
+				'<span class="collection">' + data["content"][i].collectionName + '</span><br/>' +
+				'<span class="author">' + data["content"][i].author + '</span><span class="time">'+data["content"][i].modifyTime+'</span></a></li>';
+		return html;
+	};
+	
+	function renderUserResult(data){
+		var html = "";
+		return html;
+	};
+	
+	function renderTotalPart(count,keyword){
+		var html = '<li class="all"><a href="/dct/cerc/search?func=searchResult&keyword='+keyword+'">显示全部（<span name="size">'+
+			count+'</span>）</a></li>'
+		return html;
+	};
+	
+	globalSearch.appendResults = function(JSON) {
+		this.searchResult.append('<ul></ul>').show();
+		var holder = this.searchResult.children('ul');
+		var keyword = $("input[name=search_input]").val();
+		holder.append(renderTotalPart(JSON.count,keyword));
+		if(JSON.pageResult!=null)
+			holder.append(renderPageResult(JSON.pageResult));
+		if(JSON.collectionResult!=null)
+			holder.append(renderCollectionResult(JSON.collectionResult));
+		if(JSON.userResult!=null)
+			holder.append(renderUserResult(JSON.userResult));
+	};
+	
+	globalSearch.doSearch = function(QUERY){
+		var url = "/dct/cerc/search?func=searchResult&keyword=" + encodeURIComponent(QUERY);
+		window.location.href = url;
+	};
+	
+	globalSearch.resetSearch = function(){
+		this.hideCover();
+		this.clearPullDown();
+	}
+	
+	/* tabindex */
+	globalSearch.searchInput.attr('tabIndex', 1);
+	setTimeout(function(){
+		globalSearch.container.addClass('transition');
+	}, 200);
+});
+</script>
+<div id="body" class="ui-wrap wrapper1280">
+			<div id="content" class="std stdRounded">
+				<div id="tagSelector" class="content-menu">
+		<p class="ui-navList-title"><a class="iconLink config ui-RTCorner" href='/dct/cerc/config/tag'></a>查看</p>
+
+		<ul class="ui-navList">
+			<li><a class="filter-option single" key="filter" value="untaged" ><span class="tagTitle">无标签资料</span></a></li>
+		</ul>
+	<p class="ui-navList-title tagGroupTitle">
+			<a class="iconLink config ui-RTCorner"  href="/dct/cerc/config/tag" title="管理标签"></a>
+			<a class="iconFoldable" id="tag1Control" title="展开/折叠"></a>
+			未分类标签
+		</p>
+		<ul class="ui-navList" id="ungrouped-tag-list">
+
+			<li><a id="tag-for-98" class="tag-option multiple" key="tag" value="98">
+					<span class="tagTitle">默认集合</span><span class="tagResCount">754</span>
+					</a>
+					<a class="addToQuery" title="同时选中该标签"><span>+</span></a>
+				</li>
+			<li><a id="tag-for-2" class="tag-option multiple" key="tag" value="2">
+					<span class="tagTitle">科研点项目</span><span class="tagResCount">527</span>
+
+					</a>
+					<a class="addToQuery" title="同时选中该标签"><span>+</span></a>
+				</li>
+			<li><a id="tag-for-26" class="tag-option multiple" key="tag" value="26">
+					<span class="tagTitle">项目管理</span><span class="tagResCount">90</span>
+					</a>
+					<a class="addToQuery" title="同时选中该标签"><span>+</span></a>
+
+				</li>
+			<li><a id="tag-for-6" class="tag-option multiple" key="tag" value="6">
+					<span class="tagTitle">DASv6</span><span class="tagResCount">32</span>
+					</a>
+					<a class="addToQuery" title="同时选中该标签"><span>+</span></a>
+				</li>
+			<li><a id="tag-for-184" class="tag-option multiple" key="tag" value="184">
+
+					<span class="tagTitle">科研与教育</span><span class="tagResCount">30</span>
+					</a>
+					<a class="addToQuery" title="同时选中该标签"><span>+</span></a>
+				</li>
+			<li><a id="tag-for-241" class="tag-option multiple" key="tag" value="241">
+					<span class="tagTitle">运行维护</span><span class="tagResCount">9</span>
+
+					</a>
+					<a class="addToQuery" title="同时选中该标签"><span>+</span></a>
+				</li>
+			<li><a id="tag-for-21" class="tag-option multiple" key="tag" value="21">
+					<span class="tagTitle">学生工作</span><span class="tagResCount">7</span>
+					</a>
+					<a class="addToQuery" title="同时选中该标签"><span>+</span></a>
+
+				</li>
+			</ul>
+	<p class="ui-navList-title tagGroupTitle">
+				<a class="iconLink config ui-RTCorner" href='/dct/cerc/config/tag' title="管理标签"></a>
+				<a class="iconFoldable" id="tag1Control" title="展开/折叠"></a>
+				日常</p>
+			<ul class="ui-navList">
+				<li><a id="tag-for-20" class="tag-option multiple" key="tag" value="20">
+
+						<span class="tagTitle">快易通</span><span class="tagResCount">1341</span>
+						</a>
+						<a class="addToQuery"><span>+</span></a>
+					</li>
+				<li><a id="tag-for-1" class="tag-option multiple" key="tag" value="1">
+						<span class="tagTitle">考勤与公出</span><span class="tagResCount">222</span>
+
+						</a>
+						<a class="addToQuery"><span>+</span></a>
+					</li>
+				<li><a id="tag-for-233" class="tag-option multiple" key="tag" value="233">
+						<span class="tagTitle">全室共享</span><span class="tagResCount">10</span>
+						</a>
+						<a class="addToQuery"><span>+</span></a>
+
+					</li>
+				</ul>
+		<p class="ui-navList-title tagGroupTitle">
+				<a class="iconLink config ui-RTCorner" href='/dct/cerc/config/tag' title="管理标签"></a>
+				<a class="iconFoldable" id="tag1Control" title="展开/折叠"></a>
+				团队建设</p>
+			<ul class="ui-navList">
+				<li><a id="tag-for-18" class="tag-option multiple" key="tag" value="18">
+
+						<span class="tagTitle">自在园</span><span class="tagResCount">108</span>
+						</a>
+						<a class="addToQuery"><span>+</span></a>
+					</li>
+				<li><a id="tag-for-3" class="tag-option multiple" key="tag" value="3">
+						<span class="tagTitle">团队建设</span><span class="tagResCount">29</span>
+						</a>
+						<a class="addToQuery"><span>+</span></a>
+
+					</li>
+				</ul>
+		
+		</div>
+	<div id="tagItemsJSP" class="content-menu-body">
+
+	<div class="innerWrapper">
+		<div class="toolHolder" id="tagQueryHolder">
+			<a id="dragTag" class="ui-RTCorner" title="将选择条件保存到快捷导航"><span class="iconLynx icon-shortcut"></span></a>
+			<label class="statement">您已经选择：</label>
+			<ul id="tagQuery"></ul>
+		</div>
+		<div class="toolHolder light" >
+			<ul class="filter" style="float:left;">
+
+				<li><a id="remove-single-option">全部</a></li>
+			</ul>
+			<ul id="timeSelector" class="filter">
+				<li><a class="date-option single" key="date" value="today">今天</a></li>
+				<li><a class="date-option single" key="date" value="yesterday">昨天</a></li>
+				<li><a class="date-option single" key="date" value="thisweek">本周</a></li>
+				<li><a class="date-option single" key="date" value="lastweek">上周</a></li>
+
+				<li><a class="date-option single" key="date" value="thismonth">本月</a></li>
+				<li><a class="date-option single" key="date" value="lastmonth">上月</a></li>
+			</ul>
+			<ul id="typeSelector" class="filter">
+				<li><a class="type-option single" key="type" value="DPage">页面</a></li>
+				<li><a class="type-option single" key="type" value="doc">doc</a></li>
+				<li><a class="type-option single" key="type" value="ppt">ppt</a></li>
+
+				<li><a class="type-option single" key="type" value="xls">xls</a></li>
+				<li><a class="type-option single" key="type" value="pdf">pdf</a></li>
+				<!-- <li><a class="type-option single" key="type" value="other">其他文件</a></li> -->
+				<li><a class="type-option single" key="type" value="Picture">图片</a></li>
+				<li><a class="type-option single" key="type" value="Bundle">组合</a></li>
+			</ul>
+		</div>
+
+		
+		
+		<div id="resourceList-header" class="toolHolder light">
+			<label class="res-checkAll"><input type="checkbox" name="checkAll" />全选</label>
+			<label class="res-checkOption" style="display:none;"><span id="checkOption" class="icon13 icon-pulldownMore"></span></label>
+			<label class="res-star" style="display:none;"><span id="checkStar" class="iconLynxTag icon-greyStar"></span></label>
+			<label class="res-resource">资源</label>
+			<label class="res-tag">标签</label>
+			
+			<div class="ui-RTCorner">
+
+				<div id="resourceList-search" class="searchBox" style="float:left;"></div>
+				<ul id="viewSwitch" class="switch" style="float:left;">
+					<li id="showAsTable"><a title="列表显示"><span class="iconLynxTag icon-listView"></span></a></li>
+					<li id="showAsTight"><a title="紧凑列表"><span class="iconLynxTag icon-tightView"></span></a></li>
+					<li id="showAsGrid"><a title="缩略图显示"><span class="iconLynxTag icon-gridView"></span></a></li>
+				</ul>
+			</div>
+			
+		</div>
+		<ul id="resourceList" class="asTable">
+
+		</ul>
+		
+		<div class="ui-clear"></div>
+		
+		<ul class="asTable" id="resourceList">
+			<li item_id="997" class="element-data">  
+				<div class="oper">   
+					<input type="checkbox">   
+					<div rid="997" class="iconLynxTag icon-checkStar unchecked"></div>  
+				</div>  
+				<div class="resBody">   
+					<h2><a href="/dct/cerc/page/66519" class="page-link"><span class="headImg DPage "></span>考勤公示  </a></h2>  
+					<div class="resChangeLog">    
+						<span>周天 修改于 2012-05-23 15:56:53</span>     
+						<span>版本：128</span>   
+					</div>  
+				</div>  
+				<ul id="tag-item-997" class="tagList">
+					<li tag_id="1">考勤与公出</li><li tag_id="233">全室共享</li>
+					<li item_type="DPage" item_id="66519" rid="997" class="newTag"><a>+</a></li>
+				</ul> 
+			</li><li item_id="3944" class="element-data">  <div class="oper">   <input type="checkbox">   <div rid="3944" class="iconLynxTag icon-checkStar unchecked"></div>  </div>  <div class="resBody">   <h2><a href="/dct/cerc/page/81155" class="page-link"><span class="headImg DPage "></span>2012.05</a></h2>   <div class="resChangeLog">    <span>王力 修改于 2012-05-23 14:45:10</span>     <span>版本：51</span>   </div>  </div>  <ul id="tag-item-3944" class="tagList"><li tag_id="38">王力</li><li item_type="DPage" item_id="81155" rid="3944" class="newTag"><a>+</a></li></ul> </li><li item_id="8336" class="element-data">  <div class="oper">   <input type="checkbox">   <div rid="8336" class="iconLynxTag icon-checkStar unchecked"></div>  </div>  <div class="resBody">   <h2><a href="/dct/cerc/file/4432" class="page-link"><span class="headImg DFile docx"></span>产品开发任务书.docx</a></h2>   <div class="resChangeLog">    <span>王月 修改于 2012-05-23 14:39:33</span>     <span>版本：4</span>   </div>  </div>  <ul id="tag-item-8336" class="tagList"><li tag_id="9">CSP                         </li><li item_type="DFile" item_id="4432" rid="8336" class="newTag"><a>+</a></li></ul> </li><li item_id="2680" class="element-data">  <div class="oper">   <input type="checkbox">   <div rid="2680" class="iconLynxTag icon-checkStar unchecked"></div>  </div>  <div class="resBody">   <h2><a href="/dct/cerc/page/79817" class="page-link"><span class="headImg DPage "></span>DELL刀片服务器使用汇总</a></h2>   <div class="resChangeLog">    <span>王力 修改于 2012-05-23 13:44:29</span>     <span>版本：217</span>   </div>  </div>  <ul id="tag-item-2680" class="tagList"><li tag_id="241">运行维护</li><li tag_id="12">综合部内部管理</li><li item_type="DPage" item_id="79817" rid="2680" class="newTag"><a>+</a></li></ul> </li><li item_id="8335" class="element-data">  <div class="oper">   <input type="checkbox">   <div rid="8335" class="iconLynxTag icon-checkStar unchecked"></div>  </div>  <div class="resBody">   <h2><a href="/dct/cerc/file/4431" class="page-link"><span class="headImg DFile docx"></span>产品规格说明书.docx</a></h2>   <div class="resChangeLog">    <span>王月 修改于 2012-05-23 10:48:08</span>     <span>版本：3</span>   </div>  </div>  <ul id="tag-item-8335" class="tagList"><li tag_id="9">CSP                         </li><li item_type="DFile" item_id="4431" rid="8335" class="newTag"><a>+</a></li></ul> </li><li item_id="8452" class="element-data">  <div class="oper">   <input type="checkbox">   <div rid="8452" class="iconLynxTag icon-checkStar unchecked"></div>  </div>  <div class="resBody">   <h2><a href="/dct/cerc/page/81299" class="page-link"><span class="headImg DPage "></span>考勤公示：2012年3月21日-2012年4月20日</a></h2>   <div class="resChangeLog">    <span>周天 修改于 2012-05-23 10:40:33</span>     <span>版本：2</span>   </div>  </div>  <ul id="tag-item-8452" class="tagList"><li tag_id="1">考勤与公出</li><li item_type="DPage" item_id="81299" rid="8452" class="newTag"><a>+</a></li></ul> </li><li item_id="8434" class="element-data">  </ul>
+		<a id="load-more-items" class="largeButton dim" style="display:none">更多结果</a>
+			
+		<div id="resourceAction" class="shadeConsole">
+			<ul id="resAction">
+				<li id="resAction-list"><a>选中<span class="resCount">0</span>个资料
+					<span class="icon13 icon-pullupMore"></span></a>
+
+				</li>
+				<li id="resAction-tag"><a><span class="resAction-addTag"></span>添加标签</a></li>
+				<li id="resAction-bundle"><a><span class="resAction-bundle"></span>组合</a></li>
+				<li id="resAction-view"><a><span class="resAction-view"></span>打开</a></li>
+			</ul>
+		</div>
+		<div id="resAction-listMenu" class="pulldownMenu" style="position:fixed;">
+
+			<ul></ul>
+			<a id="clearSelection" >清除选择</a>
+			<!-- <a id="deleteSelected" class="icon13 icon-trash" title="删除选中的资料"></a> -->
+		</div>
+		
+		<div id="addSingleTagDialog" class="lynxDialog" style="top:10%">
+			<div class="toolHolder light">
+				<h3>添加标签</h3>
+			</div>
+
+			<div class="inner">
+				<div class="existTags">
+					<p>已有标签：</p>
+					<ul class="tagList"></ul>
+				</div>
+			
+				<p><label>输入标签（用回车分隔）：<br/>
+					<input type="text" name="typeTag" /></label>
+				</p>
+
+				<p class="ui-clear">或选择常用标签：</p>
+				<div class="tagGroupHorizon">
+					<div class="tG-scroll"></div>
+				</div>
+			</div>
+			<div class="control largeButtonHolder">
+				<input type="button" class="saveThis" value="保存">
+				<input type="button" class="closeThis" value="取消">
+			</div>
+		</div>
+		
+		<div id="makeBundleDialog" class="lynxDialog">
+			<div class="toolHolder light"><h3>将页面组合</h3></div>
+			<div class="inner">
+				<p><label>组合名称：<input type="text" name="m-bundle-title"/></label></p>
+			</div>
+			<div class="control largeButtonHolder">
+				<input type="button" class="saveThis" value="组合" />
+				<input type="button" class="closeThis" value="取消" />
+			</div>
+		</div>
+		
+		<div id="addShortcutDialog" class="lynxDialog">
+			<div class="toolHolder light"><h3>添加快捷导航</h3></div>
+			<div class="inner">
+
+				<p><label>导航名称：<input type="text" name="navbarTitle" id="navbar-title" /></label></p>
+			</div>
+			<div class="control largeButtonHolder">
+				<input type="button" class="saveThis" value="保存" />
+				<input type="button" class="closeThis" value="取消" />
+			</div>
+		</div>
+
+	
+	</div>
+	<div class="ui-clear"></div>
+	</div>
+	<div class="ui-clear"></div>
+
+<script type="text/javascript"  src="/dct/scripts/jquery/jquery.hashchange-1.3.js"></script>
+<script type="text/javascript"  src="/dct/jsp/aone/js/stateToggle.js"></script>
+<script type="text/html" id="new-tag-template">
+<li><a id="tag-for-{{= id}}" class="tag-option multiple" key="tag" value="{{= id}}">
+	<span class="tagTitle">{{= title}}</span><span class="tagResCount">{{= count}}</span></a>
+    <a class="addToQuery"><span>+</span></a>
+</li>
+</script>
+
+<script type="text/html" id="selected-tags-template">
+<li class="tQ-tag"><label>{{= title}}</label><a class="lightDel selected-tag" value="{{= tagId}}"></a></li>
+</script>
+
+<script type="text/html" id="resource-template">
+<li class="element-data" item_id="{{= rid}}">
+	<div class="oper">
+		<input type="checkbox" />
+		<div class="iconLynxTag icon-checkStar {{= isChecked}}" rid="{{= rid}}"></div>
+	</div>
+	<div class="resBody">
+		<h2><a class="page-link" href="{{= url}}"><span class="headImg {{= itemType}} {{= fileType}}"></span>{{= title}}</a></h2>
+		<div class="resChangeLog">
+			<span>{{= lastEditorName}} 修改于 {{= lastEditTime}}</span>	
+			<span>版本：{{= lastVersion}}</span>
+		</div>
+	</div>
+	<ul class="tagList" id="tag-item-{{= rid}}"></ul>
+</li>
+</script>
+
+<script type="text/html" id="page-tag-template">
+	<li tag_id="{{= id}}">{{= title}}</li>
+</script>
+
+<script type="text/html" id="page-tag-newTag-template">
+	<li class="newTag"  rid="{{= rid}}" item_id="{{= itemId}}" item_type="{{= itemType}}"><a>+</a></li>
+</script>
+
+<script type="text/html" id="nav-bar-item-template">
+<li id="navbar_{{= id}}" >
+	<a href="{{= url}}">{{= title}}</a>
+	<a class="delete-nvitem-link lightDel" value="{{= id}}" title="移除快捷导航"></a>
+</li>
+</script>
+</div>
+			<div class="clear"></div>
+		</div>
+		<a id="getFeedback" class="ui-sideTouch" href="${contextPath}/system/feedback" target="_blank">意见反馈</a>
+		
+		
+		
+		<div id="mask_1" class="intro_mask"></div>
+		<div id="intro_1" class="intro_step">
+			<div class="Iknow">我知道了</div>
+		</div>
+	</body>
+	
+</html>

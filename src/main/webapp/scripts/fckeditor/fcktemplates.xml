@@ -1,0 +1,1030 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This is the sample templates definitions file. It makes the "templates"
+ * command completely customizable.
+ *
+ * See FCKConfig.TemplatesXmlPath in the configuration file.
+-->
+<Templates imagesBasePath="fck_template/images/">
+	<Template title="图片" image="template-tp.gif">
+		<Description>图片内容模板</Description>
+		<Html>
+			<![CDATA[
+				<h2 id="section-_E5_9B_BE_E7_89_87-_E8_AF_B7_E5_9C_A8_E6_AD_A4_E8_BE_93_E5_85_A5_E5_9B_BE_E7_89_87_E5_90_8D_E7_A7_B0" style="text-align: center;">请在此输入图片名称</h2>
+				<table cellspacing="1" cellpadding="1" border="1" class="DCT_dikitable" style="width: 688px; height: 268px;">
+				    <tbody>
+				        <tr>
+				            <td style="text-align: center;">
+				            <h2 id="section-_E5_9B_BE_E7_89_87-_E8_AF_B7_E5_9C_A8_E6_AD_A4_E6_8F_92_E5_85_A5_E5_9B_BE_E7_89_87">请在此插入图片</h2>
+				            </td>
+				        </tr>
+				    </tbody>
+				</table>
+				<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	<Template title="文字" image="template-wz.gif">
+		<Description>文字内容模板</Description>
+		<Html>
+			<![CDATA[
+				<h2 id="section-_E6_96_87_E5_AD_97-_E6_96_87_E5_AD_97">文字</h2>
+<p>&nbsp;</p>
+<h1 id="section-_E6_96_87_E5_AD_97-_E6_A0_87_E9_A2_981">标题1</h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>在此编辑文字</b></p>
+<h2 id="section-_E6_96_87_E5_AD_97-_E6_A0_87_E9_A2_982">标题2</h2>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>在此编辑文字</i></p>
+<h3 id="section-_E6_96_87_E5_AD_97-_E6_A0_87_E9_A2_983">标题3</h3>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="text-decoration: underline;">在此编辑文字</span></p>
+<h4 id="section-_E6_96_87_E5_AD_97-_E6_A0_87_E9_A2_984">标题4</h4>
+<div style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: rgb(0, 0, 255);">在此编辑文字</span></div>
+<p><b>项目文字</b>1</p>
+<ul>
+    <li><span style="color: rgb(204, 153, 255);">项目编号1 </span></li>
+    <li><span style="color: rgb(204, 153, 255);">项目编号2 </span></li>
+    <li><span style="color: rgb(204, 153, 255);">项目编号3</span></li>
+</ul>
+<p>项目文字2</p>
+<ol>
+    <li><span style="color: rgb(51, 102, 255);">项目编号4 </span></li>
+    <li><span style="color: rgb(51, 102, 255);">项目编号5 </span></li>
+    <li><span style="color: rgb(51, 102, 255);">项目编号6</span></li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	<Template title="文字和图片" image="template-tphwz.gif">
+		<Description>文字和图片内容模板</Description>
+		<Html>
+			<![CDATA[
+				<p>
+<table cellspacing="1" cellpadding="1" border="0" class="DCT_dikitable" style="width: 700px; height: 223px;">
+    <tbody>
+        <tr>
+            <td width="300">
+            <div style="text-align: center;">&nbsp;&nbsp;&nbsp; 请在此插入图片&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            </td>
+            <td>
+            <h4 id="section-_E6_A8_A1_E6_9D_BF-_E5_9B_BE_E7_89_87_E5_92_8C_E6_96_87_E5_AD_97-_E8_AF_B7_E5_9C_A8_E8_BF_99_E9_87_8C_E8_BE_93_E5_85_A5_E6_96_87_E5_AD_97">&nbsp;&nbsp;&nbsp; 请在这里输入文字</h4>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</p>
+<p>&nbsp;&nbsp; 请在这里输入文字</p>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="表格和文字" image="template-bghwz.gif">
+		<Description>表格和文字内容模板</Description>
+		<Html>
+			<![CDATA[
+			<table height="173" cellspacing="1" cellpadding="1" border="0" width="687" class="DCT_dikitable">
+    <tbody>
+        <tr>
+            <td colspan="2">
+            <h2 id="section-_E6_A8_A1_E6_9D_BF-_E8_A1_A8_E6_A0_BC_E5_92_8C_E6_96_87_E5_AD_97-_E8_AF_B7_E5_9C_A8_E8_BF_99_E9_87_8C_E8_BE_93_E5_85_A5_E6_A0_87_E9_A2_98" style="text-align: center;"><span style="font-size: large;">请在这里输入标题</span></h2>
+            </td>
+        </tr>
+        <tr>
+            <td>请在这里输入文字 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>
+            <p>&nbsp;</p>
+            <p>
+            <table cellspacing="1" cellpadding="1" border="1" class="DCT_dikitable" style="width: 507px; height: 184px;">
+                <tbody>
+                    <tr>
+                        <td>&nbsp;表格</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+            </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	<Template title="两栏文字" image="template-llwz.gif">
+		<Description>两栏文字内容模板</Description>
+		<Html>
+			<![CDATA[
+			<table cellspacing="0" cellpadding="0" border="0" width="100%" class="DCT_dikitable">
+    <tbody>
+        <tr>
+            <td width="50%">
+            <div style="text-align: left;"><span style="font-size: small;"><b>左栏标题</b></span></div>
+            </td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td width="50%">
+            <div style="text-align: left;"><span style="font-size: small;"><b>右栏标题</b></span></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <p><b>栏目一</b></p>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接1&quot;">页面链接1</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接2&quot;">页面链接2</a></li>
+            </ul>
+            <p><b>栏目二</b></p>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接1&quot;">页面链接3</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接2&quot;">页面链接4</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接1&quot;">页面链接5</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接2&quot;">页面链接2</a></li>
+            </ul>
+            <p>&nbsp;</p>
+            <p>更多文字&hellip;&hellip;</p>
+            <p>&nbsp;</p>
+            </td>
+            <td>&nbsp;</td>
+            <td>
+            <p><b>栏目一</b></p>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接1&quot;">页面链接1</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接2&quot;">页面链接2</a></li>
+            </ul>
+            <p><b>栏目二</b></p>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接1&quot;">页面链接3</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接2&quot;">页面链接4</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接1&quot;">页面链接5</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-页面链接2&quot;">页面链接2</a></li>
+            </ul>
+            <p>&nbsp;</p>
+            <p>更多文字&hellip;&hellip;</p>
+            <p>&nbsp;</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="">&nbsp;</div>
+<div style=""><span style="background-color: rgb(248, 248, 255);">请在这里录入更多的文字</span></div>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	<Template title="左菜单" image="template-zcd.gif">
+		<Description>左菜单内容模板</Description>
+		<Html>
+			<![CDATA[
+			<h2 id="section-_E5_B7_A6_E8_8F_9C_E5_8D_95-_E5_B7_A6_E4_BE_A7_E8_8F_9C_E5_8D_95_E6_A0_87_E9_A2_98"><b>左侧菜单标题</b></h2>
+<ul>
+    <li><a class="createpage" href="#">一级菜单项</a>
+    <ul>
+        <li><a class="createpage" href="#">二级菜单项</a></li>
+        <li><a class="createpage" href="#">二级菜单项2</a></li>
+    </ul>
+    </li>
+</ul>
+<ul>
+    <li>一级菜单项
+    <ul>
+        <li><a class="createpage" href="#">二级菜单项</a>
+        <ul>
+            <li><a class="createpage" href="#">三级菜单项</a></li>
+        </ul>
+        </li>
+    </ul>
+    </li>
+</ul>
+<ul>
+    <li>一级菜单项
+    <ul>
+        <li><a class="createpage" href="#">二级菜单项</a>
+        <ul>
+            <li><a class="createpage" href="#">三级菜单项</a>&nbsp;
+            <ul>
+                <li><a class="createpage" href="#">四级菜单项</a></li>
+            </ul>
+            </li>
+        </ul>
+        </li>
+    </ul>
+    </li>
+</ul>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	<Template title="主菜单" image="template-maincd.gif">
+		<Description>主菜单内容模板</Description>
+		<Html>
+			<![CDATA[
+			<ul>
+    <li><a class="createpage" href="#">主菜单项1</a></li>
+    <li><a class="createpage" href="#">主菜单项2</a></li>
+    <li><a class="createpage" href="#">主菜单项3</a></li>
+    <li><a class="createpage" href="#">主菜单项4</a></li>
+    <li><a class="createpage" href="#">主菜单项5</a></li>
+</ul>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	<Template title="首页" image="template-sy.gif">
+		<Description>首页模板</Description>
+		<Html>
+			<![CDATA[
+			<p>
+<table cellspacing="1" cellpadding="1" border="0" class="DCT_dikitable" style="width: 648px; height: 309px;">
+    <tbody>
+        <tr>
+            <td>
+            <h2 id="section-_E9_A6_96_E9_A1_B5-_E9_A1_B9_E7_9B_AE_E4_BB_8B_E7_BB_8D">项目介绍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;Member&quot;">项目组成员</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;Result&quot;">项目成果</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;Meet&quot;">项目例会</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            </ul>
+            </td>
+            <td>
+            <h2 id="section-_E9_A6_96_E9_A1_B5-_E6_9C_80_E6_96_B0_E5_85_AC_E5_91_8A">最新公告&nbsp;&nbsp;&nbsp;</h2>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;Pnews&quot;">项目新闻</a> 【<span style="color: rgb(255, 0, 0);">new</span>】</li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-新闻公告&quot;">新闻公告</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-会议通知&quot;">会议通知</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <h2 id="section-_E9_A6_96_E9_A1_B5-_E5_B7_A5_E4_BD_9C_E5_8A_A8_E6_80_81">工作动态</h2>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;模板-已经完成工作&quot;">已经完成工作</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-正在进行的项目&quot;">正在进行的项目</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-其他项目进展&quot;">其他项目进展</a></li>
+            </ul>
+            </td>
+            <td>
+            <h2 id="section-_E9_A6_96_E9_A1_B5-_E5_AD_A6_E6_9C_AF_E4_BA_A4_E6_B5_81">学术交流</h2>
+            <ul>
+                <li><a class="createpage" href="#" title="Create &quot;模板-学术交流会&quot;">学术交流会</a></li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-学术报告&quot;">学术报告</a>&nbsp; <i><span style="color: rgb(255, 0, 0);"><b>New<span style="font-family: monospace; white-space: pre;">!</span></b></span></i></li>
+            </ul>
+            <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <h2 id="section-_E9_A6_96_E9_A1_B5-_E6_9B_B4_E5_A4_9A_E6_A0_8F_E7_9B_AE">&nbsp;更多栏目&hellip;&hellip;</h2>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+</p>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	
+
+	
+	<Template title="工作周报" image="template-gzzb.gif">
+		<Description>工作周报主题模板</Description>
+		<Html>
+			<![CDATA[
+			<h2 id="section-_E5_B7_A5_E4_BD_9C_E5_91_A8_E6_8A_A5-_E5_B7_A5_E4_BD_9C_E5_91_A8_E6_8A_A5">工作周报</h2>
+<p>周报格式1:</p>
+<p>
+<table cellspacing="1" cellpadding="1" border="1" class="DCT_dikitable" style="width: 683px; height: 230px;">
+    <tbody>
+        <tr>
+            <td width="200">
+            <h2 id="section-_E5_B7_A5_E4_BD_9C_E5_91_A8_E6_8A_A5-_E9_A1_B9_E7_9B_AE_E7_BB_84" style="text-align: center;">项目组</h2>
+            </td>
+            <td>
+            <h2 id="section-_E5_B7_A5_E4_BD_9C_E5_91_A8_E6_8A_A5-_E5_B7_A5_E4_BD_9C_E6_80_BB_E7_BB_93" style="text-align: center;">工作总结</h2>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="2">01 系统组</td>
+            <td>
+            <p><b>本周工作总结：</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <p><b>下周工作计划：</b></p>
+            <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="2">02 软件组</td>
+            <td>
+            <p><b>本周工作总结：</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <p><b>下周工作计划：</b></p>
+            <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="2">03 质量组</td>
+            <td>
+            <p>&nbsp;<b>本周工作总结：</b></p>
+            <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <p><b>下周工作计划：</b></p>
+            <p>&nbsp;</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;周报格式2：</p>
+<p>
+<table cellspacing="1" cellpadding="1" border="1" class="DCT_dikitable" style="width: 681px; height: 121px;">
+    <tbody>
+        <tr>
+            <td>
+            <h2 id="section-_E5_B7_A5_E4_BD_9C_E5_91_A8_E6_8A_A5-_E5_A7_93_E5_90_8D" style="text-align: center;">姓名</h2>
+            </td>
+            <td style="text-align: center;">
+            <h2 id="section-_E5_B7_A5_E4_BD_9C_E5_91_A8_E6_8A_A5-_E5_B7_A5_E4_BD_9C_E5_91_A8_E6_8A_A5">工作周报</h2>
+            </td>
+        </tr>
+        <tr>
+            <td><a class="createpage" href="#" title="Create &quot;张三&quot;">&nbsp; 张三</a></td>
+            <td><a class="createpage" href="#" title="Create &quot;第一周&quot;">&nbsp;第一周</a>&nbsp;&nbsp; <a class="createpage" href="#" title="Create &quot;第二周&quot;">第二周</a></td>
+        </tr>
+        <tr>
+            <td>&nbsp; 李四</td>
+            <td><a class="createpage" href="#" title="Create &quot;第一周&quot;">&nbsp;第一周</a>&nbsp;&nbsp; <a class="createpage" href="#" title="Create &quot;第二周&quot;">第二周</a></td>
+        </tr>
+        <tr>
+            <td>&nbsp; 王五</td>
+            <td><a class="createpage" href="#" title="Create &quot;第一周&quot;">&nbsp;第一周</a>&nbsp;&nbsp; <a class="createpage" href="#" title="Create &quot;第二周&quot;">第二周</a></td>
+        </tr>
+    </tbody>
+</table>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="文档管理" image="template-wdgl.gif">
+		<Description>文档管理主题模板</Description>
+		<Html>
+			<![CDATA[
+			<div style=""><span style="display: none;">&nbsp;</span></div>
+<h2 id="section-_E6_96_87_E6_A1_A3_E7_AE_A1_E7_90_86-_E8_AF_B7_E5_9C_A8_E6_AD_A4_E8_BE_93_E5_85_A5_E6_A0_87_E9_A2_98" style="text-align: center;">请在此输入标题</h2>
+<div style=""><span style="display: none;">&nbsp;</span></div>
+<p>&nbsp;</p>
+<h3 id="section-_E6_96_87_E6_A1_A3_E7_AE_A1_E7_90_86-_E4_B8_80_E8_AF_B7_E5_9C_A8_E6_AD_A4_E8_BE_93_E5_85_A5_E6_96_87_E6_A1_A3_E7_B1_BB_E5_88_AB_E6_A0_87_E9_A2_98">一、请在此输入文档类别标题</h3>
+<ul>
+    <li>请插入文档1</li>
+    <li>请插入文档2</li>
+    <li>请插入文档3</li>
+</ul>
+<h3 id="section-_E6_96_87_E6_A1_A3_E7_AE_A1_E7_90_86-_E4_BA_8C_E8_AF_B7_E5_9C_A8_E6_AD_A4_E8_BE_93_E5_85_A5_E6_96_87_E6_A1_A3_E7_B1_BB_E5_88_AB_E6_A0_87_E9_A2_98">二、请在此输入文档类别标题</h3>
+<ul>
+    <li>请插入文档4</li>
+    <li>请插入文档5</li>
+    <li>请插入文档6</li>
+</ul>
+<h3 id="section-_E6_96_87_E6_A1_A3_E7_AE_A1_E7_90_86-_E4_B8_89_E8_AF_B7_E5_9C_A8_E6_AD_A4_E8_BE_93_E5_85_A5_E6_96_87_E6_A1_A3_E7_B1_BB_E5_88_AB_E6_A0_87_E9_A2_98">三、请在此输入文档类别标题</h3>
+<ul>
+    <li>项目文档1</li>
+    <li>项目文档2</li>
+    <li>项目文档3</li>
+</ul>
+<h3 id="section-_E6_96_87_E6_A1_A3_E7_AE_A1_E7_90_86-_E5_9B_9B_E8_AF_B7_E5_9C_A8_E6_AD_A4_E8_BE_93_E5_85_A5_E6_96_87_E6_A1_A3_E7_B1_BB_E5_88_AB_E6_A0_87_E9_A2_98">四、请在此输入文档类别标题</h3>
+<ul>
+    <li>共享文档1</li>
+    <li>共享文档2</li>
+    <li>共享文档3</li>
+</ul>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+
+	<Template title="个人主页" image="template-grzy.gif">
+		<Description>个人主页主题模板</Description>
+		<Html>
+			<![CDATA[
+			<h2 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E5_BC_A0_E4_B8_89_E7_9A_84_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5">张三的个人主页</h2>
+<p>&nbsp;</p>
+<h3 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E4_B8_AA_E4_BA_BA_E4_BF_A1_E6_81_AF">个人信息</h3>
+<table height="146" cellspacing="1" cellpadding="1" border="0" width="681" class="DCT_dikitable">
+    <tbody>
+        <tr>
+            <td>&nbsp;&nbsp;&nbsp;</td>
+            <td width="80%">
+            <h4 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E5_B7_A5_E4_BD_9C_E5_8D_95_E4_BD_8D_E4_B8_AD_E7_A7_91_E9_99_A2">工作单位：中科院&hellip;&hellip;</h4>
+            <h4 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E8_81_94_E7_B3_BB_E7_94_B5_E8_AF_9D01012345678">联系电话：010-12345678</h4>
+            <h4 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-EMail">E-mail: &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</h4>
+            <h4 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E9_80_9A_E4_BF_A1_E5_9C_B0_E5_9D_80_E5_8C_97_E4_BA_AC_E6_B5_B7_E6_B7_80_E5_8C_BA">通信地址：北京海淀区&hellip;&hellip;</h4>
+            </td>
+            <td>
+            <h4 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E8_AF_B7_E6_8F_92_E5_85_A5_E4_B8_AA_E4_BA_BA_E5_9B_BE_E7_89_87">&nbsp;请插入个人图片 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>
+<h3 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E5_B7_A5_E4_BD_9C_E6_97_A5_E5_8E_86">工作日历</h3>
+<p>请在此插入工作日历</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3 id="section-_E4_B8_AA_E4_BA_BA_E4_B8_BB_E9_A1_B5-_E5_85_B4_E8_B6_A3_E7_88_B1_E5_A5_BD">兴趣爱好</h3>
+<p><a class="external" href="http://www.g.cn">google应用技术</a></p>
+<p><a class="external" href="http://www.microsoft.com">Microsoft 技术论坛</a></p>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+
+	<Template title="新闻栏目" image="template-xwlm.gif">
+		<Description>新闻栏目主题模板</Description>
+		<Html>
+			<![CDATA[
+			<h2 id="section-_E6_96_B0_E9_97_BB_E6_A0_8F_E7_9B_AE-_E6_96_B0_E9_97_BB_E5_85_AC_E5_91_8A">新闻公告</h2>
+<table cellspacing="1" cellpadding="1" border="0" class="DCT_dikitable" style="width: 661px; height: 329px;">
+    <tbody>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+            <h4 id="section-_E6_96_B0_E9_97_BB_E6_A0_8F_E7_9B_AE-_E9_87_8D_E5_A4_A7_E6_96_B0_E9_97_BB">重大新闻</h4>
+            <ol>
+                <li><a class="createpage" href="#" title="Create &quot;新闻1&quot;">新闻1</a> (2008-09-21)&nbsp;</li>
+                <li><a class="external" href="http://www.sina.com.cn">链接新闻2</a>(2009-01-01)</li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-项目新闻&quot;">项目新闻</a> (2009-01-02)</li>
+            </ol>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+            <h4 id="section-_E6_96_B0_E9_97_BB_E6_A0_8F_E7_9B_AE-_E5_86_85_E9_83_A8_E5_85_AC_E5_91_8A">内部公告</h4>
+            <ol>
+                <li><a class="createpage" href="#" title="Create &quot;内部新闻1&quot;">内部新闻1</a>(2008-09-18)</li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-内部新闻2&quot;">内部新闻2</a>(2008-02-15)</li>
+                <li><a class="createpage" href="#" title="Create &quot;模板-内部新闻3&quot;">内部新闻3</a> (2008-01-06)</li>
+            </ol>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>
+			]]>
+		</Html>
+	</Template>
+
+	<Template title="申请管理" image="template-sqgl.gif">
+		<Description>申请管理主题模板</Description>
+		<Html>
+			<![CDATA[
+			<h2 id="section-_E7_94_B3_E8_AF_B7_E7_AE_A1_E7_90_86-_E8_AF_B7_E5_9C_A8_E6_AD_A4_E8_BE_93_E5_85_A5_E9_A1_B5_E9_9D_A2_E6_A0_87_E9_A2_98" style="text-align: center;">请在此输入页面标题</h2>
+<table height="113" cellspacing="1" cellpadding="1" border="1" align="center" width="624" class="DCT_dikitable">
+    <tbody>
+        <tr>
+            <td bgcolor="#cccccc">编号</td>
+            <td bgcolor="#cccccc">申请内容</td>
+            <td bgcolor="#cccccc">申请时间</td>
+            <td bgcolor="#cccccc">申请原由</td>
+            <td bgcolor="#cccccc">申请人</td>
+            <td bgcolor="#cccccc">项目负责人</td>
+            <td bgcolor="#cccccc">审批人</td>
+            <td bgcolor="#cccccc">备注</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>投影仪</td>
+            <td>2009-01-14</td>
+            <td>会议</td>
+            <td>xxx</td>
+            <td>xxx</td>
+            <td>xxx</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+			]]>
+		</Html>
+	</Template>
+
+	<Template title="考勤登记" image="template-kqdj.gif">
+		<Description>考勤登记主题模板</Description>
+		<Html>
+			<![CDATA[
+			<h3 id="section-_E6_A8_A1_E6_9D_BF-_E8_80_83_E5_8B_A4-_E8_80_83_E5_8B_A4">考勤</h3>
+<p><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 为促进交流，提高工作效率，即日起全体人员请直接在本页面中填写、审核和查阅请假与公出信息。</b></p>
+<p><i>（此处插入相关考勤的规定）</i></p>
+<p>
+<table border="1" width="98%" class="DCT_dikitable">
+    <tbody>
+        <tr>
+            <th>时间段</th>
+            <th>状态</th>
+            <th>提交人</th>
+            <th>事由</th>
+            <th>初审人</th>
+            <th>审批人</th>
+            <th>提交时间</th>
+            <th>备注</th>
+        </tr>
+        <tr>
+            <td>2009.01.16</td>
+            <td>病假</td>
+            <td>王&times;&times;</td>
+            <td>病假</td>
+            <td>&nbsp;</td>
+            <td>董&times;&times;</td>
+            <td>2009.01.15</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>2009.01.15上午</td>
+            <td>病假*</td>
+            <td>钱&times;</td>
+            <td>体检</td>
+            <td>&nbsp;</td>
+            <td>董&times;&times;</td>
+            <td>2009.01.15</td>
+            <td>补假</td>
+        </tr>
+        <tr>
+            <td>2009.01.12</td>
+            <td>事假</td>
+            <td>陈&times;</td>
+            <td>事假</td>
+            <td>&nbsp;</td>
+            <td>董&times;&times;</td>
+            <td>2009.01.13</td>
+            <td>补假</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+</p>
+<p>&nbsp;&nbsp; (在上表中加入新条目时请按时间段排序。) &nbsp; &nbsp;</p>
+<p>&nbsp;</p>
+<h3 id="section-_E6_A8_A1_E6_9D_BF-_E8_80_83_E5_8B_A4-_E5_B7_A5_E4_BD_9C_E6_97_A5_E5_8E_86">工作日历</h3>
+<table border="1" width="98%" class="DCT_dikitable">
+    <tbody>
+        <tr>
+            <th>时间段</th>
+            <th>人员</th>
+            <th>活动</th>
+        </tr>
+        <tr>
+            <td>&nbsp;1月14日下午</td>
+            <td>&nbsp;杨&times;&times;</td>
+            <td>&nbsp;北航，工作会议</td>
+        </tr>
+        <tr>
+            <td>&nbsp;1月5日下午</td>
+            <td>&nbsp;杨&times;&times;</td>
+            <td>&nbsp;北航，调试程序</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+<p>&nbsp;&nbsp;（请把希望让别人了解的你的工作安排发布在日历中，特别是外出的活动，以加强协作。）</p>
+<p>&nbsp;</p>
+<h3 id="section-_E6_A8_A1_E6_9D_BF-_E8_80_83_E5_8B_A4-_E5_8E_86_E5_8F_B2_E6_95_B0_E6_8D_AE">历史数据</h3>
+<table cellspacing="1" cellpadding="1" border="0" width="637" class="DCT_dikitable">
+    <tbody>
+        <tr>
+            <td width="50%" style="text-align: center;"><b>&nbsp;考勤</b></td>
+            <td style="text-align: center;"><b>&nbsp;工作日历</b></td>
+        </tr>
+        <tr>
+            <td align="center">
+            <p><a class="wikipage" href="#">&nbsp; 考勤：2008.09.21-2008.10.20</a></p>
+            <p><a class="wikipage" href="#">考勤：2008.08.21-2008.09.20</a></p>
+            <p><a class="wikipage" href="#">考勤：2008.07.21-2008.08.20</a></p>
+            </td>
+            <td align="center">
+            <p><a class="wikipage" href="#">日历：2008.09.21-2008.10.20</a></p>
+            <p><a class="wikipage" href="#">日历：2008.08.21-2008.09.20</a></p>
+            <p><a class="wikipage" href="#">日历：2008.07.21-2008.08.20</a></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="会议日程" image="template-hyrc.gif">
+		<Description>会议日程主题模板</Description>
+		<Html>
+			<![CDATA[
+			<h2 id="section-_E6_A8_A1_E6_9D_BF-_E4_BC_9A_E8_AE_AE_E6_97_A5_E7_A8_8B-_E4_B8_AD_E7_A7_91_E9_99_A2_E7_A0_94_E7_A9_B6_E6_89_80_E5_AD_A6_E6_9C_AF_E7_A0_94_E8_AE_A8_E4_BC_9A" style="text-align: center;">&nbsp;<span style="font-size: 18pt;"><b>中科院&times;&times;&times;研究所学术研讨会</b></span></h2>
+<h3 id="section-_E6_A8_A1_E6_9D_BF-_E4_BC_9A_E8_AE_AE_E6_97_A5_E7_A8_8B-_E4_BC_9A_E8_AE_AE_E6_97_A5_E7_A8_8B" style="text-align: center;"><b><span style="font-size: 14pt;">会 议 日 程 </span></b></h3>
+<h4 id="section-_E6_A8_A1_E6_9D_BF-_E4_BC_9A_E8_AE_AE_E6_97_A5_E7_A8_8B-_E4_BC_9A_E8_AE_AE_E6_97_A5_E6_9C_9F2009_E5_B9_B4_E6_9C_88_E6_97_A5_E8_87_B3_E6_9C_88_E6_97_A5">会议日期：2009年&times;月&times;日至&times;月&times;日</h4>
+<h4 id="section-_E6_A8_A1_E6_9D_BF-_E4_BC_9A_E8_AE_AE_E6_97_A5_E7_A8_8B-_E4_BC_9A_E8_AE_AE_E5_9C_B0_E7_82_B9">会议地点：&times;&times;&times;&times;&times;&times;</h4>
+<table border="1" class="DCT_dikitable" style="width: 700px; height: 2228px;">
+    <tbody>
+        <tr>
+            <th colspan="2"><span style="background-color: rgb(213, 239, 249); text-align: center;">时间</span></th>
+            <th><span style="background-color: rgb(213, 239, 249); text-align: center;">报告题目</span></th>
+            <th><span style="background-color: rgb(213, 239, 249); text-align: center;">报告人</span></th>
+            <th><span style="background-color: rgb(213, 239, 249); text-align: center;">主持</span></th>
+        </tr>
+        <tr>
+            <td width="20" rowspan="8">4月26日上午</td>
+            <td>09:00-09:05</td>
+            <td>介绍与会领导和嘉宾，会议开幕</td>
+            <td>&nbsp;</td>
+            <td rowspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>09:05-10:00</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>10:00-10:15</td>
+            <td style="text-align: center;" colspan="3">茶&nbsp;&nbsp; 歇</td>
+        </tr>
+        <tr>
+            <td>10:15-10:45</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+            <td style="text-align: center;" rowspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>10:45-11:20</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>11:20-11:50</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>11:50-12:20</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>12:30</td>
+            <td style="text-align: center;" colspan="3">午&nbsp; 餐</td>
+        </tr>
+        <tr>
+            <td rowspan="11">4月26日下午</td>
+            <td style="text-align: center;" colspan="3">专题一 &times;&times;&times;&times;&times;发展报告（20分钟报告，5分钟提问）</td>
+            <td rowspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:00-14:25</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:25-14:50</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:50-15:15</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>15:15-15:30</td>
+            <td style="text-align: center;" colspan="3">茶 歇</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">15:30-15:55</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+            <td style="text-align: center;" rowspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>15:55-16:20</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>16:20-16:45</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>16:45-17:10</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>17:10-17:45</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>18:00</td>
+            <td style="text-align: center;" colspan="3">晚 餐</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;" rowspan="11">4月27日上午</td>
+            <td style="text-align: center;" colspan="3">专题二&nbsp; &times;&times;&times;业界发展动态报告（40分钟报告，5分钟提问）</td>
+            <td style="text-align: center;" rowspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>08:30-09:15</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>09:15-10:00</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>10:00-10:45</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>10:45-11:00</td>
+            <td style="text-align: center;" colspan="3">茶 歇</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;" colspan="3">专题三 相关技术研讨（15分钟报告）</td>
+            <td rowspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>11:00-11:15</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>11:15-11:30</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>11:30-11:45</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>11:45-12:00</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>12：00</td>
+            <td style="text-align: center;" colspan="3">午 餐</td>
+        </tr>
+        <tr>
+            <td rowspan="9">4月27日下午</td>
+            <td>14:00-14:15</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td rowspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:15-14:30</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:30-14:45</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>15:45-15:00</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>15:00-15:15</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>15:15-15:30</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>15:30-15:45</td>
+            <td style="text-align: center;" colspan="3">茶 歇</td>
+        </tr>
+        <tr>
+            <td>15:45-18:00</td>
+            <td style="text-align: left;">分组讨论</td>
+            <td style="text-align: center;">&nbsp;</td>
+            <td style="text-align: center;">各分组召集人</td>
+        </tr>
+        <tr>
+            <td>18:30</td>
+            <td style="text-align: center;" colspan="3">晚 餐</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;" rowspan="4">4月28日上午</td>
+            <td style="text-align: left;">08:30-10:15</td>
+            <td style="text-align: left;">分组讨论</td>
+            <td style="text-align: center;">&nbsp;</td>
+            <td style="text-align: center;">各分组召集人</td>
+        </tr>
+        <tr>
+            <td>10:15-10:30</td>
+            <td style="text-align: center;" colspan="3">茶 歇</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">10:30-11:45</td>
+            <td style="text-align: left;">分组讨论</td>
+            <td style="text-align: center;">&nbsp;</td>
+            <td style="text-align: center;">各分组召集人</td>
+        </tr>
+        <tr>
+            <td>12:00</td>
+            <td style="text-align: center;" colspan="3">午 餐</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;" rowspan="6">4月28日下午</td>
+            <td style="text-align: left;">13:30-13:40</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+            <td style="text-align: center;" rowspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>13:40-14:00</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:00-14:20</td>
+            <td style="text-align: left;">&nbsp;</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:20-14:30</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>14:30-15:00</td>
+            <td style="text-align: left;">大会总结</td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;" colspan="3">会议闭幕，返程</td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+			]]>
+		</Html>
+	</Template>
+	
+	
+	
+</Templates>

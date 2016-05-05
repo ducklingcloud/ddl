@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This is the sample templates definitions file. It makes the "templates"
+ * command completely customizable.
+ *
+ * See FCKConfig.TemplatesXmlPath in the configuration file.
+-->
+<Templates imagesBasePath="fck_dmlplugin/images/">	
+	   <Template title="FCKLang.titleSessionsPlugin" image="SessionsPlugin.gif">
+			<Description>
+			SessionsPlugin
+			</Description>
+			<Help>testhelp</Help>
+			<Html>
+				<![CDATA[
+		          <img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/SessionsPlugin_big.gif" title="name='SessionsPlugin';property='users';" alt="" />
+				]]>
+			</Html>
+	 </Template>
+
+
+
+	<Template title="FCKLang.titleRecentChangesPlugin" image="RecentChangesPlugin.gif">
+		<Description>RecentChangesPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/RecentChangesPlugin_big.gif" title="since=30;name='RecentChangesPlugin';" alt="" />
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="FCKLang.titlePageFilterPlugin" image="PageFilterPlugin.gif">
+		<Description>PageFilterPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/PageFilterPlugin_big.gif" alt="" title="name='PageFilterPlugin';count='10';recentdays='10';" />
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="FCKLang.titleTableOfContents" image="TableOfContents.gif">
+		<Description>TableOfContents</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/TableOfContents_big.gif" alt="" title="name='TableOfContents';" />
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="FCKLang.titleIndexPlugin" image="IndexPlugin.gif">
+		<Description>IndexPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/IndexPlugin_big.gif" alt="" title="name='IndexPlugin';" />
+			]]>
+		</Html>
+	</Template>
+	
+    <Template title="FCKLang.titleReferredPagesPlugin" image="ReferredPagesPlugin.gif">
+		<Description>ReferredPagesPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/ReferredPagesPlugin_big.gif" alt="" title="name='ReferredPagesPlugin';" />
+			]]>
+		</Html>
+	</Template>
+	
+	<!--Template title="FCKLang.titleReferringDocsPlugin" image="ReferringDocsPlugin.gif">
+		<Description>ReferringDocsPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="scripts/fckeditor/editor/images/plugin.gif" alt="" title="name='ReferringDocsPlugin';" />
+			]]>
+		</Html>
+	</Template>  -->
+	
+	<Template title="FCKLang.titleUnusedPagesPlugin" image="UnusedPagesPlugin.gif">
+		<Description>UnusedPagesPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/UnusedPagesPlugin_big.gif" alt="" title="name='UnusedPagesPlugin';" />
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="FCKLang.titleCurrentTimePlugin" image="CurrentTimePlugin.gif">
+		<Description>CurrentTimePlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/CurrentTimePlugin_big.gif" alt="" title="name='CurrentTimePlugin';format='yyyy.MM.dd hh:mm:ss';" />
+			]]>
+		</Html>
+	</Template>
+	
+	<!-- Template title="FCKLang.titleSubscribeInfo" image="SubscribeInfo.gif">
+		<Description>SubscribeInfo</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/SubscribeInfo_big.gif" alt="" title="name='cn.vlabs.duckling.plugin.SubscribeInfo';" />
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="FCKLang.titleSubscribeEmail" image="SubscribeEmail.gif">
+		<Description>SubscribeEmail</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/plugin.gif" alt="" title="handler='cn.vlabs.duckling.plugin.SubscribeEmail';
+form='subscribeForm';
+name='FormOutput';" />
+			]]>
+		</Html>
+	</Template>  -->
+	
+	<Template title="FCKLang.titleWebClipping" image="WebClipping.gif">
+		<Description>WebClipping</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/WebClipping_big.gif" alt="" title="width='800';
+height='600';
+url='http://g.cn';
+name='WebClipping';" />
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="FCKLang.titleInsertPage" image="InsertPage.gif">
+		<Description>InsertPage</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/InsertPage_big.gif" title="name='InsertPage';page='1';" alt="" />
+			]]>
+		</Html>
+	</Template>
+	
+	
+	<Template title="FCKLang.titleSubPageFilterPlugin" image="SubPageFilterPlugin.gif">
+		<Description>SubPageFilterPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/SubPageFilterPlugin_big.gif" title="name='SubDpageFilterPlugin';styleclass='';resourceid='';hastitle='true';dataformat='MM-dd';pagesize='5';nextpage='true';" alt="" />
+			]]>
+		</Html>
+	</Template>
+	
+	<Template title="FCKLang.titleVisitorCountPlugin" image="VisitorCountPlugin.gif">
+		<Description>VisitorCountPlugin</Description>
+		<Html>
+			<![CDATA[
+<img contenteditable="false" class="plugin" src="$baseurl/scripts/fckeditor/editor/images/pluginimages/VisitorCountPlugin_big.gif" title="name='VisitorCountPlugin';" alt="" />
+			]]>
+		</Html>
+	</Template>
+	
+</Templates>

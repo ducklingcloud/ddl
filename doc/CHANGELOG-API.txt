@@ -1,0 +1,47 @@
+﻿                               	API-IOS版本更新历史 
+===================================================================================
+2014-9-23 lishanbo@cstnet.cn
+added:上传文件时,加参数folderName=文件夹名称,则文件上传到参数指定的文件夹里（在根目录下，若根目录下没有该文件夹则自动创建）。
+
+ddl v4.4.4
+
+2014-8-26 lishanbo@cstnet.cn
+1.文件上传成功后返回rid.
+2.创建文件夹时,加参数existed=return,文件夹若存在则返回
+
+2014-8-20 lishanbo@cstnet.cn
+1.同步盘上传同名文件时,可设置文件名序列自增
+=================================================================================================
+
+2013-01-29 zzb@cnic.cn
+* 增加接口api/pageRecommend，api/pageCopy，api/pageDelete用于操作页面的分享，复制，删除操作
+
+2013-01-22 zzb@cnic.cn
+* 增加数据库表a1_device_token,用于消息推送
+
+DROP TABLE IF EXISTS `a1_device_token`;
+CREATE TABLE `a1_device_token` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) NOT NULL,
+  `device_token` varchar(255) NOT NULL,
+  `last_login_time` timestamp NULL default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+2013-01-21 zzb@cnic.cn
+* 修改API接口/api/teamUpdates，增加返回字段api区分相同页面的不同请求
+* 增加API接口/api/myNoticeCount，用于返回消息数量
+
+2013-01-16 zzb@cnic.cn
+* 修改API接口/api/myHistory，增加返回字段api区分相同页面的不同请求
+* 修改API接口/api/teamUpdates，不返回数据时，date为请求的date不变
+
+2013-01-14 zzb@cnic.cn
+* 修改API接口/api/teamUpdates，调整每次返回7天数据为每次返回10条以上数据，按天截断
+	如某天返回数据量多于10条则返回当天的所有数据，若不足10条则继续添加下一天的数据
+* 修改API接口/api/search，修改检索时出现不属于此团队内容。
+
+2013-01-06 zzb@cnic.cn
+* 修改API版本支持IOS的1.1.1版
+* 之前各种接口的修改，省略...
+           

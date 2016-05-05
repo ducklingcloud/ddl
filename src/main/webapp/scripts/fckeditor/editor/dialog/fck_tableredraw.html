@@ -1,0 +1,154 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<style type="text/css">
+		.Hand
+		{
+			cursor: pointer;
+			cursor: hand;
+		}
+		.TplList {
+			background-color:#FFFFFF;
+			border:2px solid #DCDCDC;
+			overflow:auto;
+			width:96%;
+		}
+	</style>
+	<script src="common/fck_dialog_common.js?version=dct4.5" type="text/javascript"></script>
+	<script type="text/javascript">
+		
+		var dialog	= window.parent ;
+		var oEditor = dialog.InnerDialogLoaded() ;
+		var dialogArguments = dialog.Args() ;
+
+		// Gets the document DOM
+		var oDOM = oEditor.FCK.EditorDocument ;
+		
+		// Gets the table if there is one selected.
+		var table ;
+		var e = dialog.Selection.GetSelectedElement() ;
+		if(e){
+			if(e.nodeType==1){
+			if(e.nodeName!='TABLE' )
+				e = oEditor.FCKSelection.MoveToAncestorNode( 'TABLE' ) ;
+			}else{
+				e = oEditor.FCKSelection.MoveToAncestorNode( 'TABLE' ) ;
+			}
+		}else{
+			e = oEditor.FCKSelection.MoveToAncestorNode( 'TABLE' ) ;
+		}
+
+		if ( e && e.tagName == "TABLE" )
+			table = e ;
+			
+			
+			
+			
+		var oldclassname;
+		var oldtable
+		if ( table ){
+			oldclassname=table.className;
+			oldtable=table.cloneNode(true);
+		}
+			
+			
+		window.onload = function ()
+		{
+			oEditor.FCKLanguageManager.TranslatePage(document) ;
+			if(dialog.document.getElementById('btnOk'))
+				dialog.document.getElementById('btnOk').style.display = 'none' ;
+			dialog.SetAutoSize( true ) ;
+		}
+		
+		function ok( url )
+		{
+			filename=url.substring(url.lastIndexOf ("/"),url.length)
+			classname=filename.substring(1,filename.indexOf("."))
+			oEditor.FCK.ReDrawTable(table,classname);
+			window.parent.CloseDialog();
+		}
+		
+		function over(td)
+		{
+			td.className = 'LightBackground Hand' ;
+		}
+		
+		function out(td)
+		{
+			td.className = 'DarkBackground Hand' ;
+		}
+		var redotype=0;
+		function showimg(sUrl,url){
+			GetE('showimg').innerHTML='<img src="' + sUrl + '" border="0" width="100%" height="100%"/>'
+			filename=url.substring(url.lastIndexOf ("/"),url.length)
+			classname=filename.substring(1,filename.indexOf("."))
+			if(redotype==0)
+				oEditor.FCK.ReDrawTableSaveUndo();
+			oEditor.FCK.ReDrawTable(table,classname);
+			redotype++;
+		}
+		
+		function hiddenimg(){
+			
+			GetE('showimg').innerHTML='&nbsp;'
+				
+		}
+		
+		function Cancel()
+		{
+			oEditor.FCK.ReDrawTableRedo();
+			window.parent.CloseDialog();
+		}
+		
+	</script>
+</head>
+<body class="InnerBody" style="overflow: hidden">
+<div  style="position: absolute;top:25px;height:212px;width:642px;border:2px solid #B9CFE6;background-color:#F8F8F5;">
+<div style="height:10px;width:250px;background-color:#F8F8F5;border:2px solid #F8F8F5;text-align: center;" >
+	<b><span fcklang="Preview">Preview</span></b>
+</div>
+<div  id='showimg' style="height:180px;width:250px;background-color:#F8F8F5;border:2px solid #F8F8F5" >
+	&nbsp;
+</div>
+
+<div style="height:200px;width:380px;left:254px;top:5px;overflow:auto;position: absolute;background-color:#FFFFFF;border:2px solid #DCDCDC;" >
+	<table cellpadding="2" cellspacing="2" align="center" border="0" width="100%" height="100%">
+		<script type="text/javascript">
+			var FCKConfig = oEditor.FCKConfig ;
+			var sBasePath	= FCKConfig.TableRedrawPath ;
+			var aImages		= FCKConfig.TableRedrawImages ;
+			var iCols		= FCKConfig.TableRedrawColumns ;
+			var iColWidth	= parseInt( 100 / iCols, 10 ) ;
+
+			var i = 0 ;
+			while (i < aImages.length)
+			{
+				document.write( '<tr>' ) ;
+				for(var j = 0 ; j < iCols ; j++)
+				{
+					if (aImages[i])
+					{
+						var sUrl = sBasePath + aImages[i] ;
+						document.write( '<td width="' + iColWidth + '%" align="center" class="DarkBackground Hand" onclick="ok(\'' + sUrl.replace(/'/g, "\\'" ) + '\')" onmouseover="over(this)" onmouseout="out(this)">' ) ;
+						document.write( '<img src="' + sUrl + '" border="0" onmouseover="javascript:showimg(\''+sUrl+'\',\'' + sUrl.replace(/'/g, "\\'" ) + '\')" onmouseout="javascript:hiddenimg()" />' ) ;
+					}
+					else
+						document.write( '<td width="' + iColWidth + '%" class="DarkBackground">&nbsp;' ) ;
+					document.write( '<\/td>' ) ;
+					i++ ;
+				}
+				document.write('<\/tr>') ;
+			}
+
+		</script>
+	</table>
+
+</div> 
+
+</div>
+
+
+</body>
+</html>

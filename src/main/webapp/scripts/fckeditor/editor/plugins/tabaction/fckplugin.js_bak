@@ -1,0 +1,216 @@
+var DETabAction = {
+	"tabPluginActed" : false,
+	"focusNode" : null,
+	"tabButton" : function(e) {
+		DETabAction.tabPluginActed = false;
+		var C = e.keyCode || e.which;
+		if(!e.shiftKey&&C==9){
+//			DETabAction.setFocusNode(e);
+//			var node = DETabAction.focusNode;
+//			if(!DETabAction.checkElement(node))
+//				return;
+//			var liElement = DETabAction.getLiElement(node);
+//			var preLi = DETabAction.getPreviousElement(liElement);
+			
+			var A = new FCKDomRange(FCK.EditorWindow);
+			A.MoveToSelection();
+			var C = FCKDomTools.GetCommonParentNode(A.StartNode || A.StartContainer, A.EndNode || A.EndContainer, ["ul", "ol"]);
+			if (C) {
+				FCK.ToolbarSet.CurrentInstance.Commands.GetCommand("Indent").Execute();
+				DETabAction.tabPluginActed = true;
+				
+//				e.cancelBubble = true;
+//				e.keyCode=0
+			}
+			
+			
+//			if(preLi==null||preLi.nodeName!="LI"){
+//				//do nothing
+//			}else{
+//				if(preLi.lastChild!=null && preLi.lastChild.nodeName=="UL"){//如果上一个li的最后一个元素是ul
+//					var ul = preLi.lastChild;
+//					ul.appendChild(liElement);
+//					//如果上一个li的最后一个元素是文本，并且倒数第二个元素是ul
+//				}else if(preLi.lastChild!=null && preLi.lastChild.nodeType==3 && DETabAction.getPreviousElement(preLi.lastChild)!=null&&DETabAction.getPreviousElement(preLi.lastChild).nodeName=="UL"){
+//					var ul = DETabAction.getPreviousElement(preLi.lastChild);
+//					ul.appendChild(liElement);
+//				}else{
+//					var newUL = document.createElement("ul");
+//					preLi.appendChild(newUL);
+//					newUL.appendChild(liElement);
+//				}
+//			}
+			
+			return false;
+		}
+	},
+	"shiftTabButton" : function(e) {
+		var C = e.keyCode || e.which;
+		if(e.shiftKey&&C==9){
+			
+			var A = new FCKDomRange(FCK.EditorWindow);
+			A.MoveToSelection();
+			var C = FCKDomTools.GetCommonParentNode(A.StartNode || A.StartContainer, A.EndNode || A.EndContainer, ["ul", "ol"]);
+			if (C) {
+				FCK.ToolbarSet.CurrentInstance.Commands.GetCommand("Outdent").Execute();
+				DETabAction.tabPluginActed = true;
+			}
+//			DETabAction.setFocusNode(e);
+//			var node = DETabAction.focusNode;
+//			if(!DETabAction.checkElement(node))
+//				return;
+//			var liElement = DETabAction.getLiElement(node);
+//			var parentUl = liElement.parentNode;
+//			var outerLi = parentUl.parentNode;
+//			if(outerLi!=null&&outerLi.nodeName=="LI"){
+//				var nextElement = DETabAction.getNextElement(liElement);
+//				if(nextElement==null||nextElement.nodeName!="LI"){//后面没有其他的li元素了，可以直接添加到外层的li后面
+//					DETabAction.appendAfter(liElement, outerLi);
+//				}else{//麻烦了，后面还有其他li元素，需要把它们取出来放到要升级的li元素下面
+//					var newUl = document.createElement("ul");
+//					var canMove = false;
+//					var child = parentUl.childNodes[0];
+//					while(child!=null){
+//						if(child==liElement){
+//							child = child.nextSibling;
+//							DETabAction.appendAfter(liElement, outerLi);
+//							var uls = liElement.getElementsByTagName("UL");
+//							for(var i=0;i<uls.length;i++){
+//								while(uls[i]!=null&&uls[i].hasChildNodes()){
+//									newUl.appendChild(uls[i].childNodes[0]);
+//								}
+//							}
+//							liElement.appendChild(newUl);
+//							canMove = true;
+//							continue;
+//						}
+//						var temp = child.nextSibling;
+//						if(canMove){
+//							newUl.appendChild(child);
+//						}
+//						child = temp;
+//					}
+//				}
+//				if(parentUl.getElementsByTagName("LI").length==0){
+//					outerLi.removeChild(parentUl);
+//				}
+//			}
+			e.cancelBubble = true;
+			e.keyCode=0
+			return false;
+		}
+	}
+//	,
+//	"getLastElementByNodeType" : function(e) {
+//		//TODO 工具方法
+//	},
+//	"getLastElementByNodeName" : function(e) {
+//		//TODO 工具方法
+//	},
+//	"appendAfter" : function(newNode, node) {
+//		var next = node.nextSibling;
+//		if(next==null){
+//			node.parentNode.appendChild(newNode);
+//		}else{
+//			node.parentNode.insertBefore(newNode, next);
+//		}
+//	},
+//	"getLastElementChild" : function(node) {
+//		var result = null;
+//		node = node.last;
+//		while(node!=null){
+//			if(node.nodeType==1){
+//				result = node;
+//				break;
+//			}
+//			node = node.previousSibling;
+//		}
+//		return result;
+//	},
+//	"getPreviousElement" : function(node) {
+//		var result = null;
+//		node = node.previousSibling;
+//		while(node!=null){
+//			if(node.nodeType==1){
+//				result = node;
+//				break;
+//			}
+//			node = node.previousSibling;
+//		}
+//		return result;
+//	},
+//	"getNextElement" : function(node) {
+//		var result = null;
+//		node = node.nextSibling;
+//		while(node!=null){
+//			if(node.nodeType==1){
+//				result = node;
+//				break;
+//			}
+//			node = node.nextSibling;
+//		}
+//		return result;
+//	},
+//	//检查外层有没有li元素
+//	"checkElement" : function (node){
+//		if(node.nodeName=="LI"){
+//			return true;
+//		}
+//		var count = 0;
+//		var parent = node.parentNode;
+//		//在第一个元素中点击tab才生效
+//		if(parent.firstChild != node){
+//			return false;
+//		}
+//		var result = false;
+//		while (node!=null && count < 5) {
+//			if(parent!=null&&parent.nodeName == "LI" && parent.firstChild==node){
+//				result = true;
+//				break;
+//			}
+//			node = parent;
+//			parent = node.parentNode;
+//			count = count + 1;
+//		}
+//		return result;
+//	},
+//	//向外层循环搜索li元素
+//	"getLiElement" : function (node){
+//		if(node!=null&&node.nodeName=="LI"){
+//			return node;
+//		}
+//		var count = 0;
+//		var parent = node.parentNode;
+//		var result = null;
+//		while (parent!=null && count < 5) {
+//			if(parent.nodeName == "LI"){
+//				result = parent;
+//				break;
+//			}
+//			parent = parent.parentNode;
+//			count = count + 1;
+//		}
+//		return result;
+//	},
+//	"setFocusNode" : function (e){
+//		if (FCKBrowserInfo.IsIE) {
+////			DETabAction.focusNode = FCK.EditorWindow.getSelection().focusNode;
+//			DETabAction.focusNode =   e.srcElement || e.target ;
+////			DETabAction.focusNode = FCKSelection.GetSelectedElement()
+//		}else{
+//			DETabAction.focusNode = FCKSelection.GetSelection().focusNode;
+//		}
+//	},
+//	"_SetupClickListener" : function() {
+//		if (!FCKBrowserInfo.IsIE) {
+//			FCK.EditorDocument.addEventListener('keydown', DETabAction.tabButton, true);
+//			FCK.EditorDocument.addEventListener('keydown', DETabAction.shiftTabButton, true);
+//		}else{
+////			FCKTools.AddEventListenerEx(A, "keydown", _FCKKeystrokeHandler_OnKeyDown, this);
+//			FCK.EditorDocument.attachEvent( 'onkeydown',DETabAction.tabButton );
+//			FCK.EditorDocument.attachEvent('onkeydown', DETabAction.shiftTabButton);
+//		}
+//	}
+}
+
+FCK.Events.AttachEvent('OnAfterSetHTML', DETabAction._SetupClickListener);

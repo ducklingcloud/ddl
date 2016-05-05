@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Cell properties dialog window.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Table Cell Properties</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<script src="common/fck_dialog_common.js?version=dct4.5" type="text/javascript"></script>
+	<script type="text/javascript">
+
+var dialog	= window.parent ;
+var oEditor = dialog.InnerDialogLoaded() ;
+
+// Gets the document DOM
+var oDOM = oEditor.FCK.EditorDocument ;
+
+// Array of selected Cells
+var aCells = oEditor.FCKTableHandler.GetSelectedCells() ;
+
+window.onload = function()
+{
+	// First of all, translate the dialog box texts
+	oEditor.FCKLanguageManager.TranslatePage( document ) ;
+
+	SetStartupValue() ;
+
+	dialog.SetOkButton( true ) ;
+	dialog.SetAutoSize( true ) ;
+	SelectField( 'txtWidth' ) ;
+}
+/**
+*如果宽度高度录入框内容改变了再做改变高宽的处理
+*这样选中多行时改变颜色就不会改变高宽了
+*/
+var widthChangeType=0;//宽度
+var heightChangeType=0;//高度
+var selWordWrapType=0;//自动换行
+var selHAlignType=0;//水平对齐
+var selVAlignType=0;//垂直对齐
+var  txtBackColorType=0;//背景颜色
+function widthonchange(){
+widthChangeType++;
+}
+function heightonchange(){
+heightChangeType++;
+}
+
+function selWordWraponchange(){
+selWordWrapType++;
+}
+
+function selHAlignChange(){
+selHAlignType++;
+}
+
+function selVAlignChange(){
+selVAlignType++;
+}
+function txtBackColorChange(){
+ txtBackColorType++;
+}
+//end 
+
+
+function SetStartupValue()
+{
+	if ( aCells.length > 0 )
+	{
+		var oCell = aCells[0] ;
+		var iWidth = GetAttribute( oCell, 'width' ) ;
+
+		if ( iWidth.indexOf && iWidth.indexOf( '%' ) >= 0 )
+		{
+			iWidth = iWidth.substr( 0, iWidth.length - 1 ) ;
+			GetE('selWidthType').value = 'percent' ;
+		}
+
+		if ( oCell.attributes['noWrap'] != null && oCell.attributes['noWrap'].specified )
+			GetE('selWordWrap').value = !oCell.noWrap ;
+
+		GetE('txtWidth').value			= iWidth ;
+		GetE('txtHeight').value			= GetAttribute( oCell, 'height' ) ;
+		GetE('selHAlign').value			= GetAttribute( oCell, 'align' ) ;
+		GetE('selVAlign').value			= GetAttribute( oCell, 'vAlign' ) ;
+		GetE('txtRowSpan').value		= GetAttribute( oCell, 'rowSpan' ) ;
+		GetE('txtCollSpan').value		= GetAttribute( oCell, 'colSpan' ) ;
+		GetE('txtBackColor').value		= GetAttribute( oCell, 'bgColor' ) ;
+		GetE('txtBorderColor').value	= GetAttribute( oCell, 'borderColor' ) ;
+		GetE('txtBackGround').value	= GetAttribute( oCell, 'background' ) ;
+//		GetE('cmbFontStyle').value		= oCell.className ;
+	}
+}
+
+
+//add by diyanliang 
+function isTel(string) {
+	if(string==null||string==""){
+		return false;
+	}
+	var i = 0;
+	var tmpchar;
+	for (i = 0; i < string.length; i++) {
+		tmpchar = string.charAt(i);
+		if (tmpchar >= "0" && tmpchar <= "9") {
+			continue;
+		}
+		return false;
+	}
+	return true;
+}
+//end
+
+// Fired when the user press the OK button
+function Ok()
+{
+	//add by diyanliang 
+	if(isTel(GetE('txtWidth').value)){
+		if(GetE('txtWidth').value<1){
+			alert("单元格宽度必须大于0");
+			return false;
+		}
+	}
+	if(isTel(GetE('txtHeight').value)){
+		if(GetE('txtHeight').value<1){
+			alert("单元格高度必须大于0")
+			return false;
+		}
+	}
+	//end
+	for( i = 0 ; i < aCells.length ; i++ )
+	{
+	
+	//设置宽度的位置2008-11-12增加对widthChangeType的判断这样在对一行改变一个属性的操作时候不会改变整行的全部属性
+		if(widthChangeType>0)
+		{
+			if ( GetE('txtWidth').value.length > 0 )
+				{
+					aCells[i].width	= GetE('txtWidth').value + ( GetE('selWidthType').value == 'percent' ? '%' : '') ;
+				}
+			else{
+					aCells[i].removeAttribute( 'width', 0 ) ;
+				}
+			
+		}
+		
+	//设置自动换行的位置2008-11-12增加对selWordWrapType的判断这样在对一行改变一个属性的操作时候不会改变整行的全部属性
+		if(selWordWrapType>0)
+		{
+			if ( GetE('selWordWrap').value == 'false' ){
+					SetAttribute( aCells[i], 'noWrap', 'nowrap' ) ;
+				}
+			else{
+					aCells[i].removeAttribute( 'noWrap' ) ;
+				}
+			
+		}
+		
+	//设置高度的位置2008-11-12增加对heightChangeType的判断这样在对一行改变一个属性的操作时候不会改变整行的全部属性
+		if(heightChangeType>0){
+			SetAttribute( aCells[i], 'height'		, GetE('txtHeight').value ) ;
+				
+		}
+		
+	//设置水平对齐的位置2008-11-12增加对selHAlignType的判断这样在对一行改变一个属性的操作时候不会改变整行的全部属性	
+		if(selHAlignType>0){
+			SetAttribute( aCells[i], 'align'		, GetE('selHAlign').value ) ;
+			
+		}
+		
+	//设置垂直对齐的位置2008-11-12增加对selVAlignType的判断这样在对一行改变一个属性的操作时候不会改变整行的全部属性			
+		if(selVAlignType>0){
+			SetAttribute( aCells[i], 'vAlign'		, GetE('selVAlign').value ) ;
+			
+		}
+		
+		//SetAttribute( aCells[i], 'rowSpan'		, GetE('txtRowSpan').value ) ;
+		//SetAttribute( aCells[i], 'colSpan'		, GetE('txtCollSpan').value ) ;
+	//设置背景颜色的位置2008-11-12增加对txtBackColorType的判断这样在对一行改变一个属性的操作时候不会改变整行的全部属性					
+		if(txtBackColorType>0){
+			SetAttribute( aCells[i], 'bgColor'		, GetE('txtBackColor').value ) ;
+			
+		}
+		
+		//add by diyanliang 09-9-8
+		SetAttribute( aCells[i], 'background'	, GetE('txtBackGround').value ) ;
+		//end
+		SetAttribute( aCells[i], 'borderColor'	, GetE('txtBorderColor').value ) ;
+//		SetAttribute( aCells[i], 'className'	, GetE('cmbFontStyle').value ) ;
+	}
+//最后把参数全都重置到没有修改的状态
+
+widthChangeType=0;	
+selWordWrapType=0;
+heightChangeType=0;	
+selHAlignType=0;
+selVAlignType=0;
+txtBackColorType=0;
+//end
+	return true ;
+}
+
+function SelectBackColor( color )
+{
+	if ( color && color.length > 0 )
+		GetE('txtBackColor').value = color ;
+}
+
+function SelectBorderColor( color )
+{
+	if ( color && color.length > 0 )
+		GetE('txtBorderColor').value = color ;
+}
+
+function SelectColor( wich )
+{
+	oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 410, 320, wich == 'Back' ? SelectBackColor : SelectBorderColor, window ) ;
+}
+
+	</script>
+</head>
+<body class="InnerBody" scroll="no" style="overflow: hidden">
+	<table cellspacing="0" cellpadding="0" width="100%" border="0" height="100%">
+		<tr>
+			<td>
+				<table cellspacing="1" cellpadding="1" width="100%" border="0">
+					<tr>
+						<td>
+							<table cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td nowrap="nowrap">
+										<span fcklang="DlgCellWidth">Width</span>:</td>
+									<td>
+										&nbsp;<input onchange="widthonchange()" onkeypress="return IsDigit(event);" id="txtWidth" type="text" maxlength="4"
+											size="3" name="txtWidth" />&nbsp;<select id="selWidthType" name="selWidthType">
+												<option fcklang="DlgCellWidthPx" value="pixels" selected="selected">pixels</option>
+												<option fcklang="DlgCellWidthPc" value="percent">percent</option>
+											</select></td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<span fcklang="DlgCellHeight">Height</span>:</td>
+									<td>
+										&nbsp;<input id="txtHeight" onchange="heightonchange()" type="text" maxlength="4" size="3" name="txtHeight" onkeypress="return IsDigit(event);" />&nbsp;<span
+											fcklang="DlgCellWidthPx">pixels</span></td>
+								</tr>
+								<tr>
+									<td>
+										&nbsp;</td>
+									<td>
+										&nbsp;</td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<span fcklang="DlgCellWordWrap">Word Wrap</span>:</td>
+									<td>
+										&nbsp;<select onchange="selWordWraponchange()" id="selWordWrap" name="selAlignment">
+											<option fcklang="DlgCellWordWrapYes" value="true" selected="selected">Yes</option>
+											<option fcklang="DlgCellWordWrapNo" value="false">No</option>
+										</select></td>
+								</tr>
+								<tr>
+									<td>
+										&nbsp;</td>
+									<td>
+										&nbsp;</td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<span fcklang="DlgCellHorAlign">Horizontal Alignment</span>:</td>
+									<td>
+										&nbsp;<select onchange="selHAlignChange()" id="selHAlign" name="selAlignment">
+											<option fcklang="DlgCellHorAlignNotSet" value="" selected>&lt;Not set&gt;</option>
+											<option fcklang="DlgCellHorAlignLeft" value="left">Left</option>
+											<option fcklang="DlgCellHorAlignCenter" value="center">Center</option>
+											<option fcklang="DlgCellHorAlignRight" value="right">Right</option>
+										</select></td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<span fcklang="DlgCellVerAlign">Vertical Alignment</span>:</td>
+									<td>
+										&nbsp;<select onchange="selVAlignChange()" id="selVAlign" name="selAlignment">
+											<option fcklang="DlgCellVerAlignNotSet" value="" selected>&lt;Not set&gt;</option>
+											<option fcklang="DlgCellVerAlignTop" value="top">Top</option>
+											<option fcklang="DlgCellVerAlignMiddle" value="middle">Middle</option>
+											<option fcklang="DlgCellVerAlignBottom" value="bottom">Bottom</option>
+											<!--option fcklang="DlgCellVerAlignBaseline" value="baseline">Baseline</option-->
+										</select></td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							&nbsp;&nbsp;&nbsp;</td>
+						<td align="right">
+							<table cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td nowrap="nowrap">
+										<!-- span fcklang="DlgCellRowSpan">Rows Span</span>:-->
+										</td>
+									<td>
+										&nbsp;
+										<!--  input onkeypress="return IsDigit(event);" id="txtRowSpan" type="text" maxlength="3" size="2"
+											name="txtRows"-->
+										<input onkeypress="return IsDigit(event);" id="txtRowSpan" type="hidden" maxlength="3" size="2"
+											name="txtRows">
+											</td>
+									<td>
+									</td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<!--  span fcklang="DlgCellCollSpan">Columns Span</span>:-->
+										</td>
+									<td>
+										&nbsp;
+										<!--  input onkeypress="return IsDigit(event);" id="txtCollSpan" type="text" maxlength="2"
+											size="2" name="txtColumns"-->
+										<input onkeypress="return IsDigit(event);" id="txtCollSpan" type="hidden" maxlength="2"
+											size="2" name="txtColumns">
+											</td>
+									<td>
+									</td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										&nbsp;</td>
+									<td colspan="2">
+										&nbsp;</td>
+									<td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										&nbsp;</td>
+									<td colspan="2">
+										&nbsp;</td>
+									<td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<span fcklang="DlgCellBackColor">Background Color</span>:</td>
+									<td>
+										&nbsp;<input onchange="txtBackColorChange()" id="txtBackColor" type="text" size="8" name="txtCellSpacing"></td>
+									<td>
+										&nbsp;
+										<input type="button" fcklang="DlgCellBtnSelect" value="Select..." onclick="SelectColor( 'Back' );txtBackColorChange()"></td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										&nbsp;</td>
+									<td colspan="2">
+										&nbsp;</td>
+									<td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<span fcklang="DlgCellBackGround">Background</span>:</td>
+									<td colspan="2">
+										&nbsp;<input  id="txtBackGround" type="text" size="20" name="txtBackGround"></td>
+									<td>
+								</tr>
+								<tr>
+									<td nowrap="nowrap">
+										<!--  span fcklang="DlgCellBorderColor">Border Color</span>:-->
+										</td>
+									<td>
+										&nbsp;
+										<!--  input id="txtBorderColor" type="text" size="8" name="txtCellPadding" /-->
+										<input id="txtBorderColor" type="hidden" size="8" name="txtCellPadding" />
+										</td>
+									
+									<td>
+										&nbsp;
+										<!-- input type="button" fcklang="DlgCellBtnSelect" value="Select..." onclick="SelectColor( 'Border' )" / -->
+										<input type="hidden" fcklang="DlgCellBtnSelect" value="Select..." onclick="SelectColor( 'Border' )" />
+										</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

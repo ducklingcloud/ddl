@@ -1,0 +1,716 @@
+<html>
+<head>
+<title>科研在线-文档库</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<style>
+body {
+	background: #eee;
+	font-family: Arial, sans-serif, "宋体";
+	font-size: 14px;
+	line-height: 1.5em;
+}
+
+table tr td {padding:7px 10px; vertical-align:top;}
+
+.ui-clear {
+	clear: both;
+}
+
+.container {
+	width: 700px;
+	margin: 0 auto;
+	background: #fff;
+	border: 1px solid #ccc;
+	padding: 1em;
+	min-height: 500px;
+}
+
+.banner {
+	background: #333;
+	height: 40px;
+}
+
+.banner img {
+	margin: 5px 10px
+}
+
+.container .content {
+	padding: 0;
+}
+
+.container .content p {
+	font-size: 13px;
+}
+
+.container .content a {
+	text-decoration: none;
+	color: #05a;
+}
+
+.container .content p.title {
+	font-weight: bold;
+	border-bottom: 1px dotted #ccc;
+	padding: 10px;
+	font-size: 14px;
+	background:#f5f5f5;
+}
+
+.container .content p.title a {
+	color: #333;
+}
+
+.container .content p.time {
+	color: #ccc;
+	font-size: 13px;
+}
+
+.subtitle {
+	font-weight: bold;
+	margin-top: 20px;
+	padding:5px 10px;
+	border-bottom:1px solid #eee;
+}
+
+p.more {
+	text-align: right;
+	margin-right: 15px;
+	font-size:13px;
+}
+p.more a,a.refuse{
+	color:#05a;
+	text-decoration:none;
+	font-size:13px;
+}
+a.refuse {text-align:center;}
+
+.container .content p .version {
+	font-size: 8pt;
+	vertical-align: super;
+}
+
+.container .content a.login {
+	display: block;
+	width: 120px;
+	line-height: 30px;
+	background: #333;
+	text-align: center;
+	color: #fff;
+	text-decoration: none;
+	font-size: 13px;
+}
+
+.new-notice {
+	background-position: 6px -170px;
+}
+
+p.new-notice {
+	margin-left: -2px !important;
+	padding-left: 15px;
+}
+
+p.old-notice span {
+	color: #999;
+}
+
+/*more*/
+.display-notice-control {
+	background-color: #eef;
+	border: 1px solid #ccf;
+	max-width: 300px;
+}
+
+.display-notice-control:hover {
+	background-color: #ccf;
+	border-color: #aaf;
+}
+
+.display-notice-control a {
+	display: block;
+	padding: 5px 10px;
+	text-decoration: none;
+}
+
+.hidden-display-notice {
+	display: none;
+}
+
+.hide-count-container {
+	display: none;
+}
+
+/*icon*/
+/* .a1-feed .a1-feed-leadingImg {
+	width: 2em;
+	margin-top: 4px;
+	height: 19px;
+	text-align: right;
+	overflow: visible;
+}
+
+.a1-feed .a1-feed-leadingImg.-DPage {
+	background: url(#@baseUrl@#/jsp/aone/images/icon-feed-19.gif) no-repeat right -150px;
+}
+
+.a1-feed .a1-feed-leadingImg.-DFile {
+	background: url(#@baseUrl@#/jsp/aone/images/icon-feed-19.gif) no-repeat right -92px;
+}
+
+.a1-feed .a1-feed-leadingImg.-DCollection {
+	background: url(#@baseUrl@#/jsp/aone/images/icon-feed-19.png) no-repeat 7px -241px;
+} */
+.headImg { 
+	float:left; 
+	margin:5px 0px 0px 10px; 
+}
+.headImg { 
+	display:inline-block; 
+	width:20px; 
+	height:20px;
+	background:url(#@baseUrl@#/jsp/aone/images/icon-feed-20.png) -5px -5px no-repeat;
+}
+.headImg.DPage {
+	background-position: -5px -5px; 
+}
+.headImg.DFile { 	
+	background-position: -5px -35px; 
+}
+.headImg.DFile.rar,.headImg.DFile.zip {
+	background-position: -5px -305px; 
+}
+.headImg.DFile.doc,.headImg.DFile.docx {
+	background-position: -5px -185px; 
+}
+.headImg.DFile.xls,.headImg.DFile.xlsx {
+	background-position: -5px -215px; 
+}
+.headImg.DFile.ppt,.headImg.DFile.pptx {
+	background-position: -5px -246px; 
+}
+.headImg.DFile.txt {
+	background-position: -5px -66px; 
+}
+.headImg.DFile.pdf {
+	background-position: -5px -276px; 
+}
+.headImg.DFile.wmv,
+.headImg.DFile.flv,
+.headImg.DFile.avi {
+	background-position: -5px -125px; }
+.headImg.DFile.jpg,
+.headImg.DFile.png,
+.headImg.DFile.gif,
+.headImg.DFile.bmp,
+.headImg.DFile.psd {
+	background-position: -5px -95px; }
+.headImg.Bundle {
+	background-position: -468px -229px; }
+.headImg.Folder {
+	background-position: -5px -155px; }
+
+div.notice-leadImg{
+	width:19px; height:19px; left:-5px; top:9px;
+	background:url(#@baseUrl@#/jsp/aone/images/icon-feed-19.gif) no-repeat;
+}
+div.notice-leadImg { left:-15px; }
+div.notice-leadImg.recommend,
+div.notice-leadImg.mention{ background-position:left -40px; }
+div.notice-leadImg.upload{ background-position:left -120px; }
+div.notice-leadImg.comment,
+	div.notice-leadImg.reply { background-position:left -58px; }
+div.notice-leadImg.modify { background-position:left -20px; }
+
+div.notice-leadImg.recommend,
+	div.notice-leadImg.recommend,
+	div.notice-leadImg.mention, 
+	div.notice-leadImg.mention,
+	div.notice-leadImg.comment, 
+	div.notice-leadImg.comment{top:8px; }
+div.notice-leadImg.delete, 
+	div.notice-leadImg.delete {background: url(#@baseUrl@#/jsp/aone/images/icon-feed-dtd-19.png)  0 0 no-repeat;  }
+div.notice-leadImg.teamMove, 
+	div.notice-leadImg.teamMove{background: url(#@baseUrl@#/jsp/aone/images/icon-feed-dtd-19.png)  0 -24px no-repeat;  }   
+
+/*trends list*/
+.a1-feed {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+span.time {
+	color: #ccc;
+	/* float: right; */
+	font-size: 9pt;
+}
+
+.notice-target-version
+	{
+	font-size: 8pt;
+	vertical-align: super;
+	white-space: nowrap;
+}
+
+.a1-feed .a1-feed-body {
+	width: 500px;
+	height: auto;
+	/* float: left; */
+	margin: 0 0 0 1em;
+	list-style: none;
+}
+
+.a1-feed .a1-feed-body p {
+	color: #666;
+	margin: 0 0.5em 0.7em 1em;
+	font-size:13px;
+}
+
+.a1-feed h4 {
+	color: #333;
+	font-weight: normal;
+	margin: 0px;
+	margin-bottom: 0.5em;
+}
+
+.a1-feed h4 a {
+	margin-left: 0.3em;
+	margin-right: 0.3em;
+}
+
+.a1-feed h4 a.a1-feed-title {
+	font-weight: bold;
+}
+
+.a1-feed h4 span {
+	font-family: helvetica, Calibri, Arial, '宋体', sans-serif;
+}
+
+.a1-feed a.a1-feed-author {
+	margin: 0px 0.5em;
+}
+
+.a1-feed .a1-feed-body a,.a1-feed .a1-feed-op a.a1-opLink,.a1-feed .a1-feed-column-title a,span.notice-actor a,span.notice-target-name a
+	{
+	color: #05a;
+	text-decoration: none;
+}
+
+.a1-feed .a1-feed-body span.a1-feed-source {
+	/* float: right; */
+	font-size: 0.9em;
+	color: #999;
+	text-align: right;
+}
+
+span.a1-feed-source span:first-child {
+	font-size: 1.1em;
+	color: #666;
+}
+
+.a1-feed .a1-feed-op a.a1-opLink {
+	font-size: 0.9em;
+}
+
+.a1-feed .a1-feed-op p {
+	text-align: right;
+}
+
+.a1-feed .a1-feed-column-sub {
+	margin-left: 10px;
+	margin-bottom: 5px;
+	border-left: 3px solid #ccf;
+}
+
+.a1-feed .a1-feed-column-sub .a1-feed-leadingImg {
+	margin-left: 10px;
+}
+
+.a1-feed .a1-feed-column-title {
+	margin-left: 10px;
+}
+
+.message {font-size:13px;}
+.notice-recommend-message {color:#999;}
+
+.notice-leadImg
+{
+	width: 19px;
+	height: 19px;
+	background: url(#@baseUrl@#/jsp/aone/images/icon-feed-19.gif) no-repeat 0px 0px;
+	margin:5px 0 0 10px;
+}
+
+.teamFeedList .notice-leadImg {
+	left: -15px;
+}
+
+.teamFeedList .notice-leadImg.recommend,.teamDivision .feedList  .notice-leadImg.recommend
+	{
+	background-position: left -40px;
+}
+
+.teamFeedList .notice-leadImg.upload,.teamDivision .feedList .notice-leadImg.upload
+	{
+	background-position: left -120px;
+}
+
+.teamFeedList .notice-leadImg.comment,.teamDivision .feedList .notice-leadImg.comment,.teamFeedList .notice-leadImg.reply,.teamDivision .feedList .notice-leadImg.reply
+	{
+	background-position: left -58px;
+}
+
+.teamFeedList .notice-leadImg.modify,.teamDivision.feedList .notice-leadImg.modify
+	{
+	background-position: left -20px;
+}
+
+.teamFeedList .notice-recommend-message,.teamFeedList .notice-comment-message,.teamDivision .feedList .notice-recommend-message,.teamDivision .feedList .notice-comment-message,.a1-feed .notice-comment-message
+	{
+	padding: 3px 3px 3px 17px;
+	border-radius: 3px;
+	background: url(#@baseUrl@#/jsp/aone/images/quote.png) no-repeat 2px 2px;
+}
+
+.teamFeedList .notice-recommend-message:after,.teamFeedList .notice-comment-message:after,.teamDivision .feedList .notice-recommend-message:after,.teamDivision .feedList .notice-comment-message:after,.a1-feed .notice-comment-message:after
+	{
+	content: url(#@baseUrl@#/jsp/aone/images/quote-end.png);
+}
+
+
+</style>
+</head>
+
+<body>
+	<table class="container">
+		<tr>
+			<td class="banner" colSpan="3">
+			<img title="科研在线" alt="科研在线"
+				src="#@baseUrl@#/jsp/aone/images/logo-lion-w.png" />
+			</td>
+		</tr>
+		<for items="#@notices@#" var="notice">
+			<tr>
+				<td class="content" colSpan="3">
+					<p>&nbsp;</p>
+					<p class="title">#@notice.team.displayName@#</p>
+				</td>
+			</tr>
+			<if test="!isNull(#@notice.teamNoticeList@#)">
+				<tr>
+					<td class="subtitle" colSpan="3">
+						<p>&nbsp;</p>
+						<p>动态(#@notice.teamNoticeSize@#)</p>
+					</td>
+				</tr>
+					<for items="#@notice.teamNoticeList@#" var="item">
+						<for items="#@item.compositeArray@#" var="cn">
+						<tr class="a1-feed">
+							<td>
+								<if test="#@cn.records[0].target.name@#.toString().lastIndexOf('.')>0">
+								<set var="xxxxx" value="#@cn.records[0].target.name@#.toString().substring(#@cn.records[0].target.name@#.toString().lastIndexOf('.')+1)"/>
+								</if>
+								<else>
+									<set var="xxxxx" value=""""/>
+								</else>
+								<div class="headImg #@cn.records[0].target.type@# #@xxxxx@#" ></div>
+							</td>
+							<td class="a1-feed-body">
+								<h4>
+									<span class="notice-target-type-#@cn.records[0].target.type@#">#@cn.records[0].target.typeDisplay@#</span>
+									<a href="#@baseUrl@#/system/switch?func=updateOneNoticeEmail&teamId=#@cn.records[0].tid@#&messageType=Monitor&eventId=#@cn.records[0].eventId@#&targetId=#@cn.records[0].target.id@#&noticeId=#@cn.records[0].id@#">#@cn.records[0].target.name@#</a>
+								</h4>
+								<set var="uploadCount" value="0"/>
+								<set var="createCount" value="0"/>
+								<set var="modifyCount" value="0"/>
+								<set var="renameCount" value="0"/>
+								<set var="commentCount" value="0"/>
+								<set var="moveCount" value="0"/>
+								<for items="#@cn.records@#" var="n">
+									<set var="status" value="0"/>
+									<set var="status" value="Integer.parseInt(#@status@#.toString())+1"/>
+									<if test=""create".equals(#@n.operation.name@#)">
+										<set var="createCount" value="Integer.parseInt(#@createCount@#.toString())+1"/>
+									</if>
+									<if test=""modify".equals(#@n.operation.name@#)">
+										<set var="modifyCount" value="Integer.parseInt(#@modifyCount@#.toString())+1"/>
+									</if>
+									<if test=""rename".equals(#@n.operation.name@#)">
+										<set var="renameCount" value="Integer.parseInt(#@renameCount@#.toString())+1"/>
+									</if>
+									<if test=""upload".equals(#@n.operation.name@#)">
+										<set var="uploadCount" value="Integer.parseInt(#@uploadCount@#.toString())+1"/>
+									</if>
+									<if test=""comment".equals(#@n.operation.name@#)">
+										<set var="commentCount" value="Integer.parseInt(#@commentCount@#.toString())+1"/>
+									</if>
+									<if test=""teamMove".equals(#@n.operation.name@#)">
+										<set var="moveCount" value="Integer.parseInt(#@moveCount@#.toString())+1"/>
+									</if>
+									<if test="Integer.parseInt(#@status@#.toString())<3">
+										<set var="noticeDisplayFlag" value=""display-notice""/>
+									</if>
+									<else>
+										<set var="noticeDisplayFlag" value=""hidden-display-notice""/>
+									</else>
+									<p class="#@n.noticeStatus@#-notice #@noticeDisplayFlag@#">
+											<if test=""recommend".equals(#@n.operation.name@#)">
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span>把#@cn.records[0].target.typeDisplay@#</span>
+												<span class="notice-target-operation-recommend">#@n.operation.displayName@#给</span>
+												<span class="notice-recommend-recipients">#@n.additionDisplay@#</span>
+												<span class="notice-recommend-message">"#@n.message@#"</span>
+											</if>
+											<elseif test=""comment".equals(#@n.operation.name@#)">
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span class="notice-target-operation-#@n.target.type@#">#@n.operation.displayName@#了#@cn.records[0].target.typeDisplay@#</span>
+												<span class="notice-comment-message">#@n.message@#</span>
+											</elseif>
+											<elseif test=""rename".equals(#@n.operation.name@#)">
+												<span>被</span>
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span class="notice-target-operation-#@n.target.type@#">#@n.operation.displayName@#了，</span>
+												<span>原名为</span>
+												<span class="notice-target-new-name"><a href="#@baseAddress@##@n.target.url@#">#@n.message@#</a></span>
+												<if test=""DPage".equals(#@n.target.type@#)||"DFile".equals(#@n.target.type@#)">
+													<span class="notice-target-version">版本#@n.targetVersion@#</span>
+												</if>
+											</elseif>
+											<else>
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#了#@cn.records[0].target.typeDisplay@#</span>
+												<if test=""create".equals(#@n.operation.name@#)">
+												</if>
+												<else>
+													<if test=""DPage".equals(#@n.target.type@#)||"DFile".equals(#@n.target.type@#)">
+														<span class="notice-target-version">版本#@n.targetVersion@#</span>
+													</if>
+												</else>
+											</else>
+									</p>
+								</for>
+								<if test="Integer.parseInt(#@createCount@#.toString())+Integer.parseInt(#@uploadCount@#.toString())+Integer.parseInt(#@modifyCount@#.toString())+Integer.parseInt(#@renameCount@#.toString())+Integer.parseInt(#@commentCount@#.toString()) >2">
+									<p class="display-notice-control">
+										<a class="summary-count-link"> 
+										<if test="Integer.parseInt(#@createCount@#.toString())>0">
+										创建#@createCount@#次
+										</if> 
+										<if test="Integer.parseInt(#@uploadCount@#.toString())>0">
+										上传#@uploadCount@#次
+										</if>
+										<if test="Integer.parseInt(#@modifyCount@#.toString())>0">
+										修改#@modifyCount@#次
+										</if>
+										<if test="Integer.parseInt(#@renameCount@#.toString())>0">
+										重命名#@renameCount@#次
+										</if>
+										<if test="Integer.parseInt(#@commentCount@#.toString())>0">
+										评论#@commentCount@#次
+										</if>
+										<if test="Integer.parseInt(#@moveCount@#.toString())>0">
+										移动#@moveCount@#次
+										</if>
+										</a> <span class="hide-count-container"><a
+											class="hide-count-link">收起更新</a></span>
+									</p>
+								</if>
+							</td>
+							<td><span class="time ui-RTCorner">#@n.occurTimeStr@#</span></td>
+						</tr>
+						</for>
+						</for>
+						<if test="Integer.parseInt(#@notice.teamNoticeSize@#)>3">
+							<tr>
+								<td></td>
+								<td></td>
+								<td>
+									<p class="more"><a href="#@baseUrl@#/#@notice.team.name@#/notice?func=teamNotice">更多</a></p>
+								</td>
+							</tr>
+						</if>
+					</if>
+
+<!-- 华丽的分割线 -->
+			<if test="!isNull(#@notice.personNoticeList@#)">
+			<tr>
+				<td class="subtitle" colSpan="3">
+					<p>&nbsp;</p>
+					<p>消息(#@notice.personNoticeSize@#)</p>
+				</td>
+			</tr>
+				<for items="#@notice.personNoticeList@#" var="noticeList">
+					
+						<for items="#@noticeList.records@#" var="n">
+						<set var="resourceAbsoluteUrl" value="#@baseUrl@#+"/system/switch?func=updateOneNoticeEmail&teamId="+#@n.tid@#+"&messageType=Person&eventId="+#@n.eventId@#+"&targetId="+#@n.target.id@#+"&noticeId="+#@n.id@#"/>
+						<tr class="message">
+							<td class="#@n.noticeStatus@#-notice #@n.operation.name@#">
+								<div class="notice-leadImg #@n.operation.name@#"></div>
+							</td>
+							<td>
+									<if test=""recommend".equals(#@n.operation.name@#)">
+										<!-- 句式0: 某人A 把 页面/文件B 推荐给了 C,D,E ：Blalaala	 -->
+										<span class="notice-actor">
+										<a href="#@baseAddress@#@#n.actor.url#@">
+										#@n.actor.name@#
+										</a></span>
+										<span>把</span>
+										<span class="notice-target-type-#@n.target.type@#">#@n.target.typeDisplay@#</span>
+										<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+										<if test=""DPage".equals(#@n.target.type@#)||"DFile".equals(#@n.target.type@#)">
+										<span class="notice-target-version">版本#@n.targetVersion@#</span>
+										</if>
+										<span class="notice-target-operation-recommend">#@n.operation.displayName@#给了</span>
+										<span class="notice-recommend-recipients">#@n.relative.name@#</span>
+										<p class="notice-recommend-message">#@n.message@#</p>
+									</if>
+									<if test=""reply".equals(#@n.operation.name@#)">
+										<!-- 句式1: 某人A 回复 了 某人B 在 页面/文件C处的评论 TA说：Blalaala	 -->
+										<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+										<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#了</span>
+										<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+										<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+										<span class="notice-target-version">版本#@n.targetVersion@#</span>
+										<p class="notice-comment-message">#@n.message@#</p>
+									</if>
+									<if test=""comment".equals(#@n.operation.name@#)">
+										<!-- 句式1: 某人A 评论 了 页面/文件 B TA说：Blalaala	 -->
+										<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+										<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#了</span>
+										<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+										<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+										<span class="notice-target-version">版本#@n.targetVersion@#</span>
+										<span class="notice-comment-message">#@n.message@#</span>
+									</if>
+									<if test=""rename".equals(#@n.operation.name@#)">
+										<!-- 句式2: 某人A 将 页面/文件/集合/团队oldB 重命名成了  newB -->
+										<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+										<span>将</span>
+										<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+										<span class="notice-target-old-name"><a href="#@resourceAbsoluteUrl@#">#@n.message@#</a></span>
+										<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#为</span>
+										<span class="notice-target-new-name"><a href="#@baseUrl@#/system/switch?func=updateOneNoticeEmail&teamId=#@n.tid@#&messageType=Person&eventId=#@n.eventId@#&targetId=#@n.target.id@#&noticeId=#@n.id@#">#@n.target.name@#</a></span>
+										<if test=""DPage".equals(#@n.target.type@#)||"DFile".equals(#@n.target.type@#)">
+											<span class="notice-target-version">版本#@n.targetVersion@#</span>
+										</if>
+									</if>
+									<if test=""mention".equals(#@n.operation.name@#)">
+										<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+										<span>在</span>
+										<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+										<span class="notice-target-new-name"><a href="#@baseUrl@#/system/switch?func=updateOneNoticeEmail&teamId=#@n.tid@#&messageType=Person&eventId=#@n.eventId@#&targetId=#@n.target.id@#&noticeId=#@n.id@#">#@n.target.name@#</a></span>
+										<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#</span>
+									</if>
+									<else>
+										<!-- 句式3: 某人A 修改/上传/创建 了 页面/文件/集合/团队 B -->
+										<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+										<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#了</span>
+										<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+										<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+									</else>
+							</td>
+							<td width="100">
+								<span class="time">#@n.occurTimeStr@#</span>
+							</td>
+							</tr>
+						</for>
+					
+				</for>
+				<if test="Integer.parseInt(#@notice.personNoticeSize@#)>3">
+					<tr>
+						<td></td>
+						<td></td>
+						<td>
+							<p class="more"><a href="#@baseUrl@#/#@notice.team.name@#/notice?func=personNotice">更多</a></p>
+						</td>
+					</tr>
+				</if>
+				</if>
+<!-- 华丽的分割线 -->
+				<if test="!isNull(#@notice.monitorNoticeList@#)">
+				<tr>
+					<td class="subtitle" colSpan="3">
+						<p>&nbsp;</p>
+						<p>关注(#@notice.monitorNoticeSize@#)</p>
+					</td>
+				</tr>
+				<for items="#@notice.monitorNoticeList@#" var="noticeList">
+							<for items="#@noticeList.records@#" var="n">
+								<set var="resourceAbsoluteUrl" value="#@baseUrl@#+"/system/switch?func=updateOneNoticeEmail&teamId="+#@n.tid@#+"&messageType=Team&eventId="+#@n.eventId@#+"&targetId="+#@n.target.id@#+"&noticeId="+#@n.id@#"/>
+								<tr class="teamFeedList message">
+									<td class="#@n.noticeStatus@#-notice #@n.operation.name@#">
+										<div class="notice-leadImg #@n.operation.name@#"></div>
+									</td>
+									<td>
+											<if test=""recommend".equals(#@n.operation.name@#)">
+												<!-- 句式0: 某人A 把 页面/文件B 推荐给了 C,D,E ：Blalaala	 -->
+												<span class="notice-actor">
+												<a href="#@baseAddress@#@#n.actor.url#@">
+												#@n.actor.name@#
+												</a></span>
+												<span>把</span>
+												<span class="notice-target-type-#@n.target.type@#">#@n.target.typeDisplay@#</span>
+												<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+												<if test=""DPage".equals(#@n.target.type@#)||"DFile".equals(#@n.target.type@#)">
+												<span class="notice-target-version">版本#@n.targetVersion@#</span>
+												</if>
+												<span class="notice-target-operation-recommend">#@n.operation.displayName@#给了</span>
+												<span class="notice-recommend-recipients">#@n.relative.name@#</span>
+												<p class="notice-recommend-message">#@n.message@#</p>
+											</if>
+											<if test=""reply".equals(#@n.operation.name@#)">
+												<!-- 句式1: 某人A 回复 了 某人B 在 页面/文件C处的评论 TA说：Blalaala	 -->
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#了</span>
+												<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+												<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+												<span class="notice-target-version">版本#@n.targetVersion@#</span>
+												<p class="notice-comment-message">#@n.message@#</p>
+											</if>
+											<if test=""comment".equals(#@n.operation.name@#)">
+												<!-- 句式1: 某人A 评论 了 页面/文件 B TA说：Blalaala	 -->
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#了</span>
+												<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+												<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+												<span class="notice-target-version">版本#@n.targetVersion@#</span>
+												<span class="notice-comment-message">#@n.message@#</span>
+											</if>
+											<if test=""rename".equals(#@n.operation.name@#)">
+												<!-- 句式2: 某人A 将 页面/文件/集合/团队oldB 重命名成了  newB -->
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span>将</span>
+												<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+												<span class="notice-target-old-name"><a href="#@resourceAbsoluteUrl@#">#@n.message@#</a></span>
+												<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#为</span>
+												<span class="notice-target-new-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+												<if test=""DPage".equals(#@n.target.type@#)||"DFile".equals(#@n.target.type@#)">
+													<span class="notice-target-version">版本#@n.targetVersion@#</span>
+												</if>
+											</if>
+											<else>
+												<!-- 句式3: 某人A 修改/上传/创建 了 页面/文件/集合/团队 B -->
+												<span class="notice-actor"><a href="#@baseAddress@##@n.actor.url@#">#@n.actor.name@#</a></span>
+												<span class="notice-target-operation-#@n.operation.name@#">#@n.operation.displayName@#了</span>
+												<span class="notice-target-type">#@n.target.typeDisplay@#</span>
+												<span class="notice-target-name"><a href="#@resourceAbsoluteUrl@#">#@n.target.name@#</a></span>
+											</else>
+									</td>
+									<td width="100">
+										<span class="time" style="display:inline-block; width:10em;">#@n.occurTimeStr@#</span>
+									</td>
+								</tr>
+							</for>
+				</for>
+				<if test="Integer.parseInt(#@notice.monitorNoticeSize@#)>3">
+					<tr>
+						<td></td>
+						<td></td>
+						<td>
+							<p class="more"><a href="#@baseUrl@#/#@notice.team.name@#/notice?func=monitorNotice">更多</a></p>
+						</td>
+					</tr>
+				</if>
+			</if>
+		</for>
+		</table>
+		<a class="refuse" href="#@baseUrl@#/dashboard?func=noticeEmail&showDetailNoticeEmail=true">点击退订该邮件</a>
+</body>
+</html>

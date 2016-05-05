@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="http://localhost/dct/dataCollect/dataCollect.css" type="text/css" />
+<script type="text/javascript" src="http://localhost/dct/scripts/jquery/jquery-1.5.2.min.js"></script>
+<script type="text/javascript">
+
+function check()
+{
+    var btn = document.getElementById("test_submit");
+    var frm = document.forms["test_form"];
+    var ifm = document.getElementById("test_iframe");
+    frm.action = "http://localhost/dct/system/bookmark";
+    frm.target = "test_iframe";
+    frm.submit();
+    btn.disabled = "disabled";
+    ifm.onload = function(){
+        btn.disabled = "";
+        var str = ifm.contentWindow;
+        alert(str.document.body.innerHTML);
+        ifm.src = "about:blank"; 
+        ifm.onload = null; 
+    }     
+    return false; 
+
+}
+
+
+
+
+$(document).ready(function(){
+	//$("#DC_urlBox").css({"color":"red"});
+	//$(".loginUser",window.frames["DC_urlBox"].document).css({"color":"red"});
+	//$(window.frames["DC_urlBox"].document).find(".loginUser").css({"color":"red"});
+//	$("iframe").contents().find("body").css({"color":"red"}); 
+	//var a = $(document.getElementById('DC_urlBox').contentWindow.document.body).html() ;
+	//var a = $(window.frames["DC_urlBox"].document).find("#loginUser").html();
+	
+/* 
+	var myFrame = document.getElementById('DC_urlBox').contentWindow;
+	$(myFrame).load(function(){
+		alert($(myFrame.document.getElementById('loginUser')).text());
+	}); 
+
+*/
+	
+/* 
+	bindEvents();
+	
+	//返回指定iframe的document
+	function getIFrameDocument(aID) {
+	    var rv = null;
+	    if (document.getElementById(aID).contentWindow.document){
+	        // if contentDocument exists, W3C compliant (Mozilla)
+	        rv = document.getElementById(aID).contentWindow.document;
+	    } else {
+	        // IE
+	        rv = document.frames[aID].document;
+	    }
+	    return rv;
+	}
+	 
+	function bindEvents() {
+	    var iDocument = getIFrameDocument('DC_urlBox');
+	    //接下来就可以进行类似的DOM操作了
+	    var map = document.getElementById('loginUser');
+	    alert($(map).html());
+	    //……
+	} 
+*/
+
+
+});
+</script>
+<title>Data Collecting</title>
+</head>
+
+<body>
+<div style="float:left; width:45%;">
+	<h3>从网页中提取内容，复制到A1中</h3>
+	<h3>方法：js嵌入</h3>
+	
+	<p id='case1'>*Case1：Copy the whole HTML</p>
+	<ol>
+		<li>将js嵌入到页面中</li>
+		<li>获取整个DOM Tree</li>
+		<li>将整个DOM Tree复制，放置到指定变量</li>
+		<li>alert出该变量，检查是否正确</li>
+		<li>copy至A1，存至iframe中，再次打开时展示，完成一次操作</li>
+	</ol>
+	
+	<p>***Case2：Copy the whole content - 只包括内容的标题+正文+图片，不包括广告、导航、sidebar、header、footer等非内容性元素</p>
+	<ol>
+		<li>
+			<div style="color:red;">将<span>js</span>嵌入到页面中</div>
+		</li>
+		<li>获取整个DOM Tree</li>
+		<li>分析内容区域？？？？并复制到指定容器（或变量）</li>
+		<li>alert出该变量，检查是否正确</li>
+		<li>copy至A1，存至iframe中，再次打开时展示，完成一次操作</li>
+	</ol>
+	<p>**Case3: Copy the selected area - 任意选中位置，包括内容的标题、正文、图片、广告、sidebar、header等所有元素</p>
+	<div>
+	<ol>
+		<li>将js嵌入到页面中</li>
+		<li>获取整个DOM Tree</li>
+		<li>onMouseOver的时候，出现选择框</li>
+		<li>单击鼠标，右上角出现一个“选择”和“取消”按钮</li>
+		<li>点击按钮，添加标记（addClass），右上角的“选择”按钮，变为“取消选择”按钮</li>
+		<li>标记完所有对象，赋值到变量</li>
+		<li>alert出该变量，检查是否正确</li>
+		<li>copy至A1，存至iframe中，再次打开时展示，完成一次操作</li>
+	</ol>
+
+	</div>
+	<input type="textarea" value="text here" >
+	<table style="background-color:#ccc; border:1px solid #000;">
+		<tr>
+			<td>I am no11</td>
+			<td>22222</td>
+			<td>ccccc here is cc</td>
+		</tr>
+		<tr>
+			<td>I am no12</td>
+			<td>2222bbbdbdbak2</td>
+			<td>ccccc here is c8809</td>
+		</tr>
+	</table>
+</div>
+
+<!-- <iframe name="framesubmit" id="framesubmit"  style="display:none" width="1" height="1" ></iframe>
+<form method="post"  target="framesubmit" name="form1" id="form1" style="display:none"></form>
+ -->
+<!-- <form target=DC_urlBox_name action="http://localhost/dct/system/bookmark?func=login">
+	<iframe id="DC_urlBox" name="DC_urlBox_name" src="http://localhost/dct/dataCollect/login.html"></iframe>
+</form> -->
+
+<!-- <iframe width="420" height="520" marginWidth=0 marginHeight=0 frameBorder=0 width="100%" scrolling="no" allowTransparency="true" src="http://localhost/dct/dataCollect/login.html"></iframe> -->
+
+
+<form id="test_form" name="test_form" >
+
+		<div id='DC_popupLogin'>
+			<div class='duckling_logo'>协同数据采集器</div>
+			
+			<div id='loginUser'>用户名：</div>
+			<div id='userName'>
+				<input id='name' type='textarea' name="name" />
+			</div>
+			<div class='clear'></div>
+			
+			<div id='loginPsw'>密码：</div>
+			<div id='psw'>
+				<input id='pass' type='password' name="psw"/>
+			</div>
+			<div class='clear'></div>
+			
+			<!-- <div id='login'>登录</div>  -->
+			<input type="submit" name="test_submit" id="test_submit" value="登录"/>
+		</div>
+		
+    <!-- <input type="textarea" name="content"  /> -->
+    
+</form>
+<iframe id="test_iframe" name="test_iframe" width="100" height="100" style=" background:#eef"></iframe>
+
+
+	<a href="javascript:
+	var jq=document.createElement('script');jq.type='text/javascript';document.body.appendChild(jq);jq.src='http://localhost/dct/scripts/jquery/jquery-1.5.2.min.js';jq.charset='utf-8';
+	var cjq=setInterval(function(){ if ($.ajax) {
+		clearInterval(cjq);
+		var s=document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='http://localhost/dct/dataCollect/dataCollect.js';s.charset='utf-8';
+		var c=document.createElement('link');c.rel='stylesheet';document.body.appendChild(c);c.href='http://localhost/dct/dataCollect/dataCollect.css';
+	}}, 20);
+	void(0);">拖动此处到浏览器书签栏</a>
+</body>
+</html>

@@ -1,0 +1,38 @@
+Duckling 2.0 r3 Release Notes  (May 07, 2010)
+
+http://duckling.sourceforge.net (English)
+http://duckling.escience.cn (Chinese)
+
+Collaboration Environment for e-Science, is a comprehensive resource sharing and 
+collaboration platform specific for research groups.  Via core software of the collaboration 
+environment, including collaboration environment core toolkit and resource and service plug-in,  
+all resources, such as hardware, software, data, information and human, can be organized and 
+integrated together to form an efficient and easy-to-use system, supporting and advancing new 
+research activity mode during  the era of informationization. 
+
+Duckling Collaboration Toolkit is a software suite supporting virtual organization, consists 
+of Document Collaboration Tool, Collaboratory Library, User Management Tool, which can help 
+to organize collaboration behavior and realize resource sharing and innovating. All modules 
+are supported by Duckling Log, a costumed log system.
+
+This release contains Duckling 2.0 Release 2, a open-source version for Collaboration Environment.
+
+NEW FEATURES
+
+  - Autodeploy for Duckling application integration
+  - Portal page configuration
+  - Wiki url compatibility for old version
+
+BUG FIXES FROM DUCKLING RELEASE 2
+
+  - bugs fixed on current page trail
+  - bugs fixed on more menu css
+  - bugs fixed on form and DML preview
+  - bugs fixed on pluto container for ResourceURL parameter
+  - bugs fixed on dData table
+  - bugs fixed on ext css
+  - bugs fixed on dml_rs css to default skin
+  - bugs fixed on width-fixed banner
+  - bugs fixed on BaseURL
+  - bugs fixed on pageTitle redundancy
+  - bugs fixed on dct-dlog connection

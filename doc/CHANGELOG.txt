@@ -1,0 +1,3592 @@
+﻿                                版本更新历史 （a1分支）
+            注：vwbconfig.properties/dct.sql/portals.xml/functions.xml文件如有变化，请在此说明！
+            =========================================================================== 
+*注：以后sql更新语句请不要使用drop语句，以免数据丢失。另外引擎统一用InnoDB。
+*住：以后sql更新语句请在CHANGELOG里面添加，并且将更新的内容一并在/doc/sql/aone_clean_init_sql.v2.sql进行修改
+
+===================================================================================
+ddl v4.4.14p1
+2016-4-22 lishanbo@cstnet.cn
+fixed:打包压缩下载时,空文件夹不能下载.
+updated:统一所有用户只发送周动态（日动态停止）.
+fixed:下载size=0的文件失败.
+fixed:首页面https访问，页脚不显示。
+
+ddl v4.4.14 
+2016-4-1 lishanbo@cstnet.cn
+added:同步盘同步文件接口.
+updated:上传失败提示详细信息（文件名不能包含特殊字符、空间不足、没有权限.）
+updated:同路径下文件夹和文件不可同名.
+fixed:修改文件名时，单撇号消失.
+updated:周团队动态最多显示5个文件（之前是5条动态），合并重复文件动态.
+
+ddl v4.4.13p1
+2016-3-17 lishanbo@cstnet.cn
+fixed:发送周动态邮件程序异常引起中断.
+updated:公开链接分享页面的国际化.
+fixed:公开链接分享的文件可以保存到view权限的团队.
+fixed:搜索日志分析的定时任务引起sql异常.
+
+ddl v4.4.13
+2016-3-11 lishanbo@cstnet.cn
+added:加入试运行的周团队动态（只对@cstnet.cn结尾的用户有效），动态根据用户兴趣推送（参考dbrain项目）. 
+            - 配置周几发送sunday=1,如duckling.emailnotice.triggerweek=3
+            - 需配置向量词库文件如:dbrain.wordvector.path=/usr/local/tomcat/wordvectorlib.bin
+            - 把计算好的用户兴趣向量表导入到ddlsub库:
+                  mysql -h10.10.1.25 -ulishanbo -p ddlsub < d:/vec4user20160310.sql --secure-auth=off --default-character-set=utf8
+                                   表结构如下：
+                  CREATE TABLE `vec4user` (
+					  `id` int(10) NOT NULL auto_increment,
+					  `passport` varchar(50) NOT NULL,
+					  `uservector` varchar(5000) NOT NULL,
+					  `appid` int(2) NOT NULL,
+					  PRIMARY KEY  (`id`),
+					  KEY `index_uservec` (`passport`,`appid`)
+				  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+added:csp附件从ddl文件列表中选取接口.
+added:分享协议.
+added:用户案例菜单.
+updated:美化邮件模版样式（日动态没有更新）.
+fixed:团队空间“复制到”下拉框默认选中当前团队.
+fixed:csp创建团队上传文件接口.
+
+ddl v4.4.12p2
+2016-2-2 lishanbo@cstnet.cn
+updated:为csp会议增加专用团队类型，值为conference. 特殊性包括：管理员不可以用户管理、用户不能退出团队、创建团队数量不作限制。
+updated:创建会议团队增加ip限制。
+
+ddl v4.4.12p1
+2016-1-7 lishanbo@cstnet.cn
+fixed:发送团队动态的email任务偶尔会执行两次.
+updated:增加ddl子数据库ddlsub，存放可释放存储空间的表。a1_auth_code和job表移到这个库.
+                配置项增加 - databaseSub = ddlsub
+                   databaseSub.ip = 10.10.1.25:3306
+                   databaseSub.username = lishanbo
+                   databaseSub.password = lishanbo1100
+                   databaseSub.url = jdbc:mysql://${databaseSub.ip}/${databaseSub}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+
+ddl v4.4.12
+2015-12-30 lishanbo@cstnet.cn
+added:rest api接口，包括文件上传、分享和列表功能.
+fixed:附件预览查询code慢.
+	  增加索引：ALTER TABLE `a1_auth_code` ADD INDEX code_index (`code`);
+
+ddl v4.4.11p3
+2015-12-16 lishanbo@cstnet.cn
+fixed:team对象的state属性，JSON格式更正为state:{value:"work"}
+
+ddl v4.4.11p2
+2015-12-15 lishanbo@cstnet.cn
+added：coremail附件预览慢的调试信息.
+
+ddl v4.4.11p1
+2015-12-07 lishanbo@cstnet.cn
+updated:整合json操作工具类为JsonUtil.java，使用jackson2.x版本.
+fixed:修改email正则，修复email中出现-验证不通过
+
+2015-11-10 lishanbo@cstnet.cn
+updated:使用tokeninput输入邮箱，在失去焦点时，已输入内容增加为一个token.
+fixed:firefox下,文件名带空格,下载时显示不全。
+
+ddl v4.4.11
+2015-11-3 lishanbo@cstnet.cn
+fixed:文件名包含特殊字符时,下载时显示乱码(chrome、firefox).
+2015-11-2 zhangshixiang@cstnet.cn
+fixed:邮件预览office文档时，文件名过长导致右侧按钮换行掉下来
+fixed:全屏预览ddoc表格显示不全bug（增加横向滚动条）
+added:ddoc右侧的fix menu中加入导出按钮
+2015-10-29 lishanbo@cstnet.cn
+added:网页端上传1G限制,增加配置项ddl.uploadByBrowser.sizeLimit=1073741824
+added:增加已使用空间字节显示.
+updated:选择成员邮箱支持空格和分号分割.
+fixed:个人偏好->默认标签->输入项useNameTag存在的xxs攻击.
+added:ddoc文档可以pdf导出.
+2015-10-26 lishanbo@cstnet.cn
+added:excel文件导入团队成员
+updated:创建团队时,隐藏团队用途选项.
+fixed:文件导入成员成功后提示json数据.
+added:增加团队人员数量显示，总文件个数显示.
+2015-10-13 lishanbo@cstnet.cn
+fixed:修复重命名时，只有空格却通过验证。
+fixed:https页脚显示不了。
+fixed:https不能访问同步盘.
+2015-10-13 lishanbo@cstnet.cn
+updated:取消新注册的用户加入体验团队.
+added:支持手机端注册页面.
+fixed:自动保存草稿引起资源时间显示错误.
+2015-10-10 lishanbo@cstnet.cn
+updated:删除后的团队，不保留团队网址，以便其它用户使用.
+fixed:公开的团队删除后，团队搜索中还能查询到.
+
+ddl v4.4.10p5
+2015-10-8 lishanbo@cstnet.cn
+fixed:v4.4.10p4版本更新引起的团队内分享无法查询收件人姓名的问题.
+
+ddl v4.4.10p4
+2015-9-29 lishanbo@cstnet.cn
+fixed:新版firefox41.0，同步盘文件列表加载失败。
+fixed:团队内分享对话框，如果焦点在文本框内，按ESC键不关闭对话框。
+
+ddl v4.4.10p3
+2015-9-10 lishanbo@cstnet.cn
+updated:合并管理员的操作.
+updated:更新帮助中心链接.
+updated:分享历史可复制分享链接.
+
+ddl v4.4.10p2
+2015-8-28 lishanbo@cstnet.cn
+fixed:标签名称html转义,防止脚步攻击
+2015-8-26 lishanbo@cstnet.cn
+added:同步盘分享手机端api.
+updated:增加管理员zhangshixiang@cstnet.cn.
+
+ddl v4.4.10p1
+2015-8-5 lishanbo@cstnet.cn
+added:增加dlog参数from=mail，统计通过邮件附件预览访问文档库次数.
+2015-7-31 lishanbo@cstnet.cn
+updated:上传文件权限不足时给出提示.
+updated:屏蔽escience邮箱注册链接.
+fixed:页面顶部团队显示排序默认按加入顺序.
+updated:分享下载次数超过10000次,不抛异常,只输出警告信息.
+
+ddl v4.4.10
+2015-7-16 lishanbo@cstnet.cn
+updated:协作文档自动保存时间更改为15秒
+
+2015-7-6 lishanbo@cstnet.cn
+fixed:删除资源不记录足迹
+updated:清除编辑页面锁时，输出发布草稿的出错信息.
+
+2015-6-29 lishanbo@cstnet.cn
+fixed:同步盘搜索结果错误.
+added:分享api.
+
+ddl v4.4.9
+2015-6-12 lishanbo@cstnet.cn
+updated:创建公开链接时，可扫描二维码.
+updated:移动端登录流程，加入选择登录主题页面和是否要求返回团队信息参数
+added:分享的文件可以手机扫描二维码
+updated:暂时屏蔽c++版同步盘客户端调用的接口.
+
+2015-5-19 lishanbo@cstnet.cn
+updated:dChat查询通知数量优化：给表vwb_team_member的uid增加索引.
+        sql语句：alter table vwb_team_member add index team_member_uid_index (uid);
+        
+2015-5-15 lishanbo@cstnet.cn
+added:同步盘客户端api.
+
+      1.增加配置项
+      duckling.redis.port=6379
+      update.version.url=http://update.escience.cn/v2/version
+      
+      2.表结构
+      ALTER TABLE `a1_file_version` ADD COLUMN `checksum` VARCHAR(255) COMMENT '文件校验和';
+      ALTER TABLE `a1_file_version` ADD COLUMN `device` varchar(300) DEFAULT null;
+      
+      CREATE TABLE `ddl_jounal` (
+      `id` bigint(20) NOT NULL auto_increment,
+      `tid` int(11) default NULL,
+      `jid` int(11) default NULL,
+      `device` varchar(300) default NULL,
+      `operation` varchar(50) default NULL,
+      `fid` int(11) default NULL,
+      `fver` int(11) default NULL,
+      `occur_time` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+      `is_dir` bit(1) default NULL,
+      `path` varchar(2000) default NULL,
+      `to_path` varchar(2000) default NULL,
+      PRIMARY KEY  (`id`),
+      KEY `jid_index` (`tid`,`jid`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='同步盘操作日志表';
+
+2015-3-27 lishanbo@cstnet.cn
+fixed:下载文档库客户端链接不正确.
+
+2015-3-18 lishanbo@cstnet.cn
+updated:提取码输入后，直接按回车即可提取文件
+
+2015-3-3 lishanbo@cstnet.cn
+fixed:团队空间api可以越权下载其它团队资源.
+===================================================================================
+ddl v4.4.8p3
+2015-2-10 lishanbo@cstnet.cn
+added:设置参数duckling.clb.aone.ismaintain，可停用上传功能.
+
+ddl v4.4.8p2
+2015-1-29 liji@cstnet.cn
+
+fixed:修复同步盘分享出去的链接无法预览的bug
+fixed:提取盘空间分享的文件时，密码左右俩侧带空格则视为密码正确.
+===================================================================================
+ddl v4.4.8p1
+2015-1-9 lishanbo@cstnet.cn
+fixed:文件夹列表的右侧的复制按钮点击后不能刷新.
+fixed:邀请多个人员，其中一个人员已是团队成员，提示信息更确切，更改为“已成功邀请，其中XXX已是团队成员，无法重复邀请”.
+updated:提取分享文件时，密码左右俩侧带空格则视为密码正确.
+updated:预览文件不支持浏览器的提示信息.
+fixed:个人空间点击复制，复制弹出框中的团队列表选择不恢复.
+updated:更新ie下载链接.
+
+===================================================================================
+ddl v4.4.8
+2014-12-25 lishanbo@cstnet.cn
+added:个人空间同步版(Beta)可以复制文件夹到个人空间、团队空间、个人空间同步版(Beta).
+updated:将文件夹和协作文档的最小占用空间设定为8KB.
+updated:文件夹复制操作每人每天最多累积不超过50000个文件条目数.
+                配置参数ddl.resource.copyLimit=50000
+updated:个人空间同步版（Beta）中的文件夹外链分享给出提示框，提示用户需复制到团队空间后才能分享.
+fixed:个人空间同步版(Beta)文件排序不起作用.
+updated:外链分享的文件显示加一个小图标表示已分享.
+               执行sql:
+           1)增加标识分享的字段 ALTER TABLE `a1_resource` ADD COLUMN `shared` int DEFAULT 0 comment '文件是否分享 0未分享 1已分享';
+           2)更新之前的分享记录 update a1_resource r,share_resource sr set r.shared=1 where r.rid=sr.rid;
+
+
+ddl v4.4.7p3
+2014-12-02 lishanbo@cstnet.cn
+updated:送空间活动结束.
+fixed:防止团队网址和系统url路径冲突.
+
+2014-12-01 lishanbo@cstnet.cn
+added:统一400错误提示页面.
+fixed:会员注册更改为https协议访问，增强用户密码安全.
+updated:验证发送邀请团队成员邮件的数量.
+                配置参数：邀请人最大发送的邮件数量 ddl.team.email.inviter=500/1800000（每0.5小时500封），
+                                   发送给每个被邀请人的最大邮件数量 ddl.team.email.invitee=5/1800000
+
+2014-11-28 lishanbo@cstnet.cn
+fixed:团队管理员可绕过邀请其他用户及其他用户的同意，直接将用户加入团队.
+fixed:团队成员权限的csrf攻击.
+
+2014-11-27 lishanbo@cstnet.cn
+fixed:邀请用户加入团队的留言框输入内容进行html转义,防止xss攻击.
+updated:团队空间中的资源占用最小空间为8K（包括文件夹）
+
+===================================================================================
+ddl v4.4.7p2
+2014-11-6 lishanbo@cstnet.cn
+updated: 抽奖活动结束.
+fixed:把activity加入到过滤器白名单，避免Not found team : [activity]错误.
+2014-11-2 lishanbo@cstnet.cn
+fixed:公开链接分享的图片，下载不是原图。
+2014-10-31 lishanbo@cstnet.cn
+fixed:firefox浏览器下保存协作文档.内容全部丢失问题.
+
+===================================================================================
+ddl v4.4.7p1
+2014-10-24 lishanbo@cstnet.cn
+added:团队空间加上新的tooltip.
+added:新增活动反馈链接.
+
+===================================================================================
+ddl v4.4.7
+2014-10-23 lishanbo@cstnet.cn
+added:抽奖活动.
+fixed:创建团队选择公开需审核时,权限默认为可编辑状态.
+
+--抽奖活动记录
+INSERT INTO `ddl_activity` VALUES ('2', 'liji@cstnet.cn', '抽奖活动', '', '2014-10-22 00:00:00', '2014-11-06 23:59:59', '1');
+
+--中奖用户联系信息
+CREATE TABLE `ddl_lottery_delivery` (
+  `id` int(11) NOT NULL auto_increment,
+  `user` varchar(256) NOT NULL,
+  `real_name` varchar(50) NOT NULL,
+  `user_address` text NOT NULL,
+  `phone_number` varchar(50) NOT NULL,
+  `gift_content` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `idx_delivery_user` (`user`(255))
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+--用户中奖记录
+CREATE TABLE `ddl_lottery` (
+  `id` int(11) NOT NULL auto_increment,
+  `user` varchar(100) NOT NULL,
+  `date` varchar(15) NOT NULL,
+  `drawed_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `gift_level` int(11) NOT NULL,
+  `lottery_name` varchar(256) NOT NULL,
+  `gift_name` varchar(50) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_date_idx` (`user`,`date`),
+  KEY `user_idx` (`user`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+===================================================================================
+ddl v4.4.6p1
+2014-10-20 lishanbo@cstnet.cn
+fixed:邮箱进入活动页面自动登录.
+fixed:meepo接口更新.送空间时.可以准确查询登录电脑客户端的用户.
+
+--更新活动开始时间
+update ddl_activity set begin_time='2014-10-20 00:00:00' where title='送空间活动' 
+
+===================================================================================
+ddl v4.4.6
+2014-10-17 lishanbo@cstnet.cn
+added:送空间活动(共100G,10G团队空间,90G个人同步盘空间).
+
+-- 活动表
+CREATE TABLE `ddl_activity` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) default NULL,
+  `title` varchar(255) default NULL COMMENT '活动名称',
+  `remark` varchar(1000) default NULL,
+  `begin_time` datetime default NULL,
+  `end_time` datetime default NULL,
+  `status` int(11) default NULL COMMENT '0新建,1进行中,2已结束',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+-- 插入送空间活动记录
+INSERT INTO `ddl_activity` VALUES ('1', 'lishanbo@cstnet.cn', '送空间活动', '', '2014-10-01 00:00:00', '2014-11-30 23:59:59', '1');
+
+-- 用户获取空间历史记录表
+CREATE TABLE `ddl_space_gained` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(45) default NULL COMMENT '创建者',
+  `obj_id` int(11) default NULL COMMENT '活动等关联的ID',
+  `obj_type` int(11) default NULL COMMENT '1代表活动',
+  `space_type` int(11) default NULL COMMENT '1可分配团队空间 2自动分配的盘空间 ',
+  `size` bigint(20) default NULL COMMENT '空间大小',
+  `remark` varchar(255) default NULL,
+  `create_time` date default NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `uor` (`uid`,`obj_id`,`remark`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+--增加用户扩展字段：未分配空间总数
+ALTER TABLE `vwb_user_ext` ADD COLUMN `unallocated_space` bigint DEFAULT 0 comment '未分配的空间';
+
+2014-9-29 zhaojuan@cstnet.cn
+修改windows下载链接，发布1.1.1Beta
+2014-9-28 lishanbo@cstnet.cn
+fixed:查询公开团队，点后退按钮会缓存查询条件,导致点击分页查询错误.
+fixed:如果查询的公开团队共有2页,则分页会显示出俩个第1页按钮.
+
+===================================================================================
+ddl v4.4.5p1
+2014-9-28 lishanbo@cstnet.cn
+fixed:IE11下同步盘文件夹进不去.
+2014-9-26 lishanbo@cstnet.cn
+fixed:同步盘发送邮件分享时，提示成功信息中查看分享历史链接有错误。
+
+===================================================================================
+ddl v4.4.5
+2014-9-23 lishanbo@cstnet.cn
+fixed:firefox同步盘目录带空格时访问不了。
+
+2014-9-17 lishanbo@cstnet.cn
+added:同步盘到同步盘的复制。
+
+2014-9-15 lishanbo@cstnet.cn
+updated:盘复制提示信息显示每个文件的复制状态.
+fixed:同步盘文件夹不能含有+号.
+fixed:IE下最大可上传100M的文件，修改为最大2G.
+
+2014-9-10 lishanbo@cstnet.cn
+pdfjs升级为1.0.712版本,解决部分中文pdf文档显示乱码问题.
+移动客户端登录记录dlog.
+
+2014-9-5 lishanbo@cstnet.cn
+1.更新文件记录dlog日志.
+
+2014-9-4 lishanbo@cstnet.cn
+1.added:盘复制自动完成的提示.
+2.database:修复分享时间会自动更新,执行sql语句,
+ALTER TABLE share_resource MODIFY COLUMN create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE pan_share_resource MODIFY COLUMN share_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+3.fixed:盘复制的错误日志目标路径显示不正确.
+===================================================================================
+ddl v4.4.4
+2014-9-3 lishanbo@cstnet.cn
+1.团队名称超过18个字符加省略号"..."
+
+2014-9-2 lishanbo@cstnet.cn
+1.生成团队空间和meepo盘双向复制失败的日志文件,并上传到复制源文件夹下.
+
+2014-8-27 lishanbo@cstnet.cn
+1.added:不支持协作文档的复制提示.
+
+2014-8-27 lishanbo@cstnet.cn
+1.团队描述信息更新到vmt.
+2.增加参数recordFormat=lite时,返回文件夹下所有文件rid.
+
+2014-8-26 lishanbo@cstnet.cn
+1.当参数maxPageSize=all时,返回一个文件夹下所有文件
+
+2014-8-20 lishanbo@cstnet.cn
+1.fixed:pan列表文件版本号是0
+
+2014-8-20 lishanbo@cstnet.cn
+1.团队空间上传同名文件时,可设置文件名序列自增
+2.同步盘和团队空间双向复制.
+3.fixed:同步盘复制窗口树目录不默认选中全部文件.
+===================================================================================
+ddl v4.4.3p4
+2014-8-15 lishanbo@cstnet.cn
+1.fixed:不能保存未加入团队分享的文件
+
+===================================================================================
+2014-07-22 xiejj@cstnet.cn
+* 修改了在移动文件时，目标目录存在同名的加密文件时的重命名BUG（修改之前,A.txt.dsf会重命名成A.txt(1).dsf）
+
+2014-07-16 xiejj@cstnet.cn
+* 修改了/api/upload(APIUploadController)，增加了更新操作的接口
+* 修改了ResourceOperationService接口的updateCLBFile函数的参数声明（从fid变更为rid)
+* 修改了JSONHelper，增加了导出的Resource的版本值。
+
+2014-07-08 xiejj@cstnet.cn
+-----------------------------------------------------------------------------------------
+1.修复了邀请用户安装加密客户端时，只会给邀请者自己发送邀请邮件的BUG。
+
+1.修改取消邀请，添加confirm进行提示
+2.添加分享记录表
+CREATE TABLE  `share_resource` (
+  `rid` int(10) unsigned NOT NULL auto_increment,
+  `tid` int(10) unsigned NOT NULL,
+  `share_uid` varchar(45) NOT NULL,
+  `create_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `last_editor` varchar(45) NOT NULL,
+  `last_edit_time` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `password` varchar(45) default NULL,
+  `download_count` int(10) unsigned default NULL,
+  PRIMARY KEY  (`rid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+3.添加pan分享记录表
+CREATE TABLE  `pan_share_resource` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `share_uid` varchar(45) NOT NULL,
+  `share_path` text NOT NULL,
+  `pan_share_id` varchar(45) NOT NULL,
+  `password` varchar(10) default NULL,
+  `share_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `expire_millis` bigint(20) unsigned default NULL,
+  `download_count` int(10) unsigned default NULL,
+  `status` varchar(45) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000000 DEFAULT CHARSET=utf8;
+
+4.进行数据库数据更新
+	update a1_user_guide set step =3 where module='common' and (step=5 or step=4); 
+5.添加用户同意分享协议记录字段
+	ALTER TABLE `vwb_user_ext` ADD COLUMN `confirm_status` varchar(15) DEFAULT null;
+6.在vwb_user_ext上加索引
+	ALTER TABLE `vwb_user_ext` ADD INDEX `uid_index`(`uid`);
+
+===================================================================================
+2014-06-17 xiejj@cstnet.cn
+------------------------------------
+* 为了规避Firefox下浏览器无法加载的BUG，暂将scripts/fckeditor/fckconfig.js改名为editorconfig.js
+
+1.上线前，请把teamCode为t的团队的teamCode值修改，管理员是zhaojuan@cnic.cn
+2.添加非私有团队下，邀请成员页面下公共加入连接的显示
+3.修改公共加入连接开头，以t开头
+4.添加再次邀请的显示方式，用提示框的方式进行显示
+5.添加删除邀请功能
+6.进行数据库数据更新
+	update a1_user_guide set step =4 where module='common' and step=5; 
+7.文档分享链接去掉加号
+===================================================================================
+ddl v4.4.1p1
+2014-6-6 zhonghui@cstnet.cn
+1.修改团队成员登录后点击推广链接发送邮件问题
+2.修改只修改ddoc名称，查看是标题不正确问题
+3.修改vmt版本7.1.3b
+zhaojuan@cstnet.cn
+替换二维码图片mobileRcode.png，改用新logo
+
+===================================================================================
+2014-5-23 liji@cstnet.cn
+连接meepo服务器 timeout时间改为60秒
+连接meepo上传文件，大于20MB进行分块上传
+
+2014-05-22 xiejj@cstnet.cn
+--------------------------
+* 修复了在浏览器使用非en-US, zh-CN语言下，编辑器无法加载的BUG
+
+
+增加个人空间（同步版Beta）
+增加加密客户端的接口支持和web显示支持
+列表显示从30条变为100条
+排序记录用户的使用偏好
+创建团队，团队代号改为团队网址，去掉验证码
+动态email点击资源链接，dlog加入标识email来源
+
+2014-05-12
+增加用户排序记录表
+CREATE TABLE `a1_user_sort_preference` (
+  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` VARCHAR(45) NOT NULL,
+  `type` VARCHAR(45) NOT NULL,
+  `sort_type` VARCHAR(45) NOT NULL,
+  `last_modify` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+===================================================================================
+2014-05-06 xiejj@cstnet.cn
+* 增加了服务器端对分享流程的支持
+* 增加了数据库表，用于存放加密文件分享邀请和接收消息
+	CREATE TABLE `vwb_client_invite` (
+	  `id` int(11) NOT NULL auto_increment,
+	  `invitor` varchar(255) NOT NULL default '',
+	  `invitee` varchar(255) NOT NULL default '',
+	  `invitetime` timestamp NULL default NULL,
+	  `accepttime` timestamp NULL default NULL,
+	  PRIMARY KEY  (`id`),
+	  KEY `invitee` (`invitee`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+	CREATE TABLE `vwb_client_message` (
+	  `id` int(11) NOT NULL auto_increment,
+	  `username` varchar(255) NOT NULL default '',
+	  `readed` tinyint(3) NOT NULL default '0',
+	  `createtime` timestamp NULL default NULL,
+	  `readtime` timestamp NULL default NULL,
+	  `message` text,
+	  PRIMARY KEY  (`id`),
+	  KEY `username` (`username`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+2014-04-21 xiejj@cstnet.cn
+* 增加了用RefreshToken换取AccessToken的接口(/system/clientcode?func=refreshtoken)。
+2014-04-18 xiejj@cstnet.cn
+* 修改了客户端的API以支持用户分享的功能。
+
+ddl v4.3
+2014-04-15 liji
+增加配置项clb.wopi.domain=159.226.11.139 用于预览服务
+
+新增pan扩容配置项
+CREATE TABLE  `a1_pan_space_application` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `uid` varchar(45) NOT NULL,
+  `application_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `application_type` varchar(10) NOT NULL,
+  `approve_time` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `new_size` bigint(20) unsigned NOT NULL,
+  `original_size` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `uid_tree_index` (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+
+===================================================================================
+ddl v4.2.2
+个人空间扩容改为：不足5G可用空间时，扩容10G
+扩容颜色更改，还剩5G以上时，颜色为灰白色；还剩不到5G，为红色
+路径旁提示目录下包含的文件夹和文件个数，并增加提示信息
+选中文件时，显示选中的个数。
+除了协作文档和文档库之外，文档均改为了文件。
+姓名出现的地方，用tooltip提示通行证账号。
+
+增加扩容记录表 zhonghui
+
+CREATE TABLE `a1_team_space_application` (
+  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tid` INTEGER UNSIGNED NOT NULL,
+  `uid` VARCHAR(45) NOT NULL,
+  `application_time` TIMESTAMP NOT NULL,
+  `application_type` VARCHAR(10) NOT NULL,
+  `approve_time` TIMESTAMP NOT NULL,
+  `new_size` BIGINT  UNSIGNED NOT NULL,
+  `original_size` BIGINT  UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `tid_tree_index`(`tid`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+2014-03-31   xiejj@cstnet.cn
+* 修改了Chrome下编辑器里表格无法删除列的BUG。
+* 修改了Chrome/FireFox下，编辑器里表格调整列大小一次后，无法再次调整的BUG。
+* 修改了某些特定的文本下，页面自动添加空行的BUG。测试文本源代码：
+	<p>产品定位：团队网盘</p>
+	<p>目标人群：科学院用户（主要），高校师生，创业团队，私营企业主</p>
+	<p>产品总体目标：在三年内，实现院内活跃用户5w人</p>
+	
+
+===================================================================================
+ddl v4.2.1
+1.对Office系列文档和PDF文档增加预览按钮
+===================================================================================
+ddl v4.2.0
+1.增加文件上传耗时统计功能。修改fileuploader.js @zhoukang@cstnet.cn 2014/3/3
+2.添加数据库表，用于记录临时访问code
+CREATE TABLE  `a1_auth_code` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `code` varchar(45) NOT NULL,
+  `access_token` varchar(45) NOT NULL,
+  `uid` varchar(45) NOT NULL,
+  `create_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `client_id` varchar(45) default NULL,
+  `status` varchar(15) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+3.tag操作采用交集
+4.文件名修改，团队的创建修改，用户信息修改中添加 |\/:?<>*的过滤
+5.修改coremail.ddl.css中图片的绝对地址
+
+===================================================================================
+ddl v4.1.2
+1.修复同一文件更新，重名时不对文件名自动加序号 2014.2.16 @zhonghui
+2.修复FCKEditor编辑器使支持IE8--IE11、Chrome、Firefox等主流浏览器。  @lishanbo@cstnet.cn 2014/2/18
+3.修复评论内容有回车时，页面显示<br>。@lishanbo@cstnet.cn 2014/2/24
+
+===================================================================================
+ddl v4.1.1p1
+1.添加dchat获取用户通知数 添加配置项dchat.ip=127.0.0.1,159.226.10.49值为dchat的ip值，以逗号分隔 @zhonghui
+修复：
+添加相关文档/插入文档，过滤查找，输入中文，显示拼音。 @lishanbo@cstnet.cn 2014/1/28  
+在文件浏览页面，对其重命名时，正文部分的文件名没有同时更新。应该像标题一样同时更新。 @lishanbo@cstnet.cn 2014/2/13  
+
+===================================================================================
+ddl v4.1.1
+1.添加删除目录记录表
+CREATE TABLE `ddl_resource_dir_trash` (
+  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `rid` INTEGER UNSIGNED NOT NULL,
+  `tid` INTEGER UNSIGNED NOT NULL,
+  `uid` VARCHAR(45) NOT NULL,
+  `delete_date` TIMESTAMP,
+  `directory` MEDIUMBLOB NOT NULL,
+  PRIMARY KEY (`id`)
+)
+ENGINE = InnoDB;
+
+改进 --@lishanbo@cstnet.cn:
+1、多选复制、移动选择树目录时，展开当前目录;
+2、pdf转换完成后自动刷新;
+3、 图片幻灯片功能：1)缩略图显示完整 2)增加滚轮和键盘切换 3)增加图片旋转 4)修复评论太长时显示不出回复按钮 5)增加隐藏评论功能 ;
+ 
+修复--@lishanbo@cstnet.cn：
+1、文档内容包含单引号，版本比较时引起页面格式混乱;
+2、ie8文档里图片太宽，比较内容时撑开页面;
+3、编辑器更改错别字、英文按钮提示中文;
+4、IE8浏览器下使用过滤功能，输入关键词后按回车键才开始进行过滤;
+5、IE8浏览器下编辑协作文档时插入图片，本地图片无法使用搜索功能;
+===================================================================================
+ddl v4.1.0
+1.vwbconfig.properties 添加字段
+	duckling.team.default.size=10737418240 #ddl默认团队空间大小10G
+	duckling.team.space.open = true #ddl是否开通团队大小控制，true为开通，其余任何值为不开通（包括不配置此项）
+	duckling.user.default.team.size=10 #ddl默认个人能创建团队个数
+2.vwbconfig.properties 添加oauth参数字段
+	client_id=888888 					
+	client_secret=1111111
+	redirect_uri=${duckling.baseURL}/system/login/token
+	access_token_URL=http://passporttest.escience.cn/oauth2/token
+	authorize_URL=http://passporttest.escience.cn/oauth2/authorize
+	scope=
+	theme=full
+3.修改数据库a1_resource 添加size;
+	ALTER TABLE `a1_resource` ADD COLUMN `size` BIGINT UNSIGNED DEFAULT 0 AFTER `description`;
+	修改a1_page_version 添加size
+	ALTER TABLE `a1_page_version` ADD COLUMN `size` BIGINT UNSIGNED DEFAULT 0 AFTER `status`;
+	更新数据
+	update a1_page_version set size=length(content);
+	update a1_resource a,a1_file_version v set a.size=v.size where v.rid = a.rid and v.version=a.last_version;
+	update a1_resource a,a1_page_version v set a.size=v.size where v.rid = a.rid and v.version=a.last_version;
+4.添加数据库表，用于记录teamSize和userSize配置
+	CREATE TABLE `a1_team_space_config` (
+	  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	  `tid` VARCHAR(45) NOT NULL,
+	  `size` BIGINT UNSIGNED NOT NULL,
+	  `update_time` TIMESTAMP NOT NULL,
+	  `update_uid` VARCHAR(45) NOT NULL,
+	  `description` TEXT,
+	  PRIMARY KEY (`id`)
+	)ENGINE = InnoDB;
+	
+	CREATE TABLE `a1_user_config` (
+	  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	  `uid` VARCHAR(45) NOT NULL,
+	  `max_create_team` INTEGER UNSIGNED NOT NULL,
+	  `config_uid` VARCHAR(45),
+	  `config_date` TIMESTAMP,
+	  `description` TEXT,
+	  PRIMARY KEY (`id`)
+	)ENGINE = InnoDB;
+===================================================================================
+
+2013.11.21
+ddl v4.0.1
+部署注意事项：
+1.多机部署ddl时，在VMT,UMT中添加新加机器IP权限
+2.邮件多机在邮件服务器添加白名单
+新增：
+1、可以跨团队复制文件。
+2、资源选择框增加文件上传功能。
+3、相关文档双向关联。
+4、双节点部署，支持可扩展
+5、公开团队支持分页浏览
+6、协作文档全屏查看
+
+改进
+1、编辑冲突的页面界面优化
+2、搜索框界面优化
+3、版本、热度的按钮显示优化
+4、修复移动端标题排序API
+修复Bug：
+1、网页收藏的文档没有在所有文档内出现
+2、未正常关闭的文档不能删除的Bug
+3、点击全知道了，右上角的通知变为NAN
+4、DDL团队添加或移除成员没有同步到VMT
+
+
+===================================================================================
+2013.11.13
+ddl v4.0.0p3
+1.不允许文件夹复制。选择文件夹或多选里面包含文件夹，不出复制按钮
+2.新建表
+CREATE TABLE  `a1_user_copy_count` (
+  `uid` varchar(45) NOT NULL,
+  `copy_date` varchar(20) NOT NULL,
+  `count` varchar(45) NOT NULL,
+  PRIMARY KEY  (`uid`,`copy_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+3.添加一个账号一天copy上限10000条，添加copy操作时间间隔为1秒
+4.去掉了500个复制限制
+5.修复Bug 编辑器插入图片、文档顺序颠倒问题。
+===================================================================================
+2013.11.12
+ddl v4.0.0p2
+1.修复一次移动多个文件夹慢的bug
+2.去除一次只能移动500条限制
+3.修复Bug：协作文档非正常关闭时，引起其他非正常关闭的文档锁不能自动释放，导致长时间占用，其他人无法编辑
+
+===================================================================================
+2013.11.11
+ddl v4.0.0p1 2013.11.11
+1.加入一次复制和移动数目限制，一次最多复制或移动500个文件/文件夹
+2.修复Bug 文件夹或文档重命名后，动态更新里应该显示修改者的名字，而不是创建者
+3.修复Bug 后缀为PDF的pdf文件无法预览
+===================================================================================
+ddl v4.0.0 2013.11.8
+新增文件夹文档归类方式。现在可以方面的建立文件夹，分类管理文档更简单 
+页面改为协作文档，类型为ddoc。团队中的文档包括在线创建的协作文档和上传的文件 
+支持文件夹和文档的移动、复制、重命名和删除 
+支持添加相关文档，在协作文档中插入其他文档链接和插入图片 
+重新设计文档导航，团队文档和个人浏览视角相结合 
+重新设计前端界面和优化界面交互 
+移动服务器API更改，以兼容旧版移动端和支持新版移动端。
+2013/9/22 xiejj@cnic.cn
+1. 删除了SiteConfig类，ConfigClass，PropertyReader等类，统一使用DucklingPorperties类来读取配置文件。数据表vwb_properties表将不再需要。
+
+ddl v3.0.9 2013.8.16
+1.将现在所有的图片查看变为压缩图。图片的大小为一宽度为主，宽度定位850.添加原图预览按钮
+2.修改组合页面添加回车事件。
+3.修改页面编辑，页面选项bug
+4.添加资源到组合时，默认放在正数第一个。
+5.修改 收到邀请并接受，在接受后不重刷浏览器的情况下，点“点此退出团队‘，找不到刚才新加入的团队bug
+===================================================================================
+ddl v3.0.8
+1.向vwbconfig.properties添加配置项duckling.mq.host=10.10.2.6 这个地址正式上线时在确定地址 
+								 duckling.mq.exchange=vmt-test-topic
+								 duckling.mq.queuename=ddl-qms
+								 duckling.mq.userName=guest
+								 duckling.mq.password=guest
+2.修改管理员管理成员方式，管理员修改成员权限立即生效，管理员不能修改自己权限。
+3.修改成员退出团队方式，如果团队只有唯一成员时提示退出团队即删除团队是否继续；如果是团队唯一管理员，提示移交管理员权限，操作终止。
+4.修改邀请历史时间显示格式
+===================================================================================
+ddl v3.0.7 2013.7.30
+1.修改vwb_team表，增加一个vmtdn字段，用于与vmt团队组织进行一一映射
+	ALTER TABLE `vwb_team` ADD COLUMN `vmtdn` VARCHAR(255) AFTER `default_member_auth`;
+2.向vwbconfig.properties添加配置项duckling.vmt.service.address=http://vmt.escience.cn/services
+3.修改a1_mobile_version表添加一个描述字段
+	ALTER TABLE `a1_mobile_version` ADD COLUMN `description` TEXT AFTER `create_time`;
+	修改一下字符集alter table a1_mobile_version convert to character set utf8;
+
+===================================================================================
+ddl v3.0.6 2013.7.12
+1.增加@支持拼音匹配
+2.修复示例页面
+3.加入二维码下载提示，用户叉掉后，不会再出现
+4.修复管理页面，成员列表加载速度慢的问题
+5.组合内上传文件,新建页面，解散某个资源，修改人的显示错误Bug
+6.去掉cnzz
+===================================================================================
+ddl v3.0.5
+1.修复Bug：IE下文件下载乱码
+2.添加移动端版本记录表
+CREATE TABLE  `a1_mobile_version` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `type` varchar(45) NOT NULL,
+  `version` varchar(45) NOT NULL,
+  `creator` varchar(45) NOT NULL,
+  `create_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+3.移动端版本修改地址http://ddl.escience.cn/system/mobileversion
+4.修复Bug：ddl文件pdf预览页面title显示错误
+5.修复Bug：标题含双引号，工具条出不来
+6.更改首页，突出移动客户端下载链接
+7.手机访问首页时，弹出移动客户端下载提示
+8.增加手机客户端的调用接口-@和获取最新版本
+9.修复Bug：邮件上传的附件，格式没有自动转换。
+===================================================================================
+ddl v3.0.4 2013-6-28
+1.修改lynx-jquery.js 提示下载浏览器IE9的链接 zhaojuan 2013-6-27
+2.升级mozilla pdf.js插件，支持chrome浏览器的在线预览 yangxiaopeng 2012-6-27
+3.修改系统通知邮件的文字 zhaojuan 2013-6-28
+
+===================================================================================
+ddl v3.0.3p1 2013-6-26
+1.修复Bug:更换nginx后，部分文件无法预览的bug
+2.组合名过长时，组合文件列表显示
+3.修改Android API接口Bug
+ddl v3.0.3 2013-6-25
+1.	个人空间的名称不允许用户手动更改。个人空间名称默认为：{姓名}的个人空间
+2.  点击查看自己的个人资料页面时，右上角的“编辑资料”链接，链接页面错误，应该链接到个人资料里的编辑页面。
+3.  常用，文档列表无文档时的操作提醒更加明显
+4.  修复Bug:复制时，选了团队，还提示选择选填
+5.  修改支持Android API接口
+===================================================================================
+ddl v3.0.2 2013-06-18
+1.新用户和新建团队空间，增加示例
+2.将文档下载从tomcat转变成nginx方式
+3.目前选择附件是把团队内自己创建的文件列了出来，修改成把团队中所有文件都列出来
+4.修改ddl接受邮件地址配置项 ddl.client.accepted.ip=159\\.226\\.(14\\.1\\d{1,2}|251\\.\\d{1,3}|56\\.139)
+===================================================================================
+ddl v3.0.1 2013-06-9
+发布科研在线文档库3.0.1（DDL 3.0.1）
+评论增加@通知功能
+已删除文件支持找回
+版本管理页面增加版本恢复入口
+管理员审核和用户申请加入公开需审核团的邮件通知
+通讯录增加管理标识
+修复支持移动客户端(Android)API
+修复coremail第一次上传附件时新建用户个人空间bug
+			    
+ddl v3.0.0p3 2013-05-31
+1.修改vwbconfig.properties.添加duckling.vmt.getteaminfo.user=vmtteamuser
+	和duckling.vmt.getteaminfo.password=vmtteampassword 用于VMT获取ddl团队和用户数据
+2.增加iOS接口，获得页面内点击链接的文件名
+===================================================================================
+ddl v3.0.0p2 2013-05-22
+1.修改vwbconfig.properties.添加duckling.file.proxy.gateway=cache_redirect 和 duckling.clb.access.mode=nginx用于nigix下载转发,分节点为tomcat
+2.增加iOS接口
+3.修复coremail，保存附件，选择团队时，默认勾选个人空间
+4.修复coremail Bug，360浏览器下，选择团队，出现横向滚动条
+===================================================================================
+ddl v3.0.0p1 2013-05-17
+1.修改coremail引用coremail.ddl.download.js\coremial.ddl.teamInfo.js地址问题
+2.修改提取分享错误页面:
+3.修改360 搜狗浏览器50M附件问题
+4.修复coremail Bug：保存某个文档，显示已存在，点链接不是该文档。
+5.改进：下载超大附件的页面，去掉“该文件存在XX个人空间下
+6.改进：下载超大附件的页面，已登录时，不显示注册按钮
+6.新增 coremail：保存附件事件在动态里展现。在每日动态邮件里展现
+7.修复Bug：管理成员的姓名没有显示
+8.改进coremail：保存附件，如果同一空间下存在重名文件，提示已存在；并不是同一封附件才判断。
+9.修复Bug：评论文件时，自己发的评论没有删除按钮
+10.改进coremail:保存附件时，加入一个正在保存的状态。Loading图标+正在保存。再次保存，也需要状态
+11.改进coremail：修改A用户退出后，B用户登录，看到的仍然是A的文档库信息的Bug
+12.增加iOS的删除接口
+13./**添加配置文件，提供coremail下载ddl附件域名配置ddl.coremail.download.domain=http://ddl.escience.cn/,
+	如果不想开启此功能，可直接注释掉或者配置为空*//
+
+
+===================================================================================
+ddl v3.0.0 2013-05-09
+1.支持中科院邮件系统附件保存至文档库及支持选择文档库文档作为邮件附件（现部分测试用户可使用）
+2.修改vwb_share_access 表 添加一个提取码字段，用于与coremail的附件分享 zhonghui@cstnet.cn 2013-4-25
+	ALTER TABLE `vwb_share_access` ADD COLUMN `fetch_file_code` VARCHAR(20) default null AFTER `clb_id`;
+3.修复bug: chrome浏览器下文件应该是不可以在线预览，即在线预览的按钮变灰不可点击；但存在chrome下组合内的文件可以在线预览的bug yangxiaopeng@cnic.cn 2013-05-03
+4.修复bug: 将资源从组合移除的时候，资源的排序错误。原因是orderTitle和orderDate没有更新正确。yangxiaopeng@cnic.cn 2013-04-27
+
+==================================================================================
+ddl v2.1.12 2013-4-22
+1.修改vwb_user_ext表 ，添加一个记录用户email字段
+  alter table `vwb_user_ext` add column `email` varchar(45) default null after `name`;
+2.同步表中email数据：update vwb_user_ext set email=uid;
+3.修改个人资料页面，移除所有MSN的输入和输出部分，添加邮箱配置，使邮箱不在默认是用户uid
+4.添加分享页面群发和单个发送选项，默认是单个发送。并保证发件箱是上述用户配置邮箱地址 。该更改先注释了。
+5.登录状态下，首页各个页面要显示登录姓名以及姓名下的菜单。
+6.修改组合名，支持回车即保存.
+7.星标文件里的组合去掉版本号
+8.编辑页面的版本比较，将恢复该版本显示在表格上方。（建议测试这个功能的正确性）
+9.修复，banner条团队，复制里的团队顺序一致
+10.修复组合里点击推荐页面，弹出后，当前页面仍然刷新的Bug。修复在单页面里点击推荐页面，应该弹出
+11.对页面和文件访问记录表数据进行更新
+	update vwb_browse_log set item_type='DPage' where item_type is null;
+12.文档转换可配置。增加配置项 duckling.clb.dconvert.enable=true 设置是否启用文档转换服务。设置为false时，不会进行文档转换，同时前台除了pdf文件以外看不到“文档转换”和“在线预览”的按钮
+13.修改搜索标签时输入“xxx%'”后台抛异常的bug. yangxiaopeng@cnic.cn
+14.修复支持iOS的API，修复通知内容加载慢的Bug。
+15.修复热度不准确的Bug
+16.注销后，直接再登录，应该回到个人偏好里设置的默认页面，而不是上一次注销的页面
+====================================================================================
+ddl v2.1.11 2013-4-9
+1.文件分享给外部成员，下载后版本不对。期望：分享后，点击链接，取最新版本。 
+2.文档列表页面，组合内的文档顺序，应该按照组合内文档的顺序排列。
+3.没有管理权限的成员，不能邀请其他成员，即通讯录里的邀请应该隐藏和右边用户管理的“邀请和管理成员”按钮应该隐藏。
+4.对搜索优化实时查询的现有代码进行改写，规范代码
+5.修改了对iOS的API支持
+6.添加一张表用于记录coremail的附件记录
+CREATE TABLE  `a1_emailattach` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `tid` int(10) unsigned NOT NULL,
+  `fid` int(10) unsigned NOT NULL,
+  `item_type` varchar(45) default NULL,
+  `creator` varchar(255) NOT NULL,
+  `mid` varchar(128) NOT NULL,
+  `create_time` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `title` varchar(255) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `email_mid` (`mid`),
+  KEY `emailattach_tid_creator` USING BTREE (`tid`,`fid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+====================================================================================
+ddl v2.1.10 2013-3-29
+支持中国科技网通行证单点登录
+修改了对iOS的API支持
+修复组合筛选无内容的Bug
+姓名修改后，通行证内的姓名也相应修改。
+改善文档搜索结果排序（详细如下）
+2013-3-28 by lizexin
+1.增加搜索优化中的相关用户查询因子 
+新加表
+CREATE TABLE `a1_user_sim` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) NOT NULL,
+  `simuid` varchar(255) NOT NULL,
+  `score` int(11) default '0',
+  `time` timestamp NOT NULL default '0000-00-00 00:00:00' on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+2.修改文档相关度的值严格递减。因为利用sphnix考虑时间排序时，会出现小权重的文档排在当权重文档钱的情况
+3.将searchService中搜索优化部分的dao访问隐藏起来，通过SearchLogAnalysis访问dao
+      修改了配置文件VWBcontext中searchService下的一个属性。
+4.优化重拍算法，使查询数据库的次数固定为4次
+5.搜索点击文档的权重，加入了对文档操作的影响
+====================================================================================
+在version.jsp中增加一段数据统计代码 by huwei
+
+ddl v2.1.9 2013-03-13     
+2013-03-06
+对字段赋值。
+UPDATE `vwb_user_ext` set frequent=1 , operation=0 ,requestNum=0 , version = 1;
+修改vwb_team_member增加字段createdby,createtime；
+alter table vwb_team_member add column `createdby` varchar(50) DEFAULT NULL;
+alter table vwb_team_member add column `createtime` datetime default NULL;
+
+=============================================================================
+2013-03-04
+bug:文件名过长在IE下会产生乱码或文件名被改变。已修改文件下载逻辑，变更为：当文件字数超过215或文件名被编码成utf8后的长度超过1900时，文件名会被截断。
+vwbconfig.properties中新增
+ddl.client.accepted.ip配置项用于ddlclient安全配置，其初始变量为ddl.client.accepted.ip=127.0.0.1
+
+1.用户在一个锁的周期内未有任何输入，将弹出提示，提示持续60秒，60秒内用户没有任何输入反应，页面将自动保存关闭。如果用户继续输入，或点击保存，继续续锁，提示并消失。
+duckling.pagelock.timeout=1 锁周期为1分钟
+2.修复用户编辑了未命名页面（版本为0），修改人没有变成更改的用户，仍为原作者。 
+
+
+ddl v2.1.8 2013-02-21            
+-------------------------------------------------------------------------------      
+1.修改组合全是图片的时候无法展示缩略图以及切换到缩略图的bug。该Bug由之前修改bundle url的显示规则引起。      
+2.修改了对手机API的支持
+2013-01-22 zzb@cnic.cn
+* 在系统启动时增加后台线程，用于消息推送
+* 增加数据库表a1_device_token,用于消息推送
+
+CREATE TABLE `a1_device_token` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) NOT NULL,
+  `device_token` varchar(255) NOT NULL,
+  `last_login_time` timestamp NULL default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-------------------------------------------------------------------------------
+ddl v2.1.7 2013-01-22 
+-------------------------------------------------------------------------------
+add by liji @2013-1-21
+1.将ddl的clb api升级到6.0.1版本
+2.在vwbconfig.properties中新增一个配置项用于判断clb服务器的版本
+说明：
+	配置项名称为duckling.clb.aone.version,值为previous或current
+	previous表示所连接的clb服务器版本为5.2.0
+	current表示所连接的clb服务器版本为6.0.1
+例子：
+	duckling.clb.aone.version=previous
+3.在vwbconfig.properties中新增一个配置项用于判断clb服务是否正在维护
+    duckling.clb.aone.ismaintain=true
+    true表示正在维护，文档上传将不可用；false表示没有维护，正常使用文档服务。
+
+4.修改邮件每日发送动态里包含前几天的动态的Bug  zhonghui
+5.修改引用附件时，把已删除的文件列出来的Bug    zhonghui
+   
+-------------------------------------------------------------------------------
+ddl v2.1.6 2013-01-17        
+1.修改vwbconfig.properties 添加属性ducking.ddl.appName=ddl 和duckling.umt.regist=${duckling.umt.site}/registEmail.do 用于给umt注册用户返回使用
+2.修改vwbconfig.properties 修改属性duckling.umt.link.regist=${duckling.umt.site}/regist.jsp
+3.修改vwbconfig.properties 修改属性duckling.umt.theme =  设置为空
+      
+--------------------------------------------------------------------------------
+ddl v2.1.5 2013-01-15           
+1.修改在IE10下编辑框打不开，保存按钮等失效。fckeditor不支持IE版本10，修改fckeditor.js
+2.修改在组合页面内删除组合时的提示，原有提示在组合为空时容易引起误导。
+3.解决组合内移除文档或解除组合时，造成标签个数不一致。
+几种动作：解散组合，移除页面或文件，移除同样是组合内页面附件的文件。
+4.修复点击空组合的空指针Bug
+5.修改查看星标文件时，有时候修改时间末尾多了.0
+6.个人通讯录查看时，按团队查看，应该显示团队名称而不是团队代号
+7.Android接口修改
+8.分享加入全选
+9.组合a跟其他文档再生成新组合b后，旧的组合里的资源链接还能使用
+10.进入组合详细页面时，显示第一个资源的url，文档列表里点组合，九宫格内点组合，还有星标里点组合，进入组合详细页面时，显示第一个资源的url
+11.九宫格里的组合不显示版本
+12.顶部banner加入中国科技网资源导航链接
+
+
+
+--------------------------------------------------------------------------------
+修改vwb_user_ext增加字段frequent、operation、modifytime、requestNum、version;
+   alter table vwb_user_ext add column `frequent` int(15) default NULL;
+   alter table vwb_user_ext add column `operation` int(15) default NULL;
+   alter table vwb_user_ext add column `requestNum` int(15) default NULL;
+   alter table vwb_user_ext add column `version` int(15) default NULL;
+   alter table vwb_user_ext add column `modifytime` datetime default NULL;
+增加表apn_user、vwm_user_outside、vwb_push_message、vwb_user_to_be_processed、vwb_user_history、vwb_team_relations、vwb_request_num。
+
+CREATE TABLE `apn_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `created_date` datetime DEFAULT NULL,
+  `email` varchar(64) DEFAULT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `password` varchar(64) DEFAULT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  `username` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `vwb_user_outside` (
+  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '',
+  `email` varchar(100) DEFAULT '',
+  `telephone` varchar(15) DEFAULT NULL,
+  `orgnization` varchar(255) DEFAULT NULL,
+  `department` varchar(255) DEFAULT '',
+  `mobile` varchar(15) DEFAULT NULL,
+  `qq` varchar(45) DEFAULT NULL,
+  `msn` varchar(45) DEFAULT NULL,
+  `weibo` varchar(45) DEFAULT NULL,
+  `sex` varchar(45) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  `photo` longblob,
+  `firstname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
+  `operation` int(15) DEFAULT NULL,
+  `createdby` varchar(100) DEFAULT '',
+  `createtime` datetime DEFAULT NULL,
+  `modifiedby` varchar(100) DEFAULT '',
+  `modifytime` datetime DEFAULT NULL,
+  `version` int(15) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `vwb_push_message` (
+  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '',
+  `email` varchar(100) DEFAULT '',
+  `telephone` varchar(15) DEFAULT NULL,
+  `orgnization` varchar(255) DEFAULT NULL,
+  `department` varchar(255) DEFAULT '',
+  `mobile` varchar(15) DEFAULT NULL,
+  `qq` varchar(45) DEFAULT NULL,
+  `msn` varchar(45) DEFAULT NULL,
+  `weibo` varchar(45) DEFAULT NULL,
+  `sex` varchar(2) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  `photo` longblob,
+  `firstname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
+  `operation` int(15) DEFAULT NULL,
+  `createdby` varchar(100) DEFAULT '',
+  `createtime` datetime DEFAULT NULL,
+  `modifiedby` varchar(100) DEFAULT '',
+  `modifytime` datetime DEFAULT NULL,
+  `teamid` int(15) DEFAULT NULL,
+  `issystemuser` int(15) DEFAULT NULL,
+  `version` int(15) DEFAULT NULL,
+  `notificationid` varchar(100) DEFAULT NULL,
+  `status` int(15) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `vwb_user_to_be_processed` (
+  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '',
+  `email` varchar(100) DEFAULT '',
+  `telephone` varchar(15) DEFAULT NULL,
+  `orgnization` varchar(255) DEFAULT '',
+  `department` varchar(255) DEFAULT '',
+  `mobile` varchar(15) DEFAULT NULL,
+  `sex` varchar(2) DEFAULT NULL,
+  `qq` varchar(45) DEFAULT NULL,
+  `msn` varchar(45) DEFAULT NULL,
+  `weibo` varchar(45) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  `photo` longblob,
+  `firstname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
+  `operation` int(15) DEFAULT NULL,
+  `createdby` varchar(100) DEFAULT '',
+  `createtime` timestamp NULL DEFAULT NULL,
+  `modifiedby` varchar(100) DEFAULT '',
+  `modifytime` timestamp NULL DEFAULT NULL,
+  `version` int(15) DEFAULT NULL,
+  `issystemuser` int(15) DEFAULT NULL,
+  `teamid` int(15) DEFAULT NULL,
+  `result` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `vwb_user_history` (
+  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '',
+  `email` varchar(100) DEFAULT '',
+  `telephone` varchar(15) DEFAULT NULL,
+  `orgnization` varchar(255) DEFAULT NULL,
+  `department` varchar(255) DEFAULT '',
+  `mobile` varchar(15) DEFAULT NULL,
+  `sex` varchar(2) DEFAULT NULL,
+  `qq` varchar(45) DEFAULT NULL,
+  `msn` varchar(45) DEFAULT NULL,
+  `weibo` varchar(45) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  `photo` longblob,
+  `firstname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
+  `operation` int(15) DEFAULT NULL,
+  `createdby` varchar(100) DEFAULT '',
+  `createtime` datetime DEFAULT NULL,
+  `modifiedby` varchar(100) DEFAULT '',
+  `modifytime` datetime DEFAULT NULL,
+  `version` int(15) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `vwb_request_num` (
+  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `date` varchar(50) DEFAULT NULL,
+  `count` int(15) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `vwb_team_relations` (
+  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
+  `allUserId` varchar(100) DEFAULT '',
+  `systemUserId` varchar(100) DEFAULT '',
+  `count` int(15) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+--------------------------------------------------------------------------------
+ddl v2.1.4 2013-01-07 
+1.文档库的分享，自动聚焦在第一个输入框
+2.文档库的分享列表，分类字母变成大写字母
+3.修复资源删除是显示删除者为创建者bug
+4.将快速分享输入地加入后台email格式校验，减少使用试探试提交给系统带来的危害
+5.修改删除文档在个人面板的显示，移除删除文档上的链接，但保留点击取消时间。
+6.a去掉检索时前60条记录的重排序的特殊处理
+6.b.恢复60条搜索记录的重排序
+7.缩短搜索优化相应时间时间
+8.修复标签集管理，第一次添加标签后，无法编辑
+9.修复分享时，用户选择框，在二次分享时，会列出上次分享过的记录，界面没刷新。
+10.新增团队通讯录，个人通讯录表格排序
+11.包括了iOS的后台接口服务
+
+--------------------------------------------------------------------------------
+ddl v2.1.3 2012-12-28
+
+1.修复Bug页面从团队A复制到团队B，在团队B动态消息里的链接为页面在A中的链接，所以导致无法访问	
+2.修复Bug 评论时用户名显示为GUEST.session过期了，但还能回复导致的。改成不登录时不能回复，转到登录页面
+3.并发Bug。两个用户创建了两个不同的bundle，同时引用了同一个页面，这两个bundle都无法被删除。改成如果页面被其他组合引用，在组合的时候弹出框提示：页面已被其他组合引用
+4.修复Bug. 团队首页的九宫格里，每个资源的时间格式错误，应该删除.0，具体到秒
+5.文件在IE下预览页面的翻页等按钮出不来,以及返回按钮改为“关闭”按钮  
+6.修复无法向域名带-横杠的邮箱发送邮件的问题（东莞提出）	
+7.发送加入团队的邀请。被邀请者可以选择用其他邮箱注册或登录。若用其他邮箱加入后，公开需审核和私密团队需要通过管理员审核，审核信息发送邮件。审核通过后，在未反馈的邀请中清除该申请，在已接受的申请中加入该申请。
+新增（避免必须注册才能接受邀请）
+8.发送团队邀请的邮件中，显示团队名称，而非团队代号	修复	 
+10.在团队动态里，删除的页面，显示删除线	修复	
+11.分享页面，发送邮件的发件人地址，从默认的duckling-default改为分享人的邮件地址。（注，只有分享时，发件人地址更改，其它不变）	修复（避免回复邮件到默认地址） 
+12.编辑页面的锁定时间为15分钟	修复（避免长时间锁定）部署时，修改部署文件即可。更改配置项：duckling.pagelock.timeout=30为：duckling.pagelock.timeout=15
+13.排序Bug，组合页面的修改，引起组合显示时间和文档排序时候所用时间不一致。
+13.修复Bug，组合文档后，显示了组合中较旧文档的时间，没有显示创建组合的时间。
+14.分享时，弹出框里列表优化。改为搜索输入框，再输入时提示成员列表，按字母排序。显示成员名称和邮箱。允许选择和输入多个已有成员名称 新增（优化体验）
+15.动态里显示 删除文件的动作，X删除了XX文件。在删除页面旁边显示（已删除），并且不能点击	修复
+16.修复编辑某个页面，结果该页面同时被其它用户删除或者重组等操作的并发Bug。改为某个页面被编辑时，不能被删除，重组或移除组合。如果有该操作，需要提示。修复（避免并发操作引起的冲突）
+17.会话过期提醒	修复
+
+
+          
+----------------------------------------------
+add by lizexin 栗泽欣  2012-12-17
+1.将sphnix返回结果由20增加到60进行重排序，只对searchtype=page的搜索有效
+2.调整页面浏览次数作为权重时的系数，避免浏览次数产生过大的影响，此外有浏览权重由次数变成人数
+3。修复日志分析中点击用户uid=“guest”的情况
+4.调整了各个权重因子的系数，用户自身点击为50，关注用户点击25，浏览文档为1，标题和内容系数比由5:1调整为3:1
+            
+----------------------------------------------------
+ddl v2.1.2 2012-12-13
+1.更改sphinx索引文件,aone_resource索引中的sql语句修改，原来的select中的order_date改为 UNIX_TIMESTAMP(order_date) as order_date 
+-by yangxiaopeng，2012-12-12
+2.  修复Bug，点击分享文件的邮件，消息还会出现该文件。	Bug	钟辉		 
+3	IE8下图片瀑布流出不来	Bug	吕龙云		 
+4	在账户名下添加个人主页链接	新增	吕龙云 
+5	在只有可查看权限的团队，组合的左侧解散和删除组合区域不显示	新增	钟辉 
+6	修复Bug，用户指南最后一步显示层次	Bug	张仕响		 
+7	修复Bug，用户从个人空间复制到其它团队时，文件url在邮件中显示的是原始链接。期望，应该是复制过来的链接。		吕龙云	 
+8   搜索页面的文件和组合类型编号和团队来源漏掉修复  张仕响
+9   修复Bug，搜索框掉下来， 张仕响
+10  用户指南，已经看过的指南不再显示 （管理指南出现时，会导致重复显示后续的指南）， 张仕响
+11  修复Bug，点击退出某个团队，在弹出框里点击取消后黑屏不消失，张仕响
+
+----------------------------------------------------
+ddl v2.1.1 2012-12-11
+1.修复Bug:组合内的页面引用附件，附件显示不出来
+2.修复预览文件，在新窗口打开。
+3.修复Bug:word粘贴出错
+4.修复用户指南 zhangshixiang
+5.关注和取消关注的checkbox禁用
+6.修复评论代码重复
+----------------------------------------------
+add by lizexin 栗泽欣  2012-12-10
+1.添加页面浏览次数（2012年8月以来的浏览记录）作为权重因子。（在关注用户影响，和自身点击行为影响都失效的情况，也会有部分文档由浏览产生的权重）
+2.修复记录页面操作的dlog日志中，"tid"="-1"的错误
+3。修复分析日志模块中，根据搜索日志生成文档权重有遗漏文档的问题。
+
+
+1.增加删除权限。页面，文件和组合只有创建者和管理员才能删掉，复制的页面或文件也只有复制者和管理员才能删除）
+多选：只删除自己创建的，不删除其它人的。
+组合：如果组合中包含其它成员创建的，不能删除组合。  by zhonghui
+2.搜索页面，session过期，搜不到结果，加入过期提示  by yangxiaopeng
+3.修复Bug 点击已关注，弹出框的保持关注和叉号点击无效 by zhonghui
+4.修复Bug IE9下粘贴word2007文档，按钮失灵 by zhonghui
+5.根据用户的浏览日志，得到用户感兴趣的用户，搜索权重中，考虑用户感兴趣的用户的点击的结果（by lizexin）
+6.修复每日动态邮件时间带.0，具体到秒 by lvlongyun
+7.tid，teamname/teamcode使用混乱。纠正某些把teamcode当成tid的错误。 by zhonghui
+8.修改索引，增加用户兴趣表，搜索权重中，考虑用户感兴趣的用户的点击的结果  by 栗泽欣 lizexin （会影响搜索的结果排序，需要积累一定的数据，才有可能看到影响）
+9.在浏览页面和组合时，增加推荐列表。配置项里 duckling.redis.server=10.10.1.105，换成其他服务器，即可屏蔽改功能   -蔡芳 caifang 
+10.加入对推荐区域和按团队搜索的用户指南-zhangshixiang
+
+add by lizexin 2012-12-04 添加user用户关注度分析 
+根据用户的浏览日志，得到用户感兴趣的用户，
+搜索权重中，考虑用户感兴趣的用户的点击的结果
+
+add by lizexin 添加表
+--a1_userinterest 存储用户感兴趣的用户
+CREATE TABLE `a1_userinterest` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) NOT NULL,
+  `interest` varchar(255) NOT NULL,
+  `score` int(11) default '0',
+  `time` timestamp NOT NULL default '0000-00-00 00:00:00' on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+-----------------------------
+ddl v2.1.0 2012-11-23  
+
+add by lvly@2012-11-22
+--新增配置项，用于配置点个人名字下面的  学术主页链接的时
+duckling.toDhome=${duckling.baseAddress}/dhome/system/fromDDL
+
+修复Bug，管理标签时，点击团队管理或团队邀请，出错。	
+修复IE下带链接的图片边框是蓝色	
+修改分享email格式
+
+-----------------------------
+
+ddl v2.0.2 2012-11-22   
+
+图片集经典视图，标题过长问题	 张仕响
+IE9下推荐区域一行只列出3个	张仕响	
+ 团队首页，要加入推荐区域	钟辉	 	 
+每日动态邮件标题加上当天的时间。“文档库X月X日动态汇总”吕龙云		 
+分享收到邮件后，点击进去查看，消息仍然存在。（消息应该消失）	吕龙云/钟辉	
+分享，将XX分享给，分享页面名称丢失	吕龙云
+重点推荐区域的文件图标时有时无	钟辉
+配置文件的host是主机名，与domain重了	吕龙云/李觊	
+分享邮件标题改为：xxx把页面xxx分享给您	吕龙云
+每日动态汇总邮件:点击退订反复多次	张仕响
+分享邮件，立即登录链接到团队动态的消息列表	吕龙云	
+重点区域，标签列表和搜索，组合内的文件不能出来。	钟辉	 
+文档库搜索字体对齐	张仕响 
+搜索页面，搜索出结果，再点banner上的搜索框，bad request	杨小澎
+图片集加入图片名和上传人上传时间	吕龙云/张仕响
+搜索时把不在团队的结果也列了出来	杨小澎 
+只有可查看的权限，却能删除文件	杨小澎	 
+只有可查看的权限，却能编辑重点区域     钟辉
+
+ddl v2.0.1 2012-11-21
+-----------------------------------------
+1.邮件通知，分享实时发送，每日动态汇总凌晨1点发送，用户可以设置是否接受，也可以按团队设置，按团队设置增加返回操作。
+2.文档在不同团队之间复制。支持页面，文件的复制。链接和评论赞不复制。只能复制到个人空间或有编辑权限的团队。如果文件已经在目标团队复制过，支持用户覆盖或新建。
+3.团队增加“公开需审核”权限，管理员需要接受或拒绝用户加入团队的申请
+4.访问公开团队的列表页面不再需要登录（包括公开和公开需审核）。
+5.访问公开团队列表页面，或者访问推广链接，老用户登录和新用户注册后，可以访问到团队首页或个人首页。
+6.标签内重要文档推荐。文档列表，每个标签开辟一个重要文档推荐区域，团队成员可以编辑这个区域。
+7.图片集的浏览优化，加入瀑布流视图，从瀑布流视图可以切换到以前的图片集浏览视图。单个浏览时，取消预加载，增加前后翻页按钮和图片名称。
+8.Bug修复：修改组合下的多余"<" 
+9.Bug修复：修改历史记录编辑无记录 
+10.链接提示：动态：点击查看团队所有动态，文档：点击查看团队所有文档，星标：点击查看所有星标文件，列表里的星标：标记为星标文件 或取消标记 +：添加标签 下载：点击下载
+11.页面和工具条顺序调整。页面的工具条，顺序调一下吧：编辑、删除、关注、分享、复制、热度、全屏阅读；文件的工具条，顺序调一下为：更新、删除、分享、复制、热度、全屏阅读
+
+
+2012-11-20
+添加图片压缩记录
+
+-- Table "a1_picture" DDL
+
+CREATE TABLE `a1_picture` (
+  `id` int(11) NOT NULL auto_increment,
+  `file_clb_version` int(11) default NULL,
+  `file_clb_id` int(11) default NULL,
+  `width` int(11) default NULL,
+  `height` int(11) default NULL,
+  `clb_id` int(11) default NULL,
+  `create_time` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+        
+2012-11-19
+zhonghui
+添加一张快捷方式记录表
+DROP TABLE IF EXISTS `a1_shortcut`;
+CREATE TABLE `a1_shortcut` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `sequence` int(11) NOT NULL default '0',
+  `tid` int(11) NOT NULL default '0',
+  `tgid` int(10) unsigned NOT NULL,
+  `rid` int(10) unsigned NOT NULL,
+  `color` varchar(45) default NULL,
+  `creator` varchar(45) default NULL,
+  `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--------------------------------------------------------------------------------- 
+ 2012-11-15
+ @lvly
+alter table a1_file_version add column `clb_version` int(11) default NULL;
+alter table a1_file add column `clb_version` int(11) default NULL;
+update a1_file_version set clb_version=version;
+update a1_file set clb_version=last_version;
+
+-- Table "a1_copy_log" DDL
+--复制记录表
+CREATE TABLE `a1_copy_log` (
+  `id` int(11) NOT NULL auto_increment,
+  `from_version` int(11) default NULL,
+  `from_rid` int(11) default NULL,
+  `from_tid` int(11) default NULL,
+  `to_version` int(11) default NULL,
+  `to_rid` int(11) default NULL,
+  `to_tid` int(11) default NULL,
+  `copy_time` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
+  `uid` varchar(255) default NULL,
+  `ancestry_rid` int(11) default '0',
+  `type` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ 
+ 
+ 2012-11-15
+ yangxiapoeng@cnic.cn
+ 增加一张表，用于用户申请加入团队
+ CREATE TABLE `vwb_team_applicant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `tid` int(11) NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `reason` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `apply_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `i_know` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--------------------------------------------------------------------------------
+2012-11-12 
+@lvly
+vwbappconfig.properties
+ 加入
+ 
+duckling.port=80
+duckling.baseAddress=http://${duckling.domain}:${duckling.port}
+duckling.baseURL=${duckling.baseAddress}
+
+邮件定时发功能所需的
+
+ddl v2.0.1    
+变更记录
+1.顶部菜单排序
+2.跨团队搜索。首页的顶部banner出现搜索框，支持在全部团队搜索。单独的搜索页面。
+3.文档排序，按时间和按标题的倒序和正序排序。
+4.消息中心，我的消息和我的关注，点过之后不再显示。
+5.注册加入验证码
+6.注册和创建团队合法性校验，团队创建限制100个字符
+7.团队空间的banner上的标题，顶部的菜单，团队名称过长进行截断。
+
+----------------------------------------------------------------------
+2012-11-7 
+--zhonghui
+--在vwb_team_member 表中加入三个字段 记录 每个notice的eventid 用于事件的记录和管理
+alter table vwb_team_member add column `team_event_ids` text default '';
+alter table vwb_team_member add column `person_event_ids` text default '';
+alter table vwb_team_member add column `monitor_event_ids` text default '';
+update vwb_team_member set team_event_ids='',person_event_ids='',monitor_event_ids='';
+
+
+--xiaopeng    
+     
+alter table a1_resource add column order_title varchar(255) default null;
+alter table a1_resource add column order_date timestamp;
+
+update a1_resource set order_title=title, order_date=last_edit_time where bid=0;
+update a1_resource a left join (select * from a1_resource where item_type='Bundle') as b
+	on a.bid=b.item_id and a.tid=b.tid set a.order_title=b.title, a.order_date=b.last_edit_time where
+	a.bid!=0; 
+	
+	
+ddl v2.0.0           
+----------------------------------------------------------------------
+2012-09-17
+--表 a1_searchlog，a1_searchedlog，a1_search_docweight添加tid字段
+
+alter table a1_searchlog add column `tid` int(11) not null default '0';
+alter table a1_searchedlog add column `tid` int(11) not null default '0';
+alter table a1_search_docweight add column `tid` int(11) not null default '0';
+----------------------------------------------------------------------
+2012-09-03
+--dlog的搜索日志分析需要添加三个表 a1_searchlog，a1_searchedlog，a1_search_docweight
+
+--a1_search_docweight存放dlog提取出的最原始的日志数据
+--uid用户识别符
+--keyword查询关键字
+--sequence查询行为后发生行为的序列号
+--opername对文档的操作行为
+CREATE TABLE `a1_searchlog` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) NOT NULL,
+  `keyword` varchar(255) NOT NULL,
+  `item_type` varchar(255) default NULL,
+  `item_id` int(11) default '0',
+  `sequence` int(11) default '0',
+  `opername` varchar(255) default NULL,
+  `time` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--a1_searched_docweight存放dlog处理后的日志数据
+--uid用户识别符
+--keyword查询关键字
+--sequence查询行为后发生行为的序列号
+--opername对文档的操作行为
+CREATE TABLE `a1_searchedlog` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) NOT NULL,
+  `keyword` varchar(255) NOT NULL,
+  `item_type` varchar(255) default NULL,
+  `item_id` int(11) default '0',
+  `sequence` int(11) default '0',
+  `opername` varchar(255) default NULL,
+  `time` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--a1_search_docweight存放经过分析后新的文档权重
+--uid用户识别符
+--keyword查询关键字
+--weight文档的新权重
+--opername对文档的操作行为
+CREATE TABLE `a1_search_docweight` (
+  `id` int(11) NOT NULL auto_increment,
+  `uid` varchar(255) NOT NULL,
+  `keyword` varchar(255) NOT NULL,
+  `rid` int(11) NOT NULL,
+  `weight` int(11) NOT NULL,
+  `time` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+----------------------------------------------------------------------
+2012-07-31
+
+--因为觉得原表不满足需求，加了一个参数表
+--type:一个type下会有很多个 key:value
+--key:至少在一个type下key是唯一的
+--value：值
+--item_id：可以是用户id，teamId，global等
+
+
+CREATE TABLE `a1_param` (
+  `id` int(11) NOT NULL auto_increment,
+  `item_id` varchar(50) default NULL,
+  `key` varchar(50) default NULL,
+  `value` varchar(50) default NULL,
+  `type` varchar(50) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+-----------------------------------------------------------------------
+2012-07-25 lvlongyun@cnic.cn
+
+--更改资源删除为标记
+ALTER TABLE  a1_page_version ADD  column `status`  varchar( 10 ) NULL ;
+ALTER TABLE a1_resource ADD  column `status`  varchar( 10 ) NULL ;
+ALTER TABLE vwb_comment ADD  column `status`  varchar( 10 ) NULL ;
+ALTER TABLE a1_file_version ADD  column `status`  varchar( 10 ) NULL ;
+
+
+--增加文件的下载次数功能，增加type标识 
+ALTER TABLE  vwb_browse_log  ADD  column `item_type`  varchar( 10 ) NULL ;
+--更改列名
+alter table vwb_browse_log  change column `page_id`  `item_id` int(11);
+
+-----------------------------------------------------------------------
+2012-07-25 yangxiaopeng@cnic.cn
+修改a1_tag表。增加pinyin, sequence列； pinyin列用于标签的搜索，sequence用于标签组内
+的标签排序。
+alter table a1_tag add pinyin varchar(255) default null;
+alter table a1_tag add sequence int(11) default 0;
+update a1_tag set sequence=0;
+
+pinyin列原有数据的更新需要借助一段小程序。联系yangxiaopeng@cnic.cn
+-----------------------------------------------------------------------
+2012-07-05 yangxiaopeng@cnic.cn
+修改vwb_user_ext表中的pinyin列定义，将varchar(55)更改为varchar(255)
+pinyin列由姓名中每个汉字的全拼加上各拼音首字母组成，用于按拼音排序
+
+alter table vwb_user_ext change pinyin pinyin varchar(255)
+-----------------------------------------------------------------------
+2012-06-29 lvlongyun@cnic.cn
+任务模块要需要用的表
+
+/**任务主表*/
+CREATE TABLE `vwb_task` (
+  `task_id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) default NULL,
+  `creator` varchar(255) default NULL,
+  `create_time` varchar(255) default NULL,
+  `valid` varchar(255) default NULL,
+  `task_type` varchar(255) default NULL,
+  `team_id` varchar(255) default NULL,
+  PRIMARY KEY  (`task_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
+
+/**独立任务的任务内容表，跟任务表是一对多关系*/
+CREATE TABLE `vwb_task_item` (
+  `item_id` int(11) NOT NULL auto_increment,
+  `content` varchar(255) default NULL,
+  `task_id` int(11) default NULL,
+  `valid` varchar(255) default NULL,
+  PRIMARY KEY  (`item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+
+/**独立任务内容和接受者 的笛卡尔积，用来维护独立任务项的状态用*/
+CREATE TABLE `vwb_task_ref` (
+  `ref_id` int(11) NOT NULL auto_increment,
+  `user_id` varchar(255) default NULL,
+  `task_id` int(11) default NULL,
+  `item_id` int(11) default NULL,
+  `status` varchar(255) default NULL,
+  PRIMARY KEY  (`ref_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=304 DEFAULT CHARSET=utf8;
+
+/**共享任务项表，跟任务表是一对多关系*/
+CREATE TABLE `vwb_task_share_item` (
+  `item_id` int(11) NOT NULL auto_increment,
+  `content` varchar(255) default NULL,
+  `task_id` int(11) default NULL,
+  `valid` varchar(255) default NULL,
+  `edit_time` varchar(255) default NULL,
+  `user_id` varchar(255) default NULL,
+  `status` varchar(255) default NULL,
+  PRIMARY KEY  (`item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+
+/**接受者队列，跟任务表是一对多关系*/
+CREATE TABLE `vwb_task_taker` (
+  `taker_id` int(11) NOT NULL auto_increment,
+  `user_id` varchar(255) default NULL,
+  `task_id` int(255) default NULL,
+  `read_status` varchar(255) default NULL,
+  PRIMARY KEY  (`taker_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8;
+
+
+-----------------------------------------------------------------------
+2012-06-20 yangxiaopeng@cnic.cn
+*vwb_team表中新增字段default_member_auth, 含义为新加入团队的成员所拥有的默认权限
+可以为：edit, view , admin
+
+alter table vwb_team add default_member_auth varchar(20) not null;
+更新原有数据，设置所有团队的default_member_auth为edit权限
+update vwb_team set default_member_auth='edit' where default_member_auth = '';
+
+-----------------------------------------------------------------------
+2012-06-07 yangxiaopeng@cnic.cn
+* 新增a1_user_guide表
+	CREATE TABLE `a1_user_guide` (
+  		`id` int(11) NOT NULL auto_increment,
+  		`uid` varchar(255) NOT NULL,
+  		`module` varchar(20) NOT NULL,
+  		`step` int(11) NOT NULL,
+  		PRIMARY KEY  (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  字段含义：uid, 用户ID
+  		  module, 功能模块。目前为dashboard, team
+  		  step, 提示步骤
+-----------------------------------------------------------------------
+2012-06-01 yangxiaopeng@cnic.cn
+*vwb_team表中新增access_type字段，含义为团队访问权限。
+	1) public, 完全公开
+	2) protected, 受限公开
+	3) private, 完全保密
+
+alter table vwb_team add access_type varchar(20) not null;
+设置目前所有的团队均为private
+update vwb_team set access_type='private'            
+------------------------------------------------------------------------
+2012-05-31 yangxiaopeng@cnic.cn
+*新增a1_user_preferences表 dct.sql
+	CREATE TABLE `a1_user_preferences` (
+	  `id` int(11) NOT NULL auto_increment,
+	  `uid` varchar(255) NOT NULL,
+	  `refresh_team_mode` varchar(255) NOT NULL,
+	  `default_team` int(11) NOT NULL,
+	  `access_home_mode` varchar(255) default NULL,
+	  PRIMARY KEY  (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	id:自增ID
+	uid: 用户ID
+	refresh_team_mode: 用户配置类型：
+		1)default,首页（登录后默认进入DashBord）
+		2)auto,上次访问团队（系统自动记忆用户上次离开时最后浏览的团队，登录后进入该团队）
+		3)config, 自定义（用户可自定义登录后进入的团队和导航页面）
+	default_team: 默认团队ID，refresh_team_mode为2）和3）时使用
+	access_home_mode: 导航页面：进入团队后选择的导航页面
+		1)common, 常用页面，即默认的团队首页
+		2)dynamic, 动态页面，即团队动态
+		3)tagitems, 资料页面
+		4)starmark, 星标页面
+------------------------------------------------------------------------
+
+2012-05-24 liji@cnic.cn
+* 新增用户行为日志配置项vwbconfig.properties
+	duckling.dlog.application.name=aone
+
+	
+2012-04-09 liji@cnic.cn
+* 新增用户行为日志系统
+* 日志系统配置 vwbconfig.properties
+	duckling.dlog.server=use-local-log
+	duckling.dlog.pool.size=20
+* tomcat中的公共lib文件夹中加入新lib包
+	org.springframework.instrument.tomcat-3.0.5.RELEASE.jar
+	
+* 新增配置 META-INF/context.xml(也可以修改tomcat下面的server.xml)
+	<?xml version="1.0" encoding="UTF-8"?>
+	<Context path="/dct" docBase="/">
+	    <Loader loaderClass="org.springframework.instrument.classloading.tomcat.TomcatInstrumentableClassLoader"/>
+	</Context>
+
+2012-03-29 liji@cnic.cn
+* vwb_user_ext表中增加一列regist_time
+alter table vwb_user_ext add `regist_time` datetime default NULL;
+
+* 增加Memcached运行时切换到OSCache的处理
+* 增加推荐系统的Redis配置
+
+2012-03-02 liji@cnic.cn
+* 数据库修改
+vwb_resource_info
+
+alter table vwb_resource_info add `last_editor` varchar(255) default NULL;
+alter table vwb_resource_info add `last_edit_time` datetime default NULL;
+alter table vwb_resource_info add `last_version` int(11) NOT NULL DEFAULT '1';
+alter table vwb_resource_info change belong cid int(11) DEFAULT NULL;
+
+* 升级数据库所需要的SQL
+
+UPDATE vwb_resource_info a,vwb_dpage_content_info b
+SET a.create_time = b.change_time, a.creator=b.change_by  
+WHERE a.tid = b.tid AND a.id = b.resourceid AND b.version = 1;
+
+UPDATE vwb_resource_info a,vwb_dpage_content_info b
+SET a.last_edit_time = b.change_time, a.last_editor=b.change_by, a.last_version = b.version  
+WHERE a.tid = b.tid AND a.id = b.resourceid AND 
+b.version = (SELECT max(c.version) FROM vwb_dpage_content_info c WHERE c.tid=a.tid AND c.resourceid=a.id);
+
+* 结构修改 
+  删除ViewportService将其并入DPageService
+  
+
+2012-02-24 xiejj@cnic.cn
+* 修改了PortalURL编码和解码代码，以便能正确的解释abc@xao.cn类似的参数。
+	编码算法，参数首先被URLEncode一遍。然后下面列表里的元字符被替换成右边列的编码。
+	    private static final String[][] ENCODINGS = new String[][] {
+            new String[] { "_",  "0x1" },
+            new String[] { ".",  "0x2" },
+            new String[] { "/",  "0x3" },
+            new String[] { "\r", "0x4" },
+            new String[] { "\n", "0x5" },
+            new String[] { "<",  "0x6" },
+            new String[] { ">",  "0x7" },
+            new String[] { " ",  "0x8" },
+            new String[] { "#",  "0x9" },
+            new String[] { "?",  "0xa" },
+            new String[] { "\\", "0xb" },
+            new String[] { "%",  "0xc" },
+            new String[] {"x", "0xd"}
+    };
+    出Bug的原因是0x本身没有被转义，解决办法是将0x转义成0xd，
+ 出错时的编解码过程：
+ 	abc@xao.cn->abc%40xao.cn->abc0xc40xao0x2cn 		->abc%4?o.cn   ->URLDecode的时候出错。
+  	abc@xao.cn->abc%40xao.cn->abc0xc40xdao0x2cn		->abc%40xao.cn ->abc@xao.cn
+  	
+2012-2-20 liji@cnic.cn
+* 新增Memcache层配置,将所有的cache服务从DB那块移动到Service层
+	配置memcache服务需要修改VWBContext.xml,系统可以选择OSCache或者Memcache
+		<bean id="cacheService" class="cn.vlabs.duckling.vwb.services.cache.CacheService" parent="abstractContainerService">
+			<!-- 			<property name="cacheProvider" ref="osCacheProvider"/> -->
+			<property name="cacheProvider" ref="memcacheProvider"/>
+		</bean>
+		<bean id="memcacheProvider" class="cn.vlabs.duckling.vwb.services.cache.MemCacheProvider" lazy-init="true">
+			<property name="memcachedClient">
+				<bean id="memcachedClient" class="net.spy.memcached.spring.MemcachedClientFactoryBean">
+					<property name="servers" value="159.226.2.209:11211,159.226.2.209:11212" />
+					<property name="protocol" value="BINARY" />
+					<property name="transcoder">
+						<bean class="net.spy.memcached.transcoders.SerializingTranscoder">
+							<property name="compressionThreshold" value="1024" />
+						</bean>
+					</property>
+					<property name="opTimeout" value="1000" />
+					<property name="timeoutExceptionThreshold" value="1998" />
+					<property name="locatorType" value="CONSISTENT" />
+					<property name="failureMode" value="Redistribute" />
+					<property name="useNagleAlgorithm" value="false" />
+				</bean>
+			</property>
+		</bean>
+	OSCache是本地缓存不依赖远程服务
+	
+* 在container里面增加cacheService
+* 将原来的TeamService分解成为三个service:TeamService,TeamMemberService,InvitationService
+
+
+2011-12-09 liji@cnic.cn
+* 新增用户反馈记录表 vwb_user_feedback
+CREATE TABLE `vwb_user_feedback` (
+  `id` int(11) NOT NULL auto_increment,
+  `email` varchar(50) NOT NULL,
+  `message` text NOT NULL,
+  `send_time` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `status` varchar(20) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+2011-11-25 xiejj@cnic.cn
+* 修改了新建页面时保存的逻辑
+
+2011-11-23 liji@cnic.cn
+数据库修改
+去掉vwb_event,vwb_notice,vwb_team_member中所有时间字段中on Update CURRENT_TIMESTAMP;
+已对2011-11-14的SQL语句进行了修改
+
+
+2011-11-22 xuerlei@cnic.cn
+//--------------------------------JohnX--------------------------------------------//
+数据库修改：
+* 新增一张表 vwb_person_contacts
+CREATE TABLE `vwb_person_contacts` (
+  `uid` varchar(45) NOT NULL default '',
+  `main_email` varchar(45) NOT NULL default '',
+  `option_email` varchar(45) default '',
+  `name` varchar(45) NOT NULL default '',
+  `orgnization` varchar(255) default NULL,
+  `department` varchar(255) default NULL,
+  `sex` varchar(45) default NULL,
+  `telephone` varchar(45) default NULL,
+  `mobile` varchar(45) default NULL,
+  `qq` varchar(45) default NULL,
+  `msn` varchar(45) default NULL,
+  `address` varchar(255) default NULL,
+  `photo` varchar(45) default NULL,
+  `birthday` varchar(45) default NULL,
+  `weibo` varchar(45) default NULL,
+  `pinyin` varchar(55) default NULL,
+  `id` int(10) unsigned NOT NULL auto_increment,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table vwb_user_ext add `pinyin` varchar(55) default NULL;
+
+数据库表说明：
+该表与vwb_user_ext很像，用于存储用户的个人通讯录条目
+uid对应于vwb_user_ext表中的uid字段，表示此条通讯录的拥有者
+pinyin字段是根据name而来，如果name包含中文，则把中文转换为其拼音，此字段主要用于检索
+//--------------------------------JohnX--------------------------------------------//
+         
+2011-11-22 liji@cnic.cn
+* aone_sphinx.conf文件更新
+source aone_page_main{
+....
+....
+sql_attr_uint            = rid
+}
+
+alter table vwb_team_member add `team_notice_count` int(11) NOT NULL default 0 ;
+alter table vwb_team_member add `person_notice_count` int(11) NOT NULL default 0 ;
+alter table vwb_team_member add `monitor_notice_count` int(11) NOT NULL default 0 ;
+
+2011-11-14 liji@cnic.cn
+//--------------------------------Clive Lee--------------------------------------------//
+数据库修改：
+* 新增两张新表 vwb_event,vwb_notice
+CREATE TABLE `vwb_event` (
+  `id` int(11) NOT NULL auto_increment,
+  `tid` int(11) NOT NULL,
+  `actor` varchar(80) NOT NULL,
+  `operation` varchar(80) NOT NULL,
+  `target` varchar(80) NOT NULL,
+  `target_type` varchar(20) NOT NULL,
+  `target_version` int(11) NOT NULL,
+  `recipients` text,
+  `message` text,
+  `occur_time` timestamp NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `vwb_notice` (
+  `id` int(11) NOT NULL auto_increment,
+  `tid` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `notice_type` varchar(45) NOT NULL,
+  `recipient` varchar(255) NOT NULL,
+  `reason` varchar(20) NOT NULL,
+  `actor_id` varchar(80) NOT NULL,
+  `actor_name` varchar(80) NOT NULL,
+  `actor_url` varchar(255) default NULL,
+  `operation` varchar(20) NOT NULL,
+  `target_id` varchar(45) NOT NULL,
+  `target_type` varchar(20) NOT NULL,
+  `target_name` varchar(80) default NULL,
+  `target_url` varchar(255) default NULL,
+  `target_version` int(11) NOT NULL,
+  `message` text,
+  `occur_time` timestamp NOT NULL default '2010-01-01 00:00:00',
+  `addition` text,
+  `relative_id` varchar(80) default NULL,
+  `relative_name` varchar(80) default NULL,
+  `relative_url` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+* 修改vwb_team表,增加一列type用于存储团队类型(common表示普通团队，personal表示个人团队)
+alter table vwb_team add `type` varchar(45) default 'common';
+* 修改vwb_team_member表，增加三列sequence,team_access,person_access
+alter table vwb_team_member add `sequence` int(11) default -1;
+alter table vwb_team_member add `team_access` timestamp NOT NULL default '2010-01-01 00:00:00' ;
+alter table vwb_team_member add `person_access` timestamp NOT NULL default '2010-01-01 00:00:00';
+alter table vwb_team_member add `monitor_access` timestamp NOT NULL default '2010-01-01 00:00:00';
+
+功能变更：
+* 重新实现整个消息模块，采用写扩散的形式以提高读取速度
+* 增加个人团队的概念，把个人团队首页作为跨团队的消息中心
+* 增加个人历史记录功能，记录所有个人发生的事情
+
+
+//--------------------------------Clive Lee--------------------------------------------//
+
+
+2011-11-10 diyanliang
+1、E2样式按钮中增加清除按钮
+2、DML中修改成空行<p/>也可以显示出来
+
+
+2011-10-28 liji@cnic.cn
+//--------------------------------Clive Lee--------------------------------------------//
+新增功能：
+* 集合首页可以将文件添加为快捷方式
+* 集合首页列表中可以直接下载文件
+* 集合首页配置页，管理快捷中可以添加或删除文件类型的快捷方式
+
+数据库表结构修改：
+* vwb_shortcut表新增一列resource_type,并将默认值设置为'DPage'
+* vwb_shortcut表中将url列名改为resource_id
+* sql语句：
+alter table vwb_shortcut add `resource_type` varchar(45) default 'DPage';
+alter table vwb_shortcut change url resource_id varchar(45);
+
+Bugs修正：
+* 修正引用文件时搜索框内中出现页面的情况    
+//--------------------------------Clive Lee--------------------------------------------//     
+
+2011-10-26 liji@cnic.cn
+* 在页面编辑时增加文件引用功能
+* 在引用文件时对团队内部所有的文件进行搜素
+* 过滤当前页面已引用的文件，使其不出现在引用文件的选择列表中
+* 使用jqueryUI中的autocomplete控件，并增加该控件对中文的支持
+* 调整集合首页列表模式下的默认显示顺序
+* 选择全部tab的时候不包含页面与文件的引用关系
+* 修正集合首页排序的bug
+* 将集合首页的创建者从email改为人名
+
+2011-10-24 liji@cnic.cn
+* 增加文件删除功能
+* 修改数据库vwb_dfile表，新增一列status,varchar类型,用于表示该文件是否被删除
+	status='available'/'removed'
+alter table vwb_dfile add `status` varchar(45) default 'available';
+
+
+dct5.1.58a(2011-10-20)
+-----------------------------------------------------------------------------------------
+
+2011-10-20 liji@cnic.cn
+* 增加将文件收藏到个人空间的功能
+* 集合首页分类显示，只按页面或只按文件或全部
+* 修改Sphinx配置文件将collection_element中的resource_type换为整数类型，详细见aone_sphinx.conf
+修改:source aone_collection_element{....}里的对应项：
+-------
+修改为：
+sql_query			= select id,tid,cid,CRC32(resource_type) as type_field,resource_id,version,title,creator,create_time,modifier,modify_time from vwb_collection_element
+最后增加：
+sql_attr_uint 			 = type_field
+------
+* 修改SearchService接口以支持多种类型的过滤搜索
+
+
+
+2011-10-14 xiejj@cnic.cn
+* 增加了对手机图片上传的支持。
+
+2011-10-14 liji@cnic.cn
+* 在vwbconfig.properties中添加两项clb访问控制
+duckling.clb.aone.user=aone4cnic
+duckling.clb.aone.password=duckling
+* 以后所有aone团队的上传下载均使用一个账号和密码（一套aone实例用一个账号）
+* 最好将以前创建的团队的clb访问账号也改成配置文件中的这个账号密码
+
+
+2011-10-13 liji@cnic.cn
+* 修改首页快速分享功能流程
+* 增加分享文件过期功能
+* 为每一个用户都新建一个个人空间
+* 增加新表vwb_share_access
+CREATE TABLE `vwb_share_access` (
+  `id` int(12) NOT NULL auto_increment,
+  `uid` varchar(50) NOT NULL,
+  `tid` int(12) NOT NULL,
+  `fid` int(12) NOT NULL,
+  `password` varchar(24) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `valid_of_days` int(12) NOT NULL,
+  `clb_id` int(12) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+2011-09-27 xiejj@cnic.cn
+* 修改了手机接口，增加了echo方法作为续约Token检查的方法，并在展示页面内容时，提供新的JSP页面。
+2011-09-26 xiejj@cnic.cn
+* 修改了系统初始化的判断语句，改为show tables like 'vwb_reosurce_info';
+   避免原检查语句无法分辨链接不上数据库，还是数据库表不存在的问题。
+
+2011-09-22 xiejj@cnic.cn
+* 修改了dct.sql删除了所有的drop table语句,以避免软件误删数据。
+
+2011-09-20 xiejj@cnic.cn
+* 临时加上更新信息获取的接口（手机）。 
+
+2011-09-16 xiejj@cnic.cn
+* 修改了API中集合页面列表的调用效果，现在只返回页面，不再返回附件。
+* 修改了利用手机浏览页面时，当没有权限时的显示页面。 
+
+dct5.1.57a(2010-09-07)
+-----------------------------------------------------------------------------------------
+
+alter table vwb_user_ext change column address address varchar(255) default NULL;
+
+
+
+2011-09-05 xiejj@cnic.cn
+* 增加了配置项，oauth.token.timeout配置项。
+	#unit: minutes
+	#default 24*60 
+	oauth.token.timeout=1440
+* 修改了附件更新通知的列表中下载链接错误的Bug。
+
+2011-09-02 liji@cnic.cn
+* 增加集合首页网格模式
+* vwb_collection 新增两列  
+  `grid_column` int(10) NOT NULL, (请将此列值都设为3)
+  `home_mode` varchar(45) default NULL,(请将此列值都设为'grid')
+alter table vwb_collection add `grid_column` int(10) default NULL;
+alter table vwb_collection add `home_mode` varchar(45) default NULL;
+
+* 增加两张新表 vwb_grid,vwb_grid_item
+DROP TABLE IF EXISTS `vwb_grid`;
+CREATE TABLE `vwb_grid` (
+  `id` int(11) NOT NULL auto_increment,
+  `tid` int(11) default NULL,
+  `cid` int(11) default NULL,
+  `sequence` int(11) default NULL,
+  `title` varchar(256) default NULL,
+  `type` varchar(45) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `vwb_grid_item`;
+CREATE TABLE `vwb_grid_item` (
+  `id` int(11) NOT NULL auto_increment,
+  `tid` int(11) default NULL,
+  `gid` int(11) default NULL,
+  `resource_type` varchar(45) default NULL,
+  `resource_id` int(11) default NULL,
+  `sequence` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+2011-09-02 xiejj@cnic.cn
+* 增加了对XAuth客户端授权的检查和用户验证错误的报错信息。
+
+2011-08-31 xiejj@cnic.cn
+* 增加了对手机API的支持，这部分的认证通过OAuth方式进行(需要同步更新UMT)
+* 增加了对OAuth的支持（部分）,需要增加数据库表
+	DROP TABLE IF EXISTS `vwb_oauth_consumer`;
+	CREATE TABLE `vwb_oauth_consumer` (
+	  `id` int(11) NOT NULL AUTO_INCREMENT,
+	  `key` varchar(255) NOT NULL DEFAULT '',
+	  `secret` varchar(255) NOT NULL DEFAULT '',
+	  `callback_url` varchar(255) DEFAULT NULL,
+	  `enable` tinyint(3) NOT NULL DEFAULT '1',
+	  `xauth` tinyint(3) NOT NULL DEFAULT '0',
+	  `description` varchar(255) DEFAULT NULL,
+	  `name` varchar(255) DEFAULT NULL,
+	  PRIMARY KEY (`id`),
+	  UNIQUE KEY `key` (`key`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+	DROP TABLE IF EXISTS `vwb_oauth_accessor`;
+	CREATE TABLE `vwb_oauth_accessor` (
+	  `id` int(11) NOT NULL AUTO_INCREMENT,
+	  `consumer_key` varchar(255) NOT NULL DEFAULT '0',
+	  `request_token` varchar(255) DEFAULT '',
+	  `token_secret` varchar(255) DEFAULT NULL,
+	  `request_create_time` timestamp NULL DEFAULT NULL,
+	  `access_token` varchar(255) DEFAULT NULL,
+	  `access_create_time` timestamp NULL DEFAULT NULL,
+	  `user_id` varchar(255) DEFAULT NULL,
+	  `authorized` tinyint(3) NOT NULL DEFAULT '0',
+	  `screen_name` varchar(255) NOT NULL DEFAULT '',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+2011-08-22 xiejj@cnic.cn
+* 修改文件信息页面的显示，现在文件的大小最多显示两位小数。
+
+dct5.1.56a(2010-08-18)
+-----------------------------------------------------------------------------------------
+2011-08-18 xiejj@cnic.cn
+* 修正在浏览某个特定版本的文件时，下载链接没有携带版本信息的Bug.
+* 修正在Safari, Chrome浏览器下，下载中文文件名附件时的文件名乱码现象。
+
+2011-08-18 liji@cnic.cn
+
+* 更新存储过程
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `update_dfile_version` $$
+CREATE PROCEDURE `update_dfile_version`(in uid varchar(255)  CHARACTER SET utf8,in v_version int(11),in v_fid int(11), in v_title varchar(255) CHARACTER SET utf8,in size int(11),in curr_time timestamp,in v_tid int(11))
+BEGIN
+insert into vwb_dfile_version(fid,title,version,size,change_by,change_time) VALUES(v_fid,v_title,v_version,size,uid,curr_time);
+update vwb_collection_element set title=v_title,modifier=uid,modify_time=curr_time,version=v_version where resource_id=v_fid and resource_type='DFile' and tid=v_tid ;
+END $$
+
+DELIMITER ;
+另外在某团队新建页面后，会同时更改已有页面标题的BUG。
+
+2011-08-18 diyanliang@cnic.cn
+
+* 更改了保存某些内容时，会引起页面为空的情况（内容：如链接：http://wiki.cerc.cnic.cn/dct/cerc/page/80508 附件内容）
+
+dct5.1.55c(2010-08-17)
+----------------------------------------------------------
+2011-08-17 zyhua@cnic.cn
+* 更改字段定义
+alter table vwb_dpage_draft change column content content mediumtext default "";
+
+2011-08-17 xiejj@cnic.cn
+* 修正了页面被删除以后，再访问该页面时，抛出内部异常的Bug(http://svn.cerc.cnic.cn/trac/duckling/ticket/328)
+* 在删除页面的同时，同步删除了页面的评论和消息。
+
+
+2011-08-16 xiejj@cnic.cn
+* 修改存储过程定义，现在显式指定字符串类型参数的字符集为UTF-8
+* 修改vwb_message_body表定义，修改title字段长度为255
+
+2011-08-15 xiejj@cnic.cn
+* 将删除页面的功能恢复了，目前删除页面的权限和移动页面的权限一致，只需要拥有页面的编辑权限即可。
+   已知问题：页面删除之前的页面更新消息还会保留，但点击链接以后，会提示页面不存在。
+   
+2011-08-12 xiejj@cnic.cn
+* 修改了数据库表vwb_dfile 删去了last_version字段，创建了一个新的View（包含三个字段 tid, fid, last_version），增加clb_id字段
+	DROP VIEW IF EXISTS `vwb_file_last_version`;
+	CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwb_file_last_version` AS select `f`.`tid` AS `tid`,`v`.`fid` AS `fid`,max(`v`.`version`) AS `last_version` from (`vwb_dfile` `f` join `vwb_dfile_version` `v`) where (`v`.`fid` = `f`.`id`) group by `v`.`fid`;
+* 修改了vwb_dfile_ref表，删去了cid, version字段。
+* 修改了vwb_dfile_version表，删去了clb_id字段。
+* 修改了相应的存储过程(insert_dfile_version_and_ref,  update_dfile_version)中的语句。
+* 增加了新的下载入口：
+	http://${domain}/dct/${teamName}/download/${fid}
+    和http://${domain}/dct/${teamName}/download/${fid}?func=cache
+
+DROP TABLE IF EXISTS `vwb_collection_element`;
+CREATE TABLE  `vwb_collection_element` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tid` int(10) unsigned NOT NULL DEFAULT '0',
+  `cid` int(10) unsigned NOT NULL DEFAULT '0',
+  `resource_type` varchar(45) NOT NULL DEFAULT '',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `creator` varchar(45) NOT NULL DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modifier` varchar(45) NOT NULL DEFAULT '',
+  `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `resource_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `version` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `vwb_dfile`;
+CREATE TABLE  `vwb_dfile` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `owner` varchar(100) NOT NULL DEFAULT '',
+  `cid` int(10) unsigned NOT NULL DEFAULT '0',
+  `tid` int(10) unsigned NOT NULL DEFAULT '0',
+  `clb_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `vwb_dfile_ref`;
+CREATE TABLE  `vwb_dfile_ref` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tid` int(10) unsigned NOT NULL DEFAULT '0',
+  `pid` int(10) unsigned NOT NULL DEFAULT '0',
+  `fid` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `vwb_dfile_version`;
+CREATE TABLE  `vwb_dfile_version` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fid` int(10) unsigned NOT NULL DEFAULT '0',
+  `version` int(10) unsigned NOT NULL DEFAULT '0',
+  `size` int(10) unsigned NOT NULL DEFAULT '0',
+  `change_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `change_by` varchar(100) NOT NULL DEFAULT '',
+  `title` varchar(200) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP VIEW IF EXISTS `vwb_file_last_version`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vwb_file_last_version` AS select `f`.`tid` AS `tid`,`v`.`fid` AS `fid`,max(`v`.`version`) AS `last_version` from (`vwb_dfile` `f` join `vwb_dfile_version` `v`) where (`v`.`fid` = `f`.`id`) group by `v`.`fid`;
+
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `insert_dfile_version_and_ref` $$
+CREATE PROCEDURE `insert_dfile_version_and_ref`(in uid varchar(255) CHARACTER SET utf8 ,in version int(11),in fid int(11),in pid int(11),
+in cid int(11),in tid int(11),in title varchar(255) CHARACTER SET utf8,in size int(11),in curr_time timestamp )
+BEGIN
+declare v_fid int(11);
+declare v_version int(11);
+select version into v_version;
+select fid into v_fid;
+insert into vwb_dfile_version(fid,title,version,size,change_by,change_time) VALUES(v_fid,title,version,size,uid,curr_time);
+if (pid!=0) then
+insert into vwb_dfile_ref(fid,pid,tid) VALUES(v_fid,pid,tid);
+end if;
+insert into vwb_collection_element(tid,cid,resource_type,title,creator,create_time,modifier,modify_time,resource_id,version) values(
+tid,cid,'DFile',title,uid,curr_time,uid,curr_time,v_fid,version);
+END $$
+DELIMITER ;
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `update_dfile_version` $$
+CREATE PROCEDURE `update_dfile_version`(in uid varchar(255)  CHARACTER SET utf8,in v_version int(11),in v_fid int(11), in v_title varchar(255) CHARACTER SET utf8,in size int(11),in curr_time timestamp,in v_tid int(11))
+BEGIN
+insert into vwb_dfile_version(fid,title,version,size,change_by,change_time) VALUES(v_fid,v_title,v_version,size,uid,curr_time);
+update vwb_collection_element set title=v_title,modifier=uid,modify_time=curr_time,version=v_version where resource_id=v_fid and resource_type='DFile' and tid=v_tid ;
+END $$
+
+DELIMITER ;
+
+
+
+2011-08-12
+* 新增快速上传文件功能
+* 新增快速新建页面功能
+* 新增左侧工具栏
+* 修改了存储过程，新增一个curr_time参数，详细见2011-08-08的存储过程代码
+
+2011-08-10 xiejj@cnic.cn
+* 修改了DFileService中关于CLB接口部分的代码。现在单独抽出成为一个Provider。避免用CLB的接口方式污染外部的代码。
+* 迁移CollectionElement相关的类到Collection包中。
+dct5.1.55a(2010-08-08)
+----------------------------------------------------------
+2011-08-08 liji@cnic.cn
+* 新增集合文件上传功能
+* 新增文件版本更新功能
+* 新增集合删除功能
+* 实现文件与页面的混排功能
+* 权限BUG的修改：集合权限以及因权限引起的集合重复等相关BUG
+* 将vwb_clb改成三个表vwb_dfile,vwb_dfile_ref,vwb_dfile_version
+	建表语句见2011年8月12日的ChangeLog
+
+历史数据的迁移请参考：http://wiki.cerc.cnic.cn/dct/cerc/page/80472
+
+2011-08-02 xiejj@cnic.cn
+* 修改了Collection的服务，代码整体挪到了cn.vlabs.duckling.services.collection包。
+  修改了CollectionService中的缓存控制，在CollectionDAO中加了一层Cache层。由该Cache层负责管理Collection的缓存。
+* 在VWBContext中增加了ThreadLocal的变量。该变量存储当前的TeamID。为日后取消Site的初始化过程提供方便。
+
+2011-08-01diyanlianG@cnic.cn
+编辑器提交功能如下
+修复bug:BUG223
+修复bug:#153 #150 #140 #135# 154#131#124
+修复bug:#110 #109 #105 #55 #54 #53 #49#243
+修复bug:#44#46#47#37#34#42#35
+编辑器对外提供可监听用户最后活跃时间的接口
+增加可选样式功能
+增加弹出查看源代码的功能	
+
+2011-07-31 zyhua@cnic.cn
+更改表vwb_message_body中title字段：
+alter table vwb_message_body change column title title varchar(255) default "";
+
+
+dct5.1.54a(2010-07-29)
+----------------------------------------------------------
+2011-07-29  xiejj@cnic.cn
+* 合并了SiteManagerService和TeamService。并将TeamService移动到了cn.vlabs.duckling.vwb.services.team包。
+* 删除了过期VWBFunctionService及其配套方法。
+      
+2011-07-28  Clive Lee(liji@cnic.cn)
+* 改进Sphinx搜索功能，采用BM25统计学标准计算相关度，并按照相关度排序
+* 改进Sphinx搜索功能，对于页面搜索加入数据库字段的权重，title权重为3，content权重为2，其余字段为1
+* 修改Sphinx搜索的一个建索引的Bug，使其支持多团队下的搜索，需要修改数据库，在vwb_resource_info中增加sphinx_id主键
+* 数据库修改命令：
+ALTER TABLE `vwb_resource_info` ADD COLUMN `sphinx_id` INTEGER UNSIGNED NOT NULL DEFAULT NULL AUTO_INCREMENT AFTER `belong`,
+ DROP PRIMARY KEY,ADD PRIMARY KEY(`sphinx_id`), ADD UNIQUE `id`(`tid`, `id`);
+* 更新时注意修改aone_sphinx.conf文件
+ 
+2011-07-28 xiejj@cnic.cn
+* 为了避免全局功能日后和团队的名称冲突，故修改了全局功能(独立于团队的功能，类似login, logout)的URL映射方式，在所有的全局功能的前面都加入了“system”作为前缀。
+  涉及的功能包括：login, logout, configTeam, createTeam, switch, regist, user, invite, activation。
+* 修改了原有的Cache包，增加OSCache和MemCache的支持。新情况下，只使用一个Cache实例，并且用不同的关键字区分不同的包。
+  关键字的规则是{teamId}.{module}.{objectId}
+  例：1号团队的 2501号 页面的编码是 1.dpage.2501
+     对应的Viewport的编码是 1.viewport.2501
+     
+2011-07-26 xiejj@cnic.cn
+* 修改了vwb_resource_info表，删除了树形结构的所有相关的数据库结构和各个辅助类。
+	1. 删除了parent, trail, leftmenu, topmenu, banner, footer和acl字段。
+	2. 修改了ViewPort类，删除了相关的属性。
+	3. 删除了存储过程findXXX(banner, leftMenu, topMenu, footer, acl, trail, publisher)
+	4. 删除了PublisherDAO。
+
+dct5.1.53a(2010-07-22)
+----------------------------------------------------------
+2011-07-20 （liji）
+* vwbconfig.properties新增一项配置duckling.pagelock.timeout表示页面锁的过期时间，单位为分钟
+* 新增PageUnlockJobWorker的定时服务，用于清理过期的页面锁并将手动保存草稿发布为公开内容
+* 新增compareDraft.jsp页面用于恢复或放弃自动保存的内容
+* 新增DraftDAO和DraftService，用于保存和修改手动保存草稿和自动保存草稿
+* 重构EditPageController,去掉冲突处理逻辑，加入同步锁逻辑
+* 新增数据库表vwb_dpage_draft用于存放临时草稿和自动保存草稿
+CREATE TABLE  `vwb_dpage_draft` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tid` int(10) unsigned NOT NULL DEFAULT '0',
+  `pid` int(10) unsigned NOT NULL DEFAULT '0',
+  `uid` varchar(45) NOT NULL DEFAULT '',
+  `type` varchar(45) NOT NULL DEFAULT '',
+  `content` text,
+  `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `title` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+* 新增属性文件配置：
+        duckling.pagelock.timeout=30
+
+            
+dct5.1.52a(2010-07-19)
+2011-07-19 diyanliang@cnic.cn
+*修改输入区域自适应bug，自适应有最小长度 
+*tab键和shifttab控制列表级别功能提交 
+*编辑器内保存按钮及编辑器自动保存功能由EXT改为Jquery 
+*在增加链接界面，如果用户没有输入协议标志，自动将地址补全为以http://开头 
+*编辑器内搜索已有页面功能bug修复(将site创建方式调整为适应现在a1的模式) 
+*编辑器右键菜单做了调整 
+*修复bug：IE下附件的插入链接和插入图片失去焦点总插在页面最前面的bug 
+*修复bug：解决FF下在同一个位置调用附件的插入链接功能保存后新链接会把老链接干掉的bug 
+*ddata的功能从编辑器中去掉 
+
+2011-07-18 xiejj@cnic.cn
+* 修改了初始化Portlet的代码，现在能正确的初始化Portlet了。
+* 删除了旧的授权体系，并迁移新的授权服务至cn.vlabs.duckling.vwb.auth包。
+* 删除了表vwb_resource_acl，删除了存储过程find_acl
+
+2011-07-15 xiejj@cnic.cn
+* 重构了登录部分的代码。将LoginAction中的代码迁移到了AuthenticationManager类中。
+* 删除了RegistLinkTag.
+* 删除了Command结构，受影响的范围包括自定义的Tag，所有的Controller和部分JSP。
+* 删除了LeftMenuTag, TopMenuTag, FooterTag.
+
+dct5.1.51a(2010-07-14)
+2011-07-13 xiejj@cnic.cn
+* 修改了页面锁机制，加入了对Session失效的监听。当用户注销或者长时间不活动以后，页面锁会被自动清除。
+
+2011-07-13 liji@cnic.cn
+* 增加了对个人所创建页面的自动关注
+* 邀请用户部分，使用了UMT里的用户进行判断
+
+此版本与上版本时间接近，且刚才重新安装系统，建议与上版本的修改与功能一并进行测试。
+
+dct5.1.50a(2010-07-13)
+-----------------------------------------------------------------------------
+2011-07-12 xiejj@cnic.cn
+* 重做了Skin的界面，移除了该界面对Ext JS的依赖。
+* 删除了UserService, DLogService, Ext JS包。
+* 删除了对VMT的依赖，目前用户系统已用A1自身的用户管理工具包。
+!!!! 注意事项
+	1.日志信息需要重新设计并加入。
+	2.需尽快加入MemCache的支持。
+
+dct5.1.49a(2010-07-11)
+-----------------------------------------------------------------------------
+此版本发布时，查看全部搜索结果以及关注人部分的界面还没有完成。
+
+2011-07-08 liji@cnic.cn
+* 重构关注和推荐部分的代码
+* 恢复对人的关注功能
+* 修正部分关注和推荐功能中的bug，去掉与MySpace表的关联，用UserExt表替换
+* 将推荐和关注页面中的人名链接都导向个人信息页面
+
+2011-07-07 xiejj@cnic.cn
+* 修改公开Collection的权限判断逻辑，要求用户必须是该团队的用户才能访问该团队的任意Collection或页面。
+* 修正了在某些URL下，无法正确显示页面未找到错误的Bug(修正前显示的是内部程序错误)
+	例：http://127.0.0.1/dct/NoSuchTeam/page/1
+* 删除了PageSettingController,SysCommConfigController及相关的JSP页面。
+* 修改了ErrorController，将404,403页面中包含的逻辑迁往Controller代码中。
+* 删除了为了保持Duckling 1.x兼容性的Wiki.jsp及其支持服务。
+* 删除了JSONRPCService类(已无代码调用）
+
+2011-07-07 liji@cnic.cn
+* 新增搜索显示全部页面
+* 搜索关键字高亮显示并按照时间排序
+* 生成并提取页面摘要
+* 修改Sphinx配置文件aone_sphinx.conf
+ 
+2011-07-06 xiejj@cnic.cn
+* 在编辑冲突中加入了编辑用户上次保存的时间，以提示其他用户。
+* 修改了系统内容，去除了对缺省团队需求。现在可以空团队建立服务。
+* 修改了在团队内部页面注销后登录，返回团队首页的Bug.现改为先去该团队的页面。
+
+*****内部API变动*****
+* 权限判断处理中的定制无权限处理方法(OnDeny Tag指定的方法)声明变动
+	1. OnDeny Tag现在可以用"*"指代所有方法。
+	2. 定制的处理方法可以返回boolean值。当返回false时，表示需要系统继续按照缺省逻辑处理。返回 true或者void时，则系统不会继续处理。
+
+dct5.1.48a(2010-07-04)
+----------------------------------------------
+2011-07-04 xiejj@cnic.cn
+* 修正了访问http://{host}/dct/{teamName}/{NoSuchPage}时，显示Default团队的顶菜单的Bug
+	修改了ContextIncepter的逻辑，现在通过Context寻找team的逻辑挪到了VWBFilter中。
+* 修改了访问http://{host}/dct/user/{userLocalId}，userLocalId不存在时报内部异常错误的Bug(应报用户未找到的错误)。
+	并在BaseController加了notFound(request, response, inTeam)
+	其中inTeam是一个boolean值，为true时显示当前团队的顶菜单，false时不显示。
+* 修改了初始化脚本，现在可以不初始化缺省页面。
+
+2011-07-02 zyhua@cnic.cn
+* 修改vwb_shortcut表
+	alter table vwb_shortcut change column title title varchar(255) default NULL;
+
+2011-07-01 xiejj@cnic.cn
+* 修改了404(访问页面未找到), 403(没有权限), 500(代码错误)页面的行为。修改后
+	如果系统有之前的引用页面信息(referer http header)，且引用页面是本地的页面时，返回该页面
+	如果之前访问的是团队首页，则返回门户（switch页面)
+	其余情况下，返回团队首页
+
+dct5.1.47a(2010-07-01) sharedlib需要更新/duckling-common.jar
+--------------------------------------------
+2011-07-01 xiejj@cnic.cn
+* 修改了在英文的Local（操作系统的语言）下, Duckling系统无法通过UMT正确登录的Bug。更新了ShareLib下的duckling-common.jar
+  这个需要UMT和相应的Duckling系统同时更新。在不更新时，需要把操作系统的语言设置成en_US-UTF-8也可以正常登录。
+
+2011-06-29 xiejj@cnic.cn,liji@cnic.cn
+* 修改了功能页面里显示的标题多一个冒号(":")的Bug。
+* 修改了Viewport的ID生成方法为每次去数据库查询一次，避免集群服务时ID冲突的问题。
+* 删除了Lucene搜索服务。
+* 修改了Sphinx服务的参数配置到vwbconfig.properties文件中。增加了两个配置项
+	duckling.sphinx.host
+	duckling.sphinx.port
+* 更新Sphinx配置文件，更新SearchService对应方法
+* vwbconfig.properties新增忘记密码配置项
+  duckling.umt.change.password=${duckling.umt.site}/user/password.do?act=showChangePassword
+
+2011-06-28 xiejj@cnic.cn
+* 修正了直接访问服务器URL(http://{domain}/dct)，后登录完报错的Bug.修正以后将导向团队首页(http://{domain}/dct/switch)。
+* 修正了在团队首页(switch页面)访问某个团队跳转出错的Bug.并修改了出错页面错误以后的跳转为Switch页面。
+
+dct5.1.45a(2010-06-28)
+--------------------------------------------
+2011-06-27 liji@cnic.cn
+* 修改vwb_user_ext表增加一列自增主键id
+ALTER TABLE `vwb_user_ext` ADD COLUMN `id` INTEGER UNSIGNED NOT NULL DEFAULT NULL AUTO_INCREMENT AFTER `weibo`,
+DROP PRIMARY KEY,ADD PRIMARY KEY(`id`);
+ALTER TABLE `vwb_user_ext` DROP PRIMARY KEY,ADD PRIMARY KEY(`id`, `uid`);
+* 新增个人信息设置和浏览功能
+* 将AONE修改密码功能链接到UMT上
+* 修改邀请流程，现在统一到我的团队页面进行接受或拒绝
+* 新增邀请拒绝状态 "IGNORED"
+* 添加邀请消息功能
+* 邀请新增一列 message 用于记录邀请留言
+ALTER TABLE `vwb_invitation` ADD COLUMN `message` TEXT DEFAULT NULL AFTER `status`;
+
+2011-06-27 xiejj@cnic.cn
+* 把Banner显示暂变成背景图片加文字的方式显示，等以后再加入更复杂的Banner。
+
+
+2011-06-26 xiejj@cnic.cn
+* 修改了DefaultURLContstructor中的Bug.原来在配置中(duckling.referenceStyle)使用相对路径时会使用完整的URL构造链接，现在已按照配置项语义工作
+
+dct5.1.44a(2011-06-24/23覆盖)
+-----------------------------------------
+2011-06-22 liji@cnic.cn
+* 新增团队邀请并激活功能
+* 新增用户注册并激活功能
+* 修改部分创建新团队时的bug
+* 新增管理邀请功能
+* 更改表结构：
+alter table vwb_collection change column name name varchar(255) default "";
+* 新增数据库 vwb_activation 注册激活链接 存储表
+DROP TABLE IF EXISTS `vwb_activation`;
+CREATE TABLE  `vwb_activation` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `password` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `encode` varchar(255) NOT NULL DEFAULT '',
+  `status` varchar(45) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+* 新增数据库 vwb_invitation 团队邀请链接 存储表
+DROP TABLE IF EXISTS `vwb_invitation`;
+CREATE TABLE  `vwb_invitation` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `encode` varchar(255) NOT NULL DEFAULT '',
+  `inviter` varchar(255) NOT NULL DEFAULT '',
+  `invitee` varchar(255) NOT NULL DEFAULT '',
+  `team` int(10) unsigned NOT NULL DEFAULT '0',
+  `accept_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `invite_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `status` varchar(45) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+*配置文件里更改项目，如下字符串的：&zeroDateTimeBehavior=convertToNull 部分
+c3p0.url = jdbc:mysql://${database.ip}/${database}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+2011-06-22 xiejj@cnic.cn
+* 清理了AttachmentServiceImpl类，现在该类所有的方法都不再需要VWBSession作为参数，也不会引用VMT，更不会去合成XML。
+  创建新文件的方法被修改成
+  	IdPair createDocument(String userName,String parentid,CreateInfo createInfo, StreamInfo streamInfo);
+  其中IdPair包含两个ID：docid对应存放CLB分配的ID, localid对应vwb_clb表中的自增字段。
+* 清理了site/{id}的访问方式。
+
+dct5.1.43a (2011-6-20)
+-----------------------------------------------------------------------------
+2011-06-20 liji@cnic.cn
+* 新增邀请URL生成功能
+* dct文件页面vwb_clb里的自增id
+* 数据库修改 vwb_clb表中新增一列
+ALTER TABLE `vwb_clb` ADD COLUMN `ID` INTEGER UNSIGNED NOT NULL DEFAULT NULL AUTO_INCREMENT AFTER `CHANGE_NOTE`,
+ DROP PRIMARY KEY,ADD PRIMARY KEY( `ID`);
+
+更改表结构：
+alter table vwb_message_body change column title title varchar(255) default "";
+
+在配置文件vwbconfig.properties里增加配置项：
+duckling.umt.theme = a1
+
+
+dct5.1.42a(2011-6-16/15覆盖版本)
+---------------------------------------------
+2011-06-16 xiejj@cnic.cn
+* 修正在改动了Attach的URL格式后，插入的图片链接地址和附件链接地址不正确的Bug
+	http://{baseurl}/attach/{hash} ---> http://{baseurl}/{tid}/attach/{hash}
+	http://{baseurl}/cachable/{hash} ---> http://{baseurl}/{tid}/cachable/{hash}
+	
+2011-06-15 liji@cnic.cn
+* 修复集合改名时出现的bug
+* 修复集合权限从公有变为私有时出现的两个相同集合的bug
+* 修复CLB附件上传功能使其支持多团队
+* 修复集合首页出现的修改时间为00:00:00的问题
+* 修复点击关注、推荐消息时弹出的ajax错误
+* 将团队更新的显示时间改为24小时制
+* 新增管理我的关注页面
+* 新增多团队切换功能（暂未开放）
+* 新增新建团队功能（暂未开放）
+
+2011-06-15 xiejj@cnic.cn
+* 修改了TeamRecentDAO，加入了对tid的选择。
+* 修改了ContextInterceptor，现在可以实现通过teamName选择不同的Team
+* 修复了编辑后无法预览的Bug
+* 修改了标题栏的显示方式为---"页面标题：团队名称"
+
+2011-06-14 xiejj@cnic.cn
+* 修改了IE下无法上传的Bug(该上传Bug是由于插件在IE、Opera下，使用IFrame form形式上传，与Firefox不一致引起的)。
+* !!!!修改了UMT2下登录URL的构造，增加了theme参数，该参数将被UMT用来选择登录界面（需要更新UMT!!!）。
+  可以从站点的配置项中 duckling.umt.theme设置。
+
+2011-06-14 liji@cnic.cn
+* 首页按时间顺序排序
+* 首页按人物显示更新添加日期 并按时间排序
+
+dct5.1.41a(2011-6-13/6.12日覆盖版本)
+--------------------------------------
+2011-06-13 xiejj@cnic.cn
+* 修改了VWBSite.java和VWBContext.java，将Team的首页设成团队首页。VWBContext.getFrontPage()
+  也直接代理给Site.getFrontPage()方法，不再独立合成首页。
+* 修改了Site.js和Commonheader.jsp，完善了在JavaScript中合成URL的调用方式。现在可以在页面的JS调用site对象的相关方法合成URL。
+例：
+	site.getViewURL(65536)   //获取65536页面的浏览URL，参数为空时，合成当前页面的URL
+	site.getEditURL(65536)   //获取65536页面的编辑URL，参数为空时，合成当前页面的URL
+	site.getTeamURL(65536)   //获取Team下的功能链接
+也可以调用
+	site.getURL(context, page)的方式获取不在上面列表中的URL。其中 context是在URLPatternResolver中定义的。
+
+clb权限变更，需要clb5.0.16a支持。
+表字段变化：vwb_collection， 字段：default_auth 类似：字符串。
+DROP TABLE IF EXISTS `vwb_collection`;
+CREATE TABLE `vwb_collection` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `resource_id` int(10) unsigned NOT NULL default '0',
+  `name` varchar(45) NOT NULL default '',
+  `description` text,
+  `sequence` int(10) default NULL,
+  `tid` int(11) NOT NULL default '0',
+  `default_auth` varchar(45) NOT NULL DEFAULT ''
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+----------------------------------------------
+dct5.1.40a(2011-6-9) 需要更新sharedlib
+by liji
+为团队添加了管理功能，包括管理团队名称、管理团队成员、设置团队权限
+集合管理页面添加了权限设置功能
+新增附件描述页面，点击附件时先去描述页面然后再下载
+新增图片描述页面，点击图片时先去描述页面然后再下载
+为编辑页面页面功能添加多文件上传功能，文件可直接拖拽（文件上传控件IE下存在BUG）
+附件上传后能以链接的形式插入E2编辑器，如果是图片则也能以图片的形式插入E2编辑器
+团队首页中新增团队动态页面
+将原来个人中心里面的内容迁移到团队首页里面来
+团队首页新增通讯录页面
+团队首页新增集合与快捷页面
+
+配置文件vwbcofig.properties里面UMT service发生变化,现在为duckling.umt.service.url=${duckling.umt.site}/services
+
+----------------------------------------------
+
+2011-06-03  xiejj@cnic.cn
+* 修改了大量的表格，由原来为每个站点创建一套表格变为用tid区分，具体的升级SQL文件见 sql/6-3-update.sql
+
+dct 5.1.39a(2011-6-7)
+------------------------------------------
+加入初始化语句，修复bug，重新发布
+
+dct 5.1.38a(2011-6-4)
+-----------------------------------------
+需补充
+
+dct 5.1.37b(2011-05-20)
+--------------------------------------
+ 采用新页面组织结构，以“团队-集合-页面”三个层次组织页面
+ 新增集合的概念，完成对集合的新建、修改、排序功能
+ 新增往集合里面添加页面的功能，每个页面只能属于一个集合
+ 去掉原有左菜单功能，顶菜单用于显示集合
+ 添加集合主页功能，该页面包括对集合内页面的搜索、排序、分页功能
+ 集合主页的搜索采用新的索引服务，对数据库内相关字段建立全文索引，并支持中文分词
+ 在集合主页添加快捷方式功能，用于集合内页面的快速导航
+ 使用新的URL转发机制，重新设计URL格式，现有URL适应多团队环境
+ 重新设计单个页面的显示界面，保留原有的新建、编辑、版本、关注、推荐、评论等功能
+ 
+2011-05-19 xiejj@cnic.cn
+* 删除了表vwb_column, vwb_column_member两张表
+* 在vwb_site 表中增加了两个字段 name, display_name
+	alter table vwb_site add column `name` varchar(255) default NULL;
+	alter table vwb_site add column `display_name` varchar(255) default NULL;
+
+2011-5-13 diyanliang
+解决表格增加行列时候单元格默认有个空格的bug
+增加表格全选浮动按钮
+dct 5.1.37a(2011-5-6)
+------------------------------------
+e2代码更新，待补充
+	
+dct 5.1.36a(2011-04-29)
+-----------------------------------------
+
+2011-04-26 liji@cnic.cn
+* 增加了表vwb_collection和vwb_shotcut
+	DROP TABLE IF EXISTS `vwb_shortcut`;
+	CREATE TABLE `vwb_shortcut` (
+	  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	  `title` varchar(50) NOT NULL DEFAULT '',
+	  `url` varchar(45) NOT NULL DEFAULT '',
+	  `sequence` int(10) unsigned NOT NULL DEFAULT '0',
+	  `collection_id` int(10) unsigned NOT NULL DEFAULT '0',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+	DROP TABLE IF EXISTS `vwb_collection`;
+	CREATE TABLE  `vwb_collection` (
+	  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	  `resource_id` int(10) unsigned NOT NULL DEFAULT '0',
+	  `name` varchar(45) NOT NULL DEFAULT '',
+	  `description` text,
+	  `sequence` int(10) unsigned DEFAULT NULL,
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+* 修改了表vwb_resource_info
+	ALTER TABLE `vwb_resource_info` ADD COLUMN `belong` INTEGER UNSIGNED DEFAULT NULL;
+* 增加了一个新的功能
+	INSERT INTO `vwb_resource_info` (`id`,`type`,`title`,`trail`,`parent`,`left_menu`,`top_menu`,`footer`,`banner`,`create_time`,`creator`,`acl`,`belong`) VALUES (5932,'JSP','团队首页',0,65535,0,0,0,0,'2011-03-07 14:48:40','System',0,NULL);
+
+dct5.1.35a(2011.4.22)
+-----------------------------------------
+2011-04-22 xiejj@cnic.cn
+* 升级JQuery核心库至1.5.2版本
+
+2011-04-22 diyanliang	
+1、编辑器工具栏随内容悬浮
+2、表格周围增加可以添加行列的按钮
+3、调整表格中添加行的高度使之兼容safari
+4、包装点击事件使之对safari兼容
+
+dct5.1.34a(2011.4.15)
+-----------------------------------
+2011-4-15 diyanliang
+1、编辑框的随内容长度自动增长 
+2、对表格里面默认多出一个空格的处理
+3、拖拽实现表格宽度的改变 
+4、粘贴外部链接时，链接识别与转换，支持在编辑状态下在新窗口中打开链接 （ZX）
+
+2011-04-15 van
+* 修改了差异比较的显示效果。 
+
+2011-04-15 liji
+-------------------------------------------
+* UserBox上的“个人中心”链接加入了收到的新推荐的计数。
+* 个人中心的关注，点击后不再消失。
+* 对个人的关注，将只显示最近10条。
+* 修正了，取消关注时不选择任何已关注内容时，无法正常工作的Bug。
+
+dct5.1.33a(2011.4.8)
+--------------------------------------------
+2011-04-08 xiejj@cnic.cn
+* 修改Diff页面显示效果
+   1.缺省显示当前版本，差异部分隐藏。通过点击显示差异。
+   2.个人中心中，"XX修改于"改成Diff链接
+* 修改热度的更新机制：
+   1.用户一天内对同一页面只贡献一个热度。
+   2.在不贡献热度时，需更新页面的访问时间。
+* 在显示所有内容更新的页面，推荐时无法正确获得页面的名称
+* 修改在DCT中登录以后无法正确重定向的问题
+
+E2Prototype0.01Version(2011-04-08)
+解决了表格里面按回车和不按回车样式不一样的问题
+解决了项目列表、项目编号和对齐按钮的冲突
+解决了缩进量和对齐方式的冲突
+解决了标题和对齐按钮的冲突
+解决了表格单元格宽度随文字变化
+
+dct5.1.32a(2011.4.1)
+---------------------------------------------
+2011-4-2 diyanliang 
+1、在编辑器fckeditor_*.js中增加新方法copyAttributes
+2、修改了表格内回车与否的效果
+3、修改了编号列表项、项目列表项、缩进与对齐方式之间的冲突
+
+2011-4-1 liji
+* 添加对个人行为的关注 	  
+* 添加全部关注记录（历史记录）页面 	  
+* 将个人中心的首页只显示没有看过的关注更新消息，点击后去掉消息 	  	 
+* 添加对用户所关注页面的新评论通知 	  	 
+* 修改个人中心推荐、关注等模块的显示效果 	  	 
+* 新增导航页面，包括用户最近创建和最近修改过的页面 	  	 
+* 新增关注管理页面，可以显示和删除已关注的页面和人 	  
+* 修正评论中js可执行的bug，日期显示模式改为24小时制 	  	 
+* 关注、取消关注、推荐成功后提示信息显示1.5秒后自行消失，不需要再操作对话框
+
+2011-03-28 xiejj@cnic.cn
+* 修改了
+	cn.vlabs.duckling.vwb.SiteMap
+	cn.vlabs.duckling.vwb.VWBDriverServlet
+  来修正配置大写域名时，无法正常访问的问题。
+
+dct5.1.31a(2011.3.24)
+-----------------------------------------------
+2011-03-24 clive
+* 将Aone中的通知中心改名为个人中心
+* 增加一张新表vwb_comment
+	DROP TABLE IF EXISTS `vwb_comment`;
+	CREATE TABLE  `vwb_comment` (
+	  `id` int(11) NOT NULL AUTO_INCREMENT,
+	  `receiver` varchar(50) DEFAULT NULL,
+	  `content` text,
+	  `create_time` datetime DEFAULT NULL,
+	  `page_id` int(11) DEFAULT NULL,
+	  `sender` varchar(50) DEFAULT NULL,
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+* 修改了数据库 在vwb_myspace中增加一列 name
+	ALTER TABLE `vwb_myspace` ADD COLUMN `name` VARCHAR(50) NOT NULL DEFAULT '' AFTER `resourceId`;
+* 每次用户登录时更新一次vwb_myspace中的真实姓名
+* 增加页面评论功能，以及评论在个人中心的显示
+* 将个人中心中的email部分替换为真实姓名
+* 推荐选人的时候按照Email的字母进行排序
+* 将多人对同一页面的推荐、评论记录合并到一起
+* 将同一天中对同一页面的多条关注更新合并
+
+dct5.1.30a (a1分支，2011.3.17，需要更新sharedlib）
+----------------------------------------------
+2011-03-17 xiejj
+* 增加了Aone的相关功能
+* 修改了数据库需要执行Aone.sql，并在vwb_resource_info中增加几条记录
+	INSERT INTO `vwb_resource_info` (`id`,`type`,`title`,`trail`,`parent`,`left_menu`,`top_menu`,`footer`,`banner`,`create_time`,`creator`,`acl`) VALUES (5927,'JSP','通知中心',0,65535,0,0,0,0,'2011-03-05 11:10:57','System',0);
+	INSERT INTO `vwb_resource_info` (`id`,`type`,`title`,`trail`,`parent`,`left_menu`,`top_menu`,`footer`,`banner`,`create_time`,`creator`,`acl`) VALUES (5928,'JSP','个人中心',0,65535,0,0,0,0,'2011-03-05 11:10:57','System',0);
+	INSERT INTO `vwb_resource_info` (`id`,`type`,`title`,`trail`,`parent`,`left_menu`,`top_menu`,`footer`,`banner`,`create_time`,`creator`,`acl`) VALUES (5929,'JSP','黑名单',0,65535,0,0,0,0,'2011-03-16 14:59:00','System',0);
+	INSERT INTO `vwb_resource_info` (`id`,`type`,`title`,`trail`,`parent`,`left_menu`,`top_menu`,`footer`,`banner`,`create_time`,`creator`,`acl`) VALUES (5930,'JSP','新建栏目',0,65535,0,0,0,0,'2011-03-07 14:48:40','System',0);
+	INSERT INTO `vwb_resource_info` (`id`,`type`,`title`,`trail`,`parent`,`left_menu`,`top_menu`,`footer`,`banner`,`create_time`,`creator`,`acl`) VALUES (5931,'JSP','个人资料',0,65535,0,0,0,0,'2011-03-07 14:48:40','System',0);
+
+2010-01-24 diyanliang
+取消了对表结构的调整 page_order项已经从代码中移除   
+增加了 vwb:SubPage标签,可以根据用户权限和父页面ID来显示子页面列表<vwb:SubPage pageid="1(7,6,5,4,3);2"/> “;”隔开父页面 （）里面是子页面的排序顺序
+            
+2011-01-24 xiejj 需更新ShareLib !!!
+* 修改了PortletRequest，现在可以获得当前页面的ID，并调整了SiteContext，增加了构造简单URL的方法。调用方法如下：
+	request.getPageId();
+  可以使用当前的pageid构造一个简单访问的URL。调用方式：
+    SiteContext siteContext = request.getSiteSession().getSiteContext();
+    String simpleURL = siteContext.getSimpleURL(pageid, params);
+ 在SiteSession中获取其他站点的SiteContext方法：
+ 	SiteContext siteContext = request.getSiteSession().getSiteContext(siteId);
+ 	
+2011-01-20 xiejj
+* 更新了Framework包、XStream包、CLB的API包，新的Framework包升级到了0.9版本，部分提高了API调用的速度
+  同样的CLB,UMT,VMT的framework包也做了升级
+* 修改了AttachmentServlet的Cachable机制，对于已缓存的文件，不再下载完整的附件内容。
+* 修改了在多线程环境下，AttachmentService的Bug（对同一个用户创建多个CLB连接）
+* 修改了错误页面的展现方式，现在错误页面也通过layout.jsp来展现了。
+* 修改了错误页面，无法正确导航到用户设置的首页的Bug。
+* 修改了VWBDriverServlet。将该类中，需要调用获取站点首页的链接地址的地方，改为直接调用Site类的对应方法。
+  不再由VWBDriverServlet自己拼接。
+
+2010-01-17 diyanliang
+针对科技网的项目做了表结构的调整
+1、修改了userbox.jsp
+2、增加了了SubPageTag
+3、修改了表结构alter table vwb_dpage_content_info add COLUMN (page_order int(11));
+4、修复用户计数器插件的缩略图及显示名称
+
+2011-01-15 fred
+* 站点对登录但未加入站点的用户处理功能
+    判定根据站点参数vwb.site.checkuser
+   （1） vwb.site.checkuser=add   系统自动把登录但未加入站点的用户加入站点
+   （2） vwb.site.checkuser=apply 系统把登录但未加入站点的用户申请加入站点
+   （3） vwb.site.checkuser=none 或不设置该参数  系统不做任何处理
+2011-01-13 fred
+* sharelib 下的duckling-common.jar包更新
+2011-01-09 xiejj
+* 修改了Portlet的URL映射功能，现在提供简单URL映射方式。
+  原来使用标签方式创建的URL，可以通过构造简单的URL方式访问同样的功能。
+  例：http://localhost/dct/portal/65534?action=success，等同于调用标签
+	<portlet:renderURL var="success">
+		<portlet:param name="action" value="success"/>
+	</portlet:renderURL>
+  产生的URL的访问地址。
+  通过简单URL访问的地址，将会有一次重定向（简单URL只能访问RenderURL)
+  
+2010.1.7 zzb(2010.2.25补)
+* 修改Lucene索引时文件打开数过多的错误
+	
+
+dct5.1.29 (2011.1.6)
+---------------------------------------------------
+2010.01.05 fred
+* 添加记录用户访问站点个数的插件
+
+2010.12.16 zzb
+* 修改Lucene索引时没有解锁的bug
+
+
+dct5.1.28 (2010.12.16) (需要更新sharedlib)
+----------------------------------------------------
+2010.12.13 xiejj
+* 修改了logout方法，现在支持指定退出以后显示的页面
+	调用方式 site.getURL(VWBContext.PLAIN, "logout", "next=encodedURL");
+	其中encodedURL是用UTF-8编码的目标URL(你想指定的退出以后的URL)
+	最后重定向到这种方式产生的URL，就可以完成预定的功能
+* 完成了对UMT失败页面的重定向，现在应用插件可以完整的控制登录过程。
+* Portal容器增加了登录服务，调用方式是从ActionResponse中调用doLogin方法
+* 对PortalSession进行重构，PortletRequest增加了获取SiteSession服务的方法。
+  相应的PortalSession的获取方式已不再建议使用。
+* 原Portal的URLService，现在可以从PortletResponse中获取
+	例：portletResponse.getViewURL(pageid, params);
+
+2010.12.9 fred
+* API修改获取站点状态的bug
+* 添加登录后重定向到指定的地址  ，需要指定参数returnURL
+   使用例子：
+   dct的登录连接 http://127.0.0.1:8080/dct/site/1/login
+   登录成功后重定向到指定的地址http://127.0.0.1:8080/dct/site/1/page/9
+   
+   http://127.0.0.1:8080/dct/site/1/login?returnURL=http://127.0.0.1:8080/dct/site/1/page/9
+
+dct5.1.27 (2010.12.03)
+-----------------------------------------------------
+2010.12.8 xiejj
+* 修改了Portlet容器，增加了对跨Portlet的支持（需要更新Sharelib)
+  使用方法：在JSP中引入Portlet 2.0的Taglib(在更新的sharelib中可以找到）
+  portlet:renderURL增加四个参数page, context, portlet, sequence
+  同Web应用中的其他Portlet  <portlet:renderURL portlet="OtherPortletName"/>
+  跨Web应用中的其他Portlet  <portlet:renderURL portlet="OtherPortletName" context="/OtherApp"/>
+  已知页面和Portlet在页面中的需要方式
+   <portlet:renderURL portlet="OtherPortletName" context="/OtherApp" page="2502" sequence="0"/>
+2010.12.01
+*添加配置项
+duckling.umt.service.url=${duckling.umt.site}/ServiceServlet
+*支持dct注册功能
+*在functions.xml中加了5029的功能，做升级包的时候需要对functions.xml升级
+
+2010.12.1 zzb
+* 修改启动时lucene一直报空指针错的bug            
+            
+2010.11.30 xiejj
+* 由于CLB API提供了对Session的管理，DCT对相应修改代码进行了修改，删除了为了解决第一次上传的Bug，而强制加入的 login操作(AttachmentService.createDocument)。
+
+2010.11.17 xiejj
+* 修改了某些情况下，页面的权限设置无效的Bug。产生该Bug的原因是权限设置页面，没有按照继承的方式显示当前页面的权限。已修改。
+  升级程序中，应将有ACL设置的ViewPort项的acl标志位设成1
+* 修改了权限服务，如需打印权限判断的调试信息，请在conf/log4j.properties文件中将级别调成DEBUG
+
+2010.11.16 xiejj
+* 修改了附件下载时的出错处理方式，对于需要在页面中显示的内容（cachable方式访问的），直接显示没有权限。
+  对于需要下载的附件(attach方式)，如果访问者是未登录状态，将会要求用户先登录。
+* 修改了http://${domain}/site/${id}/attach/${hash}类URL方式下，如果没有权限无法正确重定向的Bug
+
+2010.11.12 kevin
+* 修改admin的默认site.properties，将默认vo从Duckling修改成VO
+
+2010.11.12 xiejj
+* 增加了一种新的附件下载方式(http://domain.name/dct/cachable)。这种方式下，附件被允许最多缓存8个小时。
+  页面上的嵌入图片，Flash，都将使用这种方式。原附件下载方式(http://domain.name/dct/attach)，将要求浏览器每次都检查附件是否更新。
+
+dct5.1.26 (2010.11.11) 需要修改sharedlib
+-------------------------------------------
+2010.11.11 xiejj
+* 修改了在多站点模式下(site/id这类URL下)，无法更新附件的Bug
+* 修改了comm-manager.js,修正了在线人员的Popup菜单无法正常工作的情况。
+* 修改了附件的缓存机制，使用Last-Modified来决定附件是否更新，解决了更新附件以后，无法看到更新内容的Bug
+
+2010.11.11 xiejj
+* 修正了用户修改了邮件通知模板无法生效的Bug
+
+2010.11.11 fred
+* 在api中添加支持传principals[]，修改sharedlib
+2010.11.11
+编辑器中的链接增加根据class切换语言栏功能，目前只支持手动录入class其中DCT_enus可以切换到英文DCT_zhcn可以切换到中文
+          
+2010.11.9  zzb
+修改linux下duckling的lucene文件读取过多的bug
+
+2010.11.09 fred
+* 在sql文件 tablesTemplate.sql中
+    1） 修改表vwb_dpage_content_info，把列change_by的长度修改为255
+    2） 修改表vwb_clb，把列change_by的长度修改为255
+2010.11.5 xiejj
+* 修改了AdminPortlet，在所有的JavaScript操作的DOM对象前加入了<portlet:namespace/>,
+  以避免因为名字空间的问题导致javascript失效
+
+dct5.1.25(2010.11.5)
+-----------------------------------------------------
+2010.11.5  xiejj
+* 修正了第一次上传图片无法正确上传的错误。
+	AttachMentServiceImpl中CreateDocument方法的 if (conn==null && !conn.login()) return;改为
+	if (conn==null) return; 
+	if (!conn.login()) return;
+2010.11.03 fred
+* 修改销毁站点bug
+* 修改VWBContainer.java 中的方法名 getAdminDoamin---->getDefaultDomain
+
+dct5.1.24(2010.11.03)
+-----------------------------------------------------
+2010.11.01 fred
+* 修改bug：应用签名次数过多出现内存溢出
+2010.10.29 fred
+* 修改bug 邮箱订阅管理中的组合条件查询无法实现
+* 修改bug 顶级页面可以设置“继承上级页面的当前位置”的选项
+* 修改bug dlog统计查询出现错误
+2010.10.28 fred
+*修改bug统计参数设置不能修改
+   在configStasticsEvents.jsp文件中 $('cmd').value = 'save'语句改成$("#cmd").val("save");
+*修改bug利用自己保存的模板创建子站点显示不正常
+   原因：由于资源的banner除了inherit,yes,no,还有使用皮肤里的banner。当保存成模板的时候，由于-2没有对应的值，都设置成no。
+         
+
+dct5.1.23(2010.10.26)
+-----------------------------------------------------
+2010.10.26
+* 更新vmt-api.jar文件
+* 删除vwbconfig.properties文件中duckling.vmt.keyCenter，duckling.vmt.api.service两个配置项
+
+dct5.1.22(2010.10.19)
+-------------------------------------------------------
+2010.10.18 fred
+* 所有模块使用cerc-cred.jar 来进行身份认证，把duckling-common.jar移除。sharedlib包需要更新
+2010.10.18 zzb
+* 修改站点参数设置时的用户社区ID设置对新umt无效
+2010.10.13 fred
+*  添加启动站点，关闭站点，查询站点状态的api接口    
+*  允许指定的ip访问dct api，指定的IP在WEB-INF/conf/accessIPs.txt中配置
+2010.10.11 xiejj
+* 为了兼容以前Plugin.jsp的功能，现在增加一个系统功能(5001)，使用方法和效果，同以前的Plugin.jsp一样。
+  使用示例: http://127.0.0.1/dct/page/5001?target=a.jsp，这将使页面中间区域显示a.jsp。
+  如需加入额外的参数，则在这个URL继续按照参数的构造规则加入即可(http://127.0.0.1/dct/page/5001?target=a.jsp&param1=a)。
+  这条修改需要在数据库表vwb_resource_info中增加一条
+  insert into vwb_resource_info(id, type,title,parent,create_time,creator)
+  values(5001,'JSP','plugin.jsp',65535,now(),'System');
+  ********************注意***********************
+  这条修改对所有的站点资源表都起作用。补丁包需要对所有的站点都执行一遍。
+  
+2010.10.9 xiejj
+* 修改了PageContent.jsp和PortletContent.jsp,在编辑模式时，更多菜单的遮盖层使用的URL.
+  修改后使用一个静态页面作遮盖层， 而不是原来的指向不存在的页面的方式。修改后，可略微缩短编辑模式下页面加载速度。
+2010.9.30 zzb
+* 修改当前时间插件为动态时间         
+
+dct5.1.21(2010.9.29)
+-----------------------------------------------------
+2010.9.29 dylan
+*DEmap增加可以自己设置图标的功能
+            
+2010.9.29 fred
+* 添加设置站点默认语言的api接口    
+2010.9.19 xiejj
+* 修改编辑页面时，第一次上传附件失败的Bug，解决方法是在AttachmentService的上传文件方法中，增加预先登录的操作
+2010.9.17
+* SimpleUploaderServer.java中恢复授权给“all”的代码，解决图片等无法访问的问题（这个问题在新的clb中需要重新考虑）
+2010.9.7 kevin
+* 整理所有默认模板的innerBanner样式，去掉absolute属性，解决IE7下banner中文字显示的bug。 
+
+dct5.1.20 (2010.9.7)
+-----------------------------------------------------
+* 调用clb、dlog等兼容新老接口两种方法。
+* API中增加销毁站点的接口
+* 在sharedlib中增加两个jar包。duckling-common.jar和bcprov-jdk15-129.jar
+* vwbconfig.properties中增加了新旧umt/vmt使用的注释性配置
+
+--------------------------------------------------------
+dct5.1.19 (Duckling版本修改为2.1)
+*去掉站点设置中的文档管理工具配置，增加“是否公开文档库”一项，
+（如果修改为公开，提交后自动在umt/vmt的相应社区中加入anonymous@root.umt用户；
+如果修改为不公开，提交后将umt/vmt中相应社区中退出anonymous@root.umt用户）。    
+2010-8-26 kevin
+增加站点首页功能，可以指定页面（包括插件页面）为站点首页。并解决当站点首页修改为其它页面后，注销时返回页面不正确的bug                      
+2010-8-24 kevin
+解决未登录状态下下载需授权文件报错的bug。
+2010-8-23 fred
+1:在dct中集成新老umt(还需调整)
+2010-8-12 fred
+增加了DCT默认语言配置功能，每一个站点的管理员均可指定用户进入该站点时的默认语言。                     
+
+dct5.1.18
+----------------------------------------------------------
+2010-8-12 dylan
+1、修复图片薄插件后缀过滤的bug
+2、修复图片薄插件没有过滤非图片文件的bug
+3、编辑器内外效果调整一致
+2010-8-11 dylan
+1、修复图片插件多站点bug
+2、Utility增加查询vodisplayname的功能
+3、解决在DE编辑器的添加附件链接功能中可能因voname和vodisplayname不一样导致的clb目录获取不到的bug。
+
+2010-8-10 dylan
+DEMap增加默认显示地图类型功能，增加鼠标右键查看属性时候根据用户定位的中心点和地图类型改变属性图的功能
+
+dct5.1.17(2010.08.09)
+-----------------------------------------------------------
+2010.8.9 dylan
+1、图片滚动插件修复过滤后缀功能。
+2、更改DEMap页面的编码为Utf-8
+3、修复DEMap的js使之支持多个地图同时显示
+
+2010.8.9 dylan
+DE编辑器增加DEMap功能，用户可以在系统参数设置里面录入google map key
+
+2010.8.6 kevin
+* 将匿名下载的anonymous connection修改成一个session共享，部分解决CLOSE_WAIT的问题。
+
+dct5.1.16(2010.08.04)
+--------------------------------------------------------------
+2010.8.3 dylan
+1、对clb到dct的数据流左缓存检查处理，如果lastUpdate与客户端Last-Modified一致,强制返回304
+2、图片薄插件以clb为存储介质
+
+2010.8.2 kevin
+在下载clb附件的servlet(CLBAttachmentServlet)中增加cache缓存时间属性，默认为1天。
+
+dct5.1.15(2010.08.02)
+-------------------------------------------------------------
+2010.7.30 dylan
+1、修复bug1997共享页面外部地址不正确的时候，系统提示不友好 
+2、配置文件中增加新内容duckling.robots=true
+3、站点参数设置中增加了keywords descriptions robots设置项
+
+2010.7.29 dylan
+1、增加图片薄插件，并在编辑器中增加按钮，使用时管理员需要在WebRoot\imagesdata下的相关站点的文件夹中建立自定义文件夹来上传图片
+用户可以通过拖拽来改变大小，可以通过设置样式名来改变样式，可以设置间隔时间，如果不设置高宽，图片会自动变化大小
+对图片下载模式调优，如果图片不更新不更新浏览器缓存
+2、修复bug 1982、 2009、 2090
+2010.7.27
+修复默认首页不为1时，自动进入portlet管理界面的bug（DCTDriverServlet）。
+
+dct5.1.14(2010.7.27)
+--------------------------------------------------------------
+2010.7.27 dylan
+1\左菜单增加互斥功能  需要使用class="DCT_leftmenu_mutex"
+2\增加配置项duckling.defaultpage  默认首页id  如果没有该项默认为1
+
+2010.7.26 dylan
+1\修复bug:
+在D.E.编辑器中增加可配置bodyid的选项，默认和浏览模式下的容器id相同(FCKConfig.ducklingbodyid='DCT_viewcontent';)
+并在编辑器外部增加div id="pagecontent",将编辑器效果元素与浏览模式下的效果元素统一，解决编辑器，和浏览模式下效果不一样的bug.
+2\左菜单默认打开效果:将需要默认打开的左菜单class设为DefaultShow即可
+     
+2010.7.23
+lib目录中删除spring相关包commons-attributes-api.jar/commons-attributes-compiler.jar/spring-beans.jar/spring-context.jar/spring-core.jar。
+
+2010.7.23 dylan
+调整为页面只有使用皮肤自带banner时候才会使用站点名称作为banner显示文字
+更新了vwbconfig.properties  删除了duckling.bannertitle属性
+
+2010.7.22 dylan
+修复编辑模式下flash挡住更多菜单的bug，并将遮罩js修改的更通用
+
+dct5.1.13(2010.7.22)
+--------------------------------------------------------------
+2010.7.22 sunp
+policy错误权限过滤
+
+2010.7.22
+修复ie7下“共享页面”功能无法使用的bug （替换原mootools tabmenu方法）
+左上角searchbox结果集改为原lucene结果集
+2010.7.21
+添加red/skyblue两个皮肤，并将“使用皮肤banner”设置为默认方式。
+2010.7.21
+1\修复ie下新建页面弹出框无法使用的bug (增加String.prototype.trim替代原有mootools的trim方法)
+2\上传附件显示不出来的bug  (将原调用mootools的wiki初始化方法变为不依赖mootools)
+          
+dct5.1.12(2010.7.20)
+--------------------------------------------------            
+2010.7.20 dylan
+统一在commonheader中加载jquery基库,去掉下列jsp中的加载的jquery基库(如有问题请及时与我联系)
+WebRoot\jsp\autodeploy\appsManager.jsp、WebRoot\jsp\page\portalsetting.jsp、WebRoot\jsp\PolicyManage.jsp
+WebRoot\jsp\SiteCreate.jsp、WebRoot\jsp\SiteManage.jsp、WebRoot\WEB-INF\fragments\admin\page\view.jsp
+WebRoot\SearchBox.jsp
+      
+2010.7.20 dylan
+1、在dct中取消加载mootools
+2、jquery自动补全增加参数keyControl:true//是否支持键盘控制 默认true;
+3、替换原mootools方法（页面设置、原自动补全bug修复）
+    mootools的String.extend(localize:)方法改为String.prototype.localize
+
+2010.7.19 fred
+* 修改api， BasedDpage类中添加author 和 lastModified属性
+
+2010.7.19 dylan
+1、jquery自动补全增加参数resultsClass:"ac_results",//显示区css 默认是ac_results
+2、替换原mootools方法（searchbox不能使用bug）
+	searchbox基础库由原来mootools改为jquery
+
+dct5.1.11(2010.7.16)
+--------------------------------------------------
+2010-7-16 fred
+* 增加API接口，可通过页面ID得到子页面列表
+
+2010-7-16 Dylan
+增加下来顶菜单功能，修改左菜单展开功能,并简化用户使用方法
+使用方法如下：
+1、用户在编辑其中编辑左菜单或者顶菜单，编辑方法和以前一样（使用列表按钮）
+2、把需要作为下拉或者展开的菜单做成下级列表（使用缩进量按钮）
+3、在最上级ul里面加上class="DCT_topmenu"或者class="DCT_leftmenu"即可
+
+2010.7.15 kevin
+* 修改default皮肤的DCT_body的宽度为1002px，以后所有皮肤宽度建议均为1002px。
+
+2010-7-15 dylan
+1、修改了做菜单效果的用例
+2、dml对A元素增加ID属性
+
+
+dct5.1.10(2010.7.15)
+-------------------------------------------------
+2010-7-14 dylan（ 此使用方法已经作废！！！）
+增加左菜单树形展开功能，使用方法如下：
+1、如果要使用该功能用户需要在skin里面增加skin.js。该js可以在skin模板中下载
+2、用户可以根据展开后的效果在编辑器中直接编辑左菜单的一级菜单二级菜单， 系统会在左菜单浏览时自动隐藏二级菜单
+3、要求一级菜单链接元素(A)的class必须为DCT_leftmenu_lvl1并且id必须以DCT_leftmenu_lvl开头，例如（DCT_leftmenu_lvl_info）
+3、要求二级菜单列表元素(UL)的class必须为DCT_leftmenu_lvl2并且id必须以DCT_leftmenu_lv2开头，并且后缀名必须与需要关联的一级菜单后缀名相同，例如（DCT_leftmenu_lv2_info）
+4、一级菜单和二级菜单可以直接用编辑器的li,ul功能完成,id和class的填写需要在编辑器源代码模式下添加
+5、用户可以在skin.css中设置一级二级左菜单的样式
+6、左菜单例子如下,用户可以直接复制这段内容到编辑器，然后调整css和文字即可:
+<ul>
+    <li>
+    <a class="DCT_leftmenu_lvl1" id="DCT_leftmenu_lvl1_test1" href="#">主菜单</a>
+    <ul id="DCT_leftmenu_lvl2_test1" class="DCT_leftmenu_lvl2">
+        <li><a href="#">子菜单1</a></li>
+        <li><a href="#">子菜单2</a></li>
+    </ul>
+    </li>
+    <li>
+    <a class="DCT_leftmenu_lvl1" id="DCT_leftmenu_lvl1_test2" href="#">主菜单2</a>
+    <ul id="DCT_leftmenu_lvl2_test2" class="DCT_leftmenu_lvl2">
+        <li><a href="#">子菜单21</a></li>
+        <li><a href="#">子菜单22</a></li>
+    </ul>
+    </li>
+</ul>
+
+2010-7-8 dylan
+修复SubDpageFilterPlugin更多不能使用，hr显示错误的bug
+
+dct5.1.9(2010.7.2)
+-------------------------------------------------
+2010-7-2
+修改API接口
+FCK返回的html里，增加了对a的class属性的类型区分，包括dpage、portal、jsp、attachment四种。
+            
+2010-6-30 kevin
+更新dpages.xml，修改Main主页，banner、左菜单等采用继承方式（实际为继承101 root页面）。
+
+dct5.1.8(2010.6.30)
+--------------------------------------------------
+2010-6-29 dylan
+1\加入banner随皮肤变化的功能（可根据站点设置，页面设置来设置是否使用该功能）
+2\站点名称作为banner文字，并链接到首页
+3\皮肤中默认banner图片名为banner.gif
+4\美工修改皮肤时候可以直接用default或者默认下载的skin.zip样例页面skin.html把banner也制作好
+5\vwbconfig.properties加入duckling.bannertitle项，请更新vwbconfig.properties
+
+2010-6-24 dylan
+DMLData多站点应用完善
+
+dct5.1.7(2010.6.23)
+--------------------------------------------------
+2010-6-17
+DMLData移植完毕
+2010-6-12
+编辑器字号修正为数字字号
+2010.6.10 sunp
+*“系统设置”内容分类整理
+*修改v5.1.6的bug若干，包括：
+1.权限设置功能验证
+2.多站点的邮件订阅通知不能发送问题
+3.参数设置和权限设置里的VO数据一致问题
+4.站点创建刷新重复提交问题
+
+dct5.1.6(2010.6.7)
+-------------------------------------------------
+2010.6.03 sunp
+*皮肤blue中的图标整合成完整图片
+*调整站点权限设置中policy preview的样式
+
+2010.6.02 sunp
+*站点管理功能批操作及操作的前台验证
+           
+2010.5.25 sunp
+*重构页面共享功能，改hash文件数据库为mysql库  
+            
+2010.5.24 fred
+* 域名重置
+* 目录插件嵌套调用bug
+*
+
+dct5.1.5(2010.5.24)
+----------------------------------------------------------------
+2010.5.24 zzb
+* 添加模板备份的功能。
+* 添加policy的修改保存功能。
+* 修改索引单线程支持多站点，在内存中维持索引文件。
+
+
+2010.5.24 xiejj
+* 修正了因为权限触发登陆的时候，丢失URL参数的Bug。但是对于表单提交的参数还是未做处理。
+  例：在编辑需要登录的系统中，未登录状态下，输入 http://${your.domain}/dct/page/1?a=edit
+  登录完成以后可以正确的返回编辑状态。
+* 修正了在线用户插件的BUG. 修改以后，可以正确的只显示当前站点的在线用户了。
+
+dct5.1.4(2010.5.21)
+----------------------------------------------------------------
+
+2010.5.23 sunp
+*duckling.policy中的默认vo名由CERC改为Duckling,与管理站点默认时建立使用vo名称相同
+*改写AclEntryImpl中的setPrincipal函数，使其可以使其可以修改principal
+*页面导出在linux下有路径问题，功能已验证
+*邮件订阅已验证。修改系统时间后需要重启，并在整点后等待1分钟。
+
+2010.5.20 sunp
+*权限检查增加editProfile(个人设置)选项
+*创建站点时站点名称的特殊字符校验
+*站点管理中的重置域名功能
+*站点管理的列显示调整
+*站点管理中操作的访问控制（根据服务器状态的不同）
+*页面共享功能debug
+
+2010.5.21 xiejj
+* 修改了layout.jsp，这样layout.jsp不再自己处理错误了，错误日志将正确的记录到日志文件中。
+* 修改了URL解析功能，现在对于含有多于'/'的URL也能正确的解析了。
+	例:http://localhost/dct//page/1
+* 增加了一个site.js, 以后在JS中拼写URL可以使用site对象完成
+	getViewURL(pageid)		返回页面浏览的URL
+	getEditURL(pageid)		返回页面编辑的URL
+	getJSPURL(jsp)			返回JSP类型的URL
+* 修改了页面权限设置中，如果使用的是site/id 的方式访问时，无法正确获取用户组的Bug.
+* 修改了OSCache的使用机制，增加了WEB-INF/conf/OSCache.properties配置文件
+* 修改了VWBContainer的查找方式，现在寻找Container不再需要ServletContext，也不会因为寻找Container产生额外的Session
+* 修改了多站点方式下，Cookie改写的规则。现在判定依据是是否为管理域名，并加入了忽略列表(VWBFilter的初始化参数中配置, 以分号做分隔)
+  忽略改写的列表为API做服务，可调用API时做一定的验证。
+  
+* 修改了系统404(页面未找到),500(系统内部错误),403(没有权限)错误时，没有正确重定向的Bug.
+	修改前：
+	系统对设有域名站点可以正确重定向回首页。
+	对于以site/id方式的访问，会把用户重定向到管理站点首页。
+	修改后:
+	现在，如果是特定站点里触发的问题，会正确的重定向回该站点的首页(不论是否以site/id方式访问)。
+	对于未知站点是哪个的访问，会重定向回管理站点首页。
+
+2010.5.20 sunp
+*Policy部分问题
+  非界面可编辑区域的权限设置不会被覆盖
+  VOGroup名称替换
+
+2010.5.20 xiejj
+* 修改了系统错误以后无法正确重定向回当前站点首页的Bug (没有权限访问，内部代码错误和页面未找到)
+
+dct5.1.3(2010.5.20)
+-------------------------------------------------
+2010.5.20 xiejj
+* 修改了页面无法删除的Bug
+* 修改了如果该页面是个人主页时无法删除的Bug
+* 删除页面权限未检查的Bug.
+
+2010.5.20 sunp
+*站点管理界面的bug：
+  国际化不完整
+  firefox表单刷新自动填充问题
+  域名存在验证和有效性ajax后台验证信息合并到同一个区域显示
+            
+2010.5.18 xiejj
+* 修改了容器代码，现在支持单域名下的多站点。例如：
+	http://${admin.domain}/dct/site/1
+	http://${admin.domain}/dct/site/2
+   可以独立登录，互不干扰对方的Session.
+   另：vwbconfig.properties中加入管理域名(duckliing.domain)
+   	任何通过管理域名的访问都只能以http://${admin.domain}/dct/site/id方式访问。
+   	管理域名将不再允许服务站点使用。
+* 修改了容器Driver, 现在如果访问是以辅助域名方式访问的情况下，系统将自动重定向到主域名方式访问。
+* 修改了vwb_email_notify表格，删除了冗余字段page_title，修改后代码将从vwb_resource_info表中读取
+	alter table vwb_email_notify drop column page_title;
+
+dct5.1.2(2010.5.17)
+----------------------------------------------
+2010.5.17 sharedlib中的SimpleAuth有变化
+
+2010.5.17 zhangkong
+* 远程站点名字修改，域名检查，资源banner更新
+* 添加创建站点日期,管理站点页面显示的站点列表以站点创建时间先后的顺序排列，修改了数据库表vwb_site
+	alter table vwb_site add column create_time datetime default NULL;
+	update vwb_site set create_time=now();
+
+2010.5.17 xiejj
+* 修改Portal容器提供的功能, 在PortalSession中，增加获取其他站点的URL(需要修改Sharelib)
+
+dct5.1.1(2010.5.15)
+---------------------------------------------
+* 修正创建站点的bug
+* 修改创建站点API
+* 修改sharedlib库
+            
+dct5.1.0(2010.5.14)
+-----------------------------------------------
+2010-5-14
+加入多站点功能包括：
+1）管理站点可创建多个服务站点。
+2）可对服务站点进行管理，包括暂停、恢复、删除等。
+3）可将某一个服务站点导出成模板，在创建新服务站点时使用。
+4）增加创建站点的API功能。
+
+2010-5.14
+实现站点userbox和searchbox可配置成是否显示（全局）。
+实现站点banner、当前位置、footer的继承属性功能，并且可以配置是否设置。
+站点的全局配置（policy文件和properties文件）实现动态配置，并增加了UI界面。
+
+2010-5-13 dylan
+保存页面时对不存在的资源id将连接地址指向本页
+           
+2010.5.10 kevin
+subdPagePlugin增加hastitle、nextpage、dateformat等参数
+
+2010.5.5 zhangkong
+sql重构
+
+2010.5.5 sunp
+1.页面共享
+a).增加配置项
+#######pdf###########
+duckling.pdf.cache = pdfcache
+b).增加jar包   Tidy.jay,core-renderer.jar,iText-2.0.8.jar,iTextAsian.jar
+2.MailService发送附件功能
+3.共享页面的DView（不包括userbox和searchbox）
+
+
+dct5.0.9(2010.5.5)
+-------------------------------------------------
+2010.4.26 sunp
+修复skin右键菜单的图标显示问题          
+            
+2010.4.24
+dDataForm跳转页面增加了自动补全的功能，并且修复了bug            
+2010.4.21 diyanliang
+DE编辑器插入编辑页面链接按钮 对dpage的操作增加了键盘控制，并且限制了显示出的title长度，并增加了了提示
+
+2010.4.21  xiejj
+* 修改了英文环境下，页面权限设置中，权限操作(Add Privileges)按钮显示不全的Bug(增加了显示宽度）
+* 修正了页面权限设置中，用户左侧的额外空白的Bug。
+* 修改了API接口定义。抽象了一个接口。
+
+dct5.0.8 (2010.4.20)
+----------------------------------------------
+2010.4.26 sunp
+portal应用自动部署功能相关配置更改：
+
+1.数据库
+DROP TABLE IF EXISTS `vwb_app_info`;
+CREATE TABLE `vwb_app_info` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `context` varchar(45) NOT NULL,
+  `description` text NOT NULL,
+  `issys` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `vwb_app_map`;
+CREATE TABLE `vwb_app_map` (
+  `resourceId` int(10) unsigned NOT NULL,
+  `context` varchar(45) NOT NULL,
+  `pageId` varchar(45) NOT NULL,
+  PRIMARY KEY  (`resourceId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `vwb_app_info` (`id`,`context`,`description`,`issys`) VALUES 
+ (1,'/dct','应用插件管理',1),
+ (2,'/clb','文档库插件',0);
+ 
+升级包注意：
+INSERT INTO `vwb_resource_info` (`id`,`type`,`title`,`trail`,`parent`,`left_menu`,`top_menu`,`footer`,`banner`,`create_time`,`creator`,`acl`) VALUES 
+ (5023,'JSP','应用自动部署',-1,65535,0,0,0,0,'2010-04-26 15:44:51','System',0);
+
+2.配置文件
+#######autodeploy###########
+duckling.autodeploy.upload = appwars
+duckling.autodeploy.retrycount = 20
+
+2010.4.20 sunp
+portal应用自动部署数据不一致及部署异常完善等bug            
+
+2010.4.20 xiejj
+* (Bug 1500)修改了页面当前位置显示，现在，显示第一级和最后四级路径，其余部分被省略。
+  以前 前四级和最后一级路径被显示。
+
+2010-4-19 diyanliang
+1、对被flash挡住的更多菜单的做了处理
+2、编辑器中增加了Protal链接添加功能
+
+dct5.0.7 (2010.4.19)
+----------------------------------------------
+2010-4-16 diyanliang
+1修复bug 带form及DML数据集的页面预览后显示错乱，点击“保存并退出”系统提示错误
+2修复bug 带form及DML数据集的页面，预览后继续编辑DML数据集丢失
+3修复bug多人编辑同一页面或页面自动备份，冲突编辑及恢复备份内容时系统显示若干代码提示
+4修复bug页面自动备份后，用户再次编辑页面，系统显示用户上次编辑内容的时间不正确
+2010.4.16 zhangkong
+* 编辑模式下对portal页面的设置
+2010.4.16 sunp
+portal应用自动部署
+
+dct5.0.6
+-------------------------------------------
+2010.4.15 zhangkong
+portal页面设置
+2010.4.14 diyanliang
+1、修改了编辑器链接部分的文字描述
+2、修改自动保存和用户主动保存状态下对dData建表的处理
+2010.4.14 xiejj
+* 修改了Pluto容器，保证在ResourceURL的情况下，不在保留以前浏览的参数信息。
+* 修改Portal容器，增加对旧接口获取社区信息的兼容。这个接口将在下个版本中移除。 
+
+2010 4.13 diyanliang
+1、Dml中不保留 title
+2、清除ext的s.gif
+3、修复ducklinglink里面的自动查询显示内容
+4、skin中加入dml_rs默认样式
+5、Dml保存时候修复某些情况下ie浏览器产生的连接错误
+
+2010.4.13 zhangkong
+* 修改可不设置dlog的记录
+* 编辑添加页面时，自动补全选中显示去掉id
+
+2010.4.13 xiejj
+* 增加了对旧页面模式的兼容，增加了Wiki.jsp，现在可以继续使用Wiki.jsp?page=${page_name}的方式访问升级前创建的页面。
+* 修改了在使用固定宽度的Banner时，容易出现导航栏不显示的Bug.
+* 修改了BaseURL读取规则，现在系统的URL不会出现多于的斜杠(例：http://wiki.cerc.cnic.cn/dct//page/1);
+
+2010 4.12 diyanliang
+编辑器中增加了下方提交按钮      
+2010.4.9 张孔
+修改个人主页，创建个人主页的时候，如果个人主页资源不存在就创建，否则不创建
+2010.4.9 sunp
+vwb_email_notify和vwb_resource_info左连接查询，解决pageTitle不一致问题
+2010.4.8 张孔
+修改dlog，可以更新dctdlog.jar的传送
+dct5.0.5
+----------------------------------------------
+2010.4.7 xiejj
+* 修改了cn.vlabs.duckling.dct.common.UserNameUtil类，对Username为空的情况做了特殊处理。
+* 修改了Policy文件解析的代码，现在除了空格符以外，还支持\n\t\f\r作为Policy文件的分隔符。
+* 修改了VOtree.jsp的访问方式，现在的访问方式为page/id?a=share&method=showVO
+* 修改了LinkTag.java 在多参数的情况下，无法正确拼接URL的问题
+
+
+dct5.0.4
+------------------------------------
+ 2010.4.2 zhangkong
+* 修改：删除dpage的时候不删除资源，只删除原信息
+* 修改：个人主页bug
+* 修改：页面的banner，left，top等原信息继承性的修改
+2010.4.2 xiejj
+* 修改了最近更新插件, 对于没有父页面的附件，也可以正常显示。
+* 修改了default/skin.css, 修正了IE下, 顶层用户栏(UserBox), 显示不正常的问题。
+2010.4.2 diyanliang
+1、插件名称修改
+2、修复了上传附件链接在报错后出错的bug
+
+dct5.0.3
+------------------------------------
+2010-4-2 sunp
+1.邮件订阅问题修复，已验证（今后测试时，请在修改系统时间后，重启服务器）
+2.dData系统配置管理页面移植
+3.dLog 分页查询bug
+4.附件上传用户授权bug
+
+2010-4-2 diyanliang
+1、dData已经整合到dct开源项目中
+2、修复在编辑器模式下 左菜单的插件只显示图片的Bug
+3、修复了恢复版本时候有 插件消失的bug
+4、修复模板中链接的错误
+5、上传附件签名问题已经解决(柯勇)
+6、baseurl 的路径由 http://yoururl/dct/page改为http://yoururl/dct/
+2010.4.1 xiejj
+* 修改了Configmenu.jsp, 修改了其中图片的指向，解决图片未找到问题。
+* 修改了DPageServiceImpl.java的getDpageVersionContent方法，对于版本号小于1(版本号永远大于等于1)的，直接返回null.
+* 修改了PageContent.jsp 增加了对当前页面存在与否的检查(vwb:PageExists)。
+* 修改了VWBSession的初始化代码，现在不再向Portal容器中注入未登录状态下的Principal.
+* 修改了UserBox.jsp，浏览模式/编辑模式的切换按钮，将只出现在页面浏览和Portlet浏览的时候。
+* 修改了TriaditionalDiffProvider类，给该类的查询语句加了前缀。以后将内容查询委托给DPage相关的功能。
+* 修改了ViewPort类，增加了isInherit判断。并修正了ViewportService中，getMappedView无法正确获得父页面的Trail设置的Bug
+
+dct5.0.2
+------------------------------------------------
+
+
+
+2010.3.31 sunp
+修改了vwb_email_notify表的resourceId字段为Varchar类型。
+
+
+       
+2010-3-25 diyanliang	
+提交个人主页代码
+添加vwb_my_space数据库表,更新代码的同志需要记得更新数据库
+dct5.0.1                  
+-----------------------------------------------
+恢复了dlog功能
+增加了供其他模块或插件使用的API
+
+2010-3-25
+修改了编辑器中上传附件取消以后链接不消失的bug
+2010-3-22 xiejj
+数据库表名修改：
+	修改resource_info表为vwb_resource_info
+	修改dpage_content_info表为vwb_dpage_content_info
+	修改dct_clb表位 vwb_clb
+修改Config.java类的Bug，现在配置项中，可以支持多个变量(例：${duckling.umt.site}/index.jsp?vo=${duckling.umt.vo})。
+修改注销链接中(http://localhost/dct/logout?null)多于的(?null)。
+
+Duckling2.0
+-------------------------------------------------
+dct/clb/umt/dlog版本均为5.0.0
+
+2010-2-25 diyanliang	
+提交dPageRender相关代码
+                         
+2010-2-24 diyanliang	
+提交Dml解析代码及dData代码
+
+2010-2-4 fred
+添加了treeviewprovider的实现
+
+2010-2-4 kevin
+增加了默认的page信息，并用ResourceID替换。（但未转化为DML格式）
+
+2010-2-4 zzb
+增加VWB容器中相关权限判断逻辑，提供AuthorizationService的实现
+
+2010-2-3 zzb
+增加policy文件解析模块
+
+2010-2-3 sunp
+clb服务重构
+
+2010-2-2 fred
+dlog服务重构，umt服务部分重构
+
+2010-2-2 Yong Ke
+增加配置文件信息模块
+增加I18n资源管理模块
+
+2010-2-2 xiejj
+增加AbstractService,如需要配置文件的，请从该类继承。
+修改了Config，取消了单例模式
+           
+2010-02-01 kevin
+初始化changelog

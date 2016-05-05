@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+.funcbtn {margin:0px; padding: 2px 10px 2px 10px; border:0px;}
+
+.funcbtn .selbtn {padding: 0px 5px; font-size:11pt;}
+
+.lsdiv ul {list-style-type:none; margin:0px; padding:0px 15px;}
+
+.lsdiv ul li {margin:0px; padding:2px 10px; height:30px; font-weight:bold; font-size:16px; font-family: Cambria}

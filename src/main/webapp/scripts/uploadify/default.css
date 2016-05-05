@@ -1,0 +1,22 @@
+
+#uploadifyUploader {
+	width: 90px; 
+	height: 30px; 
+}
+
+#fileQueue {
+	width: 380px;
+	height: 70px;
+	overflow: auto;
+	border: 0px;
+	margin-bottom: 10px;
+}
+
+.fileCtrl {
+	border: 0px; 
+	color: white; 
+	font: bold; 
+	cursor: hand; 
+	width: 60px; 
+	height: 30px; 
+}

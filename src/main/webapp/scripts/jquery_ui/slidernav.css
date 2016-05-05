@@ -1,0 +1,85 @@
+/*
+ *  SliderNav - A Simple Content Slider with a Navigation Bar
+ *  Copyright 2010 Monjurul Dolon, http://mdolon.com/
+ *  Released under the MIT, BSD, and GPL Licenses.
+ *  More information: http://devgrow.com/slidernav
+ */
+.slider { 
+	width: 450px; height:535px; min-height: 250px; display: block;
+	position: absolute;  top:0px; left:300px;
+	background: #fff; overflow: hidden; 
+}
+.slider ul { list-style: none; }
+.slider-content { 
+	width: 200px; display: block; 
+	overflow: hidden; min-height: 250px; 
+	float:left;
+}
+.slider-content ul { 
+	float: left; width: 200px; display: block; 
+	position: relative; padding:0;
+}
+.selectedPerson {
+	width:200px; 
+	margin-left:250px;
+	float:left;
+	position:absolute; right:20px; top:30px;
+}
+.selectedPerson .selectedShow {font-weight:bold; margin:1em 0; border-bottom:1px dotted #999;}
+.selectedPerson .submitButton {text-align:right;}
+.selectedPerson ul {height:400px; overflow:auto; padding:0; margin:0;}
+.selectedPerson ul li a.delete {float:right;}
+
+.slider-content ul li { float: left; width: 100%; }
+.slider-content ul ul li a,.selectedPerson ul li { 
+	padding: 5px 10px; display: block; 
+	border-bottom: 1px solid #f3f3f3; 
+	text-transform: capitalize; 
+}
+
+.slider-content ul ul li a:hover { background: #f3faff; border-color: #d5ebf9; }
+.slider-content ul ul li a.selected {background:#eef;}
+.slider-content .title { 
+	padding: 5px 0; text-indent: 10px; 
+	background: #bbb; color: #fff; width: 100%; 
+	float: left; font-weight: bold; 
+	text-transform: uppercase; 
+}
+.slider-content .selected .title { background: #666; }
+.slider .slider-nav { 
+	position: absolute; left: 200px; top: 0; 
+	background: #666; min-height: 250px; 
+	float:left;
+}
+.slider .slider-nav ul { padding: 5px 0; }
+.slider .slider-nav li a { 
+	padding: 3px 5px; line-height: 13px; 
+	text-align: center; color: #fff; 
+	font-weight: bold; display: block; text-transform: uppercase; 
+	cursor: pointer; text-decoration:none;
+}
+.slider #debug { position: absolute; bottom: 0; left: 0; padding: 5px; background: #000; color: #fff; }
+.slider .arrow { 
+	font-size: 0px; line-height: 0%; width: 0px; 
+	border-bottom: 8px solid #fff; border-left: 5px solid #888; border-right: 5px solid #888; 
+	position: relative; top: -7px; 
+}
+/* .slider .down { border-bottom: none; border-top: 8px solid #fff; top: 2px; }
+.slider .slide-up, .slider .slide-down { 
+	height: 20px; background: #888; 
+	text-align: center; cursor: pointer; 
+	float: left; width: 200px; position: relative; 
+} */
+
+.listTitle {
+	background:#888; line-height:30px; 
+	font-weight:bold; color:#fff;
+	padding-left:0.5em;
+}
+.listTitle .closeDia {
+	width:20px; height:20px;
+	display:block; cursor:pointer;
+	font-size:1.2em;
+	line-height:30px; 
+	float:right; 
+}

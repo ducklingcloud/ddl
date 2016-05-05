@@ -1,0 +1,197 @@
+@charset "UTF-8";
+
+body{background:#fff;}
+body.texure {background:url("images/tile-lightGrey-slope.jpg") repeat scroll 0 0 #F5F5F5;}
+
+/*default-May2012*/
+.ui-wrap #banner {height:70px;}
+
+.ui-wrap #banner #escience-logo {
+	width:150px; height:70px; float:left;
+	background:url(images/logo-may2012.png);
+	display:block;
+}
+
+.ui-wrap #banner #nav {float:left; margin-top:16px;}
+.ui-wrap #banner #nav ul {
+	list-style:none; font:bold 13pt "微软雅黑"; 
+	cursor:pointer;
+}
+.ui-wrap #banner #nav ul li {
+	float:left; 
+	padding:2px 2em;
+}
+.ui-wrap #banner #nav ul li a { border:2px solid transparent; color:#000; text-decoration:none;}
+.ui-wrap #banner #nav ul li:hover a {color:#ff6905;}
+
+.ui-wrap #banner #tel-login {float:left;}
+.ui-wrap #banner #tel-login #tel { color:#aaa; font-size:11pt; margin:5px;}
+.ui-wrap #banner #tel-login ul#login,.ui-wrap #ddl-banner #ddl-tel ul {
+	list-style:none; margin:10px 8px 0; padding:0;
+	background:url("../images/vpx-60-f5grad3.gif") repeat-x scroll center bottom #F7F7F7;
+	border:1px solid #bbb;
+	border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;
+	overflow-y:auto;
+	box-shadow:0 1px 1px rgba(150,150,150,0.1);
+	font-size:9pt
+}
+.ui-wrap #banner #tel-login ul#login li,.ui-wrap #ddl-banner #ddl-tel ul li {
+	float:left; margin:0; border:1px solid transparent;
+	border-top-color:#fcfcfc; border-left-color:#f9f9f9; 
+	border-right-color:#bbb;padding:3px 0.5em;
+}
+.ui-wrap #banner #tel-login ul#login li:last-child, .ui-wrap #banner #tel-login ul#login li:last-child:hover
+.ui-wrap #ddl-banner #ddl-tel ul li:last-child
+ { border-right-color:transparent; }
+.ui-wrap #banner #tel-login ul#login li a,.ui-wrap #ddl-banner #ddl-tel ul li a{padding:3px 0.5em; text-decoration:none; border:none; color:#666;}
+.ui-wrap #banner #tel-login ul#login li a:hover {text-decoration:none; border:none;}
+
+.ui-wrap #mainShow {position:relative;}
+
+.ui-wrap #mainShow .learnMore {
+	width:97px; height:61px; 
+	position:absolute; z-index:2;
+	bottom:20px; left:45%;
+	background:url(images/learnMore.png) 0 0 no-repeat;
+}
+
+.ui-wrap .hero { padding:1px 0; width:100%; position:relative; }
+.ui-wrap .hero .hero-container { position:absolute; top:0; right:0; }
+.ui-wrap .hero h1 { margin-bottom:20px; text-align:right; }
+
+.ui-wrap .heroNav { margin:535px auto 20px auto; padding:0; width:76px; height:11px; }
+.ui-wrap .heroNav li { display:block; float:left; width:11px; height:11px; margin:0 2px;
+	background:url(images/portal-Nov2011-components.png) -3px -3px no-repeat;
+	cursor:pointer;
+}
+.ui-wrap .heroNav li:hover { background-position: -29px -3px; }
+.ui-wrap .heroNav li.current { background-position: -16px -3px; }
+.ui-wrap .content.May2012 {box-shadow:0 1px 1px #ccc;}
+.ui-wrap .content.May2012 .ROL-small-black {padding-left:60px;}
+.ui-wrap .content.May2012 #sina,.ui-wrap .content.May2012 #tencent {
+	background:url(images/focus.png) 0 0 no-repeat;
+	width:100px; height:37px;
+	margin:30px 0 0 80px; display:block; 
+}
+.ui-wrap .content.May2012 #tencent {background-position:0 -63px;}
+/*ddl-May2012*/
+.ui-wrap #ddl-banner {
+	border:1px solid #ccc; border-top:none;
+	border-bottom-left-radius:5px;
+	border-bottom-right-radius:5px;
+	box-shadow:0 1px 1px #ddd;
+	background:#fff;
+}
+.ui-wrap #ddl-banner #ddl-logo {
+	width:150px; height:70px; float:left;
+	background:url(images/ddlLogo-may2012.png);
+}
+
+.ui-wrap #ddl-banner #ddl-about {float:right; margin-right:10px; *width:420px;}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav {clear:both; *clear:none;}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li {
+	list-style:none; float:left; padding:2px 1em; border-right:1px solid #ccc;
+}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li a {text-decoration:none;}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li:last-child {border:none;}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li#escienceMenu {positon:relative; }
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li ul#es-pullDownMenu {
+	position:absolute; z-index:2;
+	top:60px; 
+	width:110px; padding:0; margin-left:-1em; 
+	background:#f7f7f7;
+	border-radius:5px; border:1px solid #eee;
+}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li ul#es-pullDownMenu li {
+	float:none; line-height:2em; padding:0 0 0 1em; margin:0;
+	border:none; border-bottom:1px dotted #ccc;
+}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li ul#es-pullDownMenu li:hover {background:#eef;}
+.ui-wrap #ddl-banner #ddl-about ul#ddl-small-nav li ul#es-pullDownMenu li:last-chlid {border:none;}
+
+.ui-wrap #escience-aboutus {padding:2em 3em 6em; line-height:2em;}
+.ui-wrap #escience-aboutus table th {width:6em;}
+.ui-wrap #escience-aboutus table td {width:30em;}
+
+.ui-wrap #ddl-banner #ddl-tel {
+	float:right;  
+	color:#aaa; font-size:11pt; 
+	margin:0px 15px 5px 0 ;
+	text-align:right;
+}
+.ui-wrap #ddl-nav {
+	height:30px;
+	margin:10px 0; padding-top:5px;
+	box-shadow:0px 1px 1px #ddd;
+	border:1px solid #ccc; border-radius:5px;
+	font:bold 14px "微软雅黑";
+	background:#fff;
+}
+.ui-wrap #ddl-banner #ddl-tel span {float:left;margin-top:15px;}
+.ui-wrap #ddl-banner #ddl-tel ul {float:right; margin-right:0;}
+
+
+.ui-wrap #ddl-nav .current-nav{color:#ff6905;}
+.ui-wrap #ddl-nav ul {list-style:none; margin:0; padding:0;}
+.ui-wrap #ddl-nav ul li {
+	float:left; 
+	border-right:1px solid #ccc;
+	padding:3px 2em;
+}
+.ui-wrap #ddl-nav ul li a{color:#333; box-shadow:none; text-decoration:none;}
+.ui-wrap #ddl-nav ul li a:hover{color:#ff6905;}
+.ui-wrap #ddl-nav ul li:last-chlid {border:none;}
+
+.ui-wrap #ddl-content {
+	border:1px solid #ccc;  border-radius:5px;
+	background:#fff;
+}
+
+.ui-wrap #ddl-content.aboutus {margin-top:2em;}
+
+.ui-wrap #ddl-content #feature-nav {width:300px; float:left;}
+.ui-wrap #ddl-content #feature-nav ul {
+	list-style:none; 
+	background:#eaf5fb; 
+	margin:50px 0 20px 20px; padding:0;
+	font:normal 12pt "微软雅黑";
+}
+.ui-wrap #ddl-content #feature-nav ul li {padding:0; border-bottom:1px dotted #90d5fb;}
+.ui-wrap #ddl-content #feature-nav ul li:last-child {border:none;}
+.ui-wrap #ddl-content #feature-nav ul li a {display:block; padding:1.8em 1em; text-decoration:none; color:#000;}
+.ui-wrap #ddl-content #feature-nav ul li a.current-feature-nav {background:#0375b2; color:#fff; font-weight:bold;}
+.ui-wrap #ddl-content #feature-content {width:650px; float:left; margin:50px 0 20px 20px;}
+.ui-wrap #ddl-content #feature-content h3 {padding-left:0;}
+
+
+.ui-wrap #ddl-intro {
+	width:100%; text-align:center; 
+	border-bottom:1px solid #ccc;
+	padding-bottom:2em;
+}
+
+.ui-wrap #ddl-intro.ddl-feature {padding:1em 0;}
+.ui-wrap #ddl-intro #ddl-regist {
+	display:inline-block; width:150px; height:40px; 
+	padding-top:10px;  margin-top:10px;
+	border-radius:6px;
+	background:url(images/button-orange.png);
+	font:bold 15pt "微软雅黑"; color:#fff; text-decoration:none;
+	
+}
+
+.ui-wrap #ddl-detail .ddl-feature {
+	border-bottom:1px dotted #ccc;
+	margin:2em auto;  padding-bottom:2em;
+	width:970px;
+}
+.ui-wrap #ddl-detail .ddl-feature .ddl-feature-text { float:left; width:380px; margin:0 10px;}
+.ui-wrap #ddl-detail .ddl-feature .ddl-feature-text h2 {color:#333; }
+.ui-wrap #ddl-content p { text-indent:2em; font-size:14px; color:#666; line-height:1.8em;  margin-left:0;}
+.ui-wrap #ddl-detail .ddl-feature .ddl-feature-img { float:left; width:550px; margin:0 10px;}
+
+.ui-wrap ul#ddl-footer-nav {list-style:none; margin:1em 100px; text-align:center;}
+.ui-wrap ul#ddl-footer-nav li {float:left; padding:0 2em; display:inline-block;}
+.ui-wrap ul#ddl-footer-nav li#footer-logo {width:10px; height:30px; background:url("images/logo-rol-beta.png") no-repeat scroll left -40px transparent}
+
+#escience-notice {color:#f90; text-align:center; margin:10px 0 0 0;}

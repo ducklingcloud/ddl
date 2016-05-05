@@ -1,0 +1,13 @@
+﻿<p>
+<span style="color: blue; font-weight: bold;">
+ 
+<D_plugin>
+<D_parameter name="SessionsPlugin"/>
+<D_parameter property="users"/>
+</D_plugin>
+ 
+</span>
+</p>
+
+<hr/>
+

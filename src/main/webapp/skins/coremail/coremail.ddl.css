@@ -1,0 +1,135 @@
+.ui-clear {clear:both;}
+.ui-dialog { position: absolute; top:30px; left:100px; background:#ccc; padding: 0em; width: 300px; overflow: hidden; z-index:30}
+div.ui-dialog {
+	width:60em;
+	height:auto;
+	position:absolute;
+	background-color:#fff;
+	border:0;
+	border-radius:3px;
+	display:none;
+	z-index:1023;
+	box-shadow:0 3px 7px #333;
+}
+div.ui-dialog#showDdlTeamHtmlDiv,div.ui-dialog#showDdlSaveAttachShowDiv {top:10%;left:30%;position:fixed;}
+div.ui-dialog-body {
+	display:inline-block;
+	max-width:92%;
+	min-width:40%;
+	text-align:left;
+	padding-left:2%;
+	padding-right:4%;
+	overflow:hidden;
+}
+
+div.ui-dialog-control {
+	text-align:right;
+	margin:1em 2em;
+}
+div.ui-dialog-control input[type="button"],
+	div.ui-dialog-control input[type="submit"],
+	div.ui-dialog-control a {
+	cursor:pointer;
+	margin-left:1em;
+}
+div.ui-dialog-control input[type="button"],
+	div.ui-dialog-control input[type="submit"] {
+	padding:0.2em 1em;
+	letter-spacing:0.2em;
+}
+div.ui-dialog-control a { color:#369; }
+div.ui-dialog-control a:hover { color:#369; }
+
+span.ui-dialog-x {
+	float:right;
+	display:block;
+	width:15px;
+	height:15px;
+	margin:3px;
+	background:url(../images/dialog-x.gif) no-repeat left top;
+	cursor:pointer;
+}
+span.ui-dialog-x:hover {
+	background:url(../images/dialog-x.gif) no-repeat left -15px;
+}
+.ui-wrap p.ui-dialog-title, p.ui-dialog-title {
+	font-weight:bold;
+	color:#fff;
+	background-color:#369;
+	margin:0px;
+	margin-bottom:1.5em;
+	padding:5px 0.5em;
+	text-align:left;
+	letter-spacing:2px;
+}
+.sysBody .adnWin .adNfTbl{position:relative;}
+ul#pageDisplayUl.ddlPageShow {clear:both; list-style:none; width:100%; overflow:hidden;  margin:0; padding:0; position:absolute; bottom:0; margin-left:4em;}
+ul#pageDisplayUl.ddlPageShow li {float:left; padding:1px 10px 0 0;/*padding:5px 10px 10px*/ }
+
+ul#displayChoiceFile.ddlChosenItem {clear:both; list-style:none; margin:0; padding:0; width:620px; overflow:hidden; }
+ul#displayChoiceFile.ddlChosenItem li{float:left; padding:5px 7px 7px; background:#fff; margin:0 10px 10px 0; border:1px solid #ddd; border-radius:4px;}
+ul#displayChoiceFile.ddlChosenItem li span.unchosen {background:#eee; cursor:pointer; padding:0 5px 3px; margin-left:10px;}
+p.ddlChosen {font-weight:bold; margin-top:10px; border-top:1px solid #ccc;}
+.footerButton {float:right; margin:5px 10px 0 0;}
+
+ul.ddlSaveResult {list-style-type:circle; margin:0; color:#ccc;height:370px;}
+ul.ddlSaveResult li {margin:10px; color:#000;}
+ul.ddlSaveResult li span.ddlFileName {margin:0 7px 0 0;}
+
+ul#teamInfoUl li {padding:3px 10px;}
+ul#teamInfoUl li.choice {background:#ececec; border-radius:3px; font-weight:bold;}
+
+#ddlTableBody tr.ddl_noResult td {
+	font-family:Arial,"宋体"; color:#ddd; 
+	line-height:50px; height:50px; text-align:center; font-size:16px;
+}
+.adNfTbl table.std th {text-align:left;padding-left:10px; border-right:1px solid #ccc;}
+.adNfTbl table.std #ddlTeamShowBody td {padding-left:5px}
+
+.adnWin.adNfTbl table.std th {border-right:1px solid #ccc;}
+.adNfTbl table.std th.ddl-size {width:50px; text-align:center;}
+.adNfTbl table.std #ddlTableBody td {overflow:hidden; padding-left:5px;}
+.adNfTbl table.std #ddlTableBody td.ddl-size {text-align:center;}
+.sysBody input#searchReferableFiles {margin:-15px 12px 10px; padding:5px; border-radius:3px;}
+
+ul#pageDisplayUl.ddlPageShow a{
+background: none repeat scroll 0 0 white;
+border: 1px solid #E7ECF0;
+color: mediumBlue;
+height: 22px;
+line-height: 22px;
+overflow: hidden;
+text-align: center;
+text-decoration: none;
+width: auto;
+padding: 2px 6px;
+}
+ul#pageDisplayUl.ddlPageShow li.current {line-height:22px;}
+ul#pageDisplayUl.ddlPageShow a:hover{
+background: none repeat scroll 0 0 #E9F1F7;
+}
+a.ddlSaveOther{
+	text-decoration: underline;
+	cursor: pointer;
+}
+ul#showddlAttachContext.ddlSaveResult i.sico{
+	margin-right:5px;
+}
+ul#teamInfoUl{
+	overflow: auto;
+	height: 300px;
+}
+tr#ddl_noResult{
+	
+}
+
+.ui-dialog.dialogFrame.winFrame {#max-width:55.2em; *max-width:42em}
+
+#showDdlTeamHtmlDiv .adNfTbl{overflow-y:auto;overflow-x: hidden;}
+
+#ddlTeamShowBody input{
+	border:none;
+}
+
+i.icon.icon-gray-trigle {background:url(https://ddl.escience.cn/jsp/aone/images/icons-tr.png) 0 -12px no-repeat; display:inline-block; width:9px; height:9px;}
+span.sup-ddl{background:url(https://ddl.escience.cn/jsp/aone/images/icons-tr.png) -1px -23px no-repeat; display:inline-block; width:30px; height:12px; position:absolute; top:-3px; margin-left:-3px;}

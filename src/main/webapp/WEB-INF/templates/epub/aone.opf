@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<package version="2.0" xmlns="http://www.idpf.org/2007/opf" unique-identifier="epub-book-id">
+	<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" 
+			xmlns:opf="http://www.idpf.org/2007/opf">
+		<dc:title>科研在线</dc:title>
+		<dc:language >zh</dc:language>
+		<dc:identifier id="epub-book-id" opf:scheme="ISBN">CERC-001</dc:identifier>
+		<dc:identifier id="epub-book-id" opf:scheme="URI">http://www.escience.cn/aone.epub</dc:identifier>
+		<dc:creator opf:file-as="协同中心" opf:role="aut">协同工作环境研究中心</dc:creator>
+		<dc:publisher>中科院计算机网络信息中心</dc:publisher>
+		<dc:rights>公开、免费</dc:rights>
+		<dc:source>http://www.escience.cn/aone.txt</dc:source>
+		<dc:subject>科研在线，让团队知识协作与分享变得简单！</dc:subject>
+		<meta content="cover" name="cover"/>
+	</metadata>
+	<manifest>
+		ITEMS
+	</manifest>
+	<spine toc="ncx">
+		ITEMREFS
+	</spine>
+</package>

@@ -1,0 +1,56 @@
+A1系统重要字典和说明书
+
+0.系统字典
+	页面--DPage
+	文件--DFile
+	团队--Team
+	集合--DCollection
+	用户--User
+	通知--Notice
+	
+	
+	
+	评论--Comment
+	回复--Reply
+	分享--Share
+	
+
+1.约定
+约定一：在java代码或jsp当中以下变量具有相同的含义：
+	tid = Team ID 团队的数字代号 对应vwb_team中的自增ID
+	cid = Collection ID 集合编号 对应vwb_resource_info中类型为DCollection的自增ID
+	pid = Page ID 页面编号 对应vwb_resource_info中类型为DPage的自增ID
+	fid = File ID 文件编号 对应vwb_dfile中的自增ID
+	uid = User ID 系统成员ID 对应vwb_user_ext中的email值
+	tgid = Tag ID 
+	bid = Bundle ID
+	
+	teamName = 团队名称
+2.导航
+	{domain}/user/uxid
+	{domain}/team-name/
+3.类型
+	团队类型（vwb_team:type）
+		普通团队 = common 
+		个人团队 = personal 
+	通知类型（vwb_notice:notice_type）
+		团队更新 = Team
+		历史记录 = History
+		个人消息 = Person
+		个人关注 = Monitor
+	事件/通知的操作类型（vwb_event:operation / vwb_notice:operation）
+		创建 = create
+		修改 = modify
+		推荐 = recommend
+		上传 = upload
+		评论 = comment
+		回复 = reply
+	通知中的目标类型（vwb_notice:target_type）
+		页面 = DPage
+		文件 = DFile
+		团队 = Team
+		集合 = DCollection
+		成员 = User
+	
+	
+

@@ -1,0 +1,117 @@
+@CHARSET "UTF-8";
+body{
+	width:95%; max-width:775px;
+	margin:0 auto;
+	font-size:10pt;
+    text-align:left;
+    color:#333;
+}
+
+a { color:#05a; }
+
+
+img { max-width:85%; border-radius:2px; }
+
+/* from css.css */
+/*限制列宽，不让文字撑爆行   delete by  diyanliang 增加此样式后 FF下表格调整宽度失效
+table{
+    table-layout: fixed;
+}*/
+td{
+    word-break: break-all; 
+    word-wrap:break-word;
+}
+
+.note{/*E2Comment*/
+    font-size: 8px;
+}
+
+/* FONT-FAMILY */
+/* to ensure consistency, define font-family types together */
+h1, h2, h3, blockquote, blockquote p
+    { font-family: Cambria, Garamond, '微软雅黑', serif; } 
+
+body, p,
+    ul, ol, dl,
+    table,
+    table p
+    { font-family: Helvetica, Arial, '宋体', sans-serif; }
+
+/*
+blockquote p
+    { font-family: Cambria, Garamond, '楷体_GB2312', serif; }
+*/
+
+h1 { font-size:1.6em; color:#047; font-weight:normal; margin:0.5em 0 0.5em 0; line-height:1em;}
+h2 { font-size:1.4em; color:#047; font-weight:bold; margin:0.5em 0 1em 0; line-height:1em; }  
+h3 { font-size:1.2em; color:#047; font-weight:bold; margin:0.5em 0 0.8em 0; line-height:1em; } 
+
+p {
+    color:#333; font-weight:normal; margin:0.8em 0em; line-height:1.6em;
+    text-indent:2em;    
+}
+p.listTitle {text-indent:0; font-weight:bold; margin:0.5em 0 0 -1em; line-height:1em;}
+table p {
+    text-indent:0em;    
+}
+blockquote p {
+    text-indent:0em;    
+}
+p.noIndent { text-indent:0; }
+
+blockquote { margin:1em 2em 1.5em; padding:0.5em 1em; }
+blockquote { background-color:#f8f8ff;
+    border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;
+}
+blockquote.quote { }
+blockquote.line { padding:0 1em; border-left:4px solid #ccf; }
+
+ul, ol
+    { color:#333; font-weight:normal; margin:0.5em 1em 1em 3.5em; padding:0; line-height:1.4em; }
+ul ul, ol ol, ul ol, ol ul { margin:0 0 0 1em; }
+li { margin:0.1em 0; padding:0;}
+
+ul { list-style:disc; }
+    /* default multi-level */
+    ul ul { list-style:circle; }
+    ul ul ul { list-style:square; }
+    ul ul ul ul { list-style:none; }
+    ul ul ul ul li { margin-left:-1em; }
+    ul ul ul ul li:before { content: '- '; }
+ol { list-style:decimal; }
+    /* default multi-level */
+    ol ol { list-style:lower-alpha; }
+    ol ol ol { list-style:lower-roman; }
+    ol ol ol ol { list-style:decimal; }
+/* inherits higher level order, e.g. 2.1.3 at the third level */
+ol.multi li { margin-left:-1em; }
+ol.multi, ol.multi ol { counter-reset:ordered; list-style:none; }
+ol.multi li:before
+    { counter-increment:ordered; content:counters(ordered, ".", decimal) '. '; }
+
+table { border-collapse:collapse; max-width:100%; font-size:11pt; }
+table td p, table th p { line-height:1.4em; margin:0; text-indent:0; }
+table td, table th {
+    padding:0.2em; line-height:1.4em; margin:0; text-indent:0; border:1px solid #333; }
+table[border="0"] td, table[border="0"] th { border:none; }
+table caption { padding-bottom:0.5em; font-size:0.9em; }
+
+hr { height:0px; border:0px; border-top:1px solid #999; }
+
+/* Use border instead of text-deocration, to avoid overlay of line and characters
+ *  Waived because: border color won't change with text color. May annoy users. */
+
+span,
+    strong, em, b, i
+    { padding:0px; margin:0 2px; }
+span.bold { font-weight:bold; }
+span.italic { font-style:italic; }
+span.underline { border-bottom-width:1px; border-bottom-style:solid; }
+
+
+div.objHolder { margin:0.5em auto; text-align:center; }
+div.objHolder img { border:1px solid #ccc; }
+div.objHolder p.caption { margin:0.5em; margin-bottom:0em; text-indent:0; font-size:0.9em; }
+
+table.floatLeft, div.objHolder.floatLeft { float:left; margin:0.5em 1em; }
+table.floatRight, div.objHolder.floatRight { float:right; margin:0.5em 1em; }

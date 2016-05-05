@@ -1,0 +1,22 @@
+<h2>
+所有更新历史
+</h2>
+
+<h4>
+本页面记录了本站点页面发生的所有修改。 
+<D_Link href="7">
+最近更新
+</D_Link>
+记录了在最近30天之内本站点页面发生的所有修改。
+</h4>
+
+<p>
+<D_plugin>
+<D_parameter name="RecentChangesPlugin"/>
+</D_plugin>
+</p>
+
+<p>
+ 
+</p>
+

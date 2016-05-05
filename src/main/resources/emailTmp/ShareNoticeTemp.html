@@ -1,0 +1,133 @@
+<html>
+<head>
+	<title>科研在线-文档库</title>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+	<style>
+		body {background: #eee;}
+		table.shareFile {font-family: Helvetica, Arial, sans-serif, 微软雅黑 !important; width: 700px; font-size:13px; margin:0 auto; background:#fff; border:1px solid #ccc}
+		table.shareFile tr td {padding:10px}
+		.notice-comment-message:after{
+			content:url("#@baseUrl@#/jsp/aone/images/quote-end.png")
+		}
+		.notice-comment-message{
+			background: url("#@baseUrl@#/jsp/aone/images/quote.png") no-repeat scroll 2px 2px transparent;
+   			border-radius:3px 3px 3px 3px;
+    		padding:3px 3px 3px 17px;
+		}
+		.banner {
+			background:url("#@baseUrl@#/jsp/aone/images/banner_bg.png") repeat 0 0 #0096CE;
+			height: 60px;
+			vertical-align:middle;
+		}
+		
+		.banner img {
+			margin: 5px 0;
+			display:block; float:left;
+		}
+		
+		.banner .ddlTitle {font-size:24px; line-height:24px; font-family:Arial,"微软雅黑"; color:#fff; }
+		.banner .ddlIndex {font-size:16px; line-height:24px; font-family:Arial,"微软雅黑"; color:#fff; text-decoration:none;padding-right:10px; }
+		p.bigHint {color:#999; font-size:30px; font-family:Arial,"微软雅黑"; margin:10px;text-align:center;}
+	</style>
+</head>
+<body>
+	<table cellspacing="0" cellpadding="0" class="shareFile">
+		<tr>
+			<td class="banner" colSpan="3">
+				<table>
+					<tr>
+						<td style="width:50px;">
+							<img title="科研在线·团队文档库" alt="科研在线·团队文档库" src="#@baseUrl@#/jsp/aone/images/ddlMailLogo.png" /> 
+						</td>
+						<td style="width:550px;">
+							<span class="ddlTitle" style=" font-family:'微软雅黑'">团队文档库</span>
+						</td>
+						<td style="width:100px">
+							<a href="#@baseUrl@#" target="_blank" class="ddlIndex">进入主页</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="font-family: LucidaGrande, tahoma, verdana, arial, sans-serif, 微软雅黑; font-size:14px;"  colSpan="3" >
+				<!-- 句式0: 某人A 把 页面/文件B 推荐给了 C,D,E ：Blalaala	 --> 
+				<span class="notice-actor"  style="font-weight:bold; color:#0096ce">#@shareFrom.name@#</span>
+				<span>把</span>
+				<if test=""DPage".equals(#@resource.itemType@#)">
+				<span style="font-size: 1em; color: #333;">协作文档</span>
+				</if>
+				<elseif test=""DFile".equals(#@resource.itemType@#)">
+				<span style="font-size: 1em; color: #333;">文件</span>
+				</elseif>
+				<elseif test=""Folder".equals(#@resource.itemType@#)">
+				<span style="font-size: 1em; color: #333;">文件夹</span>
+				</elseif>
+				<span style="white-space: nowrap;"><a target="_blank" href="#@baseUrl@#/system/switch?func=updateOneNoticeEmail&teamId=#@renderTeam.team.id@#&messageType=Person&eventId=#@eventId@#&redirect=true&targetId=#@targetId@#">#@resource.title@#</a></span> 
+				<if test="!"Folder".equals(#@resource.itemType@#)">
+				<span style="font-size: 8pt; vertical-align: super; white-space: nowrap;">#@resource.lastVersion@#</span>
+				</if>
+				<span>分享给了</span><span>您</span>
+				<p style="font-size:13px;"><span class="notice-comment-message">#@remark@#</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td colSpan="3" >
+				<span style="color: #999; font-size:13px;">来自团队
+					<a target="_blank" href="#@baseUrl@#/system/switch?func=forward&amp;team=#@renderTeam.team.name@#&amp;tab=personNotice">#@renderTeam.team.displayName@#</a>
+				</span>
+				<br>
+				<span style="color: #CCC; font-size: 9pt;">#@currentTime@#</span>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:center" colSpan="3" >
+				<a href="#@baseUrl@#/#@renderTeam.team.name@#/notice?func=personNotice" style="display:inline-block;width:120px; text-align:center; height:30px; background:#0096CE; line-height:30px;text-decoration: none; border-radius:5px;">
+					<span style="font-weight: bold; white-space: nowrap; color: #fff; font-size: 13px;">立即登录浏览</span>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td colSpan="3" style="text-align:right; color:#999; font-size:12px; padding-right:20px; padding-top:60px">
+				<p>科研在线·团队文档库</p>
+				<p>本邮件由系统发出，请勿直接回复。如有疑问，可致信vlab@cnic.cn</p>
+				<a href="#@baseUrl@#/dashboard?func=noticeEmail&showDetailNoticeEmail=true" style="font-size:13px; text-decoration:none;">点击退订该邮件</a>
+			</td>
+		</tr>
+		<tr>
+			<td style="background:#f2f2f2;"colSpan="3">
+				<table>
+					<tr>
+						<td>
+							<div style="width:400px; float:left; font-family:'微软雅黑'">
+								<p class="bigHint">更方便的分享</p>
+								<p class="bigHint">更便捷的办公</p>
+							</div>
+						</td>
+						<td>
+							<div style="width:150px; float:left; text-align:center;">
+								<img src="#@baseUrl@#/images/mobileCode0.jpg" style="width:100px; height:100px;" />
+								<p style="color:#999;font-size:12px;">下载团队文档库客户端</p>
+							</div>
+						</td>
+						<td>
+							<div style="width:150px; float:left; text-align:center;">
+								<img src="#@baseUrl@#/images/keyanzaixian.jpg" style="width:100px; height:100px;" />
+								<p style="color:#999;font-size:12px;">关注“科研在线”公众号</p>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colSpan="2" style="background:#f2f2f2; text-align:center; font-size:12px; color:#999;  border-top:1px dotted #ddd;padding:20px 0; width:570px;">
+				<p>联系我们：QQ 2813954364     电话  010-58812378</p>
+				<p>Copyright &copy; 中国科学院计算机网络信息中心 中国科技网</p>
+			</td>
+			<td style="background:#f2f2f2; text-align:center;border-left:1px dotted #ddd; border-top:1px dotted #ddd; padding:20px 0; width:130px;"><img src="#@baseUrl@#/images/kejiyun.png" /></td>
+		</tr>
+	</table>
+	
+</body>
+</html>

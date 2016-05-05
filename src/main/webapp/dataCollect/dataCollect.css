@@ -1,0 +1,160 @@
+@charset 'utf-8';
+.clear {
+	clear:both;
+}
+#DC_cover_follow {
+	position:absolute;zoom:1;z-index:100000; 
+	border:3px solid #f90; border-radius:5px;
+	-webit-transition:0.1s ease-out all;
+	-moz-transition:0.1s ease-out all;
+	-ms-transition:0.1s ease-out all;
+	-o-transition:0.1s ease-out all;
+	transition:0.1s ease-out all;
+}
+
+/*up z-index*/
+.up_zindex{z-index:200000;}
+
+/*select area*/
+.DC_cover_selected {
+	position:absolute;zoom:1;z-index:300000; 
+	min-height:20px; min-width:45px; 
+	background-color:rgba(255, 153, 0, 0.2);
+	border:3px solid #f90; border-radius:5px;
+	-webit-transition:0.1s ease-out all;
+	-moz-transition:0.1s ease-out all;
+	-ms-transition:0.1s ease-out all;
+	-o-transition:0.1s ease-out all;
+	transition:0.1s ease-out all;
+}
+.DC_cover_selected .innerTransparent{
+	position:absolute;
+	padding:0; margin:0;
+	width:100%; height:100%;
+	background-color:#f90; filter:alpha(opacity=20);
+	background-color:rgba(255, 153, 0, 0);	
+	*text-align:left;
+}
+.DC_cover_selected .expandArea,.DC_cover_selected .cancleArea {
+	width:20px; height:20px; 
+	position:absolute; top:0px; left:0px;
+	float:left; 
+	background-image:url(images/cancle.png);
+}
+.DC_cover_selected .expandArea { background-position:0px 0;}
+.DC_cover_selected .cancleArea { background-position:20px 0; margin-left:2px; left:21px;}
+
+/*popUp area*/
+#DC_popupArea, #DC_loginHref, #DC_loginIframe {
+	position:fixed; top:5px; right:5px; z-index:400000;
+	width:400px; height:500px;
+	background-color:#eef;
+	border:1px solid #ccc; border-radius:5px;
+	box-shadow:0 0 23px rgba(0,0,0,0.8);
+}
+
+#DC_loginHref {
+	line-height:35px; 
+	width:400px; height:40px;
+	padding:5px;
+	font:normal 10pt "宋体"; 
+}
+
+#DC_loginHref p#DC_login_p{
+	line-height:35px;
+	padding:0; margin:0;
+}
+#DC_loginHref p#DC_login_p a{color:#f90;}
+
+#DC_popupArea #team, #DC_popupArea #collection {
+	float:left; 
+	width:190px; line-height:25px;
+	margin:5px;
+	color:#06a; font:bold 10pt "黑体";
+}
+
+#DC_popupArea #test_iframe {
+	display:none;
+}
+
+#DC_popupArea #team select, #DC_popupArea #collection select{
+	width:100px;
+}
+
+#DC_urlBox_outer {
+	width:380px; height:270px;
+	padding:15px 0; margin:150px 10px 0 10px;
+	background-color:#fff;
+	border:1px solid #ccc; border-radius:5px;
+}
+#DC_urlBox {
+	width:380px; height:240px;
+	margin-top:20px;
+}
+
+#DC_popupArea .duckling_logo,#DC_loginIframe .duckling_logo { 
+	width:200px;  
+	color:#06a;
+	background:url(images/duckling_48.png) no-repeat; 
+	padding:10px 0 0 55px;  margin-bottom:0px;
+	font:bold 12pt "黑体"; 
+	line-height:30px;
+	float:left; text-align:left;
+}
+
+#DC_loginIframe .duckling_logo { 
+	margin:80px 0 20px 100px;	
+}
+#DC_form {
+	width:400px;
+	margin:0; padding:0;
+}
+
+#DC_popupArea #close, #closeLoginBox { 
+	background:url(images/close.png) 0px -15px no-repeat; 
+	width:15px; height:15px; 
+	float:right; 
+	margin:20px 10px 0 10px;
+}
+#closeLoginBox {position:fixed; z-index:400001; top:0px; right:10px;}
+
+#DC_popupArea #wholeHtml {
+	width:80px; line-height:48px;
+	float:left; text-align:center;
+	margin:16px 0 0 0; padding:2px;
+	cursor:pointer;
+	background-color:#1c77a9; color:#fff;
+	font:normal 10pt "黑体"; border:1px solid #ccc; border-radius:3px;
+}
+
+#DC_popupArea #DC_show_textArea,#DC_popupArea #DC_show_title {
+	font-size:10pt;
+	background:#fff; 
+	border:1px solid #ccc; border-radius:5px; 
+	width:380px; height:330px; 
+	overflow:auto; 
+	margin:3px auto; padding:3px;
+	text-align:left;
+	color:#000;
+}
+
+#DC_popupArea #DC_show_title {
+	height:20px;
+	line-height:25px;
+	overflow:hidden;
+}
+
+#DC_popupArea .oper { text-align:right;}
+
+#DC_popupArea .oper input {
+	display:block; float:right; 
+	margin:3px 10px; padding:2px; 
+	width:60px;  
+	cursor:pointer;
+	text-align:center; line-height:20px; 
+	font:normal 11pt "黑体"; border:1px solid #ccc; border-radius:3px;
+}
+
+#DC_popupArea .oper input.redo { background:#ddd; color:#333;}
+
+#DC_popupArea .oper input#DC_submit { background:#1c77a9; color:#fff;}

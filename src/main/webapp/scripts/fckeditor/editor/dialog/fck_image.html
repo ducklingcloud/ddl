@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Link dialog window.
+-->
+<html>
+	<head>
+		<title>Upload Document</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="robots" content="noindex, nofollow" />
+		<script src="common/fck_dialog_common.js?version=dct4.5" type="text/javascript"></script>
+		<script src="fck_image/fck_New_img.js?version=dct4.5" type="text/javascript"></script>
+	    <script type="text/javascript" src="../../../ajax/ajax.js?version=dct4.5"></script>
+        <script type="text/javascript" src="../../../ajax/upload.js?version=dct4.5"></script>
+	</head>
+	<body class="InnerBody" scroll="no" style="OVERFLOW: hidden">
+			<table  cellspacing="0" cellpadding="0" height="100%" width="100%" ><tr><td  class="DE_dialogboderstyle"><span  fcklang="ImageProperties" class="DE_dialogfontstyle"></span>
+			
+			<table cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td nowrap="nowrap">
+											<span fcklang="DlgImgWidth">Width</span>&nbsp;</td>
+										<td>
+											<input type="text" size="6" id="txtWidth"/>&nbsp;<span fckLang="DlgTableWidthPx">px</span></td>
+										<td nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>	
+										<td nowrap="nowrap">
+											<span fcklang="DlgImgHeight">Height</span>&nbsp;</td>
+										<td>
+											<input type="text" size="6" id="txtHeight"/>&nbsp;<span fckLang="DlgTableWidthPx">px</span></td>
+									</tr>
+			</table>
+		<div id="divUpload">
+		
+			<form id="frmUpload" name="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onsubmit="return CheckUpload();">
+				<br/>
+				<input type="hidden" id="rightType" name="rightType" value="all" />
+				
+				<input type="hidden" id="cachable" name="cachable" value="true" />
+				<div id ="uploadedFileWrapper">
+				<input id="txtUploadFile"  type="file"  size="30" name="NewFile" onchange="CheckImg(this)" />
+				</div>
+				<input type="hidden" id="signature" name="signature" value="none" onclick="changeCookie()"/>
+				<input type="hidden" id="pageName" name="pageName" value="123" />
+				<!--<input id="btnUpload" type="button" value="Send it to the Server" fckLang="DlgLnkBtnUpload" onclick="CheckUpload()"/>-->
+				<script type="text/javascript">
+					document.write( '<iframe name="UploadWindow" style="display: none" src="' + FCKTools.GetVoidUrl() + '"><\/iframe>' ) ;
+				</script>
+				<br/>
+				<span fckLang="DlgUploadFile">Upload</span>
+			</form>
+		</div>
+		
+		<div id="divLink" style="display: none">
+		<br/>
+		<table cellspacing="1" cellpadding="1" border="0" width="100%">
+			<tr>
+				<td>
+					<table cellSpacing="0" cellPadding="0" width="100%" border="0">
+							<tr>
+								<td vAlign="top">
+						<span fcklang="DlgLnkURL">URL</span><br />
+						<!--  input id="txtLnkUrl" style="width: 100%" type="text" onblur="UpdatePreview();" /-->
+						<input id="txtLnkUrl" style="width: 100%" type="text"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+		</td>
+		</tr>
+		</table>
+	</body>
+<script language="javascript">refreshCookie();</script>  	
+</html>

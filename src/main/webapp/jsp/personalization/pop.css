@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+a:link {
+color:#0066CC;
+text-decoration:none;
+}
+a:hover {
+color:#FF6600;
+height:19px;
+padding-left:1px;
+width:95%;
+}
+.pop_ul{
+margin:0;
+padding-left:1em;
+}
+.pop_t1, .pop_t2 {
+border-bottom:1px solid #000000;
+color:#FFFFFF;
+background:#79B5C6;
+font-size:13px;
+font-weight:bold;
+height:23px;
+line-height:23px;
+margin-bottom:10px;
+padding-left:5px;
+position:relative;
+}
+.pop_bw {
+overflow:hidden;
+word-wrap:break-word;
+}
+.pop_chbox {
+color:#666666;
+float:left;
+margin-bottom:10px;
+margin-right:100px;
+width:35%;
+}

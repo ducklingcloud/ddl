@@ -1,0 +1,94 @@
+@charset "utf-8";
+
+#nov2011 { background:#fff url(../images/portal-Nov2011-components.png) -3px -152px no-repeat;
+	margin-left:-1px; padding-bottom:20px;
+}
+#nov2011 .text-fixed { width:425px; float:left; padding:1px 0; #position:relative; }
+#nov2011 .text-fixed h1 { margin:50px 0 30px 45px; padding:0; text-align:left; }
+#nov2011 .intro { font-size:11pt; color:#999; line-height:1.8em;
+	font-family:Helvetica, Calibri, Arial, '微软雅黑', '黑体', sans-serif;
+}
+#nov2011 .text-fixed .intro { margin:10px 0 30px 50px; text-align:left; }
+#nov2011 .rolRegister { display:block; margin:40px auto 0; width:230px; height:68px;
+	background:url(../images/portal-Nov2011-components.png) -3px -82px no-repeat;
+	text-align:center; font-size:20pt; line-height:65px;
+	letter-spacing:0.2em;
+	color:#000;
+	font-family:Helvetica, Calibri, Arial, '微软雅黑', '黑体', sans-serif;
+	text-shadow:0 0 1px rgba(0,0,0,1);
+	text-decoration:none; 
+}
+#nov2011 .rolRegister:hover { background-position:-3px -14px; text-decoration:none; }
+#nov2011 .plus { text-align:center; color:#999; }
+#nov2011 .plus a { color:#69c; }
+#nov2011 .plus a:hover { color:#369; }
+
+#nov2011 .hero { float:right; padding:1px 0; width:560px; position:relative; }
+#nov2011 .hero .hero-container { position:absolute; top:0; right:0; }
+#nov2011 .hero h1 { margin-bottom:-20px; text-align:right; }
+#nov2011 .hero h3 { margin:-20px 0 0; text-align:center; }
+#nov2011 .hero .intro { margin:0; text-align:center; line-height:1.2em; font-size:10pt; }
+
+#nov2011 .heroNav { margin:460px auto 20px auto; padding:0; width:76px; height:11px; }
+#nov2011 .heroNav li { display:block; float:left; width:11px; height:11px; margin:0 2px;
+	background:url(../images/portal-Nov2011-components.png) -3px -3px no-repeat;
+	cursor:pointer;
+}
+#nov2011 .heroNav li:hover { background-position: -29px -3px; }
+#nov2011 .heroNav li.current { background-position: -16px -3px; }
+
+
+/* aspect & its children */
+#aspect .std {
+	position: relative;
+	padding:1px 20px 30px 20px; margin-bottom:0;
+	font-family:Helvetica, Calibri, Arial, '微软雅黑', '黑体', sans-serif;
+	background:#fff url(../images/vpx-70-f-f5.gif) repeat-x bottom;
+}
+
+#aspect p { text-indent:2em; color:#333; line-height:1.4em; }
+#aspect h3 { border-bottom:1px solid #eee; }
+#aspect { margin-top:0em; }
+
+#aspect .newFunc {
+	position: absolute; top: -1px; right: -1px;
+	width: 95px; height: 95px;
+	background: url(../images/newFunc.png) no-repeat right top;
+}
+
+#aspect .capitalFig.left { float:left; max-width:350px; margin:0 4em 0 1em; }
+
+#webpageCapture {
+	width:;
+}
+#webpageCapture a#webpageCaptureLink {
+	display: block; float: left; width: 217px; height: 36px;
+	margin: 20px 30px;
+	color: transparent;
+	background: url(/dct/dataCollect/images/dragButton-green.png) no-repeat;
+}
+#webpageCapture a#webpageCaptureLink.msie {
+	font-size:0;
+	background: url(/dct/dataCollect/images/dragButton-saveTo.png) no-repeat;
+}
+
+#textIntro, #ducklingPassport { width:500px; float:left; }
+#mobile, #directShare { width:400px; float:right; }
+#textIntro, #mobile { height:160px; }
+#ducklingPassport, #directShare { height:190px; }
+
+
+#mobileAppInstall { margin:10px auto; }
+#androidApk, #iphone { display:block; width:157px; height:45px; margin:0 20px; float:left;
+	background:url(../images/mobileAppButton.png) no-repeat;
+	color:transparent;
+	font-size:0;
+}
+#androidApk { background-position:-1px top; }
+#androidApk:hover { background-position:-1px -51px; }
+#androidApk:active { background-position:-1px -50px; }
+#iphone { background-position:-191px top; }
+#iphone:hover { background-position:-191px -51px; }
+#iphone:active { background-position:-191px -50px; }
+
+/* end of aspect */

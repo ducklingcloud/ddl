@@ -1,0 +1,53 @@
+<p>
+亲爱的用户： 
+<br/>
+您好！ 
+<br/>
+
+<i>
+<D_Link href="http://" class="external">
+××××协作环境
+</D_Link>
+<img class="outlink" src="/dct/images/out.png"/>
+</i>
+在过去24小时内所有更改的页面如下： 
+<br/>
+CHANGED_PAGE_LIST
+</p>
+
+<hr/>
+
+<p>
+<br/>
+如果您想改变邮件订阅的地址，请编辑
+<D_Link href="baseurl://emailnotify/emailManage.do?method=show" class="footnoteref">
+[订阅邮件通知]
+</D_Link>
+ 页面。 
+<br/>
+感谢您使用
+<i>
+<D_Link href="http://" class="external">
+××××协作环境
+</D_Link>
+<img class="outlink" src="/dct/images/out.png"/>
+</i>
+！如有意见和疑问，请发表在
+<D_Link href="6" target="_blank">
+意见建议
+</D_Link>
+ 页面。我们将一如既往地为您提供优质服务！ 
+<br/>
+
+<br/>
+敬祝 工作顺利，万事如意！ 
+<br/>
+
+<br/>
+××××协作环境  敬上
+</p>
+
+<p>
+ 
+</p>
+

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceConfig>
+<validator>cn.vlabs.rest.examples.NullValidator</validator>
+<entires>
+  <Service>
+    <servicename>loginService</servicename>
+    <clazz>cn.vlabs.duckling.vwb.ui.rsi.RemoteLoginService</clazz>
+    <validAppAuth>false</validAppAuth>
+  </Service>
+  <Service>
+    <servicename>loginAppService</servicename>
+    <clazz>cn.vlabs.duckling.vwb.ui.rsi.VWBAppLoginService</clazz>
+    <validAppAuth>false</validAppAuth>
+  </Service>
+  <Service>
+  	<servicename>getDpageService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.dpage.GetDPageContentService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  <Service>
+  	<servicename>createDpageService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.dpage.CreateDPageService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  
+
+  
+  <Service>
+  	<servicename>updateDpageService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.dpage.UpdateDPageContentService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  
+  <Service>
+  	<servicename>createSiteService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.CreateSiteService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  <Service>
+  	<servicename>updateSiteNameService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.SiteNameService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  
+    <Service>
+  	<servicename>domainService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.SiteDomainService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+ <Service>
+  	<servicename>leftMenuService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.SiteLeftMenuService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+   <Service>
+  	<servicename>mailService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.SiteEmailService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+    <Service>
+  	<servicename>skinsService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.SiteSkinsService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  <Service>
+  	<servicename>destroySiteService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.DestroySiteService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  <Service>
+  	<servicename>siteLanguageService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.SiteLanguageService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  <Service>
+  	<servicename>siteLifeCycleService</servicename>
+  	<clazz>cn.vlabs.duckling.vwb.ui.rsi.profile.SiteLifeCycleService</clazz>
+  	<validAppAuth>false</validAppAuth>
+  </Service>
+  
+</entires>
+</ServiceConfig>

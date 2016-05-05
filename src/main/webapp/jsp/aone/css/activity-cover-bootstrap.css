@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+.navbar.navbar-fixed-top .navbar-inner .container ul.nav li {margin:6px 0 0 0;}
+.navbar .brand {padding:0; margin-left:0;}
+.caret {border:none}
+.navbar-inner {background-image:none;background-color:#1b1b1b; border:none; filter:none;}
+.navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {
+	background:none;
+}
+.navbar .nav>li>a {padding-top:5px; text-shadow:none;}
+.winContent-js p {font-size:20px; line-height:2em; color:#f90}
+.winContent-js p.present {color:#0a0;}
+
+.ly-plate{position:relative; width:600px; height:600px; margin: 20px auto;}
+.rotate-bg{ width:600px; height:600px;background:url(../images/disk.png);position:absolute;top:0;left:0}
+.ly-plate div.lottery-star{width:112px;height:224px;position:absolute;top:190px;left:243px;outline:none;}
+#lotteryBtn{cursor: pointer;position: absolute;top:0;left:0;*left:-107px;}
+
+/*taskWinSpace.jsp*/
+.navbar.navbar-fixed-top .navbar-inner .container ul.nav li {margin:6px 0 0 0;}
+.navbar .brand {padding:0;}
+span.preparePopover {display:inline-block; cursor:pointer; border-bottom:1px dotted #ccc; color:#05a}
+font.pop {font-size:12px; color:#666;}
+.popover {width:295px; max-width:295px;}
+.popover-content {padding:3px; line-height:20px;}
+.popover.bottom .popover-content {text-align:center;}
+div.ui-wrap a.beta {border-bottom:1px dotted #ccc;text-decoration:none;}
+span.preparePopover:hover,div.ui-wrap a.beta:hover {border-bottom:1px dotted #05a}

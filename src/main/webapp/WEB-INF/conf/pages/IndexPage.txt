@@ -1,0 +1,23 @@
+<div>
+<span style="font-size: small;">
+页面索引 
+</span>
+</div>
+
+<p>
+下面是本系统中的所有页面列表，共
+<D_plugin>
+<D_parameter name="totalpages"/>
+</D_plugin>
+个页面。
+</p>
+
+<hr/>
+
+<p>
+<D_plugin>
+<D_parameter name="IndexPlugin"/>
+<D_parameter exclude="SandBox-*"/>
+</D_plugin>
+</p>
+

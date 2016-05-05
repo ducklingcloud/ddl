@@ -1,0 +1,113 @@
+@charset 'utf-8';
+.clear {
+	clear:both;
+}
+
+body {
+	background:url("../../jsp/aone/images/tile-lightGrey-slope.jpg") repeat scroll 0 0 #DDDDDD;
+}
+#main-content {
+	width:1000px;
+	margin:0 auto;
+	padding:0;
+	font-size:10pt;
+}
+
+#main-content #banner {
+	width:980px; padding:0; margin:0 auto;
+	border-radius:5px; border:2px solid #ccc; box-shadow:2px 2px 2px #ccc;
+}
+
+#main-content #feature .lynx-feature {
+	width:300px; height:130px;
+	border:1px solid #ccc;
+	border-radius:5px;
+	box-shadow:2px 2px 2px #ccc;
+	padding:10px;	margin:10px 0px 10px 8px;
+	float:left;
+	background:#fff;
+}
+
+#main-content #feature .lynx-feature h3 {line-height:30px; margin:5px;}
+#main-content #feature .lynx-feature h3 span.introIcon {
+	width:30px; height:30px;
+	float:left; margin-right:10px;
+	border:1px solid #eee; border-radius:5px;
+	background:url("introIcon.png") no-repeat scroll 0 0 transparent;
+}
+
+#main-content #feature .lynx-feature h3 span.introIcon.ui{}
+#main-content #feature .lynx-feature h3 span.introIcon.tag{ background-position:0 -30px;}
+#main-content #feature .lynx-feature h3 span.introIcon.sub{ background-position:0 -60px;}
+#main-content #feature .lynx-feature h3 span.introIcon.star{ background-position:0 -90px;}
+#main-content #feature .lynx-feature h3 span.introIcon.search{ background-position:0 -120px;}
+#main-content #feature .lynx-feature h3 span.introIcon.note{ background-position:0 -150px;}
+#main-content #feature .lynx-feature p {text-indent:2em; }
+
+
+/*mask here*/
+.intro_mask {
+	position:absolute; top:0; left:0;  z-index:49;
+	width:100%; height:100%;
+	opacity: 0.6; filter:alpha(opacity=60);
+	background:#000;
+}
+.intro_step {
+	display:none;
+	position:absolute; z-index:101;
+	background:url(intro.png) 0 0 no-repeat;
+	width:600px; height:150px;
+}
+.intro_step#intro_1 { top:30px; left:245px;}
+.intro_step#intro_2 { top:30px; right:130px; background-position: 0 -1700px;}
+.intro_step#intro_3 { top:38px; left:216px; background-position: 0 -1300px; height:200px;}
+.intro_step#intro_4 { top:91px; left:-18px; background-position: 0 -150px; height:200px;}
+.intro_step#intro_5 { top:91px; left:50px; background-position: 0 -350px; height:200px;}
+.intro_step#intro_index { top:130px; left:120px; background-position: 0 -450px;}
+.intro_step#intro_6 { top:330px; left:188px; background-position: 0 -700px;}
+.intro_step#intro_index { top:200px; left:600px; background-position: 0 -750px;}
+.intro_step#intro_7 { top:160px; left:600px; background-position: 0 -1000px;}
+.intro_step#intro_8 { top:265px; left:600px; background-position: 0 -1150px;}
+.intro_step#intro_9 { top:50px; right:0px; background-position: 0 -1000px;}
+
+.intro_step .title {
+	position:relative; top:60px; left:60px;
+	width:300px;
+	font:normal 16px "楷体"; color:#999;
+}
+.intro_step .content {
+	position:relative; top:50px; left:60px;
+	width:300px;
+	margin:0; padding:0; border:none;
+	font:normal 10pt "楷体"; color:#333;
+}
+.intro_step#intro_2 .title {top:75px;}
+.intro_step#intro_2 .Iknow {top:50px;}
+.intro_step#intro_3 .title, .intro_step#intro_4 .title,.intro_step#intro_5 .title {top:110px;}
+.intro_step#intro_4 .Iknow,.intro_step#intro_5 .Iknow {top:75px;}
+.intro_step#intro_3 .Iknow {top:80px;}
+.intro_step#intro_7 .title,.intro_step#intro_9 .title {top:40px;}
+.intro_step#intro_7 .Iknow,.intro_step#intro_9 .Iknow {top:5px;}
+
+.intro_step .Iknow,.intro_step .closeMe {
+	position:relative; top:25px; left:365px;
+	background:#369; padding:5px 10px;
+	width:65px; height:20px; text-align:center;
+	font-size:10pt; font-weight:bold; color:#fff;
+	border-radius:5px; cursor:pointer;
+	text-decoration:none;
+	display:inline-block; float:left;
+}
+
+.intro_step .closeMe {
+	width:30px; margin-left:5px;
+	background:none; font-weight:normal;
+	color:#369; left:355px;
+}
+
+.intro_step .Iknow:hover {text-decoration:none;}
+
+.isHighLight {
+	position:relative; z-index:200;
+	background:#fff; 
+}

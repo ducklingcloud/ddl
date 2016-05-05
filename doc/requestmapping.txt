@@ -1,0 +1,573 @@
+----------------------------------------------------------
+包cn.vlabs.duckling.aone.task.web 下的controller
+TaskBaseController对任务操作的基本Controller
+	类级mapping {teamCode}/task
+	 准备更改任务
+	"func=readyModifyTask"
+	获取团队成员
+	"func=getmembers"
+
+TaskIndependentController 对任务操作的基本Controller
+	类级mapping /{teamCode}/task/independent
+	查看一个任务
+	"func=view"
+	获得进度，ajax
+	"func=process"
+	修改一个任务，准备页面
+	"func=readyModify"
+	提交一个任务，并跳转到任务列表页面
+	"func=modifySubmit"
+	ajax 任务
+	"func=readyDeal"
+	处理任务 ajax
+	"func=dealSubmit"
+	删除任务 
+	"func=delete"
+	归档任务
+	"func=dustbin"
+
+TaskShareController 对共享任务操作的基本Controller
+	类级mapping /{teamCode}/task/share
+	查看任务进度 ajax
+	"func=process"
+	查看一个任务
+	"func=view"
+	修改一个任务，准备页面
+	"func=readyModify"
+	提交一个任务，并跳转到任务列表页面
+	"func=modifySubmit"
+	准备处理页面，获得任务项
+	"func=readyDeal"
+	处理任务项完成，更改状态
+	"func=dealSubmit"
+	任务删除，更改状态
+	"func=delete"
+	归档任务
+	"func=dustbin"
+	
+---------------------------------------------------------------
+包cn.vlabs.duckling.aone.copy.web 下的controller
+	CopyController
+	类级mapping {tid}/copy
+	func=test ？？
+	func=getCanEditTeamList
+---------------------------------------------------------------
+包 cn.vlabs.duckling.aone.content.web 下的controller
+	BundleController
+	类级mapping /{tid}/bundle/{bid}
+	func=reorder
+	func=getUnBundle
+	func=saveBundleItem
+	func=removeBundleItem
+	func=deleteBundleItem
+	func=rename
+	func=updateBundleDesc
+	func=disbandBundle
+	func=deleteBundle
+	func=loadMore
+	
+	ConfigTagController
+	类级mapping /{teamCode}/config/tag
+	为tid添加一个group
+	func=addTagGroup
+	获取tid的所有tagGroup信息
+	func=loadGroup
+	更新tag的所有信息
+	func=updateTag
+	更新TagGroup，只更新title
+	func=updateTagGroup
+	删除tag的所有信息
+	func=deleteTag
+	删除group其中包括删除tag的所有信息
+	func=deleteTagGroup
+	排序tag
+	func=sortTagGroups
+	改变一个Tag的groupId
+	func=changeTagFromGroup
+	func=addTag
+	
+	DashboardController
+	类级mapping /dashboard
+	func=emailNoticeAll
+	func=emailNoticeDetail
+	func=useNameTag
+	func=userPreferences
+	func=userPreferences
+	func=emailNoticeDetail
+	func=useNameTag
+	func=userPreferences
+	func=decreaseScore
+	func=resortTeam
+	
+	DataSyncronizedController
+	类级mapping /system/data/synchronized
+	func=tagCount
+	
+	LynxBannerSearchController
+	类级mapping /{tid}/search
+	
+	LynxBookmarkController
+	类级mapping /system/bookmark
+	func=newPage
+	func=getPermission
+	
+	LynxCreateController
+	类级mapping /{teamCode}/quick
+	func=makeBundle
+	func=uploadFiles
+	func=createPage
+	func=submitCreatePage
+	用于上传文件页面获取标签，获取的标签包括URL中传递过来的tagId以及姓名标签
+	func=getTag
+	在上传文档后，添加bundle和为bundle添加标签
+	func=afterUpload
+	校验bundle name是否重复
+	func=checkBundleName
+	
+	LynxEditPageController 编辑器和浏览的功能都在这里
+	类级mapping /{teamCode}/editPage
+	func=restoreDraft
+	func=unrestoreDraft
+	func=cancel
+	func=autosave
+	func=save
+	func=saveexit
+	func=preview
+	func=previewToEdit
+	func=pageLocked
+	func=isLockTimeOut
+	func=updateLockTime
+	
+	LynxFileDownloadController
+	类级mapping /{teamCode}/download/{fid}
+	@RequestMapping(params = { "type=pdf", "version" })
+	type=doc
+	func=cache
+	
+	LynxFileInfoController
+	类级mapping /{teamCode}/file/{fid}
+	func=deleteFileRef
+	func=moveToTrash
+	func=removedSuccess
+	func=shareExistFile
+	func=submitShareExistFile
+	func=shareExistFileSuccess
+	func=onlineViewer
+	func=pdfTransform
+	
+	LynxFileUploadController
+	类级mapping /{teamCode}/upload
+	func=prepareUploadPage
+	func=updateFile
+	func=updateFile
+	func=uploadFiles
+	func=uploadFiles
+	func=searchReferableFiles
+	func=referFiles
+	func=referExistFiles
+	
+	LynxHomeController
+	类级mapping /home
+	func=getStatus
+	
+	LynxPageController
+	类级mapping /{teamCode}/page/{pid}
+	func=del
+	
+	LynxResourceController
+	类级mapping /{teamCode}/resource
+	func=query
+	func=searchResult
+	func=research
+	func=loadmore
+	func=searchlog
+	
+	LynxStarmarkController
+	类级mapping /{teamCode}/starmark
+	func=add
+	func=remove
+	
+	NavbarController
+	类级mapping /{teamCode}/navbar
+	func=addItem
+	func=delete
+	
+	NineGridController
+	类级mapping /{teamCode}
+	func=pin
+	func=unpin
+	func=kickout
+	
+	TagController
+	类级mapping /{teamCode}/tag
+	func=loadTeamTags
+	func=batchAdd
+	func=add
+	func=deleteResource
+	func=remove
+	func=download
+	
+	TeamSpaceController
+	类级mapping /{teamCode}/notice
+	func=exportTeamContacts
+	
+	ToDhomeController 去往dhome的入口
+	类级mapping /system/toDhome
+	
+	UserGuideController
+	类级mapping /system/userguide
+	func=get
+	func=update
+	
+-----------------------------------------------------------------------------------
+	包cn.vlabs.duckling.vwb.ui.api 下的controller 
+	APICollectionElementsController API调用的Controller（查询集合页面
+	类级mapping /api/collectionElements
+	
+	APICollectionsController API调用的服务程序
+	类级mapping /api/collections
+	
+	APIEchoController API调用的Controller（查询集合页面）
+	类级mapping /api/echo
+	
+	APIMyUpdatesController 为API设计的我的导航
+	/api/myCreatePages
+	/api/myEditPages
+	
+	APIPageController API接口中访问页面接口
+	类级mapping /mobile/page
+	
+	APIPageCrawlerController 
+	类级mapping /api/crawler/page
+	
+	APISearchController API接口中的搜索服务
+	类级mapping /api/search
+	
+	APITeamsController 查询用户参加的团队
+	类级mapping /api/teams
+	func=allTeams
+	
+	APITeamUpdatesController 查询系统更新
+	类级mapping /api/teamUpdates
+	
+	APIUpdateController API调用的服务程序
+	类级mapping /api/update
+	
+	APIUploadController 手机客户端上传图片接口
+	类级mapping /api/upload
+--------------------------------------------------------------------------
+cn.vlabs.duckling.vwb.ui.attach 包下controller 
+
+	AttachController 附件下载链接
+	/{teamCode}/attach/{hash}
+	/{teamCode}/cachable/{hash}
+	
+	CopyFileController
+	/copyfile/{downloadURL}
+	/copyfile/{downloadURL}/success
+	
+	DirectDownloadController
+	/direct/{downloadURL}
+	/direct/{downloadURL}/download
+	
+	FileDownloadController
+	@RequestMapping(params={"type=pdf","version"})
+	type=doc
+	func=cache
+	
+	FileInfoController
+	func=deleteFileRef
+	func=moveToTrash
+	func=removedSuccess
+	func=shareExistFile
+	func=submitShareExistFile
+	func=shareExistFileSuccess
+	func=onlineViewer
+	func=pdfTransform
+	
+	FileUploadController
+	func=prepareUploadPage
+	func=updateCollectionFile
+	func=updateCollectionFile
+	func=updateFile
+	uploadCollectionFiles
+	func=uploadCollectionFiles
+	func=uploadFiles
+	func=searchReferableFiles
+	func=referFiles
+	
+	UploadImgController
+	类级mapping /{teamCode}/uploadImg
+	
+----------------------------------------------------------------------------
+包cn.vlabs.duckling.vwb.ui.collection
+	
+	ActivationController
+	类级mapping /system/activation/{activationURL}
+	
+	AdminFeedbackController
+	类级mapping /aone/feedback	
+	
+	CollectionGridController
+	类级mapping /{teamCode}/collection/{cid}/grid
+	func=editGridItems
+	func=addGridItems
+	func=updateTitle
+	func=updateItemSequence
+	func=editGrids
+	func=addGrid
+	func=deleteGridItem
+	func=deleteGrid
+	func=changeColumnNumber
+	func=updateGridSequence
+	
+	CollectionHomeController
+	类级mapping /{teamCode}/collection/{cid}
+	func=viewGrid
+	func=viewList
+	func=export
+	func=download
+	func=getTotalCount
+	func=getPaginationData
+	
+	ConfigCollectionController
+	类级mapping /{teamCode}/configCollection
+	func=addAuthority
+	func=addPages
+	func=addShortcuts
+	func=updateShortcutSequence
+	func=deleteCollection
+	func=deleteShortcut
+	func=isEmptyCollection
+	func=loadCollectionList
+	func=loadPages
+	func=loadTeamMembers
+	func=moveBatchPages
+	func=moveElement
+	func=removeAuthority
+	func=updateAuthority
+	func=updateBasicInfo
+	
+	ConfigTeamController
+	类级mapping /system/configTeam
+	func=adminBasic
+	func=adminApplicant
+	func=adminUsers
+	func=adminInvitations
+	func=exportDocs
+	func=download
+	func=searchUsers
+	func=removeMember
+	func=updateAllAuthority
+	func=addMembers
+	func=adjustPlace
+	func=updateBasicInfo
+	func=sendTeamInvite
+	func=uploadMailList
+	func=uploadMailList
+	func=auditApplicant
+	
+	ContactsController
+	类级mapping /dashboard/contacts
+	func=deleteItem
+	func=addItem
+	func=saveItem
+	func=addToPersonContacts
+	func=getItemData
+	func=searchUser
+	func=searchUserInCurTeam
+	func=getUser
+	func=exportPersonalContacts
+	
+	CreateCollectionController
+	类级mapping /{teamCode}/createCollection
+	
+	CreateTeamController
+	类级mapping /system/createTeam
+	func=createTeam
+	func=success
+	func=error
+	func=validateTeamId
+	
+	EditCollectionsController
+	类级mapping /{teamCode}/editCollections
+	func=create
+	func=adjustPlace
+	
+	FeedbackController
+	类级mapping /system/feedback
+	func=submit
+	func=success
+	
+	InvitationValidateController
+	类级mapping /system/invite/{inviteURL}
+	func=accept
+	func=ignore
+	
+	JoinPublicTeamController
+	类级mapping /system/joinPublicTeam
+	func=join
+	func=quit
+	func=cancelApply
+	func=iknow
+	
+	PageBarController
+	类级mapping /{teamCode}/myspace
+	func=updateRecommendStatus
+	func=updateSubscriptionStatus
+	func=updateMessageStatus
+	func=feedHistory
+	func=recommendHistory
+	func=myPageNavigator
+	func=teamPageNavigator
+	func=feedManager
+	
+	PictureCheckCodeController
+	类级mapping /system/pictrueCheckCode
+	func=getImage
+	func=checkCode
+	
+	QuitTeamController
+	类级mapping /system/quitTeam
+	
+	RecLoggingController
+	类级mapping /{teamCode}/reclogger
+	func=cl
+	func=dapgelog
+	
+	RegistController
+	类级mapping /system/regist
+	func=submit
+	func=submitWithInvite
+	func=validate
+	
+	ShareAgainController
+	类级mapping /system/shareAgain
+	
+	ShareFileController
+	类级mapping /system/shareFile
+	func=uploadTempFiles
+	
+	ShareFileSuccessController
+	类级mapping /system/shareFileSuccess
+	
+	ShortCutController
+	类级mapping /{teamCode}/configShortCut
+	
+	SwitchTeamController
+	类级mapping /system/switch
+	
+	TeamGridController
+	类级mapping /{teamCode}/grid
+	
+	UserProfileController
+	类级mapping /system/user/{uxid}
+	
+---------------------------------------------------------------------
+包cn.vlabs.duckling.vwb.ui.config
+	AppAutoDeployController
+	类级mapping /{teamCode}/appAutoDeploy
+	
+	BannerController Banner管理Controller
+	类级mapping /{teamCode}/banner
+	
+	BlackListController 黑名单管理
+	类级mapping /{teamCode}/blackList
+	
+	EmailManageController 登录用户设置有关自身的所有邮件订阅
+	类级mapping /{teamCode}/emailManage
+	
+	ManageSiteController 站点管理
+	类级mapping /{teamCode}/manageSite
+	
+	MyPageController 用户创建/编辑的页面
+	类级mapping  /{teamCode}/myPage
+	
+	SiteTemplateController 
+	类级mapping /siteTemplate
+	
+	SkinController 皮肤管理
+	类级mapping /{teamCode}/skin
+	
+	SubscribeAdminController 管理员配置所有的邮件订阅
+	类级mapping /{teamCode}/subscribeAdmin
+	
+	VWBPropertiesController 系统配置
+	类级mapping /{teamCode}/VWBProperties
+	
+---------------------------------------------------------------------------------------
+包cn.vlabs.duckling.vwb.ui.ddata
+	DmlDataController
+	类级mapping /{teamCode}/dmlData
+	
+	DmlFieldController 
+	类级mapping /{teamCode}/dmlField
+	
+	DmlFormController
+	类级mapping /{teamCode}/dmlForm
+	
+	DmlResultSetController
+	类级mapping /{teamCode}/dmlResultSet
+	
+	ManageDDataController DData 管理程序
+	类级mapping /{teamCode}/manageDdata
+	
+	UpdateDDataController
+	
+	类级mapping /{teamCode}/updateDdata
+	
+	------------------------------------------------------------------------
+包cn.vlabs.duckling.vwb.ui.message
+	CommentController
+	类级mapping /{teamCode}/comment
+	
+	FeedController
+	类级mapping /{teamCode}/feed
+	
+	RecommendController
+	类级mapping /{teamCode}/recommend
+
+----------------------------------------------------------------------------------
+包cn.vlabs.duckling.vwb.ui.oauth
+	AccessTokenController
+	类级mapping /oauth/access_token
+	
+------------------------------------------------------------------------------------
+包cn.vlabs.duckling.vwb.ui.page
+	AllPagesController
+	类级mapping /{teamCode}/allPages
+	
+	CreatePageController
+	类级mapping /{teamCode}/createPage
+	
+	GetPathByResourceIdController
+	类级mapping /{teamCode}/getPathByResourceId
+	
+	InfoPageController
+	类级mapping /{teamCode}/infoPage
+	
+	SubscribePageController
+	类级mapping /{teamCode}/subscribePage
+
+---------------------------------------------------------------------------------
+包 cn.vlabs.duckling.vwb.ui.system
+	AllResourceController
+	类级mapping /{teamCode}/allResource
+	
+	ErrorController  错误处理
+	类级mapping /error
+	
+	ImgScrServiceController 滚动图片效果
+	类级mapping /{teamCode}/imgScrService
+	
+	LoginController 登录Servlet
+	类级mapping /system/login
+	
+	LogoutController
+	类级mapping /system/logout
+	
+	MessageServlet
+	类级mapping /message
+	
+	PluginController
+	类级mapping  /{teamCode}/plugin

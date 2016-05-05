@@ -1,0 +1,14 @@
+<list>
+  <AppInfo>
+    <id>1</id>
+    <name>/dct</name>
+    <desc>应用插件管理</desc>
+    <issys>true</issys>
+  </AppInfo>
+  <AppInfo>
+    <id>2</id>
+    <name>/clb</name>
+    <desc>文档库插件</desc>
+    <issys>false</issys>
+  </AppInfo>
+</list>

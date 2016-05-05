@@ -1,0 +1,226 @@
+
+/****************add by GaoFan 2012.4.18****************/
+span.add, span.delete, span.update_del, span.update_add, span.move {
+	position:relative; z-index:20;
+	box-shadow:0 1px 1px #999;
+	cursor: pointer;
+}
+
+span.add, span.update_add {
+	background-color:#fc0;
+}
+
+span.delete, span.update_del {
+    text-decoration:line-through;
+     background-color: #f99;
+ }
+.moveto span.move {
+  background-color: #9f9;
+ }
+
+.movefrom {
+	display:none;
+	background-color:#cfc;
+	border:2px dashed #393;
+}
+.movefrom td, movefrom th {
+	background-color:#cfc;
+	border:2px dashed #393;
+}
+
+#movePointer { position:absolute; display:none;
+	width:92px; height:58px; background:url(images/diffFromTo.png) no-repeat;
+	text-align:center; color:#393;
+	cursor: pointer;
+}
+
+#movePointer.pointDown {
+	background-position: center top;
+	line-height:45px; 
+}
+#movePointer.pointUp { 
+	background-position: center bottom;
+	line-height:58px;
+}
+
+#DCT_viewcontent .diffFocus { display:inline-block;
+	padding:2px 3px;
+	margin:-4px -5px;
+	border-radius:3px;
+	-webkit-transition-scale:1.2;
+	-moz-transition-scale:1.2;
+	-ms-transition-scale:1.2;
+	-o-transition-scale:1.2;
+	transition-scale:1.2;
+	box-shadow:0 1px 15px #666;
+	border:2px solid #f60;
+}
+ 
+/*
+ * Styles for the Tag Diff
+ */
+span.diff-tag-html {
+  font-family: "Andale Mono" monospace;
+  font-size: 80%;
+}
+
+span.diff-tag-removed {
+  font-size: 100%;
+  text-decoration: line-through;
+  background-color: #fdc6c6; /* light red */
+}
+
+span.diff-tag-added {
+  font-size: 100%;
+  background-color: #ccffcc; /* light green */
+}
+
+/*
+ * Styles for the HTML Diff
+ */
+#diffcontent { border-bottom:1px solid #ccc; }
+#diffCtrl { z-index:50; position:relative;
+	background-color:#fff;
+	border-bottom:1px solid #ccc;
+}
+#diffCtrl h4 { margin:0; padding:0.5em; border-bottom:1px solid #999; }
+#diffCtrlSpacer { width:100%; height:auto; }
+
+#diffNav { margin-left:2em; }
+#diffNav a.diffPrev, #diffNav a.diffNext { padding:0px 15px; border:none; }
+#diffNav a.diffPrev { background:url(images/arrow-left.gif) no-repeat center; }
+#diffNav a.diffNext { background:url(images/arrow-right.gif) no-repeat center; }
+#diffNav a.disabled { filter:alpha(opacity=30); -moz-opacity:0.3; opacity:0.3; cursor:default; }
+
+#diffNav span#diffCount {  }
+
+#mask { position:absolute; z-index:0;
+	background-color:#ccc;
+	filter: Alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; }
+	
+#diffcontent span.diff-html-added,
+	#diffcontent span.diff-html-removed, #diffcontent span.diff-html-removed-port,
+	#diffcontent span.diff-html-changed {
+	position:relative; z-index:20;
+	padding:2px 0.3em; margin:-2px -0.3em;
+	border-right:1px solid #666; border-bottom:1px solid #666;
+	border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;
+}
+
+#diffcontent span.diff-html-added { background-color: #fff; }
+
+#diffcontent span.diff-html-removed { z-index:24;
+	background-color: #fdc6c6; position:absolute; display:none; cursor:pointer; }
+#diffcontent span.diff-html-removed:hover { background-color:#fcc; }
+#diffcontent span.diff-html-removed-port {
+	padding:0px 7px; margin:0px; z-index:23;
+	background:url(images/icon-removed-15.gif) no-repeat;
+	border:none;
+	cursor:pointer;
+}
+
+span.diff-html-changed {
+/*  background: url(images/diffunderline.gif) bottom repeat-x;
+	background-color: #c6c6fd; /* light blue */
+	background-color:#fff;
+}
+
+span.diff-html-selected {
+  background-color: #FF8800; /* light orange */
+  cursor: pointer;
+}
+
+span.diff-html-selected img{
+   border: 2px solid #FF8800; /* light orange */
+}
+
+span.diff-html-added img{
+ border: 2px solid #ccffcc;
+}
+
+span.diff-html-removed img{
+ border: 2px solid #fdc6c6;
+}
+
+span.diff-html-changed img{
+ border: 2px dotted #000099;
+ 
+}
+
+div.diff-removed-image, div.diff-added-image{
+  height: 300px;
+  width: 200px;  
+  position: absolute;
+  opacity : 0.55;
+  filter: alpha(opacity=55);
+  -moz-opacity: 0.55;
+}
+
+div.diff-removed-image, div.diff-added-image {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+  margin-left: 2px;
+}
+
+div.diff-removed-image {
+  background-color: #fdc6c6;
+  background-image: url(images/diffmin.gif);
+}
+div.diff-added-image {
+  background-color: #ccffcc;
+  background-image: url(images/diffplus.gif);
+  background-repeat: no-repeat;
+}
+
+img.diff-icon {
+  background-color: #FF8800;
+  background-image: url(images/bg_rounded.gif);
+  width: 16px;
+  height: 16px;
+  border: 0px none;
+}
+
+table.diff-tooltip-link, table.diff-tooltip-link-changed {
+   width: 100%;
+   text-align: center;
+   Vertical-align: middle;
+}
+
+table.diff-tooltip-link-changed {
+    border-top: thin dashed #000000; 
+    margin-top: 3px; 
+    padding-top: 3px
+}
+td.diff-tooltip-prev {
+   text-align: left;
+}
+
+td.diff-tooltip-next {
+   text-align: right;
+}
+
+table.diffpage-html-firstlast {
+  width: 100%;
+  Vertical-align: middle;
+}
+
+div.diff-topbar{
+ border-bottom: 2px solid #FF8800;
+ border-left: 1px solid #FF8800;
+ border-right: 1px solid #FF8800;
+ background-color: #FFF5F5;
+}
+
+a.diffpage-html-a, a.diffpage-html-a:hover, a.diffpage-html-a:link, a.diffpage-html-a:visited, a.diffpage-html-a:active {
+  text-decoration: none;
+  color: #FF8800;
+}
+
+.diffpage-html-firstlast a img, .dsydiff-prevnextnav a img {
+  vertical-align: middle;
+}
+
+ul.changelist {
+  padding-left: 15px;
+}

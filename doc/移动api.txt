@@ -1,0 +1,202 @@
+加载用户所在团队： api/teams
+   参数：access_token   访问令牌
+        user           用户账号
+
+加载标签信息：api/tags
+
+    参数：teamCode       团队id
+         access_token   访问令牌
+         
+加载团队更新：api/teamUpdates
+
+    参数：teamCode       团队id
+         access_token   访问令牌     
+         size           每页加载个数
+         date           日期
+         offset         已加载个数
+         api            "teamUpdate"
+         
+加载文档： api/list
+
+    参数：teamCode       团队id
+         access_token   访问令牌
+         maxPageSize    分页加载每页加载个数
+         tagFilter      加载全部文档 “all”, 其余可不放  
+         tag            标签id,加载全部文档不放
+         queryType      查询类型 tagQuery  标签文档  myStarFiles  星标文档
+         begin          目前已加载数据条数
+         sortType       排序  "timeDesc" 时间降序  "time" 时间升序  "titleDesc" 标题降序  "title" 标题升序
+         fileType       加载的文件类型
+         date           "thismonth" 加载本月  "thisweek" 加载本周, 其余可不放
+         
+        
+加载文件夹内文档： api/list
+    
+    参数：teamCode       团队id
+         access_token   访问令牌
+         rid            该文件夹rid
+         fileType       加载的文件类型
+         begin          目前已加载数据条数
+         
+加载文件夹内部的子文件夹： api/list
+    
+    参数：teamCode       团队id
+         access_token   访问令牌
+         func           "getChildrenFolder"
+         rid            该文件夹rid
+         
+文档操作：api/resourceOperate
+
+    参数：teamCode       团队id
+         access_token   访问令牌
+         func           "copy" 复制  "move" 移动
+         
+加载文档内容：mobile/page  （页面拼接url用webView加载,文件下载）
+
+    参数：teamCode       团队id
+         access_token   访问令牌
+         pid            文档rid
+         itemType       "page" 页面  "file" 文件
+         
+加载评论内容：api/pageComments
+    
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型
+  
+删除评论：api/submitComment
+               
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型
+         func           "removeComment"
+         commentId      删除的评论id
+         
+提交评论：api/submitComment
+               
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型
+         func           "removeComment"
+         content        评论内容
+         mentionUserId[]   @的人的id
+         receiver       被回复人的id
+  
+         
+加载团队成员：api/pageRecommend/prepare
+    
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型     ？
+         
+ 分享：api/pageRecommend/add
+               
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型   
+         users          要分享给的人的id, 分享多人","分隔
+         remark         分享附加信息
+         
+删除文档：api/pageDelete
+               
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型      
+         rid            文档rid  
+         
+改变星标状态：api/editStarmark
+               
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型      
+         rid            文档rid  
+         operate        "remove" 移除星标  "add" 添加星标
+         
+获取文档星标状态：api/pageInfo
+               
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型  
+             
+获取复制团队：api/pageCopy/teams   
+            
+     参数：teamCode       团队id
+         access_token   访问令牌
+         rid            文档rid    
+         api            getTeams
+         
+复制：api/pageCopy/copy
+
+     参数：teamCode       团队id
+         access_token   访问令牌
+         itemId         文档rid
+         itemType       文档类型
+         rid            文档rid    
+         version        文档版本
+         toTids         要复制到的团队id, 分享多人","分隔
+         cover          needCover  ？
+         
+加载通知个数：api/pageCopy/copy
+
+     参数：teamCode       团队id
+         access_token   访问令牌
+         api            "noticeCount"
+         
+搜索文档：api/search
+
+     参数：teamCode       团队id
+         access_token   访问令牌        
+         size           每页个数
+         keyword        搜索条件
+         offset         已加载个数
+         
+查询文件版本：api/queryfileversion
+
+     参数：teamCode       团队id
+         access_token   访问令牌            
+         fid            文档rid
+         
+查询未读消息：api/androidMessgePull
+
+     参数：access_token   访问令牌 
+     
+ 加载用户资料：api/userInfo
+
+     参数：teamCode       团队id
+         access_token   访问令牌            
+         id             用户id
+                      
+加载通知与关注消息：api/myMessages  通知  api/myFeeds 关注
+
+     参数：teamCode       团队id
+         access_token   访问令牌        
+         size           每页个数       
+         api            "myMessage" 通知  "myFeeds" 关注
+         messageType    "Person" 通知 "Monitor" 关注
+         
+上传：api/upload
+
+    参数：teamCode       团队id
+         access_token   访问令牌   
+         file           要上传的文档
+         title          文档标题
+         func           上传文档类型
+         parentRid      文档parentRid
+         
+下载：/mobile/page
+  参数：pid			rid值
+  		itemType	下载类型
+         
+            
+         
+         
+         
+         

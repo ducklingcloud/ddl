@@ -1,0 +1,31 @@
+<h2>
+最近更新历史
+</h2>
+
+<p>
+以下列表记录了最近30天内本协同工作环境页面的所有修改历史。 如需查看本协同工作环境创建以来页面的全部修改记录，请访问
+<b>
+<D_Link href="8">
+所有更新历史
+</D_Link>
+</b>
+ 。
+</p>
+
+<div>
+<span style="font-size: smaller;">
+服务器时间为中国标准时间，当前本地时间为 
+<D_plugin>
+<D_parameter name="CurrentTimePlugin"/>
+</D_plugin>
+. 
+</span>
+</div>
+
+<p>
+<D_plugin>
+<D_parameter name="RecentChangesPlugin"/>
+<D_parameter since="30"/>
+</D_plugin>
+</p>
+

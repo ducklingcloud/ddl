@@ -1,0 +1,42 @@
+<list>
+  <Banner>
+    <id>1</id>
+    <name>默认方案一</name>
+    <dirName>dctDefaultSecond</dirName>
+    <status>2</status>
+    <type>3</type>
+    <creator>system</creator>
+    <createdTime>2010-05-11 14:40:56.0 CST</createdTime>
+    <leftName>logo_pic.gif</leftName>
+    <pageId>0</pageId>
+    <ownedtype>system</ownedtype>
+  </Banner>
+  <Banner>
+    <id>2</id>
+    <name>默认方案二</name>
+    <dirName>dctDefaultFirst</dirName>
+    <status>1</status>
+    <type>1</type>
+    <creator>system</creator>
+    <createdTime>2010-05-11 14:40:56.0 CST</createdTime>
+    <leftName>leftBanner.gif</leftName>
+    <rightName>rightBanner.gif</rightName>
+    <middleName>filledBanner.gif</middleName>
+    <pageId>20</pageId>
+    <ownedtype>system</ownedtype>
+  </Banner>
+  <Banner>
+    <id>3</id>
+    <name>默认方案三</name>
+    <dirName>dctDefaultThird</dirName>
+    <status>1</status>
+    <type>4</type>
+    <creator>system</creator>
+    <createdTime>2010-05-11 14:40:56.0 CST</createdTime>
+    <leftName>logo_03.PNG</leftName>
+    <rightName>science_banner_01.gif</rightName>
+    <middleName>banner_d_01.gif</middleName>
+    <pageId>21</pageId>
+    <ownedtype>system</ownedtype>
+  </Banner>
+</list>

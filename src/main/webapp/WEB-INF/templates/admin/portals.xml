@@ -1,0 +1,26 @@
+<Resources>
+  <Portal>
+    <parent>1</parent>
+    <id>2501</id>
+    <leftMenu>NO</leftMenu>
+    <topMenu>INHERIT</topMenu>
+    <banner>INHERIT</banner>
+    <footer>INHERIT</footer>
+    <trail>NO</trail>
+    <title>Admin</title>
+    <portlet context="/dct" name="PlutoPageAdmin"/>
+    <uri>/WEB-INF/themes/config-theme.jsp</uri>
+  </Portal>
+  <Portal>
+    <parent>1</parent>
+    <id>2502</id>
+    <leftMenu>NO</leftMenu>
+    <topMenu>INHERIT</topMenu>
+    <banner>INHERIT</banner>
+    <footer>INHERIT</footer>
+    <trail>NO</trail>
+    <title>clb</title>
+    <portlet context="/clb" name="CLBPortlet"/>
+    <uri>/WEB-INF/themes/1-theme.jsp</uri>
+  </Portal>
+</Resources>

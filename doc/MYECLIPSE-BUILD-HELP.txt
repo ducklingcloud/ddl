@@ -1,0 +1,14 @@
+
+
+                        VWB MyEclipse环境编译帮助
+                       ========================
+                           最后更新20100227 by Kevin
+
+1）从cvs中导入
+2）将sharedlib目录下的lib库拷贝到tomcat/shared/lib下。
+3）选择Windows -> Preferences -> Java -> Build Path -> User Libraries
+中添加System Library，名称为sharedlib。需要勾选System library选项。
+然后Add JARs，导入刚才tomcat\shared\lib下的jar文件。
+4）右键点击项目，选择Properties -> Java Build Path，选中Library Tab，
+点击Add Library, 选中User Library中的sharedlib，确定。
+5）重新编译项目。

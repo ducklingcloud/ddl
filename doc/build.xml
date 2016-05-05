@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+
+<project name="duckling" default="run" basedir=".">
+	
+	<property name="application.name" value="Duckling.Dct"/>
+	<property name="application.id" value="Duckling.Dct"/>
+
+	<!-- sharedlib dir -->
+	<property name="sharedlib.dir" value="sharedlib"/>
+
+	<!-- complielib dir -->
+	<property name="compilelib.dir" value="lib"/>
+
+	<!-- environment access via env.* -->
+	<property environment="env"/>
+
+	<!-- jrelib dir -->
+	<property name="jrelib.dir" value="${env.JAVA_HOME}\jre\lib"/>
+	
+	<!-- compile with debugging information -->
+	<property name="debug" value="on"/>
+			
+	<!-- source directory -->
+	<property name="src.dir" value="src"/>
+	
+	<!-- common API directory -->
+	<property name="common.dir" value="common"/>
+	
+	<!-- i18n directory -->
+	<property name="i18n.dir" value="i18n"/>
+	
+	<!-- aone source -->
+	<property name="aone.dir" value="aone"/>
+	
+	<!-- portal directory -->
+	<property name="portal.dir" value="portal"/>
+	
+	<!-- library dir -->
+	<property name="lib.dir" value="WebRoot/WEB-INF/lib"/>
+	
+	<!-- webroot dir -->
+	<property name="webroot.dir" value="WebRoot"/>
+	
+	<!-- sql directory -->
+	<property name="sql.dir" value="sql"/>
+	
+	<!-- temporary build dir -->
+	<property name="build.dir" value="build"/>
+	<property name="build.classes" value="${build.dir}/classes"/>
+	<property name="build.i18n" value="${build.dir}/i18n"/>
+	<property name="build.webroot" value="${build.dir}/WebRoot"/>
+	<property name="build.common" value="${build.dir}/common"/>
+		
+	<!-- sharedlib classpath -->
+	<path id="sharedlib">
+		<fileset dir="${sharedlib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<!-- compilelib classpath -->
+	<path id="compilelib">
+		<fileset dir="${compilelib.dir}">
+			<include name="**\*.jar"/>
+		</fileset>
+	</path>
+	
+	<!-- build classpath -->
+	<path id="classpath">
+		<path refid="sharedlib" />
+		<path refid="jrelib" />
+		<path refid="compilelib" />
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${build.classes}" />
+	</path>
+	
+	<!-- jrelib classpath -->
+	<path id="jrelib">
+		<fileset dir="${jrelib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="checkJavahome" unless="env.JAVA_HOME">
+		<fail message="JAVA_HOME must be defined in your environment."/>
+	</target>
+	
+	<!-- delete build dir -->
+	<target name="clean" description="Remove all generated files">
+		<delete dir="${build.dir}"/>
+	</target>
+		
+	<target name="getver" >
+    <java jar="${lib.dir}/version.jar" outputproperty="ver" fork="true">
+    	<classpath refid="classpath" />
+    	<arg value="read"/>
+    	<arg value="version"/>
+    	<arg value="${webroot.dir}/WEB-INF/dct.ver"/>   	
+    </java>
+  </target>
+    
+	<!-- build target -->
+	<target name="compile" description="Build from source" depends="getver,checkJavahome,clean">
+	  <mkdir dir="${build.classes}"/>
+	  <javac srcdir="${src.dir};${portal.dir};${aone.dir}" 
+			destdir="${build.classes}"
+			source="1.5"
+			target="1.5"
+			debug="${debug}">
+			<compilerarg line="-encoding UTF-8" />
+			<classpath refid="classpath" />
+		</javac>
+	  
+		<mkdir dir="${build.common}" />
+		<javac srcdir="${common.dir}" 
+			destdir="${build.common}"
+			source="1.5"
+			target="1.5"
+			debug="${debug}">
+			<compilerarg line="-encoding UTF-8" />
+			<classpath refid="classpath" />
+		</javac>
+		
+	  <mkdir dir="${build.i18n}" />
+	  <copy todir="${build.i18n}">
+	  	<fileset dir="${i18n.dir}">
+	  		<include name="**/*.properties" />
+	  		<include name="**/*.html" />
+	  	</fileset>
+	  </copy>
+	  
+	</target>
+	
+	<target name="copyWebroot">
+		<mkdir dir="${build.webroot}" />
+		<copy todir="${build.webroot}">
+			<fileset dir="${webroot.dir}">
+				<exclude name="**/*classes*/**" />
+				<exclude name="**/*.svn*/**" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="run" depends="compile, pack-api, copyWebroot">
+		<description>
+			combine all the target together
+		</description>
+		<mkdir dir="${build.webroot}\WEB-INF\classes" />
+		<move todir="${build.webroot}\WEB-INF\classes">
+			<fileset dir="${build.classes}" />
+		</move>
+		<move todir="${build.webroot}\WEB-INF\classes">
+			<fileset dir="${build.i18n}" />
+		</move>
+		<move todir="${build.dir}\dct">
+			<fileset dir="${build.webroot}" />
+		</move>
+	</target>
+
+	<target name="pack" depends="run">
+		<description>
+			generate the deploy package
+		</description>
+		<mkdir dir="${build.dir}\dct${ver}.bin" />
+		<mkdir dir="${build.dir}\dct${ver}.bin\sharedlib" />
+		<mkdir dir="${build.dir}\dct${ver}.bin\sql" />
+		<move todir="${build.dir}\dct${ver}.bin\webroot">
+			<fileset dir="${build.dir}\dct" />
+		</move>
+		<copy todir="${build.dir}\dct${ver}.bin">
+			<fileset dir=".">
+				<include name="*.txt" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}\dct${ver}.bin\sharedlib">
+			<fileset dir="${sharedlib.dir}" />
+		</copy>
+		<copy todir="${build.dir}\dct${ver}.bin\api-jars">
+			<fileset dir="${build.dir}\jar">
+				<exclude name="**/*.svn*/**" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}\dct${ver}.bin\sql">
+			<fileset dir="${sql.dir}">
+			</fileset>
+		</copy>
+	</target>
+	<target name="pack-api" depends="compile">
+		<mkdir dir="${build.dir}\jar"/>
+		<jar destfile="${build.dir}\jar\dct-api-${ver}.jar">
+			<fileset dir="build\classes">
+				<include name="cn/vlabs/duckling/vwb/ui/rsi/api/**"/>
+				<exclude name="**/*Test*.class"/>
+			</fileset>
+		</jar>
+
+		<mkdir dir="${build.dir}\jar"/>
+		<jar destfile="${build.dir}\jar\duckling-common-${ver}.jar">
+			<fileset dir="${build.common}">
+				<exclude name="**/*Test*.class"/>
+			</fileset>
+		</jar>
+	</target>
+</project>

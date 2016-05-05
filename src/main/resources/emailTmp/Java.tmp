@@ -1,0 +1,131 @@
+import java.util.*;
+import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+		
+public class #@ClassName@#{
+		public static final Pattern INT = Pattern.compile("^\\d+$|-\\d+$"); 
+		public static final Pattern DOUBLE = Pattern.compile("\\d+\\.\\d+$|-\\d+\\.\\d+$");		
+		public static final String DEFAULT_TYPE="yyyy-MM-dd HH:mm:ss";
+		public static final SimpleDateFormat SDF_DEF=new SimpleDateFormat(DEFAULT_TYPE);
+		
+		public static String getTime(Date date){
+			return SDF_DEF.format(date);
+		}
+		public static boolean isNumber(String str){
+			if(isNull(str)){
+				return false;
+			}
+			return INT.matcher(str).find()||DOUBLE.matcher(str).find();
+		}
+		public static boolean isNull(Object obj){
+			if(obj==null){
+				return true;
+			}
+			if(obj instanceof List){
+				return isNull((List<?>)obj);
+			}else if(obj instanceof Map){
+				return isNull((Map<?,?>)obj);
+			}else if(obj instanceof String[]){
+				return isNull((String[])obj);
+			}else if(obj instanceof int[]){
+				return isNull((int[])obj);
+			}else if(obj instanceof Set){
+				return isNull((Set<?>)obj);
+			}else if(obj instanceof String){
+				return isNull((String)obj);
+			}else if(obj instanceof Object[]){
+				return obj==null||((Object[])obj).length==0;
+			}else if(obj instanceof Object[]){
+				return isNull((Object[])obj);
+			}
+			return false;
+		}
+		public static boolean isNull(Object[] array){
+			return (array==null||array.length==0);
+		}
+		public static boolean isNull(String[] array){
+			return (array==null||array.length==0||(array.length==1&&"".equals(array[0])));
+		}
+		public static boolean isNull(int[] array){
+			return (array==null||array.length==0);
+		}
+		public static boolean isNull(List<?> list){
+			return (list==null)||(list.size()==0);
+		}
+		public static boolean isNull(Set<?> list){
+			return (list==null)||(list.size()==0);
+		}
+		public static boolean isNull(Map<?,?> map){
+			return (map==null||(map.isEmpty()));
+		}
+		public static <K> List<K> getList(K k){
+			List<K> ks=new ArrayList<K>();
+			ks.add(k);
+			return ks;
+		}
+		public static Collection toCollection(Object obj){
+		if(obj==null)return new ArrayList();
+			if(obj instanceof Object[]){
+				return array2List((Object[])obj);
+		}else if(obj instanceof Collection){
+			return (Collection)obj;
+			}else{
+				throw new RuntimeException("the items must be Collection or Array  "+obj);
+			}
+		}
+		public static <K> K first(List<K> list){
+			if(isNull(list)){
+				return null;
+			}
+			return list.get(0);
+		}
+		public static boolean isNull(String str){
+			return str==null||"".equals(str.trim())||"null".equals(str.toLowerCase().trim());
+		}
+		public static String killNull(Object obj){
+			return isNull(obj)?"":obj.toString().trim();
+		}
+		public static String killNull(String str){
+			return isNull(str)?"":str.trim();
+		}
+		public static <K> List<K> array2List(K[] array){
+			List<K> list=new ArrayList<K>();
+			if(array!=null&&array.length>0){
+				for(K k:array){
+					list.add(k);
+				}
+			}
+			return list;
+		}
+		public static  Integer[] stringArray2IntArray(String[] array){
+			Integer[] result=new Integer[0];
+			if(array!=null){
+				result=new Integer[array.length];
+				for(int i=0;i<array.length;i++){
+					result[i]=Integer.parseInt(array[i]);
+				}
+			}
+			return result;
+		}
+		public static String format(String str,String flag){
+			if(isNull(str)){
+				return "";
+			}
+			StringBuilder sb=new StringBuilder(str);
+			if(sb.indexOf(flag)>0){
+				return sb.substring(0,sb.lastIndexOf(flag));
+			}
+			return sb.toString();
+		}
+		public static String format(String str){
+			return format(str,",");
+		}
+		public static int toInt(String x){
+			return (int)Float.parseFloat(x);
+		}
+		public static String execute(Map<String, Object> map){
+			StringBuffer result=new StringBuffer();
+			#@JavaCode@#
+			return result.toString();
+		}
+}

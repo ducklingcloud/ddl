@@ -1,0 +1,3 @@
+<p>亲爱的用户：</p>SHARE_PAGE_SUBSCRIBER将页面SHARE_PAGE_NAME共享给您。<BR>请您及时访问该页面。<BR>SHARE_PAGE_CONTENT
+
+<br><br>--管理员 (wiki@escience.cn)

@@ -1,0 +1,33 @@
+<div id="codeMode">
+	<pre id="directShowFile">${content}</pre>
+</div>
+
+<script type="text/javascript" src="${contextPath}/scripts/syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="${contextPath}/scripts/syntaxhighlighter/scripts/shAutoloader.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var fileType = "${strFileType}";
+	function initPreTag(){
+		$('#directShowFile').addClass('brush: '+fileType+';');
+	}
+	initPreTag();
+	
+	function path(){
+	  var args = arguments,
+	      result = [];
+	       
+	  for(var i = 0; i < args.length; i++)
+	      result.push(args[i].replace('@', '${contextPath}/scripts/syntaxhighlighter/scripts/'));
+	       
+	  return result;
+	};
+	 
+	SyntaxHighlighter.autoloader.apply(null, path(
+ 	  	  'xml xhtml xslt html    @shBrushXml.js'
+	));
+	SyntaxHighlighter.all();
+	SyntaxHighlighter.defaults['toolbar']=false;
+
+});
+</script>

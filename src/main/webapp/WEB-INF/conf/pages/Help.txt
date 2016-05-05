@@ -1,0 +1,108 @@
+<div style="text-align: center;">
+<span style="font-size: medium;">
+<span style="color: rgb(255, 0, 0);">
+协同环境使用指南
+</span>
+</span>
+</div>
+
+<p>
+      
+</p>
+
+<div>
+       如果您需要帐号，请首先 
+<i>
+注册账号
+</i>
+（需等待审批），或发邮件至 
+<span style="color: rgb(31, 73, 125); font-family: 'calibri','sans-serif';">
+<D_Link href="mailto:vlab@cnic.cn?subject=Duckling User Registration" class="external">
+vlab@cnic.cn
+</D_Link>
+<img class="outlink" src="/dct/images/out.png"/>
+。
+</span>
+ 
+<span style="color: rgb(31, 73, 125); font-family: 'calibri','sans-serif';">
+ 
+</span>
+</div>
+
+<p>
+ 
+</p>
+
+<div>
+
+<div>
+       您登录之后，可以通过点击页面第一行右边的 
+<i>
+我的账户
+</i>
+ 修改密码。        
+</div>
+
+<div>
+       如果您忘记了密码，请在 
+<i>
+登录页面
+</i>
+ 忘记密码框中输入邮件地址，系统会把重置的密码发送到您的邮箱中。    
+</div>
+       协同环境的内容上只是初步建了一个框架，栏目的设置可以根据您的需要进一步修改。平台的优势是大家都可以创建页面、添加内容、上传文档、发布信息，希望这能有助于大家之间的信息交流和讨论。  
+<div>
+       如果您需要编辑页面内容，请先点击页面右上角"
+<span style="color: rgb(0, 0, 255);">
+编辑模式
+</span>
+"选项，然后点击页面的“
+<span style="color: rgb(0, 0, 255);">
+编辑
+</span>
+”选项，进入编辑器界面，即可输入内容。选择图标
+<img src="scripts/fckeditor/editor/images/smiley/msn/upload.png"/>
+ ，可以上传文件。选择图标
+<img src="scripts/fckeditor/editor/images/smiley/msn/addpage.png"/>
+，可以引用其他页面。选择图标
+<img src="scripts/fckeditor/editor/images/smiley/msn/addlink.jpg"/>
+ ，可以引用外部链接。
+</div>
+
+<div>
+
+<div>
+       协同环境的
+<span style="color: rgb(0, 0, 255);">
+<D_Link href="http://duckling.escience.cn/dct/Wiki.jsp?page=H_OneMinuteGuide" class="external" target="_blank">
+使用帮助材料
+</D_Link>
+<img class="outlink" src="/dct/images/out.png"/>
+</span>
+，供参考。    
+</div>
+
+<div>
+   
+</div>
+       使用中有任何问题，请随时联系
+<D_Link href="mailto:vlab@cnic.cn?subject=Duckling User Question" class="external">
+vlab@cnic.cn
+</D_Link>
+<img class="outlink" src="/dct/images/out.png"/>
+或010-58812345获得支持服务。                                          
+<p>
+       协同平台的各项功能在进一步开发和完善，欢迎提出
+<D_Link href="7">
+意见建议
+</D_Link>
+ 。
+</p>
+
+</div>
+
+</div>
+
+<p>
+ 
+</p>

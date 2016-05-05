@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<project name="buildDDLClientjar" default="run" basedir=".">
+
+	<property name="application.name" value="Duckling.ddl"/>
+	<property name="application.id" value="Duckling.ddl"/>
+
+	<!-- environment access via env.* -->
+	<property environment="env"/>
+	<property name="JAVA_HOME" value="C:\Program Files\Java\jdk15014"/>
+	<!-- jrelib dir -->
+	<property name="jrelib.dir" value="${JAVA_HOME}\jre\lib"/>
+	<property name="sharedlib.dir" value="sharedlib"/>
+	<!-- compile with debugging information -->
+	<property name="debug" value="on"/>
+
+	<!-- source directory -->
+	<property name="src.dir" value="src/client/java"/>
+	<property name="tempsdk.dir" value="tempsdk"/>
+
+	<!-- i18n directory -->
+	<property name="i18n.dir" value="res"/>
+
+	<!-- api directory -->
+	<property name="WebRoot" value="src/main/webapp"></property>
+	<!-- library dir -->
+	<property name="lib.dir" value="${WebRoot}/WEB-INF/lib"/>
+
+	<!-- webroot dir -->
+	<property name="webroot.dir" value="WebRoot"/>
+
+	<!-- temporary build dir -->
+	<property name="build.dir" value="build"/>
+	<property name="build.classes" value="${build.dir}/classes"/>
+	<property name="build.i18n" value="${build.dir}/res"/>
+	<property name="ddl.dir" value="${build.dir}/src/"></property>
+	<property name="build.webroot" value="${build.dir}/WebRoot"/>
+	<property name="build.tempsdk" value="${build.dir}/tempsdk"/>
+	<property name="compilelib.dir" value="src/main/webapp/WEB-INF/lib"></property>
+
+
+	<!-- compilelib classpath -->
+	<path id="compilelib">
+		<fileset dir="${compilelib.dir}">
+			<include name="**\clb*.jar"/>
+			<include name="**\http*.jar"/>
+			<include name="**\json-rpc*.jar"/>
+		</fileset>
+	</path>
+	<path id="sharedlib">
+		<fileset dir="${sharedlib.dir}">
+			<include name="**\*.jar"/>
+		</fileset>
+	</path>
+	<!-- build classpath -->
+	<path id="classpath">
+		<path refid="sharedlib"/>
+		<path refid="jrelib" />
+		<path refid="compilelib" />
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${build.classes}" />
+		<pathelement location="${build.api}" />
+		<pathelement location="${build.common}" />
+	</path>
+
+	<!-- jrelib classpath -->
+	<path id="jrelib">
+		<fileset dir="${jrelib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="checkJavahome" unless="JAVA_HOME">
+		<fail message="JAVA_HOME must be defined in your environment."/>
+	</target>
+
+	<!-- delete build dir -->
+	<target name="clean" description="Remove all generated files">
+		<delete dir="${build.dir}"/>
+	</target>
+
+	<target name="getver" >
+		<java jar="${lib.dir}/version.jar" outputproperty="ver" fork="true">
+			<classpath refid="classpath" />
+			<arg value="read"/>
+			<arg value="version"/>
+			<arg value="${webroot.dir}/WEB-INF/umt.ver"/>
+		</java>
+	</target>
+
+	<target name="init" description="init and merge src files">
+		<delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.tempsdk}"/>
+		<mkdir dir="${build.dir}/src" />
+		<mkdir dir="${ddl.dir}"/>
+		<copy todir="${ddl.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- build target -->
+	<target name="compile" description="Build from source" depends="getver,checkJavahome,clean,init">
+		<mkdir dir="${build.classes}"/>
+		<javac srcdir="${build.dir}/src" 
+			destdir="${build.classes}"
+			source="1.5"
+			target="1.5"
+			debug="${debug}">
+			<compilerarg line="-encoding UTF-8" />
+			<classpath refid="classpath" />
+		</javac>
+		<mkdir dir="${build.tempsdk}"/>
+		<javac srcdir="${build.dir}/tempsdk" 
+			destdir="${build.classes}"
+			source="1.5"
+			target="1.5"
+			debug="${debug}">
+			<compilerarg line="-encoding UTF-8" />
+			<classpath refid="classpath" />
+		</javac>
+		<mkdir dir="${build.i18n}" />
+	</target>
+
+	<target name="run" depends="compile, pack-api">
+		<description>
+			combine all the target together
+		</description>
+	</target>
+
+	<target name="pack" depends="run">
+		<description>
+			generate the deploy package
+		</description>
+		<mkdir dir="${build.dir}\ddl${ver}.bin" />
+		<move todir="${build.dir}\ddl${ver}.bin\webroot">
+			<fileset dir="${build.dir}\umt" />
+		</move>
+		<copy todir="${build.dir}\ddl${ver}.bin">
+			<fileset dir=".">
+				<include name="*.txt" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}\ddl${ver}.bin\api-jars">
+			<fileset dir="${build.dir}\jar">
+				<exclude name="**/*.svn*/**" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="pack-api" depends="compile">
+		<mkdir dir="${build.dir}\jar"/>
+		<copy todir="${build.classes}">
+					<fileset dir="${build.dir}/src">
+						<include name="**/ddlclientkey" />
+					</fileset>
+		</copy>
+		<jar destfile="${build.dir}\jar\ddl-client-0.1.1.jar">
+			<fileset dir="${build.classes}">
+				<exclude name="**/*Test*.class"/>
+			</fileset>
+		</jar>
+	</target>
+</project>

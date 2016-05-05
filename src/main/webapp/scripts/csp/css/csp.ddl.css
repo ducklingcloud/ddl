@@ -1,0 +1,77 @@
+/*zhangshixiang wrote for ddl4.4.12 on 2016-1-20*/
+
+.searchInput {padding:5px; width:300px;}
+.resourceSearch input.searchBtn {
+	padding:4px 5px; width:70px; border:none; background:#0088ce; 
+	color:#fff; font-size:14px; border-radius:4px;
+}
+
+.resourceTable { border-collapse:collapse; margin:10px 10px 0 0; width:440px;}
+.resourceTable th {background:#f5f5f5; border:1px solid #ccc; font-size:13px; padding:3px; }
+.resourceTable th.ddlName {width:50%;}
+.resourceTable th.ddlSize {width:20%;}
+.resourceTable td.ddlSize,
+	.resourceTable td.ddlTime {color:#555; font-size:10px;}
+.resourceTable td {padding:3px; border-bottom:1px dotted #ddd;color:#333}
+.resourceTable tbody tr:hover { background-color: #FFFFE1; cursor:pointer;}
+
+.resourceTable .ellipsis {
+	overflow:hidden;text-overflow: ellipsis; white-space:nowrap; max-width:185px;
+	display:inline-block; vertical-align: bottom; margin-bottom: 3px;
+}
+
+.pagination { list-style: none; text-align:center;padding: 5px 0}
+.pagination li{ display: block;  float: left;}
+.pagination li a, .pagination li span {
+	padding: 3px 8px;line-height: 18px;margin:5px; font-size:12px;
+	text-decoration: none;background-color: #fff;border: 1px solid #ddd;
+}
+.pagination li span {border:none; background:none; font-weight:bold;}
+
+.CSPHeadImg { 
+	display:inline-block; 
+	width:20px; 
+	height:20px;
+	background:url(../../../../jsp/aone/images/icon-feed-20.png) -5px -5px no-repeat;
+}
+.CSPHeadImg.DFile { 	
+	background-position: -5px -35px; 
+}
+.CSPHeadImg.DFile.rar,.CSPHeadImg.DFile.zip {
+	background-position: -5px -305px; 
+}
+.CSPHeadImg.DFile.doc,.CSPHeadImg.DFile.docx {
+	background-position: -5px -185px; 
+}
+.CSPHeadImg.DFile.xls,.CSPHeadImg.DFile.xlsx {
+	background-position: -5px -215px; 
+}
+.CSPHeadImg.DFile.ppt,.CSPHeadImg.DFile.pptx {
+	background-position: -5px -246px; 
+}
+.CSPHeadImg.DFile.txt {
+	background-position: -5px -66px; 
+}
+.CSPHeadImg.DFile.pdf {
+	background-position: -5px -276px; 
+}
+.CSPHeadImg.DFile.wmv,
+.CSPHeadImg.DFile.flv,
+.CSPHeadImg.DFile.avi {
+	background-position: -5px -125px; }
+.CSPHeadImg.DFile.jpg,
+.CSPHeadImg.DFile.jpeg,
+.CSPHeadImg.DFile.png,
+.CSPHeadImg.DFile.gif,
+.CSPHeadImg.DFile.bmp,
+.CSPHeadImg.DFile.psd {
+	background-position: -5px -95px; }
+.CSPHeadImg.Bundle {
+	background-position: -468px -229px; }
+.CSPHeadImg.Folder {
+	background-position: -5px -155px; }
+
+.CSPHeadImg.DFile.dsf,
+.CSPHeadImg.DPage.dsf {
+	background:url(../images/icon-feed-file20.png) 0 0 no-repeat;
+}

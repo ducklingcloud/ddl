@@ -1,0 +1,26 @@
+<div id="fileInfo">
+	<div class="largeButtonHolder">
+		<div id="viewerWrapper" style="z-index:100;width:100%; height:750px; margin:0 auto"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function checkHtml5(){   return (typeof(Worker) !== "undefined") ? true : false;};
+var isIE9=function(){return navigator.userAgent.indexOf("MSIE 9.0")>0;};
+
+$(function(){
+	if(checkHtml5()||isIE9()){
+		$("#viewerWrapper").append("<iframe src=\"${pdfUrl}\" height=\"100%\" width=\"100%\" scrolling=\"no\" ></iframe>");
+	}else{
+		$("#fileInfo").empty();
+		$("#fileInfo").append("<table class=\"fileContainer\" style=\"border:none;\"><tbody><tr>" +
+			"<th><div class=\"fileIcon ${ext}\"></div></th>" +
+			"<td><p class=\"fileNote\"></p><div class=\"largeButtonHolder\"><p class=\"fileName\">${fileName}</p><p>${notCompatibleMsg}</p>" +
+				 "<a href=\"${downloadURL}\" class=\"largeButton extra\">${downloadMsg}<span class=\"ui-text-note\">(${sizeShort})</span></a></div></td>" +
+		    "</tr></tbody></table>"
+		);
+	}
+	var wh=$(window).height();
+	$("#viewerWrapper").css("height", wh - 10 + "px");
+});
+</script>
