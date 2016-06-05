@@ -1,302 +1,316 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
-        http://www.springframework.org/schema/mvc 
-        classpath:/org/springframework/web/servlet/config/spring-mvc-3.0.xsd
-        http://www.springframework.org/schema/context 
-        classpath:/org/springframework/context/config/spring-context-3.0.xsd
-        http://www.springframework.org/schema/beans 
-        classpath:/org/springframework/beans/factory/xml/spring-beans-3.0.xsd
-        http://www.springframework.org/schema/aop
-        classpath:/org/springframework/aop/config/spring-aop-3.0.xsd
-        http://www.springframework.org/schema/tx
-        classpath:/org/springframework/transaction/config/spring-tx-3.0.xsd">
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+			   classpath:org/springframework/web/servlet/config/spring-mvc-3.0.xsd
+			   http://www.springframework.org/schema/context 
+			   classpath:org/springframework/context/config/spring-context-3.0.xsd
+			   http://www.springframework.org/schema/beans 
+			   classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+			   http://www.springframework.org/schema/aop
+			   classpath:org/springframework/aop/config/spring-aop-3.0.xsd
+			   http://www.springframework.org/schema/tx
+			   classpath:org/springframework/transaction/config/spring-tx-3.0.xsd">
 
-	<!-- System JDBC Connection -->
-	<context:property-placeholder location="/WEB-INF/conf/vwbconfig.properties" />
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="driverClass" value="${c3p0.driverClass}" />
-		<property name="jdbcUrl" value="${c3p0.url}" />
-		<property name="user" value="${c3p0.username}" />
-		<property name="password" value="${c3p0.password}" />
-		<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
-		<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
-		<property name="minPoolSize" value="${c3p0.minPoolSize}" />
-		<property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
-		<property name="maxStatements" value="${c3p0.maxStatements}" />
-		<property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
-		<property name="maxConnectionAge" value="${c3p0.maxConnectionAge}" />
-		<property name="testConnectionOnCheckout" value="${c3p0.testConnectionOnCheckout}" />
-	</bean>
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource">
-			<ref bean="dataSource" />
-		</property>
-	</bean>
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-	<tx:annotation-driven transaction-manager="transactionManager" />
-	<bean id="namedParameterJdbcTemplate"
-		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-		<constructor-arg>
-			<ref bean="dataSource" />
-		</constructor-arg>
-	</bean>
-	<!-- Contianer Abstarct -->
-	<bean id="baseDAO" abstract="true">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-		<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate" />
-	</bean>
-	<bean id="consumerDao" class="net.duckling.ddl.service.oauth.dao.ConsumerDAOImpl"
-		parent="baseDAO" />
-	<bean id="accessorDao" class="net.duckling.ddl.service.oauth.dao.AccessorDAOImpl"
-		parent="baseDAO" />
+  <!-- System JDBC Connection -->
+  <context:property-placeholder location="/WEB-INF/conf/vwbconfig.properties" />
 
-	<!-- Container Providers -->
-	<!-- Container Services -->
-	<bean id="oauthService" class="net.duckling.ddl.service.oauth.impl.OAuthServiceImpl"
-		init-method="init" destroy-method="destroy">
-		<property name="consumerDAO" ref="consumerDao" />
-		<property name="accessorDAO" ref="accessorDao" />
-		<property name="timerService" ref="timerService" />
-		<property name="timeToLive">
-			<value>${oauth.token.timeout}</value>
-		</property>
-	</bean>
-	<bean id="timerService" class="net.duckling.ddl.service.timer.impl.TimerServiceImpl"
-		init-method="init" destroy-method="destroy">
-		<constructor-arg>
-			<value>${ddl.root}/WEB-INF/conf/quartz.properties</value>
-		</constructor-arg>
-	</bean>
-	<bean id="memcachedService"
-		class="net.duckling.falcon.api.cache.impl.MemcachedCacheService"
-		init-method="doInit" destroy-method="doDestroy">
-		<property name="memcachedURL" value="${duckling.memcached.host}" />
-	</bean>
+  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	destroy-method="close">
+    <property name="driverClass" value="${c3p0.driverClass}" />
+    <property name="jdbcUrl" value="${c3p0.url}" />
+    <property name="user" value="${c3p0.username}" />
+    <property name="password" value="${c3p0.password}" />
+    <property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
+    <property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
+    <property name="minPoolSize" value="${c3p0.minPoolSize}" />
+    <property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
+    <property name="maxStatements" value="${c3p0.maxStatements}" />
+    <property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
+    <property name="maxConnectionAge" value="${c3p0.maxConnectionAge}" />
+    <property name="testConnectionOnCheckout" value="${c3p0.testConnectionOnCheckout}" />
+  </bean>
 
-	<bean id="containerUrlConstructor" class="net.duckling.ddl.service.url.ContainerURLConstructor">
-		<constructor-arg value="${duckling.baseURL}" />
-		<constructor-arg value="${duckling.referenceStyle}" />
-	</bean>
-	<!-- Container -->
-	<bean id="container" class="net.duckling.ddl.common.VWBContainerImpl">
-		<property name="teamService" ref="teamService" />
-		<property name="baseURL" value="${duckling.baseURL}" />
-		<property name="urlConstructor" ref="containerUrlConstructor" />
-		<property name="systemProperty" ref="systemProperty" />
-	</bean>
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource">
+      <ref bean="dataSource" />
+    </property>
+  </bean>
 
-	<!-- Site Abstract -->
+  <bean id="transactionManager"
+	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"></property>
+  </bean>
 
-	<!-- Site Providers -->
+  <tx:annotation-driven transaction-manager="transactionManager" />
 
-	<bean id="storage" class="net.duckling.ddl.service.file.impl.CLBFileStorage">
-		<constructor-arg value="${duckling.clb.service}"
-			index="0" />
-		<constructor-arg value="${duckling.clb.aone.user}"
-			index="1" />
-		<constructor-arg value="${duckling.clb.aone.password}"
-			index="2" />
-		<constructor-arg value="${duckling.clb.aone.version}"
-			index="3" />
-		<constructor-arg value="${duckling.clb.dconvert.enable}"
-			index="4" />
-	</bean>
-	<bean id="systemProperty" class="net.duckling.ddl.common.DucklingProperties">
-		<constructor-arg value="false" />
-		<constructor-arg value="${ddl.root}/WEB-INF/conf/vwbconfig.properties" />
-	</bean>
-	<bean id="umtSsoProvider"
-		class="net.duckling.ddl.service.authenticate.impl.UmtSsoLoginProvider">
-		<property name="keyPath" value="${ddl.root}/WEB-INF/conf/umtpublickey.txt" />
-		<property name="publicKeyUrl" value="${duckling.umt.publicKey}" />
-		<property name="loginUrl" value="${duckling.umt.login}" />
-		<property name="serviceUrl" value="${duckling.umt.service.url}" />
-	</bean>
+  <bean id="namedParameterJdbcTemplate"
+	class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+    <constructor-arg>
+      <ref bean="dataSource" />
+    </constructor-arg>
+  </bean>
 
-	<bean id="authenticationService"
-		class="net.duckling.ddl.service.authenticate.impl.AuthenticationServiceImpl">
-		<property name="loginProvider" ref="umtSsoProvider" />
-		<property name="teamService" ref="teamService" />
-		<property name="aoneUserService" ref="aoneUserService" />
-		<property name="urlGenerator" ref="urlGenerator" />
-	</bean>
+  <!-- Contianer Abstarct -->
+  <bean id="baseDAO" abstract="true">
+    <property name="jdbcTemplate" ref="jdbcTemplate" />
+    <property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate" />
+  </bean>
+  <bean id="consumerDao" class="net.duckling.ddl.service.oauth.dao.ConsumerDAOImpl"
+	parent="baseDAO" />
+  <bean id="accessorDao" class="net.duckling.ddl.service.oauth.dao.AccessorDAOImpl"
+	parent="baseDAO" />
 
-	<bean id="sendemailservice" class="net.duckling.ddl.service.mail.impl.MailServiceImpl"
-		init-method="init" destroy-method="destroy">
-		<property name="systemProperty" ref="systemProperty" />
-	</bean>
-	<bean id="emailNoticeThread" class="net.duckling.ddl.service.mail.thread.EmailNoticeThread"
-		init-method="start" destroy-method="shutdown">
-		<property name="baseUrl" value="${duckling.baseURL}" />
-		<property name="baseAddress" value="${duckling.baseAddress}" />
-		<property name="triggerWeek" value="${duckling.emailnotice.triggerweek}" />
-		<property name="wordVectorPath" value="${dbrain.wordvector.path}" />
-		<property name="teamService" ref="teamService" />
-		<property name="recommendationService" ref="recommendationService" />
-	</bean>
-	<bean id="emailSendThread" class="net.duckling.ddl.service.mail.thread.EmailSendThread"
-		init-method="start" destroy-method="shutdown">
-		<property name="mailService" ref="sendemailservice" />
-	</bean>
-	<!-- AOne Spring IOC Config -->
-	<bean id="teamDao" class="net.duckling.ddl.service.team.dao.TeamDAOImpl"
-		parent="baseDAO" />
-	<bean id="teamCreateInfoDao" class="net.duckling.ddl.service.team.dao.TeamCreateInfoDAOImpl"
-		parent="baseDAO" />
-	<bean id="teamAclDao" class="net.duckling.ddl.service.authority.impl.TeamAclDAO"
-		parent="baseDAO" />
-	<bean id="teamMemberDao" class="net.duckling.ddl.service.team.dao.TeamMemberDAOImpl"
-		parent="baseDAO" />
-	<bean id="teamPreferenceDAO" class="net.duckling.ddl.service.team.dao.TeamPreferenceDAOImpl"
-		parent="baseDAO" />
-	<bean id="userExtDao" class="net.duckling.ddl.service.user.dao.UserExtDAOImpl"
-		parent="baseDAO" />
-	<bean id="activationDao" class="net.duckling.ddl.service.user.dao.ActivationDAOImpl"
-		parent="baseDAO" />
-	<bean id="userPreferencesDAO"
-		class="net.duckling.ddl.service.user.dao.UserPreferencesDAOImpl"
-		parent="baseDAO" />
-	<bean id="userGuideDAO" class="net.duckling.ddl.service.user.dao.UserGuideDAOImpl"
-		parent="baseDAO" />
+  <!-- Container Providers -->
+  <!-- Container Services -->
+  <bean id="oauthService" class="net.duckling.ddl.service.oauth.impl.OAuthServiceImpl"
+	init-method="init" destroy-method="destroy">
+    <property name="consumerDAO" ref="consumerDao" />
+    <property name="accessorDAO" ref="accessorDao" />
+    <property name="timerService" ref="timerService" />
+    <property name="timeToLive">
+      <value>${oauth.token.timeout}</value>
+    </property>
+  </bean>
+  <bean id="timerService" class="net.duckling.ddl.service.timer.impl.TimerServiceImpl"
+	init-method="init" destroy-method="destroy">
+    <constructor-arg>
+      <value>${ddl.root}/WEB-INF/conf/quartz.properties</value>
+    </constructor-arg>
+  </bean>
+  <bean id="memcachedService"
+	class="net.duckling.falcon.api.cache.impl.MemcachedCacheService"
+	init-method="doInit" destroy-method="doDestroy">
+    <property name="memcachedURL" value="${duckling.memcached.host}" />
+  </bean>
 
-	<bean id="teamMemberService"
-		class="net.duckling.ddl.service.team.impl.TeamMemberServiceImpl">
-		<property name="teamMemberDao" ref="teamMemberDao" />
-		<property name="memcachedService" ref="memcachedService" />
-	</bean>
-	<bean id="teamPreferenceService"
-		class="net.duckling.ddl.service.team.impl.TeamPreferenceServiceImpl">
-		<property name="teamPreferenceDao" ref="teamPreferenceDAO" />
-	</bean>
+  <bean id="containerUrlConstructor" class="net.duckling.ddl.service.url.ContainerURLConstructor">
+    <constructor-arg value="${duckling.baseURL}" />
+    <constructor-arg value="${duckling.referenceStyle}" />
+  </bean>
 
-	<bean id="urlGenerator" class="net.duckling.ddl.service.url.URLGenerator">
-		<property name="baseUrl" value="${duckling.baseURL}" />
-		<property name="teamService" ref="teamService" />
-	</bean>
+  <!-- Container -->
+  <bean id="container" class="net.duckling.ddl.common.VWBContainerImpl">
+    <property name="teamService" ref="teamService" />
+    <property name="baseURL" value="${duckling.baseURL}" />
+    <property name="urlConstructor" ref="containerUrlConstructor" />
+    <property name="systemProperty" ref="systemProperty" />
+  </bean>
 
-	<bean id="teamService" class="net.duckling.ddl.service.team.impl.TeamServiceImpl">
-		<property name="teamDao" ref="teamDao" />
-		<property name="memcachedService" ref="memcachedService" />
-		<property name="teamMemberService" ref="teamMemberService" />
-		<property name="aoneUserService" ref="aoneUserService" />
-		<property name="authorityService" ref="authorityService" />
-		<property name="vmtTeamManager" ref="vmtTeamManager" />
-		<property name="teamPreferenceService" ref="teamPreferenceService" />
-		<property name="teamCreateInfoDao" ref="teamCreateInfoDao"></property>
-	</bean>
-	<bean id="aoneUserService" class="net.duckling.ddl.service.user.impl.AoneUserServiceImpl">
-		<property name="serviceUrl">
-			<value>${duckling.umt.service.url}</value>
-		</property>
-		<property name="memcachedService" ref="memcachedService" />
-		<property name="userExtDao" ref="userExtDao" />
-		<property name="activationDao" ref="activationDao" />
-		<property name="userPreferencesDAO" ref="userPreferencesDAO" />
-		<property name="userGuideDAO" ref="userGuideDAO" />
-	</bean>
-	<bean id="authorityService"
-		class="net.duckling.ddl.service.authority.impl.AuthorityServiceImpl">
-		<property name="teamAclDao" ref="teamAclDao" />
-	</bean>
+  <!-- Site Abstract -->
+  <!-- Site Providers -->
 
+  <bean id="storage" class="net.duckling.ddl.service.file.impl.CLBFileStorage">
+    <constructor-arg value="${duckling.clb.service}"
+		     index="0" />
+    <constructor-arg value="${duckling.clb.aone.user}"
+		     index="1" />
+    <constructor-arg value="${duckling.clb.aone.password}"
+		     index="2" />
+    <constructor-arg value="${duckling.clb.aone.version}"
+		     index="3" />
+    <constructor-arg value="${duckling.clb.dconvert.enable}"
+		     index="4" />
+  </bean>
 
+  <bean id="systemProperty" class="net.duckling.ddl.common.DucklingProperties">
+    <constructor-arg value="false" />
+    <constructor-arg value="${ddl.root}/WEB-INF/conf/vwbconfig.properties" />
+  </bean>
 
-	<!-- AOne Spring IOC Config end -->
+  <bean id="umtSsoProvider"
+	class="net.duckling.ddl.service.authenticate.impl.UmtSsoLoginProvider">
+    <property name="keyPath" value="${ddl.root}/WEB-INF/conf/umtpublickey.txt" />
+    <property name="publicKeyUrl" value="${duckling.umt.publicKey}" />
+    <property name="loginUrl" value="${duckling.umt.login}" />
+    <property name="serviceUrl" value="${duckling.umt.service.url}" />
+  </bean>
 
-	<bean id="groupService" class="net.duckling.vmt.api.impl.GroupService">
-		<constructor-arg>
-			<value>${duckling.vmt.service.address}</value>
-		</constructor-arg>
-	</bean>
-	<bean id="vmtUserService" class="net.duckling.vmt.api.impl.UserService">
-		<constructor-arg>
-			<value>${duckling.vmt.service.address}</value>
-		</constructor-arg>
-	</bean>
-	<bean id="vmtTeamManager" class="net.duckling.ddl.service.team.dao.VMTTeamManagerImpl">
-		<property name="groupService" ref="groupService" />
-		<property name="vmtUserService" ref="vmtUserService" />
-	</bean>
-	<bean id="panService" class="net.duckling.meepo.api.PanServiceImpl">
-		<constructor-arg>
-			<value>${ddl.profile.env}</value>
-		</constructor-arg>
-		<property name="memcachedService" ref="memcachedService" />
-	</bean>
+  <bean id="authenticationService"
+	class="net.duckling.ddl.service.authenticate.impl.AuthenticationServiceImpl">
+    <property name="loginProvider" ref="umtSsoProvider" />
+    <property name="teamService" ref="teamService" />
+    <property name="aoneUserService" ref="aoneUserService" />
+    <property name="urlGenerator" ref="urlGenerator" />
+  </bean>
 
-	<bean id="drawResultDao" class="net.duckling.ddl.service.lottery.dao.DrawResultDaoImpl"
-		parent="baseDAO" />
-	<bean id="deliveryDao" class="net.duckling.ddl.service.lottery.dao.DeliveryDaoImpl"
-		parent="baseDAO" />
+  <bean id="sendemailservice" class="net.duckling.ddl.service.mail.impl.MailServiceImpl"
+	init-method="init" destroy-method="destroy">
+    <property name="systemProperty" ref="systemProperty" />
+  </bean>
 
-	<bean id="lotteryService" class="net.duckling.ddl.service.lottery.LotteryService"
-		init-method="doInit" destroy-method="doDestroy">
-		<constructor-arg index="0" value="WEB-INF/conf/lottery.yml" />
-		<constructor-arg index="1" value="${duckling.redis.server}" />
-		<constructor-arg index="2" value="${duckling.redis.port}" />
-		<property name="drawResultDao" ref="drawResultDao"></property>
-		<property name="deliveryDao" ref="deliveryDao"></property>
-		<property name="timerService" ref="timerService"></property>
-	</bean>
-	
-	<bean id="gerneratorService" class="net.duckling.falcon.api.idg.impl.IDGeneratorService" >
-		<constructor-arg index="0" value="${duckling.redis.server}" />
-		<constructor-arg index="1" value="${duckling.redis.port}" />
-	</bean>
-	
-	
-	<!--dataSourceSub JDBC Connection-->
-	<bean id="dataSourceSub" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="user" value="${databaseSub.username}" />
-		<property name="password" value="${databaseSub.password}" />
-		<property name="jdbcUrl" value="${databaseSub.url}" />
-		<property name="driverClass" value="${c3p0.driverClass}" />
-		<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
-		<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
-		<property name="minPoolSize" value="${c3p0.minPoolSize}" />
-		<property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
-		<property name="maxStatements" value="${c3p0.maxStatements}" />
-		<property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
-		<property name="maxConnectionAge" value="${c3p0.maxConnectionAge}" />
-		<property name="testConnectionOnCheckout" value="${c3p0.testConnectionOnCheckout}" />
-	</bean>
-	<bean id="jdbcTemplateSub" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource">
-			<ref bean="dataSourceSub" />
-		</property>
-	</bean>
-	<bean id="transactionManagerSub"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSourceSub"></property>
-	</bean>
-	<tx:annotation-driven transaction-manager="transactionManagerSub" />
-	<bean id="namedParameterJdbcTemplateSub"
-		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-		<constructor-arg>
-			<ref bean="dataSourceSub" />
-		</constructor-arg>
-	</bean>
-	<bean id="baseDAOSub" abstract="true">
-		<property name="jdbcTemplate" ref="jdbcTemplateSub" />
-		<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplateSub" />
-	</bean>
-	<bean id="authorizationCodeDAO" class="net.duckling.ddl.service.user.dao.AuthorizationCodeDAOImpl" parent="baseDAOSub" />
-	<bean id="jobRecords" class="net.duckling.ddl.service.jobmaster.impl.JobRecordDAO" parent="baseDAOSub" />
-	<bean id="vector4UserDao" class="net.duckling.ddl.service.dbrain.dao.impl.Vector4UserDaoImpl" parent="baseDAOSub" />
-	
-	<bean id="recommendationService" class="net.duckling.ddl.service.dbrain.impl.RecommendationServiceImpl" >
-		<property name="vector4UserService" ref="vector4UserService" />
-	</bean>
-	<bean id="vector4UserService" class="net.duckling.ddl.service.dbrain.impl.Vector4UserServiceImpl">
-		<property name="vector4UserDao" ref="vector4UserDao" />
-	</bean>
+  <bean id="emailNoticeThread" class="net.duckling.ddl.service.mail.thread.EmailNoticeThread"
+	init-method="start" destroy-method="shutdown">
+    <property name="baseUrl" value="${duckling.baseURL}" />
+    <property name="baseAddress" value="${duckling.baseAddress}" />
+    <property name="triggerWeek" value="${duckling.emailnotice.triggerweek}" />
+    <property name="wordVectorPath" value="${dbrain.wordvector.path}" />
+    <property name="teamService" ref="teamService" />
+    <property name="recommendationService" ref="recommendationService" />
+  </bean>
+
+  <bean id="emailSendThread" class="net.duckling.ddl.service.mail.thread.EmailSendThread"
+	init-method="start" destroy-method="shutdown">
+    <property name="mailService" ref="sendemailservice" />
+  </bean>
+
+  <!-- AOne Spring IOC Config -->
+  <bean id="teamDao" class="net.duckling.ddl.service.team.dao.TeamDAOImpl"
+	parent="baseDAO" />
+  <bean id="teamCreateInfoDao" class="net.duckling.ddl.service.team.dao.TeamCreateInfoDAOImpl"
+	parent="baseDAO" />
+  <bean id="teamAclDao" class="net.duckling.ddl.service.authority.impl.TeamAclDAO"
+	parent="baseDAO" />
+  <bean id="teamMemberDao" class="net.duckling.ddl.service.team.dao.TeamMemberDAOImpl"
+	parent="baseDAO" />
+  <bean id="teamPreferenceDAO" class="net.duckling.ddl.service.team.dao.TeamPreferenceDAOImpl"
+	parent="baseDAO" />
+  <bean id="userExtDao" class="net.duckling.ddl.service.user.dao.UserExtDAOImpl"
+	parent="baseDAO" />
+  <bean id="activationDao" class="net.duckling.ddl.service.user.dao.ActivationDAOImpl"
+	parent="baseDAO" />
+  <bean id="userPreferencesDAO"
+	class="net.duckling.ddl.service.user.dao.UserPreferencesDAOImpl"
+	parent="baseDAO" />
+  <bean id="userGuideDAO" class="net.duckling.ddl.service.user.dao.UserGuideDAOImpl"
+	parent="baseDAO" />
+
+  <bean id="teamMemberService"
+	class="net.duckling.ddl.service.team.impl.TeamMemberServiceImpl">
+    <property name="teamMemberDao" ref="teamMemberDao" />
+    <property name="memcachedService" ref="memcachedService" />
+  </bean>
+
+  <bean id="teamPreferenceService"
+	class="net.duckling.ddl.service.team.impl.TeamPreferenceServiceImpl">
+    <property name="teamPreferenceDao" ref="teamPreferenceDAO" />
+  </bean>
+
+  <bean id="urlGenerator" class="net.duckling.ddl.service.url.URLGenerator">
+    <property name="baseUrl" value="${duckling.baseURL}" />
+    <property name="teamService" ref="teamService" />
+  </bean>
+
+  <bean id="teamService" class="net.duckling.ddl.service.team.impl.TeamServiceImpl">
+    <property name="teamDao" ref="teamDao" />
+    <property name="memcachedService" ref="memcachedService" />
+    <property name="teamMemberService" ref="teamMemberService" />
+    <property name="aoneUserService" ref="aoneUserService" />
+    <property name="authorityService" ref="authorityService" />
+    <property name="vmtTeamManager" ref="vmtTeamManager" />
+    <property name="teamPreferenceService" ref="teamPreferenceService" />
+    <property name="teamCreateInfoDao" ref="teamCreateInfoDao"></property>
+  </bean>
+
+  <bean id="aoneUserService" class="net.duckling.ddl.service.user.impl.AoneUserServiceImpl">
+    <property name="serviceUrl">
+      <value>${duckling.umt.service.url}</value>
+    </property>
+    <property name="memcachedService" ref="memcachedService" />
+    <property name="userExtDao" ref="userExtDao" />
+    <property name="activationDao" ref="activationDao" />
+    <property name="userPreferencesDAO" ref="userPreferencesDAO" />
+    <property name="userGuideDAO" ref="userGuideDAO" />
+  </bean>
+  <bean id="authorityService"
+	class="net.duckling.ddl.service.authority.impl.AuthorityServiceImpl">
+    <property name="teamAclDao" ref="teamAclDao" />
+  </bean>
+  <!-- AOne Spring IOC Config end -->
+
+  <bean id="groupService" class="net.duckling.vmt.api.impl.GroupService">
+    <constructor-arg>
+      <value>${duckling.vmt.service.address}</value>
+    </constructor-arg>
+  </bean>
+  <bean id="vmtUserService" class="net.duckling.vmt.api.impl.UserService">
+    <constructor-arg>
+      <value>${duckling.vmt.service.address}</value>
+    </constructor-arg>
+  </bean>
+  <bean id="vmtTeamManager" class="net.duckling.ddl.service.team.dao.VMTTeamManagerImpl">
+    <property name="groupService" ref="groupService" />
+    <property name="vmtUserService" ref="vmtUserService" />
+  </bean>
+  <bean id="panService" class="net.duckling.meepo.api.PanServiceImpl">
+    <constructor-arg>
+      <value>${ddl.profile.env}</value>
+    </constructor-arg>
+    <property name="memcachedService" ref="memcachedService" />
+  </bean>
+
+  <bean id="drawResultDao" class="net.duckling.ddl.service.lottery.dao.DrawResultDaoImpl"
+	parent="baseDAO" />
+  <bean id="deliveryDao" class="net.duckling.ddl.service.lottery.dao.DeliveryDaoImpl"
+	parent="baseDAO" />
+
+  <bean id="lotteryService" class="net.duckling.ddl.service.lottery.LotteryService"
+	init-method="doInit" destroy-method="doDestroy">
+    <constructor-arg index="0" value="WEB-INF/conf/lottery.yml" />
+    <constructor-arg index="1" value="${duckling.redis.server}" />
+    <constructor-arg index="2" value="${duckling.redis.port}" />
+    <property name="drawResultDao" ref="drawResultDao"></property>
+    <property name="deliveryDao" ref="deliveryDao"></property>
+    <property name="timerService" ref="timerService"></property>
+  </bean>
+  
+  <bean id="gerneratorService" class="net.duckling.falcon.api.idg.impl.IDGeneratorService" >
+    <constructor-arg index="0" value="${duckling.redis.server}" />
+    <constructor-arg index="1" value="${duckling.redis.port}" />
+  </bean>
+  
+  <!--dataSourceSub JDBC Connection-->
+  <bean id="dataSourceSub" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	destroy-method="close">
+    <property name="user" value="${databaseSub.username}" />
+    <property name="password" value="${databaseSub.password}" />
+    <property name="jdbcUrl" value="${databaseSub.url}" />
+    <property name="driverClass" value="${c3p0.driverClass}" />
+    <property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
+    <property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
+    <property name="minPoolSize" value="${c3p0.minPoolSize}" />
+    <property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
+    <property name="maxStatements" value="${c3p0.maxStatements}" />
+    <property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
+    <property name="maxConnectionAge" value="${c3p0.maxConnectionAge}" />
+    <property name="testConnectionOnCheckout" value="${c3p0.testConnectionOnCheckout}" />
+  </bean>
+
+  <bean id="jdbcTemplateSub" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource">
+      <ref bean="dataSourceSub" />
+    </property>
+  </bean>
+
+  <bean id="transactionManagerSub"
+	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSourceSub"></property>
+  </bean>
+
+  <tx:annotation-driven transaction-manager="transactionManagerSub" />
+  <bean id="namedParameterJdbcTemplateSub"
+	class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+    <constructor-arg>
+      <ref bean="dataSourceSub" />
+    </constructor-arg>
+  </bean>
+
+  <bean id="baseDAOSub" abstract="true">
+    <property name="jdbcTemplate" ref="jdbcTemplateSub" />
+    <property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplateSub" />
+  </bean>
+
+  <bean id="authorizationCodeDAO" class="net.duckling.ddl.service.user.dao.AuthorizationCodeDAOImpl" parent="baseDAOSub" />
+  <bean id="jobRecords" class="net.duckling.ddl.service.jobmaster.impl.JobRecordDAO" parent="baseDAOSub" />
+  <bean id="vector4UserDao" class="net.duckling.ddl.service.dbrain.dao.impl.Vector4UserDaoImpl" parent="baseDAOSub" />
+  <bean id="recommendationService" class="net.duckling.ddl.service.dbrain.impl.RecommendationServiceImpl" >
+    <property name="vector4UserService" ref="vector4UserService" />
+  </bean>
+  <bean id="vector4UserService" class="net.duckling.ddl.service.dbrain.impl.Vector4UserServiceImpl">
+    <property name="vector4UserDao" ref="vector4UserDao" />
+  </bean>
 </beans>

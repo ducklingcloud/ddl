@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp"
+	 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+			     http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/conf/VWBContext.xml</param-value>
@@ -20,60 +26,71 @@
     <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
     <param-value>global_resources</param-value>
   </context-param>
+
   <listener>
-    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    <listener-class>
+      org.springframework.web.util.Log4jConfigListener
+    </listener-class>
   </listener>
   <listener>
-    <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+    <listener-class>
+      org.springframework.web.util.WebAppRootListener
+    </listener-class>
   </listener>
   <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    <listener-class>
+      org.springframework.web.context.ContextLoaderListener
+    </listener-class>
   </listener>
   <listener>
-    <listener-class>net.duckling.ddl.web.filter.VWBStartupListener</listener-class>
+    <listener-class>
+      net.duckling.ddl.web.filter.VWBStartupListener
+    </listener-class>
   </listener>
   <listener>
-    <listener-class>net.duckling.ddl.web.filter.VWBSessionListener</listener-class>
+    <listener-class>
+      net.duckling.ddl.web.filter.VWBSessionListener
+    </listener-class>
   </listener>
   
-    <filter>  
-        <filter-name>StaticCache</filter-name>  
-        <filter-class>net.duckling.ddl.common.StaticFilesCacheFilter</filter-class>  
-        <init-param>  
-            <param-name>Cache-Control</param-name>
-            <param-value>max-age=604800, public</param-value>  
-        </init-param>  
-    </filter>  
+  <filter>  
+    <filter-name>StaticCache</filter-name>  
+    <filter-class>net.duckling.ddl.common.StaticFilesCacheFilter</filter-class>  
+    <init-param>  
+      <param-name>Cache-Control</param-name>
+      <param-value>max-age=604800, public</param-value>  
+    </init-param>  
+  </filter>  
   
-    <filter-mapping>  
-        <filter-name>StaticCache</filter-name>  
-        <url-pattern>*.js</url-pattern>  
-    </filter-mapping>  
-    <filter-mapping>  
-        <filter-name>StaticCache</filter-name>  
-        <url-pattern>*.css</url-pattern>  
-    </filter-mapping>
-    <filter-mapping>  
-        <filter-name>StaticCache</filter-name>  
-        <url-pattern>*.png</url-pattern>  
-    </filter-mapping>
-    <filter-mapping>  
-        <filter-name>StaticCache</filter-name>  
-        <url-pattern>*.gif</url-pattern>  
-    </filter-mapping>
-    <filter-mapping>  
-        <filter-name>StaticCache</filter-name>  
-        <url-pattern>*.jpg</url-pattern>  
-    </filter-mapping>
-    <filter-mapping>  
-        <filter-name>StaticCache</filter-name>  
-        <url-pattern>*.bcmap</url-pattern>  
-    </filter-mapping>
-    <filter-mapping>  
-        <filter-name>StaticCache</filter-name>  
-        <url-pattern>*.xls</url-pattern>  
-    </filter-mapping>
-       
+  <filter-mapping>  
+    <filter-name>StaticCache</filter-name>  
+    <url-pattern>*.js</url-pattern>  
+  </filter-mapping>  
+  <filter-mapping>  
+    <filter-name>StaticCache</filter-name>  
+    <url-pattern>*.css</url-pattern>  
+  </filter-mapping>
+  <filter-mapping>  
+    <filter-name>StaticCache</filter-name>  
+    <url-pattern>*.png</url-pattern>  
+  </filter-mapping>
+  <filter-mapping>  
+    <filter-name>StaticCache</filter-name>  
+    <url-pattern>*.gif</url-pattern>  
+  </filter-mapping>
+  <filter-mapping>  
+    <filter-name>StaticCache</filter-name>  
+    <url-pattern>*.jpg</url-pattern>  
+  </filter-mapping>
+  <filter-mapping>  
+    <filter-name>StaticCache</filter-name>  
+    <url-pattern>*.bcmap</url-pattern>  
+  </filter-mapping>
+  <filter-mapping>  
+    <filter-name>StaticCache</filter-name>  
+    <url-pattern>*.xls</url-pattern>  
+  </filter-mapping>
+  
   <servlet>
     <servlet-name>appServlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -83,6 +100,7 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
   <servlet-mapping>
     <servlet-name>appServlet</servlet-name>
     <url-pattern>/</url-pattern>
@@ -163,6 +181,7 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.xls</url-pattern>
   </servlet-mapping>
+
   <filter>
     <filter-name>VWBFilter</filter-name>
     <filter-class>net.duckling.ddl.web.filter.VWBFilter</filter-class>
@@ -175,14 +194,17 @@
       <param-value>/ServiceServlet</param-value>
     </init-param>
   </filter>
+
   <filter-mapping>
     <filter-name>VWBFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
   <servlet>
     <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
     <servlet-class>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-class>
   </servlet>
+
   <servlet>
     <servlet-name>ServiceServlet</servlet-name>
     <servlet-class>cn.vlabs.rest.server.ServiceServlet</servlet-class>
@@ -191,6 +213,7 @@
       <param-value>WEB-INF/conf/services.xml</param-value>
     </init-param>
   </servlet>
+
   <servlet-mapping>
     <servlet-name>ServiceServlet</servlet-name>
     <url-pattern>/ServiceServlet</url-pattern>
@@ -199,6 +222,7 @@
     <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
     <url-pattern>/JSON-RPC</url-pattern>
   </servlet-mapping>
+
   <jsp-config>
     <taglib>
       <taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
@@ -213,8 +237,9 @@
       <taglib-location>/WEB-INF/tld/fn.tld</taglib-location>
     </taglib>
   </jsp-config>
+
   <session-config>
-  	<session-timeout>60</session-timeout>
+    <session-timeout>60</session-timeout>
   </session-config>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
