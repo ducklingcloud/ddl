@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	    <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+	    <property name="jdbcUrl">
+	    	<value>jdbc:mysql://10.10.2.10:3306/ddl?useUnicode=true&amp;characterEncoding=utf8</value>
+	    </property>
+	    <property name="user" value="cstnet_dev"/>
+	    <property name="password" value="dev_unit_test"/>
+		<property name="initialPoolSize" value="10"/>
+		<property name="maxPoolSize" value="50"/>
+		<property name="minPoolSize" value="10"/>
+		<property name="acquireIncrement" value="5"/>
+		<property name="maxStatements" value="10"/>
+		<property name="preferredTestQuery" value="SELECT 1"/>
+		<property name="maxConnectionAge" value="3600"/>
+		<property name="testConnectionOnCheckout" value="true"/>
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg>
+			<ref bean="dataSource"/>
+		</constructor-arg>
+	</bean>
+	<!-- Contianer Abstarct -->
+		<bean id="baseDAO" abstract="true">
+			<property name="jdbcTemplate" ref="jdbcTemplate"/>
+			<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"/>
+		</bean>
+		<bean id="abstractContainerService" abstract="true">
+			<property name="config" ref="containerConfig"/>
+		</bean>
+	<!-- Container Providers -->
+	
+		<!-- OS Cache Configure -->
+		<bean id="oscacheConfig" class="cn.vlabs.duckling.vwb.services.cache.CachePropeties">
+			<constructor-arg><value>${ddl.root}/conf/oscache.properties</value></constructor-arg>
+		</bean>
+		<bean id="osCacheProvider" class="cn.vlabs.duckling.vwb.services.cache.OSCacheProvider">
+			<constructor-arg ref="oscacheConfig"/>
+		</bean>
+		
+		<bean id="redisDao" class="cn.vlabs.duckling.vwb.services.relatedRec.dao.RedisDAO" parent="baseDAO">
+			<constructor-arg value="${duckling.redis.server}" />
+		</bean>
+
+		<bean id="fileProperty" class="cn.vlabs.duckling.vwb.services.config.provider.PropertiesFileReader">
+			<constructor-arg><value>${ddl.root}/WEB-INF/vwbconfig.properties</value></constructor-arg>
+		</bean>
+		<bean id="systemProperty" class="cn.vlabs.duckling.vwb.services.config.provider.SystemPropertyReader"/>
+		<bean id ="domainProvider" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.config.provider.DomainProvider"/>
+		
+		<bean id="consumerDao" class="cn.vlabs.duckling.vwb.services.oauth.impl.ConsumerDAOImpl" parent="baseDAO"/>
+
+		<bean id="accessorDao" class="cn.vlabs.duckling.vwb.services.oauth.impl.AccessorDAOImpl" parent="baseDAO"/>
+		<bean id="teamApplicantDAO" class="cn.vlabs.duckling.vwb.services.team.dao.TeamApplicantDAOImpl" parent="baseDAO"/>
+		
+	<!-- Container Services -->
+		<bean id="containerConfig" class="cn.vlabs.duckling.vwb.services.config.ContainerConfig" init-method="init" destroy-method="destroy">
+			<property name="globalProperty" ref="fileProperty"/>
+			<property name="systemProperty" ref="systemProperty"/>
+			<property name="configFile">
+		        <value>${ddl.root}/conf/vwbconfig.properties</value>
+		    </property>
+		</bean>
+		<bean id="oauthService" class="cn.vlabs.duckling.vwb.services.oauth.OAuthService" parent="abstractContainerService">
+			<property name="consumerDAO" ref="consumerDao"/>
+			<property name="accessorDAO" ref="accessorDao"/>
+			<property name="timeToLive"><value>${oauth.token.timeout}</value></property>
+		</bean>
+		<bean id="ducklingMessages" parent="abstractContainerService" class="cn.vlabs.duckling.vwb.services.i18n.DucklingMessage"/>
+		
+		<bean id="timerService" parent="abstractContainerService" 
+			class="cn.vlabs.duckling.vwb.services.timer.TimerService" init-method="init" destroy-method="destroy">
+			<constructor-arg><value>${ddl.root}/conf/quartz.properties</value></constructor-arg>
+		</bean>
+		<bean id="domainNameService" class="cn.vlabs.duckling.vwb.services.config.DomainServiceImpl">
+			<property name="domainProvider" ref="domainProvider" />
+			<property name="teamService" ref="teamService"/>
+		</bean>
+		<bean id="initSystem" class="cn.vlabs.duckling.vwb.services.init.SystemInitService"  parent="baseDAO">
+			<property name="webRoot"><value>${ddl.root}</value></property>
+		</bean>
+		
+		<bean id="cacheService" class="cn.vlabs.duckling.vwb.services.cache.CacheService" parent="abstractContainerService">
+			<constructor-arg type="cn.vlabs.duckling.vwb.services.cache.OSCacheProvider" ref="osCacheProvider"/>
+			<constructor-arg type="java.lang.String" value="${duckling.cache.option}"/>	
+		</bean>
+		
+		<bean id="dataSynchronizedService" class="cn.vlabs.duckling.vwb.spi.DataSynchronizedService">
+			<property name="tagDAO" ref="tagDAO"/>
+			<property name="tagItemDAO" ref="tagItemDAO"/>
+			<property name="resourceDAO" ref="resourceDAO"/>
+			<property name="bundleItemDAO" ref="bundleItemDAO"/>
+			<property name="starmarkDAO" ref="starmarkDAO"/>
+			<property name="userExtDAO" ref="userExtDao"/>
+		</bean>
+		
+		<bean id="teamApplicantService" class="cn.vlabs.duckling.vwb.services.team.service.TeamApplicantServiceImpl">
+			<property name="taDAO" ref="teamApplicantDAO"/>
+		</bean>
+
+	<!-- Container -->
+	<bean id="container" class="cn.vlabs.duckling.vwb.VWBContainerImpl">
+		<property name="i18nService" ref="ducklingMessages"/>
+		<property name="timerService" ref="timerService"/>
+		<property name="config" ref="containerConfig"/>
+		<property name="domainNameService" ref="domainNameService"/>
+		<property name="initSystem" ref="initSystem"/>
+		<property name="domainEvents" ref="domainEvents"/>
+		<property name="contactsService" ref="contactsService"/>
+		<property name="aoneUserService" ref="aoneUserService"/>
+		<property name="mailService" ref="sendemailservice"/>
+		<property name="aoneMailService" ref="aoneMailService"/>
+		<property name="authenticationService" ref="authenticationService"/>
+		<property name="skinService" ref="globalSkinService"/>
+		<property name="oauthService" ref="oauthService"/>
+		<property name="eventDispatcher" ref="eventDispatcher"/>
+		<property name="feedbackService" ref="feedbackService"/>
+		<property name="cacheService" ref="cacheService"/>
+		<property name="teamService" ref="teamService"/>
+		<property name="teamMemberService" ref="teamMemberService"/>
+		<property name="teamToBeProcessedService" ref="teamToBeProcessedService"/>
+		<property name="teamPushMessageService" ref="teamPushMessageService"/>
+		<property name="invitationService" ref="invitationService"/>
+		<property name="dataSynchronizedService" ref="dataSynchronizedService"/>
+		<property name="teamApplicantService" ref="teamApplicantService"/>
+		<property name="deviceTokenService" ref="deviceTokenService"/>
+	</bean>
+	
+	<!-- Site Abstract -->
+	
+		<!-- Site Providers -->
+	
+		<bean id="diffProvider" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.diff.TraditionalDiffProvider"/>
+		<bean id="daisyDiffProvider" class="cn.vlabs.duckling.vwb.services.diff.DaisyDiffProvider"/>
+		
+		<bean id="bannerProvider" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.banner.provider.impl.BannerProviderImpl"/>
+		<bean id="PortalPageProvider" scope="prototype" parent="baseDAO" class="org.apache.pluto.driver.config.db.PortalPageProvider"/>
+		<bean id="PortalPortletsProvider" scope="prototype" parent="baseDAO" class="org.apache.pluto.driver.config.db.PagePortletProvider"/>
+		<bean id="emailSubscriberProvider" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.emailnotifier.provider.EmailSubscriberProviderImpl"/>
+		<bean id="dfileDao" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.attachment.DFileDAOImpl"/>
+		<bean id="clbFileStorage" scope="prototype" class="cn.vlabs.duckling.vwb.services.attachment.clb.CLBFileStorage"/>
+		<bean id="sharePageAccessProvider" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.share.impl.SharePageAccessProviderImpl"/>
+		<!-- 目前还是使用单例(DData) -->
+		<bean id="dmlDataFormProvider" parent="baseDAO" class="cn.vlabs.duckling.dct.services.dmldata.dao.DmlDataFormProvider"/>
+		<bean id="dmlDataInputProvider" parent="baseDAO" class="cn.vlabs.duckling.dct.services.dmldata.dao.DmlDataInputProvider"/>
+		<bean id="dmlDataProvider" parent="baseDAO" class="cn.vlabs.duckling.dct.services.dmldata.dao.DmlDataProvider"/>
+		<bean id="dmlDataUDProvider" parent="baseDAO" class="cn.vlabs.duckling.dct.services.dmldata.dao.DmlDataUDProvider"/>
+		
+		
+		<bean id="autoDeployProvider" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.autodeploy.provider.AutoDeployProviderImpl"/>
+		<bean id="propertiesProvider" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.vwb.services.config.provider.VWBPropertiesProvider"/>
+		<bean id="initSite" scope="prototype"  class="cn.vlabs.duckling.vwb.services.init.SiteInitService"  parent="baseDAO">
+			<property name="templateRootPath"><value>${ddl.root}/templates</value></property>
+		   <property name="defaultDataPath"><value>${ddl.root}</value></property>
+		</bean>
+	<!-- Site Services -->
+		<bean id="sharePageMailService" scope="prototype" class="cn.vlabs.duckling.vwb.services.share.impl.SharePageMailServiceImpl">
+			<property name="dctRoot"><value>${ddl.root}</value></property>
+		</bean>
+		<bean id="sharePageAccessService" scope="prototype" class="cn.vlabs.duckling.vwb.services.share.impl.SharePageAccessServiceImpl">
+			<property name="provider" ref="sharePageAccessProvider"/>
+		</bean>
+		<bean id="autoDeployService" scope="prototype" class="cn.vlabs.duckling.vwb.services.autodeploy.AutoDeployServiceImpl">
+			<property name="dctRoot"><value>${ddl.root}</value></property>
+			<property name="provider" ref="autoDeployProvider"/>
+		</bean>
+		<bean id="siteConfig" scope="prototype" class="cn.vlabs.duckling.vwb.services.config.SiteConfig">
+			<property name="globalProperty" ref="fileProperty"/>
+			<property name="systemProperty" ref="systemProperty"/>
+			<property name="propertiesProvider" ref="propertiesProvider"/>
+		</bean>
+		<bean id="mySpaceService" scope="prototype" class="cn.vlabs.duckling.vwb.services.myspace.MySpaceServiceImpl">
+			<property name="mySpaceProvider" ref="mySpaceProvider"/>
+		</bean>
+		<bean id="umtSsoProvider" class="cn.vlabs.duckling.vwb.services.login.UmtSsoLoginProvider">
+			<property name="keyPath" value="${ddl.root}/WEB-INF/conf/umtpublickey.txt"/>
+			<property name="publicKeyUrl" value="${duckling.umt.publicKey}"/>
+			<property name="loginUrl" value="${duckling.umt.login}"/>
+			<property name="serviceUrl" value="${duckling.umt.service.url}"/>
+		</bean>
+		<bean id="authenticationService" class="cn.vlabs.duckling.vwb.services.login.AuthenticationManager">
+			<property name="loginProvider" ref="umtSsoProvider"/>
+		</bean>
+		<bean id="rendableFactory" scope="prototype" class="cn.vlabs.duckling.vwb.services.render.RendableFactoryImpl"/>
+
+		<bean id="variableService" scope="prototype" class="cn.vlabs.duckling.vwb.services.variable.VariableServiceImpl"/>
+		<bean id="saveTempDpageService" scope="prototype" class="cn.vlabs.duckling.dct.services.editor.SaveTempDpageServiceImpl"/>
+		<bean id="dpageService" scope="prototype" class="cn.vlabs.duckling.dct.services.dpage.service.DPageServiceImpl">
+		   <property name="dpageVersionDao" ref="dpageVersionDao"/>
+		   <property name="dpageMetaDao" ref="dpageMetaDao"/>
+		   <property name="dpageDao" ref="dpageDao"/>
+		</bean>
+		<bean id="dpagePluginService" scope="prototype" class="cn.vlabs.duckling.dct.services.plugin.impl.PluginServiceImpl"/>
+		<bean id="renderingService" scope="prototype" class="cn.vlabs.duckling.dct.services.dpage.render.RenderingServiceImpl"/>
+<!-- 		<bean id="resourceService" scope="prototype" class="cn.vlabs.duckling.vwb.services.resource.ResourceService"/> -->
+		<bean id="globalSkinService"  class="cn.vlabs.duckling.vwb.services.skin.GlobalSkinService">
+			<property name="absoluteWebRootPath" value="${ddl.root}"/>
+		</bean>
+		
+		<bean id="serviceSiteSkinService" scope="prototype" class="cn.vlabs.duckling.vwb.services.skin.ServiceSiteSkin"/>
+		
+		<bean id="differenceService" scope="prototype" class="cn.vlabs.duckling.vwb.services.diff.DifferenceServiceImpl">
+			<property name="provider" ref="daisyDiffProvider"/>
+		</bean>
+		<bean id="bannerService" scope="prototype" class="cn.vlabs.duckling.vwb.services.banner.impl.BannerServiceImpl">
+		   <property name="bannerProvider" ref="bannerProvider"/>
+		</bean>
+		<bean id="PortalPageService" scope="prototype" class="org.apache.pluto.driver.config.db.DBPortalPageService">
+			<property name="pageProvider" ref="PortalPageProvider"/>
+			<property name="portletsProvider" ref="PortalPortletsProvider"/>
+<!-- 			<property name="cache" ref="teamCache"/> -->
+		</bean>
+		<bean id="dfileService" scope="prototype" class="cn.vlabs.duckling.vwb.services.attachment.DFileServiceImpl">
+			<property name="dfileDao" ref="dfileDao"/>
+			<property name="storage" ref="clbFileStorage"/>
+		</bean>
+		
+		
+		
+		
+		<bean id="relatedRecService" scope="prototype" class="cn.vlabs.duckling.vwb.services.relatedRec.RelatedRecService">
+			<property name="redisDao" ref="redisDao"/>
+		</bean>
+		
+		
+		
+		
+	    <bean id="sendemailservice" class="cn.vlabs.duckling.vwb.services.email.MailServiceImpl" parent="abstractContainerService">
+		</bean>
+		<bean id="emailSubscriberService" scope="prototype" class="cn.vlabs.duckling.vwb.services.emailnotifier.EmailSubscriberServiceImpl">
+			<property name="provider" ref="emailSubscriberProvider"/>
+		</bean>
+	<!-- Site -->
+	<bean id="serviceSite" class="cn.vlabs.duckling.vwb.VWBSite" scope="prototype" >
+		<property name="siteConfigService" ref="siteConfig"/>		
+		<property name="DPageService" ref="dpageService"/>
+		<property name="renderingService" ref="renderingService"/>
+<!-- 		<property name="resourceService" ref="resourceService"/> -->
+		<property name="DPagePluginService" ref="dpagePluginService" />
+		<property name="differenceService" ref="differenceService" />
+		<property name="saveTempDpageService" ref="saveTempDpageService"/>
+		<property name="dmlDataFormProvider" ref="dmlDataFormProvider"/>
+		<property name="dmlDataInputProvider" ref="dmlDataInputProvider"/>
+		<property name="dmlDataProvider" ref="dmlDataProvider"/>
+		<property name="variableService" ref="variableService"/>
+		<property name="absoluteWebRootPath"><value>${ddl.root}</value></property>
+		<property name="bannerService" ref="bannerService"/>
+		<property name="emailSubscriberService" ref="emailSubscriberService"/>
+		<property name="dmlDataUDProvider" ref="dmlDataUDProvider"/>
+		<property name="sharePageMailService" ref="sharePageMailService"/>
+		<property name="sharePageAccessService" ref="sharePageAccessService"/>
+		<property name="autoDeployService" ref="autoDeployService"/>
+		<property name="initService" ref="initSite"/>
+		<property name="portalPageService" ref="PortalPageService"/>
+		<property name="rendableFactory" ref="rendableFactory"/>
+		<property name="templateService" ref="templateService"/>
+		<property name="skinService" ref="serviceSiteSkinService"/>
+		
+		<!-- For AOne -->
+		<property name="messageService" ref="messageService"/>
+		<property name="subscriptionService" ref="subscriptionService"/>
+		<property name="browseService" ref="browseLogService"/>
+		<property name="commentService" ref="commentService"/>
+		<property name="collectionService" ref="collectionService"/>
+		<property name="exportService" ref="exportService"/>
+		<property name="searchService" ref="sphinxService"/>
+		<property name="authorityService" ref="authorityService"/>
+		<property name="draftService" ref="draftService"/>
+		<property name="dfileService" ref="dfileService"/>
+		
+		<property name="relatedRecService" ref="relatedRecService"/>
+		
+		<property name="mySpaceService" ref="mySpaceService"></property>
+		<property name="gridService" ref="gridService"/>
+		<property name="shareFileAccessService" ref="shareFileAccessService"/>
+		<property name="noticeService" ref="noticeService"/>
+		<property name="eventService" ref="eventService"/>
+		<property name="collectionElementService" ref="collectionElementService"/>
+		<property name="collectionAuthService" ref="collectionAuthService"/>
+		<property name="shortcutService" ref="shortcutService"/>
+		
+		<!-- For Lynx -->
+		<property name="lynxResourceService" ref="lynxResourceService"/>
+		<property name="lynxStarmarkService" ref="lynxStarmarkService"/>
+		<property name="lynxBundleService" ref="lynxBundleService"/>
+		<property name="lynxFileService" ref="lynxFileService"/>
+		<property name="lynxPageService" ref="lynxPageService"/>
+		<property name="lynxGridService" ref="lynxGridService"/>
+		<property name="lynxNavbarService" ref="lynxNavbarService"/>
+		<property name="lynxTagService" ref="lynxTagService"/>
+		<property name="lynxSearchService" ref="lynxSearchService"/>
+		<!-- add by lvly@2012-6-8 -->
+		<property name="taskService" ref="taskService"></property>
+		<!-- add by lvly@2012-7-26 -->
+		<property name="paramService" ref="paramService"></property>
+		<!-- add by lvly@2012-11-15 复制文件 -->
+		<property name="copyService" ref="copyService"></property>
+		<!-- add by lvly@2012-11-20 瀑布流简略图 -->
+		<property name="pictureService" ref="pictureService"></property>
+	</bean>
+	
+	<bean id="templateService" class="cn.vlabs.duckling.vwb.services.backup.TemplateServiceImpl" scope="prototype">
+		<property name="portalsProvider" ref="templatePortalsProvider" />
+		<property name="dpagesProvider" ref="templateDPagesProvider" />
+		<property name="skinProvider" ref="templateSkinsProvider" />
+		<property name="siteProvider" ref="templateSiteProvider" />
+		<property name="appinfoProvider" ref="templateAppinfoProvider" />
+		<property name="vwbBannerProvider" ref="templateVWBBannerProvider" />
+		<property name="templatesPath">
+		    <value>${ddl.root}/WEB-INF/templates</value>
+		</property>
+		<!-- 
+		<property name="bannerProvider" ref="templateBannersProvider" />
+		-->
+	</bean>
+	<!-- 
+	<bean id="templateBannersProvider" class="cn.vlabs.duckling.vwb.services.backup.BannersProvider" parent="baseDAO" scope="prototype"/>
+	 -->
+	<bean id="templateSkinsProvider" class="cn.vlabs.duckling.vwb.services.backup.SkinsProvider" parent="baseDAO" scope="prototype" />
+	<bean id="templatePortalsProvider" class="cn.vlabs.duckling.vwb.services.backup.PortalsProvider" parent="baseDAO" scope="prototype" />
+	<bean id="templateDPagesProvider" class="cn.vlabs.duckling.vwb.services.backup.DPagesProvider" parent="baseDAO" scope="prototype" />
+	<bean id="templateVWBBannerProvider" class="cn.vlabs.duckling.vwb.services.backup.VWBBannersProvider" parent="baseDAO" scope="prototype" />
+	<bean id="templateAppinfoProvider" class="cn.vlabs.duckling.vwb.services.backup.VWBAppInfosProvider" parent="baseDAO" scope="prototype" />
+	<bean id="templateSiteProvider" class="cn.vlabs.duckling.vwb.services.backup.SiteProvider" parent="baseDAO" scope="prototype"/>
+	<bean id="mySpaceProvider" class="cn.vlabs.duckling.vwb.services.myspace.provider.MySpaceProviderImpl" parent="baseDAO" scope="prototype"/>
+	
+	<!-- 
+		AOne Spring IOC Config
+	 -->
+	 <bean id="messageDao" class="cn.vlabs.duckling.aone.infrastructure.repository.MessageDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="subscriptionDao" class="cn.vlabs.duckling.aone.infrastructure.repository.SubscriptionDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="browseLogDao" class="cn.vlabs.duckling.aone.infrastructure.repository.BrowseDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="commentDao" class="cn.vlabs.duckling.aone.infrastructure.repository.CommentDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="collectionDao" class="cn.vlabs.duckling.vwb.services.collection.dao.CollectionDAOImpl" scope="prototype" parent="baseDAO"/>
+<!-- 	 <bean id="collectionDaoCache" class="cn.vlabs.duckling.vwb.services.collection.dao.CollectionDAOCache" scope="prototype"> -->
+<!-- 	 	<property name="cache" ref="teamCache"/> -->
+<!-- 	 	<property name="collectionDAO" ref="collectionDao"/> -->
+<!-- 	 </bean> -->
+	 <bean id="shortcutDao" class="cn.vlabs.duckling.vwb.services.collection.dao.ShortcutDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="collectionAclDao" class="cn.vlabs.duckling.vwb.services.collection.dao.CollectionAclDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="teamDao" class="cn.vlabs.duckling.vwb.services.team.dao.TeamDAOImpl" parent="baseDAO"/>
+<!-- 	 <bean id="teamDaoCache" class="cn.vlabs.duckling.vwb.services.team.dao.TeamDAOCache" init-method="init"> -->
+<!-- 	 	<property name="idCache" ref="globalCache"/> -->
+<!-- 	 	<property name="nameCache" ref="globalCache"/> -->
+<!-- 	 	<property name="teamDao" ref="teamDao"></property> -->
+<!-- 	 </bean> -->
+
+	 <bean id="dpageDao" class="cn.vlabs.duckling.dct.services.dpage.dao.DPageDAOImpl" scope="prototype" parent="baseDAO"/>
+	 <bean id="dpageMetaDao" class="cn.vlabs.duckling.dct.services.dpage.dao.DPageMetaDAOImpl" scope="prototype" parent="baseDAO"/>
+	 <bean id="dpageVersionDao" scope="prototype" parent="baseDAO" class="cn.vlabs.duckling.dct.services.dpage.dao.DPageVersionDAOImpl"/>
+	 
+	 <bean id="teamAclDao" class="cn.vlabs.duckling.vwb.services.team.dao.TeamAclDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="teamMemberDao" class="cn.vlabs.duckling.vwb.services.team.dao.TeamMemberDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="teamToBeProcessedDao" class="cn.vlabs.duckling.vwb.services.team.dao.TeamTobeProcessedDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="teamPushMessageDao" class="cn.vlabs.duckling.vwb.services.team.dao.TeamPushMessageDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="contactsDao" class="cn.vlabs.duckling.vwb.services.contacts.ContactsDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="userExtDao" class="cn.vlabs.duckling.aone.infrastructure.repository.UserExtDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="teamRecentDao" class="cn.vlabs.duckling.vwb.services.team.dao.TeamRecentDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="invitationDao" class="cn.vlabs.duckling.vwb.services.team.dao.InvitationDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="activationDao" class="cn.vlabs.duckling.aone.infrastructure.repository.ActivationDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="draftDao" class="cn.vlabs.duckling.aone.infrastructure.repository.DraftDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="collectionElementDao" class="cn.vlabs.duckling.vwb.services.collection.dao.CollectionElementDAOImpl" scope="prototype" parent="baseDAO"/>
+	 <bean id="gridDao" class="cn.vlabs.duckling.vwb.services.collection.dao.GridDAOImpl" scope="prototype" parent="baseDAO"/>
+	 <bean id="shareFileAccessDao" class="cn.vlabs.duckling.aone.infrastructure.repository.ShareFileAccessDAO" scope="prototype" parent="baseDAO"/>
+	 <bean id="feedbackDao" class="cn.vlabs.duckling.aone.infrastructure.repository.FeedbackDAO" scope="prototype" parent="baseDAO"/>
+	 
+	<bean id="starmarkDAO" class="cn.vlabs.duckling.aone.content.dao.impl.StarmarkDAOImpl" parent="baseDAO" scope="prototype"/>
+	<bean id="bundleDAO" class="cn.vlabs.duckling.aone.content.dao.impl.BundleDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="bundleItemDAO" class="cn.vlabs.duckling.aone.content.dao.impl.BundleItemDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="fileDAO" class="cn.vlabs.duckling.aone.content.dao.impl.FileDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="fileVersionDAO" class="cn.vlabs.duckling.aone.content.dao.impl.FileVersionDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="emailAttachmentDAO" class="cn.vlabs.duckling.aone.content.dao.impl.EmailAttachmentDAOImpl"
+			parent="baseDAO" scope="prototype"/>
+	<bean id="navbarItemDAO" class="cn.vlabs.duckling.aone.content.dao.impl.NavbarItemDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="pageDAO" class="cn.vlabs.duckling.aone.content.dao.impl.PageDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="pageVersionDAO" class="cn.vlabs.duckling.aone.content.dao.impl.PageVersionDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="resourceDAO" class="cn.vlabs.duckling.aone.content.dao.impl.ResourceDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="tagDAO" class="cn.vlabs.duckling.aone.content.dao.impl.TagDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="tagGroupDAO" class="cn.vlabs.duckling.aone.content.dao.impl.TagGroupDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="tagItemDAO" class="cn.vlabs.duckling.aone.content.dao.impl.TagItemDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<!-- add by lvly@2012-6-8 用于任务模块的DAO-->
+	<bean id="taskDAO" class="cn.vlabs.duckling.aone.task.dao.impl.TaskDAOImpl"
+			parent="baseDAO" scope="prototype"/>	
+	
+	<!-- end -->
+	<!-- add by lvly@2012-7-26 用于系统参数模块的DAO-->
+	<bean id="paramDAO" class="cn.vlabs.duckling.aone.content.dao.impl.ParamDAOImpl"
+			parent="baseDAO" scope="prototype"/>	
+	<!-- end -->
+	<!-- add by lvly@2012-11-15 复制功能 -->
+	<bean id="copyDAO" class="cn.vlabs.duckling.aone.copy.dao.impl.CopyDAO" 
+			parent="baseDAO" scope="prototype"/>
+	<!-- add by lvly@2012-11-20 瀑布流简略图 -->
+	<bean id="pictureDAO" class="cn.vlabs.duckling.aone.content.dao.impl.PictureDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="gridGroupDAO" class="cn.vlabs.duckling.aone.content.dao.impl.GridGroupDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="userPreferencesDAO" class="cn.vlabs.duckling.aone.content.dao.impl.UserPreferencesDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+	<bean id="userGuideDAO" class="cn.vlabs.duckling.aone.content.dao.impl.UserGuideDAOImpl" 
+			parent="baseDAO" scope="prototype"/>
+			
+			
+	 <bean id="messageService" class="cn.vlabs.duckling.aone.domain.service.MessageService" scope="prototype">
+	 	<property name="messageDao" ref="messageDao" />
+	 </bean>
+	 <bean id="browseLogService" class="cn.vlabs.duckling.aone.domain.service.BrowseLogService" scope="prototype">
+	 	<constructor-arg value="10"/>
+	 	<property name="browseDAO" ref="browseLogDao"/>
+	 </bean>
+	 <bean id="subscriptionService" class="cn.vlabs.duckling.aone.domain.service.SubscriptionService" scope="prototype">
+	 	<property name="subscriptionDao" ref="subscriptionDao"/>
+	 </bean>
+	 <bean id="commentService" class="cn.vlabs.duckling.aone.domain.service.CommentService" scope="prototype">
+	 	<property name="commentDao" ref="commentDao"/>
+	 </bean>
+	 <bean id="collectionElementService" class="cn.vlabs.duckling.vwb.services.collection.CollectionElementService" scope="prototype" >
+		<property name="collectionElementDao" ref="collectionElementDao"/>
+	 </bean>
+	 <bean id="shortcutService" class="cn.vlabs.duckling.vwb.services.collection.ShortcutService" scope="prototype">
+	 	<property name="shortcutDao" ref="shortcutDao"/>
+	 </bean>
+	 <bean id="collectionAuthService" class="cn.vlabs.duckling.vwb.services.collection.CollectionAuthService" scope="prototype">
+	 	<property name="collectionAclDao" ref="collectionAclDao"/>
+	 </bean>
+	 <bean id="collectionService" class="cn.vlabs.duckling.vwb.services.collection.CollectionService" scope="prototype">
+	 	<property name="collectionDao" ref="collectionDao"/>
+	 </bean>
+	 <bean id="sphinxService" class="cn.vlabs.duckling.aone.domain.service.SearchServiceImpl" scope="prototype">
+	 	<property name="host" value="${duckling.sphinx.host}"/>
+	 	<property name="port" value="${duckling.sphinx.port}"/>
+	 </bean>
+	 
+	  <bean id="teamMemberService" class="cn.vlabs.duckling.vwb.services.team.service.TeamMemberServiceImpl">
+	 	<property name="teamAclDao" ref="teamAclDao"/>
+	 	<property name="teamMemberDao" ref="teamMemberDao"/>
+	 </bean>
+	 
+	  <bean id="teamToBeProcessedService" class="cn.vlabs.duckling.vwb.services.team.service.TeamToBeProcessedServiceImpl">
+	 	<property name="teamToBeProcessedDao" ref="teamToBeProcessedDao"/>
+	 </bean>
+	 
+	 <bean id="teamPushMessageService" class="cn.vlabs.duckling.vwb.services.team.service.TeamPushMessageServiceImpl">
+	 	<property name="teamPushMessageDao" ref="teamPushMessageDao"/>
+	 </bean>
+	 
+	 <bean id="invitationService" class="cn.vlabs.duckling.vwb.services.team.service.InvitationServiceImpl">
+	 	<property name="invitationDao" ref="invitationDao"/>
+	 </bean>
+	 
+	 <bean id="teamService" class="cn.vlabs.duckling.vwb.services.team.service.TeamServiceImpl">
+	 	<property name="teamDao" ref="teamDao"/>
+	 	<property name="teamRecentDao" ref="teamRecentDao"/>
+	 	<property name="templateDir"><value>${ddl.root}/templates</value></property>
+	 </bean>
+	 
+	 <bean id="contactsService" class="cn.vlabs.duckling.vwb.services.contacts.ContactsServiceImpl">
+	 	<property name="contactsDao" ref="contactsDao"/>
+	 </bean>
+	 <bean id="exportService" class="cn.vlabs.duckling.vwb.services.export.ExportServiceImpl">
+	 	<property name="epubPath">
+		    <value>${ddl.root}/templates/epub</value>
+		</property>
+	 </bean>
+	 <bean id="aoneUserService" class="cn.vlabs.duckling.aone.domain.service.AoneUserService">
+	 	<property name="serviceUrl">
+	 		<value>${duckling.umt.service.url}</value>
+	 	</property>
+	 	<property name="userExtDao" ref="userExtDao"/>
+	 	<property name="activationDao" ref="activationDao"/>
+	 	<property name="userPreferencesDAO" ref="userPreferencesDAO"/>
+	 	<property name="userGuideDAO" ref="userGuideDAO"/>
+	 </bean>
+	 <bean id="authorityService" class="cn.vlabs.duckling.vwb.services.auth.AuthorityService" scope="prototype">
+	 </bean>
+	 <bean id="aoneMailService" class="cn.vlabs.duckling.aone.domain.service.AoneMailService" parent="abstractContainerService">
+	 </bean>
+	 <bean id="draftService" class="cn.vlabs.duckling.aone.domain.service.impl.DraftServiceImpl"  scope="prototype">
+	 	<property name="draftDao" ref="draftDao"/>
+	 </bean>
+	 <bean id="gridService" class="cn.vlabs.duckling.vwb.services.collection.GridService" scope="prototype">
+	 	<property name="gridDao" ref="gridDao"/>
+	 </bean>
+	 <bean id="shareFileAccessService" class="cn.vlabs.duckling.aone.domain.service.ShareFileAccessService" scope="prototype">
+	 	<property name="shareFileAccessDao" ref="shareFileAccessDao"/>
+	 </bean>
+	 <bean id="feedbackService" class="cn.vlabs.duckling.aone.domain.service.FeedbackService" scope="prototype">
+	 	<property name="feedbackDao" ref="feedbackDao"/>
+	 </bean>
+	 <!-- For lynx -->
+	<bean id="lynxStarmarkService" class="cn.vlabs.duckling.aone.content.service.impl.StarmarkServiceImpl" scope="prototype">
+		<property name="starmarkDAO" ref="starmarkDAO"/>
+	</bean>
+	<bean id="lynxBundleService" class="cn.vlabs.duckling.aone.content.service.impl.BundleServiceImpl" scope="prototype">
+		<property name="bundleDAO" ref="bundleDAO"/>
+		<property name="bundleItemDAO" ref="bundleItemDAO"/>
+	</bean>
+	
+	
+	
+	<bean id="lynxFileService" class="cn.vlabs.duckling.aone.content.service.impl.FileServiceImpl" scope="prototype">
+		<property name="fileDAO" ref="fileDAO"/>
+		<property name="fileVersionDAO" ref="fileVersionDAO"/>
+		<property name="storage" ref="clbFileStorage"/>
+		<property name="emailAttachmentDAO" ref="emailAttachmentDAO"/>
+	</bean>
+	
+	
+		
+	<bean id="lynxGridService" class="cn.vlabs.duckling.aone.content.service.impl.GridServiceImpl" scope="prototype">
+		<property name="gridGroupDAO" ref="gridGroupDAO"/>
+	</bean>
+	<bean id="lynxNavbarService" class="cn.vlabs.duckling.aone.content.service.impl.NavbarServiceImpl" scope="prototype">
+		<property name="navbarItemDAO" ref="navbarItemDAO"/>
+	</bean>
+	<bean id="lynxPageService" class="cn.vlabs.duckling.aone.content.service.impl.PageServiceImpl" scope="prototype">
+		<property name="pageDAO" ref="pageDAO"/>
+		<property name="pageVersionDAO" ref="pageVersionDAO"/>
+	</bean>
+	<bean id="lynxResourceService" class="cn.vlabs.duckling.aone.content.service.impl.ResourceServiceImpl" scope="prototype">
+		<property name="resourceDAO" ref="resourceDAO"/>
+	</bean>
+	<bean id="lynxTagService" class="cn.vlabs.duckling.aone.content.service.impl.TagServiceImpl" scope="prototype">
+		<property name="tagDAO" ref="tagDAO"/>
+		<property name="tagGroupDAO" ref="tagGroupDAO"/>
+		<property name="tagItemDAO" ref="tagItemDAO"/>
+	</bean>
+	<!-- add by lvly@2012-6-8 -->
+	<bean id="taskService" class="cn.vlabs.duckling.aone.task.service.impl.TaskServiceImpl" scope="prototype">
+		<property name="taskDAO" ref="taskDAO"/>
+			
+	</bean>	
+	
+	<!-- end -->
+	<!-- add by lvly@2012-11-20 瀑布流简略图-->
+	<bean id="pictureService" class="cn.vlabs.duckling.aone.content.service.impl.PictureServiceImpl" scope="prototype">
+		<property name="pictureDAO" ref="pictureDAO"/>
+		<property name="storage" ref="clbFileStorage"/>
+	</bean>	
+	
+	<!-- add by lizi@2012-8-17 -->
+	<bean id="userAnalysisDAO"
+		class="cn.vlabs.duckling.aone.searchlog.dao.impl.UserAnalysisDAOImpl"
+		parent="baseDAO" scope="prototype" />
+	<bean id="searchDocWeightDAO"
+		class="cn.vlabs.duckling.aone.searchlog.dao.impl.SearchDocWeightDAOImpl"
+		parent="baseDAO" scope="prototype" />
+	<bean id="searchLogDAO"
+		class="cn.vlabs.duckling.aone.searchlog.dao.impl.SearchLogDAOImpl"
+		parent="baseDAO" scope="prototype" />
+	<bean id="searchLogAnalysis" scope="prototype"
+		class="cn.vlabs.duckling.aone.searchlog.analysis.impl.SearchLogAnalysisImpl">
+		<property name="searchDocWeightDAO" ref="searchDocWeightDAO" />
+		<property name="searchLogDAO" ref="searchLogDAO" />
+		<property name="dlogappName" value="${duckling.dlog.application.name}"></property>
+	</bean>
+	<bean id="userAnalysis" scope="prototype"
+		class="cn.vlabs.duckling.aone.searchlog.analysis.impl.UserAnalysisImpl">
+		<property name="userAnalysisDAO" ref="userAnalysisDAO" />
+	</bean>
+	<!-- end -->
+	
+	
+	<!-- add by lvly@2012-6-8 -->
+	<bean id="paramService" class=" cn.vlabs.duckling.aone.content.service.impl.ParamServiceImpl" scope="prototype">
+		<property name="paramDAO" ref="paramDAO"/>
+	</bean>
+	<!-- add by lvly@2012-11-15-->
+	<bean id="copyService" class="cn.vlabs.duckling.aone.copy.service.impl.CopyService" scope="prototype">
+		<property name="copyDAO" ref="copyDAO"/>
+		<property name="fileVersionDAO" ref="fileVersionDAO"/>
+		<property name="fileDAO" ref="fileDAO"/>
+	</bean>
+	<!-- end -->
+	<bean id="lynxSearchService" class="cn.vlabs.duckling.aone.content.service.impl.SearchServiceImpl" scope="prototype">
+		<property name="host">
+			<value>${duckling.sphinx.host}</value>
+		</property>
+		<property name="port">
+			<value>${duckling.sphinx.port}</value>
+		</property>
+		<!-- add by lizi @2012-0903 -->
+		<property name="searchLogAnalysis" ref="searchLogAnalysis"/>
+		<property name="lynxResourceService" ref="lynxResourceService" />
+		<property name="userAnalysis" ref="userAnalysis"/>
+	</bean>	 	 
+	 <bean id="PageCreatedQueue" class="cn.vlabs.duckling.aone.infrastructure.event.EventQueue">
+	 	<constructor-arg value="PageCreated"/>
+	 	<constructor-arg>
+	 		<list><bean class="cn.vlabs.duckling.aone.infrastructure.event.handler.PageCreatedHandler"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="PageModifiedQueue" class="cn.vlabs.duckling.aone.infrastructure.event.EventQueue">
+	 	<constructor-arg value="PageModified"/>
+	 	<constructor-arg>
+	 		<list><bean class="cn.vlabs.duckling.aone.infrastructure.event.handler.PageModifiedHandler"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="VisitPageQueue" class="cn.vlabs.duckling.aone.infrastructure.event.EventQueue">
+	 	<constructor-arg value="PageVisited"/>
+	 	<constructor-arg>
+	 		<list><bean class="cn.vlabs.duckling.aone.infrastructure.event.handler.PageVisitedHandler"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="TeamMemberAddedQueue" class="cn.vlabs.duckling.aone.infrastructure.event.EventQueue">
+	 	<constructor-arg value="TeamMemberAdded"/>
+	 	<constructor-arg>
+	 		<list><bean class="cn.vlabs.duckling.aone.infrastructure.event.handler.TeamMemberAddedHandler"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="attachHandler" class="cn.vlabs.duckling.aone.infrastructure.event.handler.AttachmentHandler"/>
+	 <bean id="AttachCreateQueue" class="cn.vlabs.duckling.aone.infrastructure.event.EventQueue">
+	 	<constructor-arg value="AttachCreated"/>
+	 	<constructor-arg>
+	 		<list><ref bean="attachHandler"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="AttachModifiedQueue" class="cn.vlabs.duckling.aone.infrastructure.event.EventQueue">
+	 	<constructor-arg value="AttachUpdated"/>
+	 	<constructor-arg>
+	 		<list><ref bean="attachHandler"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="EventService" class="cn.vlabs.duckling.aone.infrastructure.event.EventService" init-method="start" destroy-method="stop">
+	 	<constructor-arg>
+	 		<list>
+	 			<ref bean="PageCreatedQueue"/>
+	 			<ref bean="PageModifiedQueue"/>
+	 			<ref bean="TeamMemberAddedQueue"/>
+	 			<ref bean="VisitPageQueue"/>
+	 			<ref bean="AttachCreateQueue"/>
+	 			<ref bean="AttachModifiedQueue"/>
+	 		</list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="domainEvents" class="cn.vlabs.duckling.aone.infrastructure.event.impl.DomainEvents">
+	 	<constructor-arg ref="EventService"/>
+	 </bean>
+	 
+	 
+	 <bean id="eventDao" class="cn.vlabs.duckling.aone.infrastructure.repository.impl.DEventDAOImpl" scope="prototype" parent="baseDAO"/>
+	 <bean id="noticeDao" class="cn.vlabs.duckling.aone.infrastructure.repository.impl.NoticeDAOImpl" scope="prototype" parent="baseDAO"/>
+	 <bean id="noticeService" class="cn.vlabs.duckling.aone.domain.service.impl.NoticeServiceImpl" scope="prototype">
+	 	<property name="noticeDao" ref="noticeDao"/>
+	 </bean>
+	 <bean id="eventService" class="cn.vlabs.duckling.aone.domain.service.impl.DEventServiceImpl" scope="prototype">
+	 	<property name="eventDao" ref="eventDao"/>
+	 </bean>
+	 <bean id="eventDispatcher" class="cn.vlabs.duckling.aone.infrastructure.event.DEventDispatcher">
+	 	<constructor-arg ref="eventRunner"/>
+	 </bean>
+	 <bean id="pageListener" class="cn.vlabs.duckling.aone.infrastructure.event.listener.PageEventListener"/>
+	 <bean id="PageEventQueue" class="cn.vlabs.duckling.aone.infrastructure.event.DEventQueue">
+	 	<constructor-arg value="PageEvent"/>
+	 	<constructor-arg>
+	 		<list><ref bean="pageListener"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="fileListener" class="cn.vlabs.duckling.aone.infrastructure.event.listener.FileEventListener"/>
+	 <bean id="FileEventQueue" class="cn.vlabs.duckling.aone.infrastructure.event.DEventQueue">
+	 	<constructor-arg value="FileEvent"/>
+	 	<constructor-arg>
+	 		<list><ref bean="fileListener"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="collectionListener" class="cn.vlabs.duckling.aone.infrastructure.event.listener.CollectionEventListener"/>
+	 <bean id="CollectionEventQueue" class="cn.vlabs.duckling.aone.infrastructure.event.DEventQueue">
+	 	<constructor-arg value="CollectionEvent"/>
+	 	<constructor-arg>
+	 		<list><ref bean="collectionListener"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <bean id="teamListener" class="cn.vlabs.duckling.aone.infrastructure.event.listener.TeamEventListener"/>
+	 <bean id="TeamEventQueue" class="cn.vlabs.duckling.aone.infrastructure.event.DEventQueue">
+	 	<constructor-arg value="TeamEvent"/>
+	 	<constructor-arg>
+	 		<list><ref bean="teamListener"/></list>
+	 	</constructor-arg>
+	 </bean>
+	 <!-- add by lvly@2012-06-13 -->
+	  <bean id="TaskEventQueue" class="cn.vlabs.duckling.aone.infrastructure.event.DEventQueue">
+	 	<constructor-arg value="TaskEvent"/>
+	 	<constructor-arg>
+	 		<list><ref bean="taskListener"/></list>
+	 	</constructor-arg>
+	 </bean>
+	  <bean id="taskListener" class="cn.vlabs.duckling.aone.infrastructure.event.listener.TaskEventListener"/>
+	 <!-- end -->
+	 <bean id="eventRunner" class="cn.vlabs.duckling.aone.infrastructure.event.DEventRunner" init-method="start" destroy-method="stop">
+	 	<constructor-arg>
+	 		<list>
+	 			<ref bean="PageEventQueue"/>
+	 			<ref bean="FileEventQueue"/>
+	 			<ref bean="CollectionEventQueue"/>
+	 			<ref bean="TeamEventQueue"/>
+	 			<!-- add by lvly@2012-06-13 -->
+	 			<ref bean="TaskEventQueue"/>
+	 			<!-- end -->
+	 		</list>
+	 	</constructor-arg>
+	 </bean>
+	<!-- 
+		AOne Spring IOC Config end
+	 -->
+	 <!-- Email Notice @2012-11-7 -->
+	 
+	<bean id="emailNoticeJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass"
+			value="cn.vlabs.duckling.aone.content.email.EmailNoticeJob" />
+		 <property name="jobDataAsMap">
+			<map>
+				<entry key="container" value-ref="container"/>
+				<entry key="noticeService" value-ref="noticeService"/>
+				<entry key="paramService" value-ref="paramService"/>
+			</map>
+		</property> 
+	</bean>
+	<bean id="EmailNoticeSimpleTriggerBean"  class="org.springframework.scheduling.quartz.CronTriggerBean"> 
+		<property  name="jobDetail" ref="emailNoticeJob"/> 
+		<property name="cronExpression" value="0 0 1 * * ?"/>
+    </bean>
+	 
+	<!-- LogAnalysisTrimmer li zexin-->
+    
+	<bean id="LogAnalysisJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="cn.vlabs.duckling.aone.searchlog.analysis.impl.AnalysisTimer" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="searchLogAnalysis" value-ref="searchLogAnalysis" />
+				<entry key="userAnalysis" value-ref="userAnalysis" />
+			</map>
+		</property>
+	</bean>
+	 
+
+	
+	
+	<bean id="deviceTokenDao" class="cn.vlabs.duckling.vwb.ui.api.ios.device.dao.DeviceTokenDaoImpl" parent="baseDAO"/>
+	<bean id="deviceTokenService" class="cn.vlabs.duckling.vwb.ui.api.ios.device.service.DeviceTokenServiceImpl">
+	 	<property name="tokenDao" ref="deviceTokenDao"/>
+	 	<property name="certificatePath"><value>${ddl.root}/conf/researchol.p12</value></property>
+	 	<property name="devicePushMessageManager" ref="devicePushMessageManager"/>
+	</bean>
+	<bean id="devicePushMessageManager" class="cn.vlabs.duckling.vwb.ui.api.ios.device.service.DevicePushMessageManagerImpl">
+		<property name="cacheService" ref="cacheService"/>
+	</bean>
+	
+</beans>
