@@ -53,7 +53,12 @@ public class NginxAgent {
 	public static void setRedirectUrl(HttpServletRequest req, HttpServletResponse resp, String fileName, long fileSize, String url) {
 		if(fileSize>0){
 			resp.addHeader(X_ACCEL_REDIRECT, url + "?agent=" + Browser.recognizeBrowser(req.getHeader("USER-AGENT")).toString().toLowerCase());
+		} else {
+		    // x_accel_redirect to nginx-clbs will add another
+		    // Content-Disposition and make
+		    // ERR_RESPONSE_HEADERS_MULTIPLE_CONTENT_DISPOSITION
+		    // so, only set it without x_accel_redirect
+		    resp.setHeader("Content-Disposition", Browser.encodeFileName(req.getHeader("USER-AGENT"), fileName));
 		}
-		resp.setHeader("Content-Disposition", Browser.encodeFileName(req.getHeader("USER-AGENT"), fileName));
 	}
 }

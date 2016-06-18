@@ -1,0 +1,6 @@
+Use nginx X-Accel-Redirect to forward the request to nginx-clbs and
+complete it. Nginx-clbs gets files from MongoDB directly via
+nginx-gridfs module.
+
+Refer to nginx.conf.
+
