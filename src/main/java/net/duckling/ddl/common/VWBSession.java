@@ -27,8 +27,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletSession;
+// import javax.portlet.PortletRequest;
+// import javax.portlet.PortletSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -73,11 +73,11 @@ public class VWBSession {
         status=ANONYMOUS;
     }
 
-    public static VWBSession findSession(PortletRequest request){
-        PortletSession psession = request.getPortletSession();
-        VWBSession vwbsession = (VWBSession) psession.getAttribute(SESSION_KEY, PortletSession.APPLICATION_SCOPE);
-        return vwbsession;
-    }
+    // public static VWBSession findSession(PortletRequest request){
+    //     PortletSession psession = request.getPortletSession();
+    //     VWBSession vwbsession = (VWBSession) psession.getAttribute(SESSION_KEY, PortletSession.APPLICATION_SCOPE);
+    //     return vwbsession;
+    // }
 
     public static VWBSession findSession(HttpServletRequest request) {
         if (request == null)

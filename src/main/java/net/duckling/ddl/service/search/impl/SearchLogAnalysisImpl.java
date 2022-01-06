@@ -39,8 +39,15 @@ import net.duckling.ddl.service.search.SearchLogAnalysis;
 import net.duckling.ddl.service.search.SearchReocrd;
 import net.duckling.ddl.service.search.WeightPair;
 
+
+/*
+ * Update this -- TODO: take one package for JSON
+ * <2022-01-06 Thu>
+ */
+//import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
