@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,91 +33,91 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class FileEventListener extends AbstractEventListener {
-	@PostConstruct
-	public void init(){
-		registQueue(FILE_EVENT);
-	}
-	
-	protected void addDifferenceNoticeToHandle(DEvent e){
-		String operation = e.getEventBody().getOperation();
-		if(DAction.UPLOAD.equals(operation)){
-			upload(e);
-		}else if(DAction.SHARE.equals(operation)){
-			share(e);
-		}else if(DAction.DOWNLOAD.equals(operation)){
-			download(e);
-		}else if(DAction.DELETE.equals(operation)){
-			delete(e);
-		}else if(DAction.MODIFY.equals(operation)){
-			modify(e);
-		}else if(DAction.COMMENT.equals(operation)){
-			comment(e);
-		}else if(DAction.REPLY.equals(operation)){
-			reply(e);
-		}else if(DAction.RECOMMEND.equals(operation)){
-			recommend(e);
-		}else if(DAction.RECOVER.equals(operation)){
-			recover(e);
-		}else if(DAction.MENTION.equals(operation)){
-			mention(e);
-		}else if(DAction.TEAM_MOVE.equals(operation)){
-			teamMove(e);
-		}
-	}
-	private void teamMove(DEvent e) {
-		appendFollowNotice(e);
-		appendHistoryNotice(e);
-		appendTeamNotice(e);
-	}
+    @PostConstruct
+    public void init(){
+        registQueue(FILE_EVENT);
+    }
 
-	private void recover(DEvent e){
-		appendHistoryNotice(e);
-		appendFollowNotice(e);
-		appendTeamNotice(e);
-	}
-	private void mention(DEvent e){
-		appendMentionNotice(e);
-	}
-	private void delete(DEvent e){
-		appendHistoryNotice(e);
-		appendFollowNotice(e);
-		appendTeamNotice(e);
-	}
-	
-	private void modify(DEvent e){
-		appendHistoryNotice(e);
-		appendFollowNotice(e);
-		appendTeamNotice(e);
-	}
-	
-	private void comment(DEvent e){
-		appendOwnerNotice(e);
-		appendCommentNotice(e);
-		appendHistoryNotice(e);
-		appendTeamNotice(e);
-	}
-	
-	private void reply(DEvent e){
-		appendReplyNotice(e);
-		appendHistoryNotice(e);
-	}
-	
-	private void upload(DEvent e){
-		appendFollowNotice(e);
-		appendHistoryNotice(e);
-		appendTeamNotice(e);
-	}
-	
-	private void share(DEvent e){
-		appendHistoryNotice(e);
-	}
-	
-	private void download(DEvent e){
-		appendHistoryNotice(e);
-	}
-	
-	private void recommend(DEvent e){
-		appendRecommendNotice(e);
-		appendHistoryNotice(e);
-	}
+    protected void addDifferenceNoticeToHandle(DEvent e){
+        String operation = e.getEventBody().getOperation();
+        if(DAction.UPLOAD.equals(operation)){
+            upload(e);
+        }else if(DAction.SHARE.equals(operation)){
+            share(e);
+        }else if(DAction.DOWNLOAD.equals(operation)){
+            download(e);
+        }else if(DAction.DELETE.equals(operation)){
+            delete(e);
+        }else if(DAction.MODIFY.equals(operation)){
+            modify(e);
+        }else if(DAction.COMMENT.equals(operation)){
+            comment(e);
+        }else if(DAction.REPLY.equals(operation)){
+            reply(e);
+        }else if(DAction.RECOMMEND.equals(operation)){
+            recommend(e);
+        }else if(DAction.RECOVER.equals(operation)){
+            recover(e);
+        }else if(DAction.MENTION.equals(operation)){
+            mention(e);
+        }else if(DAction.TEAM_MOVE.equals(operation)){
+            teamMove(e);
+        }
+    }
+    private void teamMove(DEvent e) {
+        appendFollowNotice(e);
+        appendHistoryNotice(e);
+        appendTeamNotice(e);
+    }
+
+    private void recover(DEvent e){
+        appendHistoryNotice(e);
+        appendFollowNotice(e);
+        appendTeamNotice(e);
+    }
+    private void mention(DEvent e){
+        appendMentionNotice(e);
+    }
+    private void delete(DEvent e){
+        appendHistoryNotice(e);
+        appendFollowNotice(e);
+        appendTeamNotice(e);
+    }
+
+    private void modify(DEvent e){
+        appendHistoryNotice(e);
+        appendFollowNotice(e);
+        appendTeamNotice(e);
+    }
+
+    private void comment(DEvent e){
+        appendOwnerNotice(e);
+        appendCommentNotice(e);
+        appendHistoryNotice(e);
+        appendTeamNotice(e);
+    }
+
+    private void reply(DEvent e){
+        appendReplyNotice(e);
+        appendHistoryNotice(e);
+    }
+
+    private void upload(DEvent e){
+        appendFollowNotice(e);
+        appendHistoryNotice(e);
+        appendTeamNotice(e);
+    }
+
+    private void share(DEvent e){
+        appendHistoryNotice(e);
+    }
+
+    private void download(DEvent e){
+        appendHistoryNotice(e);
+    }
+
+    private void recommend(DEvent e){
+        appendRecommendNotice(e);
+        appendHistoryNotice(e);
+    }
 }

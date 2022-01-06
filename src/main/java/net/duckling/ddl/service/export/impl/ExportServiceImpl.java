@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.export.impl;
@@ -72,9 +72,9 @@ import cn.vlabs.clb.api.ResourceNotFound;
  * 重要变量释义： id2Title, 类型：Map；内容：已下载页面的路径和标题； key: 已下载页面的存储路径；value：页面标题 allPages,
  * 类型：List；内容：存放所有页面的存储路径，在写Epub时使用 downResPath, 类型：Map；内容：已下载资源ID及其存储路径；key:
  * rid_tid_itemType；value：存储路径
- * 
+ *
  * @author Yangxp
- * 
+ *
  */
 
 @Service
@@ -94,7 +94,7 @@ public class ExportServiceImpl implements ExportService {
     private FileVersionService fileVersionService;
     @Autowired
     private ResourceOperateService resourceOperateService;
-    
+
 
     protected static final Logger LOG = Logger.getLogger(ExportServiceImpl.class);
     private static final String EPUB_XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -137,7 +137,7 @@ public class ExportServiceImpl implements ExportService {
 
     @Override
     public void download(VWBContext context, String tname, Map<String, List<Tag>> tagMap, HttpServletResponse resp,
-            String format) {
+                         String format) {
         downResPath.clear();
         if (format.equalsIgnoreCase("zip")) {
             writeZip2Client(context, tname, tagMap, resp);
@@ -170,7 +170,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeZip2Client(VWBContext context, String tname, Map<String, List<Tag>> tagMap,
-            HttpServletResponse resp) {
+                                 HttpServletResponse resp) {
         Team team = teamService.getTeamByName(tname);
         setResponseHeader(tname + ".zip", resp);
         ArchiveOutputStream out = getArchiveOutputStream(resp);
@@ -200,8 +200,8 @@ public class ExportServiceImpl implements ExportService {
         sb.append(htmlHeader);
         sb.append("<body><h1>所有页面</h1><ul>");
         for (Entry<String, String> entry:id2Title.entrySet()){
-        	sb.append("<li><a target=\"pageFrame\" href=\"").append(entry.getKey()).append("\">").append(entry.getValue())
-            .append("</a></li>");
+            sb.append("<li><a target=\"pageFrame\" href=\"").append(entry.getKey()).append("\">").append(entry.getValue())
+                    .append("</a></li>");
         }
         sb.append("</ul></body>");
         InputStream in = new ByteArrayInputStream(sb.toString().getBytes());
@@ -269,7 +269,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeEpub2Client(VWBContext context, String tname, Map<String, List<Tag>> tagMap,
-            HttpServletResponse resp) {
+                                  HttpServletResponse resp) {
         Team team = teamService.getTeamByName(tname);
         setResponseHeader(tname + ".epub", resp);
         ArchiveOutputStream out = getArchiveOutputStream(resp);
@@ -287,7 +287,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeEpubFiles(String tname, List<String> allPages, ArchiveOutputStream out,
-            Map<String, String> id2Title) {
+                                Map<String, String> id2Title) {
         writeMimetype(out);
         writeMetaInfo(tname, out);
         writeCover(tname, out);
@@ -359,12 +359,12 @@ public class ExportServiceImpl implements ExportService {
                 String tagname = getIDFromResPath(str);
                 String path = str.substring(str.indexOf("/") + 1, str.length());
                 sbItems.append("<item id=\"" + tagname + "\" href=\"" + path
-                        + "\" media-type=\"application/xhtml+xml\" />\n");
+                               + "\" media-type=\"application/xhtml+xml\" />\n");
                 sbItemrefs.append("<itemref idref=\"" + tagname + "\" />\n");
             } else {
                 String pid = getIDFromResPath(str);
                 sbItems.append("<item id=\"" + pid + "\" href=\"" + str
-                        + "\" media-type=\"application/xhtml+xml\" />\n");
+                               + "\" media-type=\"application/xhtml+xml\" />\n");
                 sbItemrefs.append("<itemref idref=\"" + pid + "\" />\n");
             }
         }
@@ -393,7 +393,7 @@ public class ExportServiceImpl implements ExportService {
         int playOrder = 0;
         if (null != tname) {
             sb.append("<navPoint id=\"nv-catalog\" playOrder=\"" + (++playOrder) + "\">\n"
-                    + "<navLabel><text>目录</text></navLabel>\n<content src=\"overview.html\"/>\n</navPoint>\n");
+                      + "<navLabel><text>目录</text></navLabel>\n<content src=\"overview.html\"/>\n</navPoint>\n");
         }
         int len = allPages.size();
         for (int par = 0; par < len; par++) {
@@ -403,7 +403,7 @@ public class ExportServiceImpl implements ExportService {
                 String path = str.substring(str.indexOf("/") + 1, str.length());
                 playOrder++;
                 sb.append("<navPoint id=\"nv-" + playOrder + "\" playOrder=\"" + playOrder + "\">\n<navLabel><text>"
-                        + tagName + "</text></navLabel>\n<content src=\"" + path + "\"/>\n");
+                          + tagName + "</text></navLabel>\n<content src=\"" + path + "\"/>\n");
                 for (int child = par + 1; child < len; child++) {
                     String item = allPages.get(child);
                     if (item.contains("index")) {
@@ -412,8 +412,8 @@ public class ExportServiceImpl implements ExportService {
                     String pageTitle = id2Title.get(item);
                     playOrder++;
                     sb.append("<navPoint id=\"nv-" + playOrder + "\" playOrder=\"" + playOrder
-                            + "\">\n<navLabel><text>" + pageTitle + "</text></navLabel>\n<content src=\"" + item
-                            + "\"/>\n</navPoint>\n");
+                              + "\">\n<navLabel><text>" + pageTitle + "</text></navLabel>\n<content src=\"" + item
+                              + "\"/>\n</navPoint>\n");
                 }
                 sb.append("</navPoint>\n");
             }
@@ -461,7 +461,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeOverview(String tag, String tname, int[] rids, ArchiveOutputStream out, VWBContext context,
-            boolean isEpub) {
+                               boolean isEpub) {
         String htmlHeader = getTemplate(epubPath + HTML_TEM);
         htmlHeader = htmlHeader.replace("TITLE", "" + tname);
         htmlHeader = htmlHeader.replaceAll("[\\.]{2}", "\\.");
@@ -494,7 +494,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeOverview(String tname, Map<String, List<Tag>> tagMap, ArchiveOutputStream out,
-            VWBContext context, boolean isEpub) {
+                               VWBContext context, boolean isEpub) {
         String htmlHeader = getTemplate(epubPath + HTML_TEM);
         htmlHeader = htmlHeader.replace("TITLE", "" + tname);
         htmlHeader = htmlHeader.replaceAll("[\\.]{2}", "\\.");
@@ -523,7 +523,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeOverviewItemByResource(VWBContext context, int rid, StringBuilder sb, String tag, String tname,
-            boolean isEpub) {
+                                             boolean isEpub) {
         IResourceService rs = resourceService;
         Resource res = rs.getResource(rid);
         if (null == res) {
@@ -560,7 +560,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeOverviewItemByTag(VWBContext context, Map<String, List<Tag>> tagMap, StringBuilder sb,
-            boolean isEpub) {
+                                        boolean isEpub) {
         if (null != tagMap && !tagMap.isEmpty()) {
             for (Map.Entry<String, List<Tag>> entry : tagMap.entrySet()) {
                 sb.append("<li><ul><p  class=\"listTitle\">" + entry.getKey() + "</p>");
@@ -569,7 +569,7 @@ public class ExportServiceImpl implements ExportService {
                     for (Tag tag : tags) {
                         String target = isEpub ? " " : " target=\"pageListFrame\" ";
                         sb.append("<li><a" + target + "href=\"" + tag.getTitle() + "_" + tag.getId() + "/index.html\">"
-                                + tag.getTitle() + "</a></li>");
+                                  + tag.getTitle() + "</a></li>");
                     }
                 }
                 sb.append("</ul></li>");
@@ -628,7 +628,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private String getProcessedHtml(String html, VWBContext context, String path, ArchiveOutputStream out,
-            Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                                    Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         String s = processFileOrPageLink(html, LynxConstants.TYPE_FILE, context, path, out, id2Title, allPages, isEpub);
         String ss = processImageLink(s, context, path, out, id2Title, allPages, isEpub);
         String sss = processFileOrPageLink(ss, LynxConstants.TYPE_PAGE, context, path, out, id2Title, allPages, isEpub);
@@ -636,7 +636,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private String processImageLink(String html, VWBContext context, String path, ArchiveOutputStream out,
-            Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                                    Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         String regex = "[0-9a-zA-Z\\-\\/]+/download/([0-9]+)(\\?func=cache){0,1}";
         Pattern p = Pattern.compile(regex);
         String[] cells = p.split(html);
@@ -664,7 +664,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private String processFileOrPageLink(String html, String type, VWBContext context, String path,
-            ArchiveOutputStream out, Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                                         ArchiveOutputStream out, Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         String regex;
         if (LynxConstants.TYPE_FILE.equals(type)) {
             regex = "/file/([0-9]+)";
@@ -702,7 +702,7 @@ public class ExportServiceImpl implements ExportService {
                     Resource res = resourceService.getResource(attId, context.getTid());
                     if (null != res) {
                         List<FileVersion> attFiles = fileVersionService.getFilesOfPage(res.getRid(),
-                                VWBContext.getCurrentTid());
+                                                                                       VWBContext.getCurrentTid());
                         for (FileVersion file : attFiles) {
                             writeAttFile(path, VWBContext.getCurrentTid(), file.getRid(), context, out);
                         }
@@ -782,7 +782,7 @@ public class ExportServiceImpl implements ExportService {
     /*--------------------------------   写资源的相关方法   ----------------------------------------*/
     // 文档页导出时调用的主方法
     private void writeForResource(String parent, int tid, int[] rids, VWBContext context, ArchiveOutputStream out,
-            Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                                  Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         String path = parent + "/" + DEFAULT_TAG;
         int size = rids.length;
         for (int i = 0; i < size; i++) {
@@ -792,7 +792,7 @@ public class ExportServiceImpl implements ExportService {
 
     // 团队管理员导出文档时调用的主方法
     private void writeForTag(String parent, Map<String, List<Tag>> tagMap, int tid, VWBContext context,
-            ArchiveOutputStream out, Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                             ArchiveOutputStream out, Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         ITagService ts = tagService;
         Team team = teamService.getTeamByID(tid);
         if (null == tagMap || tagMap.isEmpty()) {
@@ -831,7 +831,7 @@ public class ExportServiceImpl implements ExportService {
 
     // 写单个资源
     private void writeResource(String parent, int tid, int rid, VWBContext context, ArchiveOutputStream out,
-            Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                               Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         Resource res = resourceService.getResource(rid);
         if (null == res) {
             LOG.error("Resource doesn't exist! rid=" + rid + " and tid=" + tid);
@@ -853,7 +853,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writePage(String path, int resourceId, VWBContext context, ArchiveOutputStream out,
-            Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                           Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         Resource page =  resourceService.getResource(resourceId);
         StringBuilder sbuf = new StringBuilder();
         String pagePath = path + "/" + resourceId + ".html";
@@ -913,14 +913,14 @@ public class ExportServiceImpl implements ExportService {
         downResPath.put(resKey, path + "/" + newFilename);
         FileVersion file = fileVersionService.getLatestFileVersion(rid, tid);
         try {
-//            file = fileService.getFile(rid, tid);
+            //            file = fileService.getFile(rid, tid);
         } catch (net.duckling.ddl.service.export.FileNotFoundException e) {
             LOG.error("没有找到ID为" + rid + "的文档！");
             return;
         }
         ExportAttachSaver eas = new ExportAttachSaver(path, tid, rid, out);
         try {
-        	resourceOperateService.getContent(file.getClbId(), "" + file.getClbVersion(), eas);
+            resourceOperateService.getContent(file.getClbId(), "" + file.getClbVersion(), eas);
         } catch (AccessForbidden e) {
             LOG.warn("对ID为" + file.getClbId() + "文档的访问被拒绝！");
         } catch (ResourceNotFound e) {
@@ -931,7 +931,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeBundle(String parent, int tid, Resource res, VWBContext context, ArchiveOutputStream out,
-            Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
+                             Map<String, String> id2Title, List<String> allPages, boolean isEpub) {
         List<BundleItem> items = bundleService.getBundleItems(res.getRid());
         if (null != items && items.size() > 0) {
             for (BundleItem item : items) {
@@ -942,7 +942,7 @@ public class ExportServiceImpl implements ExportService {
 
     // 生成单个标签的目录页
     private void writeTagIndex(String path, String tagname, List<Integer> rids, String tname, boolean isEpub,
-            ArchiveOutputStream out, VWBContext context) {
+                               ArchiveOutputStream out, VWBContext context) {
         String html = getIndexHtml(tagname, rids, tname, isEpub, context);
         InputStream in = new ByteArrayInputStream(html.getBytes());
         try {
@@ -983,7 +983,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private void writeTagIndexItemByResource(VWBContext context, int rid, StringBuilder sb, String tag, String tname,
-            boolean isEpub) {
+                                             boolean isEpub) {
         IResourceService rs = resourceService;
         Resource res = rs.getResource(rid);
         if (null == res) {

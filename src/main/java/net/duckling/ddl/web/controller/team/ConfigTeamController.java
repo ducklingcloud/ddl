@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -106,13 +106,13 @@ public class ConfigTeamController extends BaseController {
     private TeamService teamService;
     @Autowired
     private InvitationService invitationService;
-	@Autowired
-	private AuthorityService authorityService;
-	@Autowired
-	private URLGenerator urlGenerator;
-	@Autowired
-	private ICacheService cacheService;
-	
+    @Autowired
+    private AuthorityService authorityService;
+    @Autowired
+    private URLGenerator urlGenerator;
+    @Autowired
+    private ICacheService cacheService;
+
     private static final Logger LOGGER = Logger.getLogger(ConfigTeamController.class);
 
     private VWBContext getVWBContext(HttpServletRequest pRequest) {
@@ -128,8 +128,8 @@ public class ConfigTeamController extends BaseController {
         setCurrentTab("basic", mv);
         String teamUrl = urlGenerator.getAbsoluteURL(team.getId(), UrlPatterns.T_TEAM, null, null).replace(":80/", "/");
         if(teamUrl.endsWith("/")){
-			teamUrl = teamUrl.substring(0, teamUrl.length()-1);
-		}
+            teamUrl = teamUrl.substring(0, teamUrl.length()-1);
+        }
         mv.addObject("teamUrl", teamUrl);
         mv.addObject(LynxConstants.PAGE_TITLE, "基本设置");
         return mv;
@@ -194,7 +194,7 @@ public class ConfigTeamController extends BaseController {
         long end = System.currentTimeMillis();
         if ((end - begin) > 1000) {
             LOGGER.info("---------->(centry-begin)=" + (centry - begin) + "(end-centry)=" + (end - centry) + "总耗时："
-                    + (end - begin));
+                        + (end - begin));
         }
         mv.addObject("csrfToken", super.getCsrfToken(request));
         return mv;
@@ -215,10 +215,10 @@ public class ConfigTeamController extends BaseController {
         mv.addObject("invalidList", invalidList);
         setCurrentTab("invitations", mv);
         if(Team.ACCESS_PRIVATE.equals(team.getAccessType())){
-        	mv.addObject("showUrl",false);
+            mv.addObject("showUrl",false);
         }else{
-        	mv.addObject("showUrl",true);
-        	setTeamModel(mv, team);
+            mv.addObject("showUrl",true);
+            setTeamModel(mv, team);
         }
         mv.addObject(LynxConstants.PAGE_TITLE, "邀请成员");
         return mv;
@@ -242,7 +242,7 @@ public class ConfigTeamController extends BaseController {
 
     @RequestMapping(params = "func=download")
     public void download(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("teamCode") String teamName, @RequestParam("format") String format) {
+                         @RequestParam("teamCode") String teamName, @RequestParam("format") String format) {
         VWBContext context = getVWBContext(request);
         String[] tagids = request.getParameterValues("tag");
         Map<String, List<Tag>> groupTagMap = constructGroupTagMap(tagids);
@@ -251,7 +251,7 @@ public class ConfigTeamController extends BaseController {
 
     @RequestMapping(params = "func=searchUsers")
     public void searchUsers(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("teamCode") String teamName, @RequestParam("keyword") String keyword) {
+                            @RequestParam("teamCode") String teamName, @RequestParam("keyword") String keyword) {
         if (keyword == null || keyword.length() == 0) {
             keyword = "@";
         }
@@ -273,7 +273,7 @@ public class ConfigTeamController extends BaseController {
 
     @RequestMapping(params = "func=removeMember")
     public void removeMember(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("teamCode") String teamCode, @RequestParam("uid") String uid) {
+                             @RequestParam("teamCode") String teamCode, @RequestParam("uid") String uid) {
         Team team = teamService.getTeamByName(teamCode);
         boolean status = teamService.removeMembers(team.getId(), new String[]{uid}, true);
         LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" remove member:"+uid+" from team"+team);
@@ -285,8 +285,8 @@ public class ConfigTeamController extends BaseController {
 
     @RequestMapping(params = "func=updateAllAuthority")
     public void updateAllMemberAuthority(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("teamCode") String teamName, @RequestParam("uid") String[] uids,
-            @RequestParam("auth") String[] auths) {
+                                         @RequestParam("teamCode") String teamName, @RequestParam("uid") String[] uids,
+                                         @RequestParam("auth") String[] auths) {
         Team team = teamService.getTeamByName(teamName);
         teamService.updateMembersAuthority(team.getId(), uids, auths,false);
         LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" update user :"+getUIDString(uids)+"Authority:"+getUIDString(auths)+" from team"+team);
@@ -297,10 +297,10 @@ public class ConfigTeamController extends BaseController {
 
     @RequestMapping(params = "func=updateOneAuthority")
     public void updateOneMemberAuthority(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("teamCode") String teamName, @RequestParam("uid") String uid,
-            @RequestParam("auth") String auth) {
-    	if(super.isWrongCsrfToken(request)){return;}
-    	
+                                         @RequestParam("teamCode") String teamName, @RequestParam("uid") String uid,
+                                         @RequestParam("auth") String auth) {
+        if(super.isWrongCsrfToken(request)){return;}
+
         Team team = teamService.getTeamByName(teamName);
         teamService.updateMembersAuthority(team.getId(), new String[]{ uid}, new String[]{auth}, false);
         LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" update user :"+uid+"Authority:"+auth+" from team"+team);
@@ -321,8 +321,8 @@ public class ConfigTeamController extends BaseController {
 
     @RequestMapping(params = "func=addMembers")
     public void addMembers(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("user-info") String[] userInfoArray, @RequestParam("teamCode") String teamName,
-            @RequestParam("defaultAuth") String defaultAuth) {
+                           @RequestParam("user-info") String[] userInfoArray, @RequestParam("teamCode") String teamName,
+                           @RequestParam("defaultAuth") String defaultAuth) {
         if (userInfoArray != null) {
             JSONArray array = new JSONArray();
             String[] uids = new String[userInfoArray.length];
@@ -351,10 +351,10 @@ public class ConfigTeamController extends BaseController {
 
     @RequestMapping(params = "func=updateBasicInfo")
     public void updateBasicInfo(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("teamCode") String teamCode) {
-    	if(StringUtil.illCharCheck(request, response, "title","description")){
-    		return;
-    	}
+                                @RequestParam("teamCode") String teamCode) {
+        if(StringUtil.illCharCheck(request, response, "title","description")){
+            return;
+        }
         String title = HTMLConvertUtil.replaceLtGt(request.getParameter("title"));
         String description = HTMLConvertUtil.replaceLtGt(request.getParameter("description"));
         VWBContext context = getVWBContext(request);
@@ -395,25 +395,25 @@ public class ConfigTeamController extends BaseController {
             if (filterSet.contains(invitees[i])) {
                 invalidInvitees.add(invitees[i].trim());
             } else {
-            	if(!inviteeMailCount(inviter, invitees[i], getVWBContext(request))){
-            		restrictInvitees.add(invitees[i].trim());
-            	}else{
-            		validInvitees.add(invitees[i].trim());
-            	}
+                if(!inviteeMailCount(inviter, invitees[i], getVWBContext(request))){
+                    restrictInvitees.add(invitees[i].trim());
+                }else{
+                    validInvitees.add(invitees[i].trim());
+                }
             }
         }
-        
+
         if(!inviterMailCount(inviter, validInvitees.size(), getVWBContext(request))){
-        	JSONObject obj = new JSONObject();
+            JSONObject obj = new JSONObject();
             obj.put("success", false);
             obj.put("message", "发送邀请的邮件超过500封，请0.5小时后重新发送");
-        	LOGGER.warn("Amount of send mail exceed. " + "(inviter:"+ inviter + ")");
-        	JsonUtil.writeJSONObject(response, obj);
-        	return;
+            LOGGER.warn("Amount of send mail exceed. " + "(inviter:"+ inviter + ")");
+            JsonUtil.writeJSONObject(response, obj);
+            return;
         }
-        
+
         aoneMailService.sendInvitationMail(teamName, team.getId(), inviter, validInvitees, message,
-                team.getDisplayName());
+                                           team.getDisplayName());
 
         JSONObject obj = new JSONObject();
         obj.put("success", true);
@@ -422,26 +422,26 @@ public class ConfigTeamController extends BaseController {
         obj.put("validCount", validInvitees.size());
         JsonUtil.writeJSONObject(response, obj);
     }
-    
+
     @RequestMapping(params = "func=cancelInvite")
     public void cancelInvite(HttpServletRequest request,HttpServletResponse response){
-    	 String recipient = request.getParameter("invitees");
-         int tid = VWBContext.getCurrentTid();
-         Invitation inv =  invitationService.getExistValidInvitation(recipient, tid);
-         invitationService.updateInviteStatus(inv.getEncode(), inv.getId()+"", StatusUtil.INVALID);
-         JSONObject obj = new JSONObject();
-         obj.put("success", true);
-         JsonUtil.writeJSONObject(response, obj);
+        String recipient = request.getParameter("invitees");
+        int tid = VWBContext.getCurrentTid();
+        Invitation inv =  invitationService.getExistValidInvitation(recipient, tid);
+        invitationService.updateInviteStatus(inv.getEncode(), inv.getId()+"", StatusUtil.INVALID);
+        JSONObject obj = new JSONObject();
+        obj.put("success", true);
+        JsonUtil.writeJSONObject(response, obj);
     }
-    
+
     private JSONArray transferJSONArray(List<String> list){
-    	JSONArray arr = new JSONArray();
-    	for(String s : list){
-    		arr.add(s);
-    	}
-    	return arr;
+        JSONArray arr = new JSONArray();
+        for(String s : list){
+            arr.add(s);
+        }
+        return arr;
     }
-    
+
     private void trimString(String[] ss) {
         if (ss != null && ss.length > 0) {
             for (int i = 0; i < ss.length; i++) {
@@ -488,10 +488,10 @@ public class ConfigTeamController extends BaseController {
         String fileName = uplFile.getOriginalFilename();
         uploadMailListCommon(fileName, in, response);
     }
-    
+
     private void uploadMailListCommon(String fileName, InputStream in, HttpServletResponse response) throws IOException{
-    	String fileType = fileName.substring(fileName.indexOf('.') + 1);
-    	List<Map<String, String>> list = EmailAddressFileAnalysisUtil.getContactsFromStream(in, fileType.toUpperCase());
+        String fileType = fileName.substring(fileName.indexOf('.') + 1);
+        List<Map<String, String>> list = EmailAddressFileAnalysisUtil.getContactsFromStream(in, fileType.toUpperCase());
         JSONArray jsonList = new JSONArray();
         JSONObject result = new JSONObject();
         if (null == list) {
@@ -561,7 +561,7 @@ public class ConfigTeamController extends BaseController {
 
     /**
      * 批量审核用户申请
-     * 
+     *
      * @param request
      * @param response
      * @param uids
@@ -571,21 +571,21 @@ public class ConfigTeamController extends BaseController {
      */
     @RequestMapping(params = "func=auditApplicant")
     public void auditApplicant(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("uids[]") String[] uids, @RequestParam("unames[]") String[] unames,
-            @RequestParam("auths[]") String[] auths, @RequestParam("status") String status) {
+                               @RequestParam("uids[]") String[] uids, @RequestParam("unames[]") String[] unames,
+                               @RequestParam("auths[]") String[] auths, @RequestParam("status") String status) {
         if (uids.length <= 0) {
             JsonUtil.writeJSONObject(response, getJSONResponse(false, "参数错误"));
             return;
         }
         VWBContext context = getVWBContext(request);
         int teamId = VWBContext.getCurrentTid();
-        
+
         //验证uids
         if(!checkApplicant(uids, teamId)){
-        	JsonUtil.writeJSONObject(response, getJSONResponse(false, "参数错误"));
+            JsonUtil.writeJSONObject(response, getJSONResponse(false, "参数错误"));
             return;
         }
-    	
+
         updateTeamApplicant(context, teamId, uids, status);
         boolean isSuccess = updateTeamMember(teamId, uids, unames, auths, status);
         if (!isSuccess) {
@@ -613,7 +613,7 @@ public class ConfigTeamController extends BaseController {
             // 将审核后的邀请置为接受
             if (uids != null) {
                 for (String uid : uids) {
-                	invitationService.updateWaiteToAccept(teamId, uid);
+                    invitationService.updateWaiteToAccept(teamId, uid);
                 }
             }
         } else {
@@ -626,12 +626,12 @@ public class ConfigTeamController extends BaseController {
     }
 
     private boolean updateTeamMember(int teamId, String[] uids, String[] unames, String[] auths,
-            String status) {
+                                     String status) {
         if (TeamApplicant.STATUS_ACCEPT.equals(status)) {
             // Service方法内部处理了用户是否已加入团队的问题
             teamService.addTeamMembers(teamId, uids, unames, auths);
         } else if (TeamApplicant.STATUS_REJECT.equals(status) || TeamApplicant.STATUS_WAITING.equals(status)) {
-        	teamService.removeMembers(teamId, uids,false);
+            teamService.removeMembers(teamId, uids,false);
         } else {
             return false;
         }
@@ -668,7 +668,7 @@ public class ConfigTeamController extends BaseController {
         }
         return result;
     }
-    
+
     /**
      * 验证发送邀请团队成员邮件的数量
      * @param sender
@@ -676,38 +676,38 @@ public class ConfigTeamController extends BaseController {
      */
     @SuppressWarnings("unchecked")
     private boolean inviterMailCount(String sender, int sendAmount, VWBContext context){
-    	VWBContainer container = context.getContainer();
-    	Integer [] arr = parseMailParameters(container.getProperty("ddl.team.email.inviter"));
-    	int maxAmount = arr[0];
-    	int seconds = arr[1];
-    	if(sendAmount>maxAmount){
-    		return false;
-    	}
-    	
-    	String key = "TeamInvite_" + sender;
-		Map<String,Object> obj = (HashMap<String,Object>)cacheService.get(key);
-    	long currentTime = (new Date()).getTime();
-    	if(obj == null){
-    		obj = new HashMap<String,Object>();
-    		obj.put("amount", 0);
-    		obj.put("lastTime", 0L);
-    	}
-    	Integer amount = (Integer)obj.get("amount");
-    	Integer newAmount = amount+sendAmount;
-    	obj.put("amount", newAmount);
-    	Long lastTime = (Long)obj.get("lastTime");
-    	if((currentTime - lastTime) <= seconds ){
-    		if(newAmount > maxAmount){
-    			return false;
-    		}
-    	}else{
-    		obj.put("amount", sendAmount);
-    		obj.put("lastTime", currentTime);
-    	}
-    	cacheService.set(key, obj);
-    	return true;
+        VWBContainer container = context.getContainer();
+        Integer [] arr = parseMailParameters(container.getProperty("ddl.team.email.inviter"));
+        int maxAmount = arr[0];
+        int seconds = arr[1];
+        if(sendAmount>maxAmount){
+            return false;
+        }
+
+        String key = "TeamInvite_" + sender;
+        Map<String,Object> obj = (HashMap<String,Object>)cacheService.get(key);
+        long currentTime = (new Date()).getTime();
+        if(obj == null){
+            obj = new HashMap<String,Object>();
+            obj.put("amount", 0);
+            obj.put("lastTime", 0L);
+        }
+        Integer amount = (Integer)obj.get("amount");
+        Integer newAmount = amount+sendAmount;
+        obj.put("amount", newAmount);
+        Long lastTime = (Long)obj.get("lastTime");
+        if((currentTime - lastTime) <= seconds ){
+            if(newAmount > maxAmount){
+                return false;
+            }
+        }else{
+            obj.put("amount", sendAmount);
+            obj.put("lastTime", currentTime);
+        }
+        cacheService.set(key, obj);
+        return true;
     }
-    
+
     /**
      * 验证发送给每个被邀请者邮件数量
      * @param sender
@@ -716,35 +716,35 @@ public class ConfigTeamController extends BaseController {
      */
     @SuppressWarnings("unchecked")
     private boolean inviteeMailCount(String sender, String receiver, VWBContext context){
-    	VWBContainer container = context.getContainer();
-    	Integer [] arr = parseMailParameters(container.getProperty("ddl.team.email.invitee"));
-    	int maxAmount = arr[0];
-    	int seconds = arr[1];
-		
-    	String key = "TeamInvite_" + sender + "_" + receiver;
-		Map<String,Object> obj = (HashMap<String,Object>)cacheService.get(key);
-    	long currentTime = (new Date()).getTime();
-    	if(obj == null){
-    		obj = new HashMap<String,Object>();
-    		obj.put("amount", 0);
-    		obj.put("lastTime", 0L);
-    	}
-    	Integer amount = (Integer)obj.get("amount");
-    	Integer newAmount = amount+1;
-    	obj.put("amount", newAmount);
-    	Long lastTime = (Long)obj.get("lastTime");
-    	if((currentTime - lastTime) <= seconds ){
-    		if(newAmount > maxAmount){
-    			return false;
-    		}
-    	}else{
-    		obj.put("amount", 1);
-    		obj.put("lastTime", currentTime);
-    	}
-    	cacheService.set(key, obj);
-    	return true;
+        VWBContainer container = context.getContainer();
+        Integer [] arr = parseMailParameters(container.getProperty("ddl.team.email.invitee"));
+        int maxAmount = arr[0];
+        int seconds = arr[1];
+
+        String key = "TeamInvite_" + sender + "_" + receiver;
+        Map<String,Object> obj = (HashMap<String,Object>)cacheService.get(key);
+        long currentTime = (new Date()).getTime();
+        if(obj == null){
+            obj = new HashMap<String,Object>();
+            obj.put("amount", 0);
+            obj.put("lastTime", 0L);
+        }
+        Integer amount = (Integer)obj.get("amount");
+        Integer newAmount = amount+1;
+        obj.put("amount", newAmount);
+        Long lastTime = (Long)obj.get("lastTime");
+        if((currentTime - lastTime) <= seconds ){
+            if(newAmount > maxAmount){
+                return false;
+            }
+        }else{
+            obj.put("amount", 1);
+            obj.put("lastTime", currentTime);
+        }
+        cacheService.set(key, obj);
+        return true;
     }
-    
+
     /**
      * 验证是否是真实的申请者
      * @param uids
@@ -752,34 +752,34 @@ public class ConfigTeamController extends BaseController {
      * @return
      */
     private boolean checkApplicant(String[] uids, int teamId){
-    	if(uids==null || uids.length==0){
-    		return false;
-    	}
-    	List<TeamApplicantRender> list = teamApplicantService.getWaitingApplicantOfTeam(teamId);
-    	Map<String,String> applicantMap = new HashMap<String,String>();
-    	for(TeamApplicantRender item : list){
-    		applicantMap.put(item.getTeamApplicant().getUid(), null);
-    	}
-    	boolean result = true;
-    	for(String item : uids){
-    		if(!applicantMap.containsKey(item)){
-    			result = false;
-    			break;
-    		}
-    	}
-    	return result;
+        if(uids==null || uids.length==0){
+            return false;
+        }
+        List<TeamApplicantRender> list = teamApplicantService.getWaitingApplicantOfTeam(teamId);
+        Map<String,String> applicantMap = new HashMap<String,String>();
+        for(TeamApplicantRender item : list){
+            applicantMap.put(item.getTeamApplicant().getUid(), null);
+        }
+        boolean result = true;
+        for(String item : uids){
+            if(!applicantMap.containsKey(item)){
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
-    
+
     /**
      * 解析邮件发送参数配置
      * @param config
      * @return
      */
     private Integer [] parseMailParameters(String config){
-    	Integer [] result = new Integer[2];
-    	String [] paramArr = config.split("/");
-    	result[0] = Integer.parseInt(paramArr[0]);
-    	result[1] = Integer.parseInt(paramArr[1]);
-    	return result;
+        Integer [] result = new Integer[2];
+        String [] paramArr = config.split("/");
+        result[0] = Integer.parseInt(paramArr[0]);
+        result[1] = Integer.parseInt(paramArr[1]);
+        return result;
     }
 }

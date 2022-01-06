@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -25,153 +25,153 @@ package net.duckling.ddl.service.subscribe;
  */
 public class Publisher {
 
-	private int id;
+    private int id;
 
-	private String type;
+    private String type;
 
-	private String name; //不存数据库字段
+    private String name; //不存数据库字段
 
-	private int rootPage; //不存数据库字段
-	
-	private String url;
-	
-	private int tid;
-	
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
+    private int rootPage; //不存数据库字段
 
-	/**
-	 * @param url the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    private String url;
 
-	public String getName() {
-		return name;
-	}
+    private int tid;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
 
-	public static final String PERSON_TYPE = "person";
+    /**
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public static final String PAGE_TYPE = "page";
+    public String getName() {
+        return name;
+    }
 
-	public static final String TEAM_TYPE = "team";
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public static final String RECOMMEND_TYPE = "recommend";
+    public static final String PERSON_TYPE = "person";
 
-	public static final String ATTACH_TYPE = "attach";
-	
-	public static final String COMMENT_TYPE = "comment";
-	
-	public static final String RECOMMEND_COMMENT = "recommend_comment";
-	
-	public static final String FEED_COMMENT = "feed_comment";
-	
-	public static final String MY_CREATE_PAGE = "my_create_page";
-	
-	public static final String MY_PAGE_COMMENT = "my_page_comment";
+    public static final String PAGE_TYPE = "page";
 
-	public Publisher() {
+    public static final String TEAM_TYPE = "team";
 
-	}
+    public static final String RECOMMEND_TYPE = "recommend";
 
-	public Publisher(String type, int id) {
-		this.id = id;
-		this.type = type;
-	}
+    public static final String ATTACH_TYPE = "attach";
 
-	public int getId() {
-		return id;
-	}
+    public static final String COMMENT_TYPE = "comment";
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public static final String RECOMMEND_COMMENT = "recommend_comment";
 
-	public String getType() {
-		return type;
-	}
+    public static final String FEED_COMMENT = "feed_comment";
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public static final String MY_CREATE_PAGE = "my_create_page";
 
-	public int getRootPage() {
-		return this.rootPage;
-	}
+    public static final String MY_PAGE_COMMENT = "my_page_comment";
 
-	public void setRootPage(int rootPage) {
-		this.rootPage = rootPage;
-	}
+    public Publisher() {
 
-	public boolean equals(Object other) {
-		if (other == null){
-			return false;
-		}
-		if (other == this){
-			return true;
-		}
-		if (other instanceof Publisher) {
-			Publisher publisher = (Publisher) other;
-			return (type.equals(publisher.type) && id == publisher.getId());
-		} else {
-			return false;
-		}
-	}
+    }
 
-	public int hashCode() {
-		return (type.hashCode() + id);
-	}
-	
-	public static boolean isSubscription(Publisher publisher) {
-		return (publisher != null && (Publisher.PAGE_TYPE.equals(publisher
-				.getType()) || Publisher.PERSON_TYPE
-				.equals(publisher.getType())));
-	}
-	
-	public static boolean isFeedComment(Publisher publisher) {
-		return (publisher != null && Publisher.FEED_COMMENT.equals(publisher
-				.getType()));
-	}
-	
-	public static boolean isRecommendComment(Publisher publisher) {
-		return publisher != null && (Publisher.RECOMMEND_COMMENT.equals(publisher.getType()) || Publisher.MY_PAGE_COMMENT.equals(publisher.getType()));
-	} 
-	
-	public static boolean isTeam(Publisher publisher) {
-		return (publisher != null && Publisher.TEAM_TYPE.equals(publisher.getType()));
-	}
+    public Publisher(String type, int id) {
+        this.id = id;
+        this.type = type;
+    }
 
-	public static boolean isPage(Publisher publisher) {
-		return (publisher != null && Publisher.PAGE_TYPE.equals(publisher
-				.getType()));
-	}
+    public int getId() {
+        return id;
+    }
 
-	public static boolean isPerson(Publisher publisher) {
-		return (publisher != null && Publisher.PERSON_TYPE.equals(publisher
-				.getType()));
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public static boolean isRecommend(Publisher publisher) {
-		return (publisher != null && Publisher.RECOMMEND_TYPE.equals(publisher
-				.getType()));
-	}
+    public String getType() {
+        return type;
+    }
 
-	public int getTid() {
-		return tid;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setTid(int tid) {
-		this.tid = tid;
-	}
-	
-	
+    public int getRootPage() {
+        return this.rootPage;
+    }
+
+    public void setRootPage(int rootPage) {
+        this.rootPage = rootPage;
+    }
+
+    public boolean equals(Object other) {
+        if (other == null){
+            return false;
+        }
+        if (other == this){
+            return true;
+        }
+        if (other instanceof Publisher) {
+            Publisher publisher = (Publisher) other;
+            return (type.equals(publisher.type) && id == publisher.getId());
+        } else {
+            return false;
+        }
+    }
+
+    public int hashCode() {
+        return (type.hashCode() + id);
+    }
+
+    public static boolean isSubscription(Publisher publisher) {
+        return (publisher != null && (Publisher.PAGE_TYPE.equals(publisher
+                                                                 .getType()) || Publisher.PERSON_TYPE
+                                      .equals(publisher.getType())));
+    }
+
+    public static boolean isFeedComment(Publisher publisher) {
+        return (publisher != null && Publisher.FEED_COMMENT.equals(publisher
+                                                                   .getType()));
+    }
+
+    public static boolean isRecommendComment(Publisher publisher) {
+        return publisher != null && (Publisher.RECOMMEND_COMMENT.equals(publisher.getType()) || Publisher.MY_PAGE_COMMENT.equals(publisher.getType()));
+    }
+
+    public static boolean isTeam(Publisher publisher) {
+        return (publisher != null && Publisher.TEAM_TYPE.equals(publisher.getType()));
+    }
+
+    public static boolean isPage(Publisher publisher) {
+        return (publisher != null && Publisher.PAGE_TYPE.equals(publisher
+                                                                .getType()));
+    }
+
+    public static boolean isPerson(Publisher publisher) {
+        return (publisher != null && Publisher.PERSON_TYPE.equals(publisher
+                                                                  .getType()));
+    }
+
+    public static boolean isRecommend(Publisher publisher) {
+        return (publisher != null && Publisher.RECOMMEND_TYPE.equals(publisher
+                                                                     .getType()));
+    }
+
+    public int getTid() {
+        return tid;
+    }
+
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
+
+
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,11 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 /**
- * 
+ *
  */
 package net.duckling.ddl.web.controller;
 
@@ -51,79 +51,79 @@ import org.springframework.web.servlet.ModelAndView;
  * @author lvly
  * @since 2012-11-13
  */
-@Controller 
+@Controller
 @RequestMapping("{teamCode}/copy")
 @RequirePermission(target = "team", operation = "view")
 public class CopyController extends BaseController {
-    
-	private static final Logger LOG=Logger.getLogger(CopyController.class);
-	
+
+    private static final Logger LOG=Logger.getLogger(CopyController.class);
+
     @Autowired
     private ICopyService copyService;
     @Autowired
     private TeamPreferenceService teamPreferenceService;
-	@Autowired
-	private TeamService teamService;
+    @Autowired
+    private TeamService teamService;
     @Autowired
     private AuthorityService authorityService;
-	@RequestMapping
-	@ResponseBody
-	public boolean copy(HttpServletRequest request,
-			@RequestParam("cover[]")boolean[] cover,
-			@RequestParam("fromRid")int fromRid,
-			@RequestParam("toTids[]")int[] toTids,
-			@RequestParam("version") int version){
-		VWBContext context = VWBContext.createContext(request, UrlPatterns.T_COPY_PATTERNS);
-		try{
-		    copyService.doCopy(fromRid,version,VWBContext.getCurrentTid(), toTids, cover,context.getCurrentUID());
-		}catch(CopyException e){
-			LOG.error("Do Copy Error:", e);
-			return false;
-		}
-		return true;
-	}
-	@RequestMapping(params="func=test")
-	public ModelAndView test(HttpServletRequest request){
-		VWBContext context = VWBContext.createContext(request,
-				UrlPatterns.T_TASK_PATTERNS);
-		ModelAndView mv = layout(ELayout.LYNX_MAIN, context,
-				"/jsp/aone/tag/bundle-flow-layout.jsp");
-		return mv;
-	}
-	@RequestMapping(params="func=getCanEditTeamList")
-	@ResponseBody
-	public List<CopyTeam> getCanEditTeamList(HttpServletRequest request,@RequestParam("fromRid")int rid){
-		VWBContext context = VWBContext.createContext(request, UrlPatterns.T_COPY_PATTERNS);
-		List<TeamPreferences> prefList = teamPreferenceService.getAllTeamPrefs(context.getCurrentUID());
-		List<CopyTeam> teamList = new ArrayList<CopyTeam>();
-		for (TeamPreferences p : prefList) {
-			String auth=authorityService.getTeamAuthority(p.getTid(), context.getCurrentUID());
-			if(Team.AUTH_ADMIN.equals(auth)||Team.AUTH_EDIT.equals(auth)){
-				boolean needCover=VWBContext.getCurrentTid()==p.getTid()?false: copyService.isNeedCover(rid, p.getTid());
-				teamList.add(new CopyTeam(teamService.getTeamByID(p.getTid()),needCover));
-			}
-		}
-		return teamList;
-	}
-	public static class CopyTeam{
-		private Team team;
-		private boolean isNeedCover;
-		public CopyTeam(Team team,boolean isNeedCover){
-			this.team=team;
-			this.isNeedCover=isNeedCover;
-		}
-		public Team getTeam() {
-			return team;
-		}
-		public void setTeam(Team team) {
-			this.team = team;
-		}
-		public boolean isNeedCover() {
-			return isNeedCover;
-		}
-		public void setNeed(boolean isNeed) {
-			this.isNeedCover = isNeed;
-		}
-		
-	}
+    @RequestMapping
+    @ResponseBody
+    public boolean copy(HttpServletRequest request,
+                        @RequestParam("cover[]")boolean[] cover,
+                        @RequestParam("fromRid")int fromRid,
+                        @RequestParam("toTids[]")int[] toTids,
+                        @RequestParam("version") int version){
+        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_COPY_PATTERNS);
+        try{
+            copyService.doCopy(fromRid,version,VWBContext.getCurrentTid(), toTids, cover,context.getCurrentUID());
+        }catch(CopyException e){
+            LOG.error("Do Copy Error:", e);
+            return false;
+        }
+        return true;
+    }
+    @RequestMapping(params="func=test")
+    public ModelAndView test(HttpServletRequest request){
+        VWBContext context = VWBContext.createContext(request,
+                                                      UrlPatterns.T_TASK_PATTERNS);
+        ModelAndView mv = layout(ELayout.LYNX_MAIN, context,
+                                 "/jsp/aone/tag/bundle-flow-layout.jsp");
+        return mv;
+    }
+    @RequestMapping(params="func=getCanEditTeamList")
+    @ResponseBody
+    public List<CopyTeam> getCanEditTeamList(HttpServletRequest request,@RequestParam("fromRid")int rid){
+        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_COPY_PATTERNS);
+        List<TeamPreferences> prefList = teamPreferenceService.getAllTeamPrefs(context.getCurrentUID());
+        List<CopyTeam> teamList = new ArrayList<CopyTeam>();
+        for (TeamPreferences p : prefList) {
+            String auth=authorityService.getTeamAuthority(p.getTid(), context.getCurrentUID());
+            if(Team.AUTH_ADMIN.equals(auth)||Team.AUTH_EDIT.equals(auth)){
+                boolean needCover=VWBContext.getCurrentTid()==p.getTid()?false: copyService.isNeedCover(rid, p.getTid());
+                teamList.add(new CopyTeam(teamService.getTeamByID(p.getTid()),needCover));
+            }
+        }
+        return teamList;
+    }
+    public static class CopyTeam{
+        private Team team;
+        private boolean isNeedCover;
+        public CopyTeam(Team team,boolean isNeedCover){
+            this.team=team;
+            this.isNeedCover=isNeedCover;
+        }
+        public Team getTeam() {
+            return team;
+        }
+        public void setTeam(Team team) {
+            this.team = team;
+        }
+        public boolean isNeedCover() {
+            return isNeedCover;
+        }
+        public void setNeed(boolean isNeed) {
+            this.isNeedCover = isNeed;
+        }
+
+    }
 }

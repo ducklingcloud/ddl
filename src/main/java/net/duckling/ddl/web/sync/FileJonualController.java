@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.sync;
@@ -46,37 +46,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequirePermission(target = "team", operation = "view")
 public class FileJonualController {
 
-	private static final Logger LOG = Logger.getLogger(FileJonualController.class);
+    private static final Logger LOG = Logger.getLogger(FileJonualController.class);
 
-	/*
-	 * 文件列表
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/v1/sync/delta", method = RequestMethod.POST)
-	public void delta(HttpServletRequest request, HttpServletResponse resp, @RequestParam("jid") Long jid) {
-		Context ctx = ContextUtil.retrieveContext(request);
-		List<Jounal> list = jounalService.list(ctx.getTid(), jid);
-		TeamSpaceSize size = teamSpaceSizeService.getTeamSpaceSize(ctx.getTid());
+    /*
+     * 文件列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/sync/delta", method = RequestMethod.POST)
+    public void delta(HttpServletRequest request, HttpServletResponse resp, @RequestParam("jid") Long jid) {
+        Context ctx = ContextUtil.retrieveContext(request);
+        List<Jounal> list = jounalService.list(ctx.getTid(), jid);
+        TeamSpaceSize size = teamSpaceSizeService.getTeamSpaceSize(ctx.getTid());
 
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("teamSize", size);
-		result.put("jounals", list);
-		JsonUtil.writeJSONObject(resp, new Result<Map<String, Object>>(result));
-	}
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("teamSize", size);
+        result.put("jounals", list);
+        JsonUtil.writeJSONObject(resp, new Result<Map<String, Object>>(result));
+    }
 
-	/*
-	 * 最近jid
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/v1/sync/get_latest_jid", method = RequestMethod.POST)
-	public void getLatestJid(HttpServletRequest request, HttpServletResponse resp) {
-		Context ctx = ContextUtil.retrieveContext(request);
-		Integer jid = jounalService.getLatestJid(ctx.getTid());
-		JsonUtil.writeJSONObject(resp, new Result<Integer>(jid));
-	}
+    /*
+     * 最近jid
+     */
+    @ResponseBody
+    @RequestMapping(value = "/v1/sync/get_latest_jid", method = RequestMethod.POST)
+    public void getLatestJid(HttpServletRequest request, HttpServletResponse resp) {
+        Context ctx = ContextUtil.retrieveContext(request);
+        Integer jid = jounalService.getLatestJid(ctx.getTid());
+        JsonUtil.writeJSONObject(resp, new Result<Integer>(jid));
+    }
 
-	@Autowired
-	private IJounalService jounalService;
-	@Autowired
-	TeamSpaceSizeService teamSpaceSizeService;
+    @Autowired
+    private IJounalService jounalService;
+    @Autowired
+    TeamSpaceSizeService teamSpaceSizeService;
 }

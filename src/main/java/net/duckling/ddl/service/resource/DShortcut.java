@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -27,81 +27,81 @@ import java.util.Date;
  */
 public class DShortcut {
 
-	private int id;
-	private int tid;
-	private int tgid;
-	private int rid;
-	private String color;
-	
-	private String creator;
-	
-	private Date creatorTime;
-	
-	private int sequence;
+    private int id;
+    private int tid;
+    private int tgid;
+    private int rid;
+    private String color;
 
-	public int getId() {
-		return id;
-	}
+    private String creator;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    private Date creatorTime;
 
-	public int getTid() {
-		return tid;
-	}
+    private int sequence;
 
-	public void setTid(int tid) {
-		this.tid = tid;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public int getTgid() {
-		return tgid;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setTgid(int tgid) {
-		this.tgid = tgid;
-	}
+    public int getTid() {
+        return tid;
+    }
 
-	public int getRid() {
-		return rid;
-	}
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
 
-	public void setRid(int rid) {
-		this.rid = rid;
-	}
+    public int getTgid() {
+        return tgid;
+    }
 
-	public String getColor() {
-		return color;
-	}
+    public void setTgid(int tgid) {
+        this.tgid = tgid;
+    }
 
-	public void setColor(String color) {
-		this.color = color;
-	}
+    public int getRid() {
+        return rid;
+    }
 
-	public String getCreator() {
-		return creator;
-	}
+    public void setRid(int rid) {
+        this.rid = rid;
+    }
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
+    public String getColor() {
+        return color;
+    }
 
-	public Date getCreatorTime() {
-		return creatorTime;
-	}
+    public void setColor(String color) {
+        this.color = color;
+    }
 
-	public void setCreatorTime(Date creatorTime) {
-		this.creatorTime = creatorTime;
-	}
+    public String getCreator() {
+        return creator;
+    }
 
-	public int getSequence() {
-		return sequence;
-	}
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
-	public void setSequence(int sequence) {
-		this.sequence = sequence;
-	}
-	
-	
+    public Date getCreatorTime() {
+        return creatorTime;
+    }
+
+    public void setCreatorTime(Date creatorTime) {
+        this.creatorTime = creatorTime;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
+
 }

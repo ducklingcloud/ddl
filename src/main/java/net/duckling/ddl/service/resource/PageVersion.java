@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.resource;
@@ -22,161 +22,161 @@ import java.util.Date;
 
 public class PageVersion {
 
-	private int id; 
-	private int tid;
-	private int rid;
-	private int version; 
-	private String title; 
-	private String editor;
-	private String editorName;
-	private Date editTime;  
-	private String content;
-	private long size;
-	
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
+    private int id;
+    private int tid;
+    private int rid;
+    private int version;
+    private String title;
+    private String editor;
+    private String editorName;
+    private Date editTime;
+    private String content;
+    private long size;
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
 
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-
-	public int getRid() {
-		return rid;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
 
-	public void setRid(int rid) {
-		this.rid = rid;
-	}
+    public int getRid() {
+        return rid;
+    }
 
 
-	/**
-	 * @return the tid
-	 */
-	public int getTid() {
-		return tid;
-	}
+    public void setRid(int rid) {
+        this.rid = rid;
+    }
 
 
-	/**
-	 * @param tid the tid to set
-	 */
-	public void setTid(int tid) {
-		this.tid = tid;
-	}
+    /**
+     * @return the tid
+     */
+    public int getTid() {
+        return tid;
+    }
 
 
-	/**
-	 * @return the version
-	 */
-	public int getVersion() {
-		return version;
-	}
+    /**
+     * @param tid the tid to set
+     */
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
 
 
-	/**
-	 * @param version the version to set
-	 */
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    /**
+     * @return the version
+     */
+    public int getVersion() {
+        return version;
+    }
 
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+    /**
+     * @param version the version to set
+     */
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
 
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
 
 
-	/**
-	 * @return the editor
-	 */
-	public String getEditor() {
-		return editor;
-	}
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
 
-	/**
-	 * @param editor the editor to set
-	 */
-	public void setEditor(String editor) {
-		this.editor = editor;
-	}
+    /**
+     * @return the editor
+     */
+    public String getEditor() {
+        return editor;
+    }
 
 
-	/**
-	 * @return the editorName
-	 */
-	public String getEditorName() {
-		return editorName;
-	}
+    /**
+     * @param editor the editor to set
+     */
+    public void setEditor(String editor) {
+        this.editor = editor;
+    }
 
 
-	/**
-	 * @param editorName the editorName to set
-	 */
-	public void setEditorName(String editorName) {
-		this.editorName = editorName;
-	}
+    /**
+     * @return the editorName
+     */
+    public String getEditorName() {
+        return editorName;
+    }
 
 
-	/**
-	 * @return the editTime
-	 */
-	public Date getEditTime() {
-		return editTime;
-	}
+    /**
+     * @param editorName the editorName to set
+     */
+    public void setEditorName(String editorName) {
+        this.editorName = editorName;
+    }
 
 
-	/**
-	 * @param editTime the editTime to set
-	 */
-	public void setEditTime(Date editTime) {
-		this.editTime = editTime;
-	}
-
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return content;
-	}
+    /**
+     * @return the editTime
+     */
+    public Date getEditTime() {
+        return editTime;
+    }
 
 
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(String content) {
-		this.content = content;
-	}
+    /**
+     * @param editTime the editTime to set
+     */
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
+    }
+
+    /**
+     * @return the content
+     */
+    public String getContent() {
+        return content;
+    }
 
 
-	public long getSize() {
-		return size;
-	}
+    /**
+     * @param content the content to set
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
 
 
-	public void setSize(long size) {
-		this.size = size;
-	}
-	
+    public long getSize() {
+        return size;
+    }
+
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,7 +33,7 @@ import org.jdom.JDOMException;
 
 /**
  * Introduction Here.
- * 
+ *
  * @date 2010-3-8
  * @author 狄
  */
@@ -41,10 +41,10 @@ import org.jdom.JDOMException;
 public class ParserDmlLinkElement extends AbstractParseDmlElement {
 
     static final String[] cExternalLinks = { "http:", "ftp:", "https:", "mailto:", "news:", "file:", "rtsp:", "mms:",
-            "ldap:", "gopher:", "nntp:", "telnet:", "wais:", "prospero:", "z39.50s", "z39.50r", "vemmi:", "imap:",
-            "nfs:", "acap:", "tip:", "pop:", "dav:", "opaquelocktoken:", "sip:", "sips:", "tel:", "fax:", "modem:",
-            "soap.beep:", "soap.beeps", "xmlrpc.beep", "xmlrpc.beeps", "urn:", "go:", "h323:", "ipp:", "tftp:",
-            "mupdate:", "pres:", "im:", "mtqp", "smb:" };
+        "ldap:", "gopher:", "nntp:", "telnet:", "wais:", "prospero:", "z39.50s", "z39.50r", "vemmi:", "imap:",
+        "nfs:", "acap:", "tip:", "pop:", "dav:", "opaquelocktoken:", "sip:", "sips:", "tel:", "fax:", "modem:",
+        "soap.beep:", "soap.beeps", "xmlrpc.beep", "xmlrpc.beeps", "urn:", "go:", "h323:", "ipp:", "tftp:",
+        "mupdate:", "pres:", "im:", "mtqp", "smb:" };
 
     private boolean attachmentType = false;
 
@@ -84,7 +84,7 @@ public class ParserDmlLinkElement extends AbstractParseDmlElement {
                 dml2htmlengine.getMout().print(" href=\"" + strAttValue + "\"");
             } else {
                 dml2htmlengine.getMout().print(
-                        " href=\"" + dml2htmlengine.getDmlcontext().getBaseUrl() + strAttValue.substring(10) + "\"");
+                    " href=\"" + dml2htmlengine.getDmlcontext().getBaseUrl() + strAttValue.substring(10) + "\"");
             }
         } else if (strAttValue.startsWith("#")) {// 链接地址是页面锚点
             // edit by diyanliang 2011-2-16
@@ -119,8 +119,8 @@ public class ParserDmlLinkElement extends AbstractParseDmlElement {
                 herftype = "attach";
             }
             dml2htmlengine.getMout().print(
-                    " class=\"" + herftype + "\" href=\""
-                            + dml2htmlengine.getDmlcontext().getURL(herftype, strAttValue, null) + "\"");
+                " class=\"" + herftype + "\" href=\""
+                + dml2htmlengine.getDmlcontext().getURL(herftype, strAttValue, null) + "\"");
         }
     }
 
@@ -159,8 +159,8 @@ public class ParserDmlLinkElement extends AbstractParseDmlElement {
             // 如果是附件 在后面加上附件的图片
             if (attachmentType) {
                 dml2htmlengine.getMout().print(
-                        "<img border=\"0\" src=\"" + dml2htmlengine.getDmlcontext().getBaseUrl()
-                                + "images/attachment_small.png\" alt=\"(info)\" />");
+                    "<img border=\"0\" src=\"" + dml2htmlengine.getDmlcontext().getBaseUrl()
+                    + "images/attachment_small.png\" alt=\"(info)\" />");
                 attachmentType = false;
             }
         } else {
@@ -168,8 +168,8 @@ public class ParserDmlLinkElement extends AbstractParseDmlElement {
             // 如果是附件 在后面加上附件的图片
             if (attachmentType) {
                 dml2htmlengine.getMout().println(
-                        "<img border=\"0\" src=\"" + dml2htmlengine.getDmlcontext().getBaseUrl()
-                                + "images/attachment_small.png\" alt=\"(info)\" />");
+                    "<img border=\"0\" src=\"" + dml2htmlengine.getDmlcontext().getBaseUrl()
+                    + "images/attachment_small.png\" alt=\"(info)\" />");
                 attachmentType = false;
             }
         }

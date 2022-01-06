@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -54,101 +54,101 @@ import cn.cnic.cerc.dlog.client.WebLog;
 @RequestMapping("/{teamCode}/recommend")
 @RequirePermission(target = "team", operation = "view")
 public class RecommendController extends AbstractRecommendContrller {
-	@Autowired
-	private EventDispatcher eventDispatcher;
-	@Autowired
-	private IResourceService resourceService;
-	private String combineRecipients(String[] userIds) {
-		if (userIds == null || userIds.length == 0) {
-			return null;
-		}
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < userIds.length; i++) {
-			sb.append(userIds[i]);
-			if (i != (userIds.length - 1)) {
-				sb.append(",");
-			}
-		}
-		return sb.toString();
-	}
-	@SuppressWarnings("unchecked")
-	private void getTeamAllUser(VWBContext ctx,HttpServletResponse response){
-		List<SimpleUser> candidates = teamMemberService.getTeamMembersOrderByName(ctx.getTid());
-		Collections.sort(candidates, comparator);
-		JSONArray array = new JSONArray();
-		for (SimpleUser current : candidates) {
-			JSONObject temp = new JSONObject();
-			temp.put("uid", current.getUid());
-			temp.put("id", current.getId());
-			temp.put("email", current.getEmail());
-			temp.put("pinyin", current.getPinyin());
-			if (StringUtils.isNotEmpty(current.getName())) {
-				temp.put("name", current.getName());
-			} else {
-				temp.put("name", current.getUid());
-			}
-			array.add(temp);
-		}
-		JsonUtil.writeJSONObject(response, array);
-	}
-	@SuppressWarnings("unchecked")
-	private void submitRecommend(EventDispatcher eventDispatcher, HttpServletRequest request, HttpServletResponse response) {
-		VWBContext ctx = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
-		String currUser = ctx.getCurrentUID();
-		String remark = request.getParameter("remark");
-		String sendType = request.getParameter("sendType");
-		String[] userIds = request.getParameterValues("users");
-		int rid = Integer.parseInt(request.getParameter("rid"));
-		Resource res = resourceService.getResource(rid);
-		if (res.isFile()) {
-			eventDispatcher.sendFileRecommendEvent(ctx.getTid(), rid, res.getTitle(), currUser, res.getLastVersion(),
-							remark, combineRecipients(userIds),sendType);
-		} else if(res.isPage()){
-			eventDispatcher.sendPageRecommendEvent(ctx.getTid(), rid, res.getTitle(), currUser, res.getLastVersion(),
-							remark, combineRecipients(userIds),sendType);
-		}else if(res.isFolder()){
-			eventDispatcher.sendFolderRecommendEvent(ctx.getTid(), rid, res.getTitle(), currUser, res.getLastVersion(),
-					remark, combineRecipients(userIds),sendType);
-		}
-		
-		JSONObject object = new JSONObject();
-		object.put("status", "success");
-		object.put("itemType", res.getItemType());
-		JsonUtil.writeJSONObject(response, object);
-	}
-	private Resource getSavedViewPort(HttpServletRequest request, int rid,
-			String itemType) {
-		Site site = VWBContext.findSite(request);
-		return resourceService.getResource(rid, site.getId());
-	}
+    @Autowired
+    private EventDispatcher eventDispatcher;
+    @Autowired
+    private IResourceService resourceService;
+    private String combineRecipients(String[] userIds) {
+        if (userIds == null || userIds.length == 0) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < userIds.length; i++) {
+            sb.append(userIds[i]);
+            if (i != (userIds.length - 1)) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+    @SuppressWarnings("unchecked")
+    private void getTeamAllUser(VWBContext ctx,HttpServletResponse response){
+        List<SimpleUser> candidates = teamMemberService.getTeamMembersOrderByName(ctx.getTid());
+        Collections.sort(candidates, comparator);
+        JSONArray array = new JSONArray();
+        for (SimpleUser current : candidates) {
+            JSONObject temp = new JSONObject();
+            temp.put("uid", current.getUid());
+            temp.put("id", current.getId());
+            temp.put("email", current.getEmail());
+            temp.put("pinyin", current.getPinyin());
+            if (StringUtils.isNotEmpty(current.getName())) {
+                temp.put("name", current.getName());
+            } else {
+                temp.put("name", current.getUid());
+            }
+            array.add(temp);
+        }
+        JsonUtil.writeJSONObject(response, array);
+    }
+    @SuppressWarnings("unchecked")
+    private void submitRecommend(EventDispatcher eventDispatcher, HttpServletRequest request, HttpServletResponse response) {
+        VWBContext ctx = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
+        String currUser = ctx.getCurrentUID();
+        String remark = request.getParameter("remark");
+        String sendType = request.getParameter("sendType");
+        String[] userIds = request.getParameterValues("users");
+        int rid = Integer.parseInt(request.getParameter("rid"));
+        Resource res = resourceService.getResource(rid);
+        if (res.isFile()) {
+            eventDispatcher.sendFileRecommendEvent(ctx.getTid(), rid, res.getTitle(), currUser, res.getLastVersion(),
+                                                   remark, combineRecipients(userIds),sendType);
+        } else if(res.isPage()){
+            eventDispatcher.sendPageRecommendEvent(ctx.getTid(), rid, res.getTitle(), currUser, res.getLastVersion(),
+                                                   remark, combineRecipients(userIds),sendType);
+        }else if(res.isFolder()){
+            eventDispatcher.sendFolderRecommendEvent(ctx.getTid(), rid, res.getTitle(), currUser, res.getLastVersion(),
+                                                     remark, combineRecipients(userIds),sendType);
+        }
 
-	private VWBContext getVWBContext(HttpServletRequest request, int rid,
-			String itemType) {
-		Resource res = getSavedViewPort(request, rid, itemType);
-		return VWBContext.createContext(request, UrlPatterns.MYSPACE, res);
-	}
+        JSONObject object = new JSONObject();
+        object.put("status", "success");
+        object.put("itemType", res.getItemType());
+        JsonUtil.writeJSONObject(response, object);
+    }
+    private Resource getSavedViewPort(HttpServletRequest request, int rid,
+                                      String itemType) {
+        Site site = VWBContext.findSite(request);
+        return resourceService.getResource(rid, site.getId());
+    }
 
-	@RequestMapping(params = "func=prepareRecommend")
-	@WebLog(method = "prepareRecommend", params = "rid")
-	public void prepareRecommend(HttpServletRequest request,
-			HttpServletResponse response) {
-		prepareRecommend(response);
-	}
+    private VWBContext getVWBContext(HttpServletRequest request, int rid,
+                                     String itemType) {
+        Resource res = getSavedViewPort(request, rid, itemType);
+        return VWBContext.createContext(request, UrlPatterns.MYSPACE, res);
+    }
 
-	@RequestMapping(params = "func=getTeamUser")
-	public void getTeamUser(HttpServletRequest request,
-			HttpServletResponse response) {
-		int rid = Integer.parseInt(request.getParameter("rid"));
-		String itemType = request.getParameter("itemType");
-		VWBContext context = getVWBContext(request, rid, itemType);
-		getTeamAllUser(context, response);
-	}
+    @RequestMapping(params = "func=prepareRecommend")
+    @WebLog(method = "prepareRecommend", params = "rid")
+    public void prepareRecommend(HttpServletRequest request,
+                                 HttpServletResponse response) {
+        prepareRecommend(response);
+    }
 
-	@RequestMapping(params = "func=addRecommend")
-	@WebLog(method = "addRecommend", params = "rid")
-	public void addRecommend(HttpServletRequest request,
-			HttpServletResponse response) {
-		submitRecommend(eventDispatcher, request,
-				response);
-	}
+    @RequestMapping(params = "func=getTeamUser")
+    public void getTeamUser(HttpServletRequest request,
+                            HttpServletResponse response) {
+        int rid = Integer.parseInt(request.getParameter("rid"));
+        String itemType = request.getParameter("itemType");
+        VWBContext context = getVWBContext(request, rid, itemType);
+        getTeamAllUser(context, response);
+    }
+
+    @RequestMapping(params = "func=addRecommend")
+    @WebLog(method = "addRecommend", params = "rid")
+    public void addRecommend(HttpServletRequest request,
+                             HttpServletResponse response) {
+        submitRecommend(eventDispatcher, request,
+                        response);
+    }
 }

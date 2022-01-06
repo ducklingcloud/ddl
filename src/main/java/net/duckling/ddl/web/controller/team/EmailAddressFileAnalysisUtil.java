@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller.team;
@@ -74,8 +74,8 @@ public final class EmailAddressFileAnalysisUtil {
             email = java.net.URLEncoder.encode("电子邮件", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             LOG.info(
-                    "Unsupported Encoding character in static initialization of cn.vlabs.duckling.aone.infrastructure.util.EmailAddressFileAnalysisUtil",
-                    e);
+                "Unsupported Encoding character in static initialization of cn.vlabs.duckling.aone.infrastructure.util.EmailAddressFileAnalysisUtil",
+                e);
         }
     }
 
@@ -87,55 +87,55 @@ public final class EmailAddressFileAnalysisUtil {
         } else if (fileFormat.toUpperCase().equals("VCF")) {
             contacts = readVCFFile(in);
         } else if(fileFormat.toUpperCase().equals("XLS")||fileFormat.toUpperCase().equals("XLSX")){
-        	contacts = readExcelFile(in,fileFormat);
+            contacts = readExcelFile(in,fileFormat);
         }else{
-        	LOG.error("Unsupported File Format!");
+            LOG.error("Unsupported File Format!");
             return null;
         }
         if (null == contacts) {
             return null;
         }
         for (Entry<String, String> entry:contacts.entrySet()){
-        	Map<String, String> temp = new HashMap<String, String>();
-        	temp.put("name", entry.getValue());
-        	temp.put("email", entry.getKey());
-        	result.add(temp);
+            Map<String, String> temp = new HashMap<String, String>();
+            temp.put("name", entry.getValue());
+            temp.put("email", entry.getKey());
+            result.add(temp);
         }
         return result;
     }
-    
+
     /**
      * @param in
      * @param ext excel扩展名xls或xlsx
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static Map<String, String> readExcelFile(InputStream in, String ext) {
-    	Map<String, String> result = new LinkedHashMap<String, String>();
-    	ExcelReader er = null;
-		try {
-			er = new ExcelReader(in, ext);
-		} catch (IOException err) {
-			LOG.error("", err);
-			return null;
-		}
-		
-		try {
-			List<Map<Integer, Object>> list = er.readExcelContent();
-			for (int i = 0; i < list.size(); i++) {
-	        	Map<Integer,Object> row = list.get(i);
-	        	String tureName = String.valueOf(row.get(0)).trim();
-	        	String email = String.valueOf(row.get(1)).trim();
-	        	if(!StringUtil.isValidEmail(email) || StringUtils.isEmpty(tureName)){
-	        		return null;
-	        	}
-	            result.put(email, tureName);
-	        }
-		} catch (Exception e) {
-			 LOG.error("Invalid Excel File: " + e.getMessage());
-			 return null;
-		}
-        
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        ExcelReader er = null;
+        try {
+            er = new ExcelReader(in, ext);
+        } catch (IOException err) {
+            LOG.error("", err);
+            return null;
+        }
+
+        try {
+            List<Map<Integer, Object>> list = er.readExcelContent();
+            for (int i = 0; i < list.size(); i++) {
+                Map<Integer,Object> row = list.get(i);
+                String tureName = String.valueOf(row.get(0)).trim();
+                String email = String.valueOf(row.get(1)).trim();
+                if(!StringUtil.isValidEmail(email) || StringUtils.isEmpty(tureName)){
+                    return null;
+                }
+                result.put(email, tureName);
+            }
+        } catch (Exception e) {
+            LOG.error("Invalid Excel File: " + e.getMessage());
+            return null;
+        }
+
         return result;
     }
 
@@ -195,7 +195,7 @@ public final class EmailAddressFileAnalysisUtil {
                             displayName_index = i;
                         }
                         if (colStr.contains(email) || colStr.toLowerCase().contains(EMAIL_EN1)
-                                || colStr.toLowerCase().contains(EMAIL_EN2)) {
+                            || colStr.toLowerCase().contains(EMAIL_EN2)) {
                             emailCols.add(i);
                         }// break;
                     }

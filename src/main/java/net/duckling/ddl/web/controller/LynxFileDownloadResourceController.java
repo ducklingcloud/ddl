@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller;
@@ -58,172 +58,172 @@ import cn.cnic.cerc.dlog.client.WebLog;
 @RequirePermission(target = "team", operation = "view")
 public class LynxFileDownloadResourceController  extends BaseAttachController{
 
-	  @Autowired
-	    private IPictureService pictureService;
-	    @Autowired
-	    private BrowseLogService browseLogService;
-	    @Autowired
-	    private FileVersionService fileVersionService;
-	    @Autowired
-	    private IResourceService resourceService;
-	    
-		private FileVersion getClbVersion(Resource f, String version, int tid) {
-			// 现在下载时用clbVersion，fileVersion只是给用户看的
-			FileVersion clbVersion = null;
-			if (!CommonUtils.isNull(version)) {
-				clbVersion = fileVersionService.getFileVersion(f.getRid(), tid, Integer.parseInt(version));
-			} else {
-				clbVersion = fileVersionService.getLatestFileVersion(f.getRid(), tid);
-			}
-			;
-			return clbVersion;
-		}
+    @Autowired
+    private IPictureService pictureService;
+    @Autowired
+    private BrowseLogService browseLogService;
+    @Autowired
+    private FileVersionService fileVersionService;
+    @Autowired
+    private IResourceService resourceService;
 
-		@RequestMapping(params = { "type=pdf", "version" })
-		@WebLog(method = "downloadPdf", params = "rid")
-		public ModelAndView downloadPdf(HttpServletRequest req, HttpServletResponse res, @PathVariable("rid") int rid)
-				throws IOException {
-			Site site = VWBContext.findSite(req);
-			int tid = site.getId();
-			Resource f = resourceService.getResource(rid,tid);
-			VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
+    private FileVersion getClbVersion(Resource f, String version, int tid) {
+        // 现在下载时用clbVersion，fileVersion只是给用户看的
+        FileVersion clbVersion = null;
+        if (!CommonUtils.isNull(version)) {
+            clbVersion = fileVersionService.getFileVersion(f.getRid(), tid, Integer.parseInt(version));
+        } else {
+            clbVersion = fileVersionService.getLatestFileVersion(f.getRid(), tid);
+        }
+        ;
+        return clbVersion;
+    }
 
-			// add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
-			if (f == null || LynxConstants.STATUS_DELETE.equals(f.getStatus())) {
-				return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-			}
-			if (f != null && f.isAvailable()) {
-				FileVersion fv = getClbVersion(f, req.getParameter("version"),  tid);
-				if(FileTypeUtils.isClbDealImage(f.getTitle())){
-					getPictureContext(req, res, fv, false);
-				}else{
-					getPdfContent(req, res, fv.getClbId(), fv.getClbVersion()+"",fv.getTitle(),
-							false);
-				}
-			}
-			// add by lvly@2012-07-23 记下载次数
-			browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
-			return null;
-		}
+    @RequestMapping(params = { "type=pdf", "version" })
+    @WebLog(method = "downloadPdf", params = "rid")
+    public ModelAndView downloadPdf(HttpServletRequest req, HttpServletResponse res, @PathVariable("rid") int rid)
+            throws IOException {
+        Site site = VWBContext.findSite(req);
+        int tid = site.getId();
+        Resource f = resourceService.getResource(rid,tid);
+        VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
 
-		@RequestMapping(params = "type=doc")
-		@WebLog(method = "downloadDoc", params = "rid")
-		public ModelAndView previewDoc(HttpServletRequest req, HttpServletResponse res, @PathVariable("rid") int rid)
-				throws IOException {
-			Site site = VWBContext.findSite(req);
-			VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
-			int tid = site.getId();
-			Resource dfile = resourceService.getResource(rid,tid);
-			// add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
-			if (dfile == null || LynxConstants.STATUS_DELETE.equals(dfile.getStatus())) {
-				return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-			}
-			if (dfile != null && dfile.isAvailable()) {
-				FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
-				if(FileTypeUtils.isClbDealImage(dfile.getTitle())){
-					getPictureContext(req, res, fv, false);
-				}else{
-					getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), false);
-				}
-			}
-			// add by lvly@2012-07-23 记下载次数
-			browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
+        // add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
+        if (f == null || LynxConstants.STATUS_DELETE.equals(f.getStatus())) {
+            return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
+        }
+        if (f != null && f.isAvailable()) {
+            FileVersion fv = getClbVersion(f, req.getParameter("version"),  tid);
+            if(FileTypeUtils.isClbDealImage(f.getTitle())){
+                getPictureContext(req, res, fv, false);
+            }else{
+                getPdfContent(req, res, fv.getClbId(), fv.getClbVersion()+"",fv.getTitle(),
+                              false);
+            }
+        }
+        // add by lvly@2012-07-23 记下载次数
+        browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
+        return null;
+    }
 
-			return null;
-		}
+    @RequestMapping(params = "type=doc")
+    @WebLog(method = "downloadDoc", params = "rid")
+    public ModelAndView previewDoc(HttpServletRequest req, HttpServletResponse res, @PathVariable("rid") int rid)
+            throws IOException {
+        Site site = VWBContext.findSite(req);
+        VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
+        int tid = site.getId();
+        Resource dfile = resourceService.getResource(rid,tid);
+        // add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
+        if (dfile == null || LynxConstants.STATUS_DELETE.equals(dfile.getStatus())) {
+            return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
+        }
+        if (dfile != null && dfile.isAvailable()) {
+            FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
+            if(FileTypeUtils.isClbDealImage(dfile.getTitle())){
+                getPictureContext(req, res, fv, false);
+            }else{
+                getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), false);
+            }
+        }
+        // add by lvly@2012-07-23 记下载次数
+        browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
 
-		@RequestMapping
-		@WebLog(method = "download", params = "rid")
-		public ModelAndView download(HttpServletRequest req, HttpServletResponse res, @PathVariable int rid)
-				throws IOException {
-			Site site = VWBContext.findSite(req);
-			int tid = site.getId();
-			Resource dfile = resourceService.getResource(rid,tid);
-			VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
-			// add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
-			if (dfile == null || LynxConstants.STATUS_DELETE.equals(dfile.getStatus())) {
-				return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-			}
-			// 如果请求要简略图，那就给他简略图
-			if (dfile != null && dfile.isAvailable()) {
-				if (!CommonUtils.isNull(req.getParameter("simple")) && ImageUtils.isPicture(dfile.getTitle())){
-					FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
-					Picture pic= pictureService.getPicture(fv.getClbId(), fv.getClbVersion());
-					if(pic==null){
-						getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), false);
-					}else{
-						getContent(req, res, pic.getClbId(),fv.getTitle(),
-								"1", false);
-					}
-				} else {
-					FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
-					if(FileTypeUtils.isClbDealImage(dfile.getTitle())){
-						getPictureContext(req, res, fv, true);
-					}else{
-						getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), false);
-					}
-				}
-			}
+        return null;
+    }
 
-			// add by lvly@2012-07-23 记下载次数
-			browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
+    @RequestMapping
+    @WebLog(method = "download", params = "rid")
+    public ModelAndView download(HttpServletRequest req, HttpServletResponse res, @PathVariable int rid)
+            throws IOException {
+        Site site = VWBContext.findSite(req);
+        int tid = site.getId();
+        Resource dfile = resourceService.getResource(rid,tid);
+        VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
+        // add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
+        if (dfile == null || LynxConstants.STATUS_DELETE.equals(dfile.getStatus())) {
+            return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
+        }
+        // 如果请求要简略图，那就给他简略图
+        if (dfile != null && dfile.isAvailable()) {
+            if (!CommonUtils.isNull(req.getParameter("simple")) && ImageUtils.isPicture(dfile.getTitle())){
+                FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
+                Picture pic= pictureService.getPicture(fv.getClbId(), fv.getClbVersion());
+                if(pic==null){
+                    getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), false);
+                }else{
+                    getContent(req, res, pic.getClbId(),fv.getTitle(),
+                               "1", false);
+                }
+            } else {
+                FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
+                if(FileTypeUtils.isClbDealImage(dfile.getTitle())){
+                    getPictureContext(req, res, fv, true);
+                }else{
+                    getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), false);
+                }
+            }
+        }
 
-			return null;
-		}
+        // add by lvly@2012-07-23 记下载次数
+        browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
 
-		@RequestMapping(params = "func=cache")
-		@WebLog(method = "downloadCache", params = "rid")
-		public ModelAndView cache(HttpServletRequest req, HttpServletResponse res, @PathVariable int rid)
-				throws IOException {
-			Site site = VWBContext.findSite(req);
-			int tid = site.getId();
-			Resource dfile = resourceService.getResource(rid,tid);
-			VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
-			// add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
-			if (dfile != null && LynxConstants.STATUS_DELETE.equals(dfile.getStatus())) {
-				return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-			}
-			if (dfile != null && dfile.isAvailable()) {
-				FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
-				if(FileTypeUtils.isClbDealImage(dfile.getTitle())){
-					getPictureContext(req, res, fv, true);
-				}else{
-					getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), true);
-				}
-			}
-			// add by lvly@2012-07-23 记下载次数
-			browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
-			return null;
-		}
-		@RequestMapping(params = "func=getImageStatus")
-		@WebLog(method = "getImageStatus", params = "rid")
-		public void getImageStatus(HttpServletRequest req, HttpServletResponse resp, @PathVariable int rid){
-			String type = req.getParameter("type");
-			int version = 0;
-			try{
-				version = Integer.parseInt(req.getParameter("version"));
-			}catch(Exception e){}
-			FileVersion fv = null;
-			if(version==0){
-				fv = fileVersionService.getLatestFileVersion(rid, VWBContext.getCurrentTid());
-			}else{
-				fv= fileVersionService.getFileVersion(rid, VWBContext.getCurrentTid(), version);
-			}
-			String status = getImageStatus(fv.getClbId(), fv.getClbVersion()+"", type);
-			JSONObject j = new JSONObject();
-			j.put("status", status);
-			JsonUtil.writeJSONObject(resp,j);
-		}
-		
-		@RequestMapping(params = "func=folder")
-		public void downloadFolder(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-			String[] rids = req.getParameterValues("rids[]");
-			List<Integer> rs = new ArrayList<Integer>();
-			for(String r : rids){
-				int rid = Integer.parseInt(r);
-				rs.add(rid);
-			}
-			downloadFolder(req, resp, rs);
-		}
-		
+        return null;
+    }
+
+    @RequestMapping(params = "func=cache")
+    @WebLog(method = "downloadCache", params = "rid")
+    public ModelAndView cache(HttpServletRequest req, HttpServletResponse res, @PathVariable int rid)
+            throws IOException {
+        Site site = VWBContext.findSite(req);
+        int tid = site.getId();
+        Resource dfile = resourceService.getResource(rid,tid);
+        VWBContext context = VWBContext.createContext(req, UrlPatterns.T_FILE, rid, LynxConstants.TYPE_FILE);
+        // add by lvly@2012-07-23 如发现文件已删除，则跳转到删除页面
+        if (dfile != null && LynxConstants.STATUS_DELETE.equals(dfile.getStatus())) {
+            return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
+        }
+        if (dfile != null && dfile.isAvailable()) {
+            FileVersion fv = getClbVersion(dfile, req.getParameter("version"),  tid);
+            if(FileTypeUtils.isClbDealImage(dfile.getTitle())){
+                getPictureContext(req, res, fv, true);
+            }else{
+                getContent(req, res, fv.getClbId(),fv.getClbVersion()+"",fv.getTitle(), true);
+            }
+        }
+        // add by lvly@2012-07-23 记下载次数
+        browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
+        return null;
+    }
+    @RequestMapping(params = "func=getImageStatus")
+    @WebLog(method = "getImageStatus", params = "rid")
+    public void getImageStatus(HttpServletRequest req, HttpServletResponse resp, @PathVariable int rid){
+        String type = req.getParameter("type");
+        int version = 0;
+        try{
+            version = Integer.parseInt(req.getParameter("version"));
+        }catch(Exception e){}
+        FileVersion fv = null;
+        if(version==0){
+            fv = fileVersionService.getLatestFileVersion(rid, VWBContext.getCurrentTid());
+        }else{
+            fv= fileVersionService.getFileVersion(rid, VWBContext.getCurrentTid(), version);
+        }
+        String status = getImageStatus(fv.getClbId(), fv.getClbVersion()+"", type);
+        JSONObject j = new JSONObject();
+        j.put("status", status);
+        JsonUtil.writeJSONObject(resp,j);
+    }
+
+    @RequestMapping(params = "func=folder")
+    public void downloadFolder(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        String[] rids = req.getParameterValues("rids[]");
+        List<Integer> rs = new ArrayList<Integer>();
+        for(String r : rids){
+            int rid = Integer.parseInt(r);
+            rs.add(rid);
+        }
+        downloadFolder(req, resp, rs);
+    }
+
 }

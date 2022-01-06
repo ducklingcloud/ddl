@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.share.impl;
@@ -31,75 +31,75 @@ import net.duckling.meepo.api.IPanService;
 
 @Service
 public class PanShareResourceServiceImpl implements PanShareResourceService {
-	@Autowired
-	private PanShareResourceDao panShareResourceDao;
-	@Autowired
+    @Autowired
+    private PanShareResourceDao panShareResourceDao;
+    @Autowired
     private IPanService service;
-	
-	@Override
-	public int add(PanShareResource panShareResource) {
-		return panShareResourceDao.add(panShareResource);
-	}
 
-	@Override
-	public void update(PanShareResource panShareResource) {
-		panShareResourceDao.update(panShareResource);
-	}
+    @Override
+    public int add(PanShareResource panShareResource) {
+        return panShareResourceDao.add(panShareResource);
+    }
 
-	@Override
-	public void delete(int id) {
-		PanShareResource pan = get(id);
-		if(pan!=null){
-			pan.setStatus(LynxConstants.STATUS_DELETE);
-			pan.setPassword(null);
-			panShareResourceDao.update(pan);
-		}
-	}
+    @Override
+    public void update(PanShareResource panShareResource) {
+        panShareResourceDao.update(panShareResource);
+    }
 
-	@Override
-	public PanShareResource get(int id) {
-		return panShareResourceDao.get(id);
-	}
-	public PanShareResource getByPath(String uid,String path){
-		List<PanShareResource> ls = getByUid(uid);
-		if(ls!=null){
-			for(PanShareResource p:ls){
-				if(path.equals(p.getSharePath())){
-					return p;
-				}
-			}
-		}
-		return null;
-	}
-	
-	public PanShareResource queryByPath(String uid,String path){
-		List<PanShareResource> list = panShareResourceDao.getByPath(uid, path);
-		if(list!=null && list.size()>0){
-			return list.get(0);
-		}
-		return null;
-	}
-	
-	@Override
-	public PanShareResource getAllByPath(String uid,String path){
-		List<PanShareResource> ls = getAllByUid(uid);
-		if(ls!=null){
-			for(PanShareResource p:ls){
-				if(path.equals(p.getSharePath())){
-					return p;
-				}
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public List<PanShareResource> getByUid(String uid) {
-		return panShareResourceDao.getByUid(uid);
-	}
-	@Override
-	public List<PanShareResource> getAllByUid(String uid) {
-		return panShareResourceDao.getAllByUid(uid);
-	}
+    @Override
+    public void delete(int id) {
+        PanShareResource pan = get(id);
+        if(pan!=null){
+            pan.setStatus(LynxConstants.STATUS_DELETE);
+            pan.setPassword(null);
+            panShareResourceDao.update(pan);
+        }
+    }
+
+    @Override
+    public PanShareResource get(int id) {
+        return panShareResourceDao.get(id);
+    }
+    public PanShareResource getByPath(String uid,String path){
+        List<PanShareResource> ls = getByUid(uid);
+        if(ls!=null){
+            for(PanShareResource p:ls){
+                if(path.equals(p.getSharePath())){
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
+
+    public PanShareResource queryByPath(String uid,String path){
+        List<PanShareResource> list = panShareResourceDao.getByPath(uid, path);
+        if(list!=null && list.size()>0){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public PanShareResource getAllByPath(String uid,String path){
+        List<PanShareResource> ls = getAllByUid(uid);
+        if(ls!=null){
+            for(PanShareResource p:ls){
+                if(path.equals(p.getSharePath())){
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<PanShareResource> getByUid(String uid) {
+        return panShareResourceDao.getByUid(uid);
+    }
+    @Override
+    public List<PanShareResource> getAllByUid(String uid) {
+        return panShareResourceDao.getAllByUid(uid);
+    }
 
 }

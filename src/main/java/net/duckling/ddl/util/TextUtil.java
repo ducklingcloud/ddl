@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,28 +13,28 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 /*
-    JSPWiki - a JSP-based WikiWiki clone.
+  JSPWiki - a JSP-based WikiWiki clone.
 
-    Copyright (C) 2001-2002 Janne Jalkanen (Janne.Jalkanen@iki.fi)
+  Copyright (C) 2001-2002 Janne Jalkanen (Janne.Jalkanen@iki.fi)
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation; either version 2.1 of the License, or
-    (at your option) any later version.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation; either version 2.1 of the License, or
+  (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 package net.duckling.ddl.util;
 
 import java.io.UnsupportedEncodingException;
@@ -58,7 +58,7 @@ public final class TextUtil {
     /**
      * java.net.URLEncoder.encode() method in JDK < 1.4 is buggy. This
      * duplicates its functionality.
-     * 
+     *
      * @param rs
      *            the string to encode
      * @return the URL-encoded string
@@ -73,26 +73,26 @@ public final class TextUtil {
             char c = (char) rs[i];
 
             switch (c) {
-            case '_':
-            case '.':
-            case '*':
-            case '-':
-            case '/':
-                result.append(c);
-                break;
-
-            case ' ':
-                result.append('+');
-                break;
-
-            default:
-                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
+                case '_':
+                case '.':
+                case '*':
+                case '-':
+                case '/':
                     result.append(c);
-                } else {
-                    result.append('%');
-                    result.append(HEX_DIGITS.charAt((c & 0xF0) >> 4));
-                    result.append(HEX_DIGITS.charAt(c & 0x0F));
-                }
+                    break;
+
+                case ' ':
+                    result.append('+');
+                    break;
+
+                default:
+                    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
+                        result.append(c);
+                    } else {
+                        result.append('%');
+                        result.append(HEX_DIGITS.charAt((c & 0xF0) >> 4));
+                        result.append(HEX_DIGITS.charAt(c & 0x0F));
+                    }
             }
 
         } // for
@@ -106,13 +106,13 @@ public final class TextUtil {
      * Bug parade, bug #4257115</A> for more information.
      * <P>
      * Thanks to CJB for this fix.
-     * 
+     *
      * @param bytes
      *            The byte array containing the bytes of the string
      * @param encoding
      *            The encoding in which the string should be interpreted
      * @return A decoded String
-     * 
+     *
      * @throws UnsupportedEncodingException
      *             If the encoding is unknown.
      * @throws IllegalArgumentException
@@ -130,18 +130,18 @@ public final class TextUtil {
         try {
             for (int count = 0; count < bytes.length; count++) {
                 switch (bytes[count]) {
-                case '+':
-                    decodeBytes[decodedByteCount++] = (byte) ' ';
-                    break;
+                    case '+':
+                        decodeBytes[decodedByteCount++] = (byte) ' ';
+                        break;
 
-                case '%':
-                    decodeBytes[decodedByteCount++] = (byte) ((HEX_DIGITS.indexOf(bytes[++count]) << 4) + (HEX_DIGITS
-                            .indexOf(bytes[++count])));
+                    case '%':
+                        decodeBytes[decodedByteCount++] = (byte) ((HEX_DIGITS.indexOf(bytes[++count]) << 4) + (HEX_DIGITS
+                                                                                                               .indexOf(bytes[++count])));
 
-                    break;
+                        break;
 
-                default:
-                    decodeBytes[decodedByteCount++] = bytes[count];
+                    default:
+                        decodeBytes[decodedByteCount++] = bytes[count];
                 }
             }
 
@@ -164,7 +164,7 @@ public final class TextUtil {
     /**
      * Replaces the relevant entities inside the String. All &amp; &gt;, &lt;,
      * and &quot; are replaced by their respective names.
-     * 
+     *
      * @since 1.6.1
      * @param src
      *            The source string.
@@ -181,7 +181,7 @@ public final class TextUtil {
 
     /**
      * Replaces a string with an other string.
-     * 
+     *
      * @param orig
      *            Original string. Null is safe.
      * @param src
@@ -202,7 +202,7 @@ public final class TextUtil {
         }
 
         StringBuffer res = new StringBuffer(orig.length() + 20); // Pure
-                                                                 // guesswork
+        // guesswork
         int start = 0;
         int end = 0;
         int last = 0;
@@ -221,7 +221,7 @@ public final class TextUtil {
 
     /**
      * Replaces a part of a string with a new String.
-     * 
+     *
      * @param start
      *            Where in the original string the replacing should start.
      * @param end
@@ -247,7 +247,7 @@ public final class TextUtil {
     /**
      * Parses an integer parameter, returning a default value if the value is
      * null or a non-number.
-     * 
+     *
      * @param value
      *            The value to parse
      * @param defvalue
@@ -269,7 +269,7 @@ public final class TextUtil {
     /**
      * Gets an integer-valued property from a standard Properties list. If the
      * value does not exist, or is a non-integer, returns defVal.
-     * 
+     *
      * @since 2.1.48.
      * @param props
      *            The property set to look through
@@ -292,16 +292,16 @@ public final class TextUtil {
      * <P>
      * The possible values for the property are "true"/"false", "yes"/"no", or
      * "on"/"off". Any value not recognized is always defined as "false".
-     * 
+     *
      * @param props
      *            A list of properties to search.
      * @param key
      *            The property key.
      * @param defval
      *            The default value to return.
-     * 
+     *
      * @return True, if the property "key" was set to "true", "on", or "yes".
-     * 
+     *
      * @since 2.0.11
      */
     public static boolean getBooleanProperty(Properties props, String key, boolean defval) {
@@ -319,7 +319,7 @@ public final class TextUtil {
      * Properties.getProperty() in a couple of key respects: First, property
      * value is trim()med (so no extra whitespace back and front), and well,
      * that's it.
-     * 
+     *
      * @param props
      *            The Properties to search through
      * @param key
@@ -343,11 +343,11 @@ public final class TextUtil {
      * Returns true, if the string "val" denotes a positive string. Allowed
      * values are "yes", "on", and "true". Comparison is case-insignificant.
      * Null values are safe.
-     * 
+     *
      * @param val
      *            Value to check.
      * @return True, if val is "true", "on", or "yes"; otherwise false.
-     * 
+     *
      * @since 2.0.26
      */
     public static boolean isPositive(String val) {
@@ -369,10 +369,10 @@ public final class TextUtil {
      * strange sometimes.
      * <LI>The CR/LF/CRLF mess is normalized to plain CRLF.
      * </UL>
-     * 
+     *
      * The reason why we're using CRLF is that most browser already return CRLF
      * since that is the closest thing to a HTTP standard.
-     * 
+     *
      * @param postData
      *            The data to normalize
      * @return Normalized data
@@ -382,21 +382,21 @@ public final class TextUtil {
 
         for (int i = 0; i < postData.length(); i++) {
             switch (postData.charAt(i)) {
-            case 0x0a: // LF, UNIX
-                sb.append("\r\n");
-                break;
+                case 0x0a: // LF, UNIX
+                    sb.append("\r\n");
+                    break;
 
-            case 0x0d: // CR, either Mac or MSDOS
-                sb.append("\r\n");
-                // If it's MSDOS, skip the LF so that we don't add it again.
-                if (i < postData.length() - 1 && postData.charAt(i + 1) == 0x0a) {
-                    i++;
-                }
-                break;
+                case 0x0d: // CR, either Mac or MSDOS
+                    sb.append("\r\n");
+                    // If it's MSDOS, skip the LF so that we don't add it again.
+                    if (i < postData.length() - 1 && postData.charAt(i + 1) == 0x0a) {
+                        i++;
+                    }
+                    break;
 
-            default:
-                sb.append(postData.charAt(i));
-                break;
+                default:
+                    sb.append(postData.charAt(i));
+                    break;
             }
         }
 
@@ -435,7 +435,7 @@ public final class TextUtil {
     /**
      * Adds spaces in suitable locations of the input string. This is used to
      * transform a WikiName into a more readable format.
-     * 
+     *
      * @param s
      *            String to be beautified.
      * @return A beautified string.
@@ -447,7 +447,7 @@ public final class TextUtil {
     /**
      * Adds spaces in suitable locations of the input string. This is used to
      * transform a WikiName into a more readable format.
-     * 
+     *
      * @param s
      *            String to be beautified.
      * @param space
@@ -481,8 +481,8 @@ public final class TextUtil {
             } else {
                 result.append((char) cur);
                 if (((curKind == UPPER) && (nextKind == DIGIT))
-                        || ((curKind == LOWER) && ((nextKind == DIGIT) || (nextKind == UPPER)))
-                        || ((curKind == DIGIT) && ((nextKind == UPPER) || (nextKind == LOWER)))) {
+                    || ((curKind == LOWER) && ((nextKind == DIGIT) || (nextKind == UPPER)))
+                    || ((curKind == DIGIT) && ((nextKind == UPPER) || (nextKind == LOWER)))) {
                     result.append(space);
                 }
             }
@@ -498,18 +498,18 @@ public final class TextUtil {
      * Creates a Properties object based on an array which contains
      * alternatively a key and a value. It is useful for generating default
      * mappings. For example:
-     * 
+     *
      * <pre>
      *     String[] properties = { "jspwiki.property1", "value1",
      *                             "jspwiki.property2", "value2 };
-     * 
+     *
      *     Properties props = TextUtil.createPropertes( values );
-     * 
+     *
      *     System.out.println( props.getProperty("jspwiki.property1") );
      * </pre>
-     * 
+     *
      * would output "value1".
-     * 
+     *
      * @param values
      *            Alternating key and value pairs.
      * @return Property object
@@ -534,7 +534,7 @@ public final class TextUtil {
 
     /**
      * Counts the number of sections (separated with "----") from the page.
-     * 
+     *
      * @param pagedata
      *            The WikiText to parse.
      * @return int Number of counted sections.
@@ -560,7 +560,7 @@ public final class TextUtil {
      * Gets the given section (separated with "----") from the page text. Note
      * that the first section is always #1. If a page has no section markers,
      * them there is only a single section, #1.
-     * 
+     *
      * @param pagedata
      *            WikiText to parse.
      * @param section
@@ -595,7 +595,7 @@ public final class TextUtil {
     /**
      * A simple routine which just repeates the arguments. This is useful for
      * creating something like a line or something.
-     * 
+     *
      * @param what
      *            String to repeat
      * @param times
@@ -617,7 +617,7 @@ public final class TextUtil {
      * Converts a string from the Unicode representation into something that can
      * be embedded in a java properties file. All references outside the ASCII
      * range are replaced with \\uXXXX.
-     * 
+     *
      * @param s
      *            The string to convert
      * @return the ASCII string
@@ -649,7 +649,7 @@ public final class TextUtil {
      * Generates a hexadecimal string from an array of bytes. For example, if
      * the array contains { 0x01, 0x02, 0x3E }, the resulting string will be
      * "01023E".
-     * 
+     *
      * @param bytes
      *            A Byte array
      * @return A String representation
@@ -670,7 +670,7 @@ public final class TextUtil {
      * quick test this is roughly the same speed as Integer.parseInt() if the
      * argument is a number, and roughly ten times the speed, if the argument is
      * NOT a number.
-     * 
+     *
      * @since 2.4
      * @param s
      *            String to check
@@ -700,7 +700,7 @@ public final class TextUtil {
 
     /**
      * Generate a random String suitable for use as a temporary password.
-     * 
+     *
      * @return String suitable for use as a temporary password
      * @since 2.4
      */

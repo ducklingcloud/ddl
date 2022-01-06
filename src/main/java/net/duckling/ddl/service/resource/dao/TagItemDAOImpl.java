@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.resource.dao;
@@ -49,252 +49,252 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TagItemDAOImpl extends AbstractBaseDAO implements TagItemDAO {
 
-	private static final Logger LOG = Logger.getLogger(TagDAOImpl.class);
-	
-	private static final String SQL_CREATE = "insert into a1_tag_item(tid,tgid,rid) select ?,?,? from dual where not exists (select * from " +
-			"a1_tag_item where a1_tag_item.tid=? and a1_tag_item.tgid=? and a1_tag_item.rid=?)";
-	private static final String SQL_DELETE = "delete from a1_tag_item";
-	private static final String TAGID = " where tgid=?";
-	private static final String SQL_UPDATE = "update a1_tag_item set tid=?, tgid=?, rid=? where id=? ";
-	private static final String SQL_QUERY = "select * from a1_tag_item ";
-	private static final String TAGITEMBYID = " where id=?";
+    private static final Logger LOG = Logger.getLogger(TagDAOImpl.class);
 
-	private RowMapper<TagItem> tagItemRowMapper = new RowMapper<TagItem>(){
+    private static final String SQL_CREATE = "insert into a1_tag_item(tid,tgid,rid) select ?,?,? from dual where not exists (select * from " +
+            "a1_tag_item where a1_tag_item.tid=? and a1_tag_item.tgid=? and a1_tag_item.rid=?)";
+    private static final String SQL_DELETE = "delete from a1_tag_item";
+    private static final String TAGID = " where tgid=?";
+    private static final String SQL_UPDATE = "update a1_tag_item set tid=?, tgid=?, rid=? where id=? ";
+    private static final String SQL_QUERY = "select * from a1_tag_item ";
+    private static final String TAGITEMBYID = " where id=?";
 
-		@Override
-		public TagItem mapRow(ResultSet rs, int index) throws SQLException {
-			TagItem tagItem = new TagItem();
-			tagItem.setId(rs.getInt("id"));
-			tagItem.setTid(rs.getInt("tid"));
-			tagItem.setTgid(rs.getInt("tgid"));
-			tagItem.setRid(rs.getInt("rid"));
-			return tagItem;
-		}
-		
-	};
-	
-	@Override
-	public int create(final TagItem tagItem) {
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		this.getJdbcTemplate().update(new PreparedStatementCreator(){
+    private RowMapper<TagItem> tagItemRowMapper = new RowMapper<TagItem>(){
 
-			@Override
-			public PreparedStatement createPreparedStatement(Connection conn)
-					throws SQLException {
-				PreparedStatement ps = null;
-				ps = conn.prepareStatement(SQL_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
-				int i = 0;
-				ps.setInt(++i, tagItem.getTid());
-				ps.setInt(++i, tagItem.getTgid());
-				ps.setInt(++i, tagItem.getRid());
-				ps.setInt(++i, tagItem.getTid());
-				ps.setInt(++i, tagItem.getTgid());
-				ps.setInt(++i, tagItem.getRid());
-				return ps;
-			}
-			
-		}, keyHolder);
-		Number key = keyHolder.getKey();
-		return (key==null)?-1:key.intValue();
-	}
+            @Override
+            public TagItem mapRow(ResultSet rs, int index) throws SQLException {
+                TagItem tagItem = new TagItem();
+                tagItem.setId(rs.getInt("id"));
+                tagItem.setTid(rs.getInt("tid"));
+                tagItem.setTgid(rs.getInt("tgid"));
+                tagItem.setRid(rs.getInt("rid"));
+                return tagItem;
+            }
 
-	@Override
-	public int delete(int id) {
-		return this.getJdbcTemplate().update(SQL_DELETE+TAGITEMBYID, new Object[]{id});
-	}
+        };
 
-	@Override
-	public int update(int id, TagItem tagItem) {
-		return this.getJdbcTemplate().update(SQL_UPDATE, new Object[]{tagItem.getTid(),
-				tagItem.getTgid(), tagItem.getRid(),id});
-	}
+    @Override
+    public int create(final TagItem tagItem) {
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        this.getJdbcTemplate().update(new PreparedStatementCreator(){
 
-	@Override
-	public int batchUpdateWithTag(final int tid, final int tagid, final List<Long> rids) {
-		this.getJdbcTemplate().batchUpdate(SQL_CREATE, new BatchPreparedStatementSetter(){
+                @Override
+                public PreparedStatement createPreparedStatement(Connection conn)
+                        throws SQLException {
+                    PreparedStatement ps = null;
+                    ps = conn.prepareStatement(SQL_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
+                    int i = 0;
+                    ps.setInt(++i, tagItem.getTid());
+                    ps.setInt(++i, tagItem.getTgid());
+                    ps.setInt(++i, tagItem.getRid());
+                    ps.setInt(++i, tagItem.getTid());
+                    ps.setInt(++i, tagItem.getTgid());
+                    ps.setInt(++i, tagItem.getRid());
+                    return ps;
+                }
 
-			@Override
-			public int getBatchSize() {
-				return (null==rids||rids.size()<=0)?0:rids.size();
-			}
+            }, keyHolder);
+        Number key = keyHolder.getKey();
+        return (key==null)?-1:key.intValue();
+    }
 
-			@Override
-			public void setValues(PreparedStatement ps, int index)
-					throws SQLException {
-				long rid = rids.get(index);
-				int i = 0;
-				ps.setInt(++i, tid);
-				ps.setInt(++i, tagid);
-				ps.setInt(++i, (int)rid);
-				ps.setInt(++i, tid);
-				ps.setInt(++i, tagid);
-				ps.setInt(++i, (int)rid);
-			}
-			
-		});
-		return 1;
-	}
+    @Override
+    public int delete(int id) {
+        return this.getJdbcTemplate().update(SQL_DELETE+TAGITEMBYID, new Object[]{id});
+    }
 
-	@Override
-	public TagItem getTagItemById(int id) {
-		List<TagItem> list = this.getJdbcTemplate().query(SQL_QUERY+TAGITEMBYID, 
-				new Object[]{id}, tagItemRowMapper);
-		if(null==list || list.size()<=0)
-		{
-			return null;
-		}
-		else if(list.size()>1){
-			LOG.error("there exist more than one object while quering for TagItem " +
-					"by id = "+id);
-		}
-		return list.get(0);
-	}
+    @Override
+    public int update(int id, TagItem tagItem) {
+        return this.getJdbcTemplate().update(SQL_UPDATE, new Object[]{tagItem.getTid(),
+                tagItem.getTgid(), tagItem.getRid(),id});
+    }
 
-	@Override
-	public int deleteByTagId(int tgid) {
-		return this.getJdbcTemplate().update(SQL_DELETE+TAGID, new Object[]{tgid});
-	}
+    @Override
+    public int batchUpdateWithTag(final int tid, final int tagid, final List<Long> rids) {
+        this.getJdbcTemplate().batchUpdate(SQL_CREATE, new BatchPreparedStatementSetter(){
 
-	@Override
-	public List<TagItem> getItemsInTags(int[] tgids, int offset, int size) {
-		if(offset<0 || size<0 || (size==0 && offset>0)){
-			LOG.error("offset and size should be positive while query, however, in this query, " +
-					"offset = "+offset+", size = "+size);
-			return new ArrayList<TagItem>();
-		}
-		int len = tgids.length;
-		String condition = "";
-		if(len>0){
-			StringBuilder sb = new StringBuilder();
-			sb.append(" where tgid in(");
-			for(int i = 0; i<tgids.length; i++){
-				sb.append(tgids[i]+",");
-			}
-			sb.deleteCharAt(sb.length()-1);
-			sb.append(")");
-			condition = sb.toString();
-		}
-		String limit = "";
-		if(offset>=0 && size>0){
-			limit = " limit "+offset+","+size;
-		}
-		String sql = SQL_QUERY+condition+limit;
-		return this.getJdbcTemplate().query(sql, tagItemRowMapper);
-	}
+                @Override
+                public int getBatchSize() {
+                    return (null==rids||rids.size()<=0)?0:rids.size();
+                }
 
-	@Override
-	public int removeItems(int tid, int tgid, List<Integer> rids) {
-		if(null == rids || rids.isEmpty()){
-			return 0;
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append(" where tid="+tid+" and tgid="+tgid+" and rid in(");
-		for(int rid : rids){
-			sb.append(rid+",");
-		}
-		sb.replace(sb.lastIndexOf(","), sb.length(), ")");
-		return this.getJdbcTemplate().update(SQL_DELETE+sb.toString());
-	}
+                @Override
+                public void setValues(PreparedStatement ps, int index)
+                        throws SQLException {
+                    long rid = rids.get(index);
+                    int i = 0;
+                    ps.setInt(++i, tid);
+                    ps.setInt(++i, tagid);
+                    ps.setInt(++i, (int)rid);
+                    ps.setInt(++i, tid);
+                    ps.setInt(++i, tagid);
+                    ps.setInt(++i, (int)rid);
+                }
 
-	@Override
-	public int deleteByTagIds(int[] tgids) {
-		if(null == tgids || tgids.length<=0){
-			return -1; 
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append(" where tgid in(");
-		for(int i=0;i<tgids.length;i++){
-			sb.append(tgids[i]+",");
-		}
-		sb.replace(sb.lastIndexOf(","), sb.length(), ")");
-		return this.getJdbcTemplate().update(SQL_DELETE+sb.toString());
-	}
+            });
+        return 1;
+    }
 
-	@Override
-	public void deleteTagItem(List<Integer> rids, Integer tagId) {
-		if(null==rids || rids.size()<=0){
-			return;
-		}
-		String sql = "delete from a1_tag_item where tgid=? and rid in(";
-		StringBuilder sb = new StringBuilder();
-		for(Integer rid : rids){
-			sb.append(rid+",");
-		}
-		sb.replace(sb.lastIndexOf(","), sb.length(), ")");
-		sql += sb.toString();
-		this.getJdbcTemplate().update(sql,new Object[]{tagId});
-	}
+    @Override
+    public TagItem getTagItemById(int id) {
+        List<TagItem> list = this.getJdbcTemplate().query(SQL_QUERY+TAGITEMBYID,
+                                                          new Object[]{id}, tagItemRowMapper);
+        if(null==list || list.size()<=0)
+        {
+            return null;
+        }
+        else if(list.size()>1){
+            LOG.error("there exist more than one object while quering for TagItem " +
+                      "by id = "+id);
+        }
+        return list.get(0);
+    }
 
-	@Override
-	public List<TagItem> getItemsInTag(int tgid) {
-		String sql = "select * from a1_tag_item where tgid=?";
-		return this.getJdbcTemplate().query(sql, new Object[]{tgid},tagItemRowMapper);
-	}
+    @Override
+    public int deleteByTagId(int tgid) {
+        return this.getJdbcTemplate().update(SQL_DELETE+TAGID, new Object[]{tgid});
+    }
 
-	@Override
-	public boolean isItemHasTag(int rid, int existTagId) {
-		String sql = "select count(id) from a1_tag_item where rid=? and tgid=?";
-		int count  = this.getJdbcTemplate().queryForObject(sql,new Object[]{rid,existTagId}, Integer.class);
-		return count!=0;
-	}
+    @Override
+    public List<TagItem> getItemsInTags(int[] tgids, int offset, int size) {
+        if(offset<0 || size<0 || (size==0 && offset>0)){
+            LOG.error("offset and size should be positive while query, however, in this query, " +
+                      "offset = "+offset+", size = "+size);
+            return new ArrayList<TagItem>();
+        }
+        int len = tgids.length;
+        String condition = "";
+        if(len>0){
+            StringBuilder sb = new StringBuilder();
+            sb.append(" where tgid in(");
+            for(int i = 0; i<tgids.length; i++){
+                sb.append(tgids[i]+",");
+            }
+            sb.deleteCharAt(sb.length()-1);
+            sb.append(")");
+            condition = sb.toString();
+        }
+        String limit = "";
+        if(offset>=0 && size>0){
+            limit = " limit "+offset+","+size;
+        }
+        String sql = SQL_QUERY+condition+limit;
+        return this.getJdbcTemplate().query(sql, tagItemRowMapper);
+    }
 
-	@Override
-	public List<TagItem> getAllTagItem() {
-		String sql = "select * from a1_tag_item";
-		return this.getJdbcTemplate().query(sql, tagItemRowMapper);
-	}
+    @Override
+    public int removeItems(int tid, int tgid, List<Integer> rids) {
+        if(null == rids || rids.isEmpty()){
+            return 0;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(" where tid="+tid+" and tgid="+tgid+" and rid in(");
+        for(int rid : rids){
+            sb.append(rid+",");
+        }
+        sb.replace(sb.lastIndexOf(","), sb.length(), ")");
+        return this.getJdbcTemplate().update(SQL_DELETE+sb.toString());
+    }
 
-	@Override
-	public List<TagItem> getAllTagItemOfRid(int tid, int rid) {
-		String sql = "select * from a1_tag_item where tid=? and rid=?";
-		return this.getJdbcTemplate().query(sql, new Object[]{tid, rid}, tagItemRowMapper);
-	}
+    @Override
+    public int deleteByTagIds(int[] tgids) {
+        if(null == tgids || tgids.length<=0){
+            return -1;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(" where tgid in(");
+        for(int i=0;i<tgids.length;i++){
+            sb.append(tgids[i]+",");
+        }
+        sb.replace(sb.lastIndexOf(","), sb.length(), ")");
+        return this.getJdbcTemplate().update(SQL_DELETE+sb.toString());
+    }
 
-	@Override
-	public void deleteAllTagItemOfRid(int tid, int rid) {
-		String sql = "delete from a1_tag_item where tid=? and rid=?";
-		this.getJdbcTemplate().update(sql, new Object[]{tid, rid});
-	}
+    @Override
+    public void deleteTagItem(List<Integer> rids, Integer tagId) {
+        if(null==rids || rids.size()<=0){
+            return;
+        }
+        String sql = "delete from a1_tag_item where tgid=? and rid in(";
+        StringBuilder sb = new StringBuilder();
+        for(Integer rid : rids){
+            sb.append(rid+",");
+        }
+        sb.replace(sb.lastIndexOf(","), sb.length(), ")");
+        sql += sb.toString();
+        this.getJdbcTemplate().update(sql,new Object[]{tagId});
+    }
 
-	@Override
-	public int getTagCount(int tid, int tagId) {
-		String sql = "select count(*) from a1_tag_item a inner join a1_resource b on a.rid=b.rid " +
-				"and a.tid=b.tid where a.tid=? and a.tgid=? and b.status  ='"
-				+ LynxConstants.STATUS_AVAILABLE + "'";
-		return this.getJdbcTemplate().queryForObject(sql, new Object[]{tid, tagId},Integer.class);
-	}
-	
-	
-	private RowMapper<Resource> resourceRowMapper = new ResourceRowMapper("r.");
-	@Override
-	public PaginationBean<Resource> getTeamTagFiles(int tid, int tagId, int begin, int maxPageSize, String order, String keyWord) {
-		List<Integer> tagIds=new ArrayList<Integer>();
-		tagIds.add(tagId);
-		return getTeamTagFiles( tid , tagIds, begin, maxPageSize, order, keyWord);
-	}
-	
-	public PaginationBean<Resource> getTeamTagFiles(int tid, Collection<Integer> tagIds, int begin, int maxPageSize, String order, String keyWord) {
-		Map<String,Object> paramMap=new HashMap<String,Object>();
-		paramMap.put("tid", tid);
-		String countSql = "select count(distinct r.rid) from a1_tag_item a,a1_resource r where a.tid=:tid and a.tgid in "+StringUtil.getSQLInFromInt(tagIds)+" and r.rid=a.rid and (r.status='"+LynxConstants.STATUS_AVAILABLE+"' or r.status is null) ";
-		String sql = "select distinct r.* from a1_tag_item a,a1_resource r where a.tid=:tid and a.tgid in"+StringUtil.getSQLInFromInt(tagIds)+" and r.rid=a.rid and (r.status='"+LynxConstants.STATUS_AVAILABLE+"' or r.status is null) ";
-		if(!StringUtils.isBlank(keyWord)){
-			String s = ResourceQueryKeywordUtil.getKeyWordString(keyWord, paramMap,"r.");
-			countSql+=s;
-			sql+=s;
-		}
-		sql=sql + ResourceOrderUtils.buildOrderSql("", order);
-		sql= sql+ResourceOrderUtils.buildDivPageSql(begin, maxPageSize);
-		
-		
-		int total=this.getNamedParameterJdbcTemplate().queryForObject(countSql, paramMap, Integer.class);
-		List<Resource> r = getNamedParameterJdbcTemplate().query(sql, paramMap, resourceRowMapper);
-		PaginationBean<Resource> result =new PaginationBean<Resource>();
-		result.setBegin(begin);
-		result.setData(r);
-		result.setSize(maxPageSize);
-		result.setTotal(total);
-		return result;
-	}
+    @Override
+    public List<TagItem> getItemsInTag(int tgid) {
+        String sql = "select * from a1_tag_item where tgid=?";
+        return this.getJdbcTemplate().query(sql, new Object[]{tgid},tagItemRowMapper);
+    }
+
+    @Override
+    public boolean isItemHasTag(int rid, int existTagId) {
+        String sql = "select count(id) from a1_tag_item where rid=? and tgid=?";
+        int count  = this.getJdbcTemplate().queryForObject(sql,new Object[]{rid,existTagId}, Integer.class);
+        return count!=0;
+    }
+
+    @Override
+    public List<TagItem> getAllTagItem() {
+        String sql = "select * from a1_tag_item";
+        return this.getJdbcTemplate().query(sql, tagItemRowMapper);
+    }
+
+    @Override
+    public List<TagItem> getAllTagItemOfRid(int tid, int rid) {
+        String sql = "select * from a1_tag_item where tid=? and rid=?";
+        return this.getJdbcTemplate().query(sql, new Object[]{tid, rid}, tagItemRowMapper);
+    }
+
+    @Override
+    public void deleteAllTagItemOfRid(int tid, int rid) {
+        String sql = "delete from a1_tag_item where tid=? and rid=?";
+        this.getJdbcTemplate().update(sql, new Object[]{tid, rid});
+    }
+
+    @Override
+    public int getTagCount(int tid, int tagId) {
+        String sql = "select count(*) from a1_tag_item a inner join a1_resource b on a.rid=b.rid " +
+                "and a.tid=b.tid where a.tid=? and a.tgid=? and b.status  ='"
+                + LynxConstants.STATUS_AVAILABLE + "'";
+        return this.getJdbcTemplate().queryForObject(sql, new Object[]{tid, tagId},Integer.class);
+    }
+
+
+    private RowMapper<Resource> resourceRowMapper = new ResourceRowMapper("r.");
+    @Override
+    public PaginationBean<Resource> getTeamTagFiles(int tid, int tagId, int begin, int maxPageSize, String order, String keyWord) {
+        List<Integer> tagIds=new ArrayList<Integer>();
+        tagIds.add(tagId);
+        return getTeamTagFiles( tid , tagIds, begin, maxPageSize, order, keyWord);
+    }
+
+    public PaginationBean<Resource> getTeamTagFiles(int tid, Collection<Integer> tagIds, int begin, int maxPageSize, String order, String keyWord) {
+        Map<String,Object> paramMap=new HashMap<String,Object>();
+        paramMap.put("tid", tid);
+        String countSql = "select count(distinct r.rid) from a1_tag_item a,a1_resource r where a.tid=:tid and a.tgid in "+StringUtil.getSQLInFromInt(tagIds)+" and r.rid=a.rid and (r.status='"+LynxConstants.STATUS_AVAILABLE+"' or r.status is null) ";
+        String sql = "select distinct r.* from a1_tag_item a,a1_resource r where a.tid=:tid and a.tgid in"+StringUtil.getSQLInFromInt(tagIds)+" and r.rid=a.rid and (r.status='"+LynxConstants.STATUS_AVAILABLE+"' or r.status is null) ";
+        if(!StringUtils.isBlank(keyWord)){
+            String s = ResourceQueryKeywordUtil.getKeyWordString(keyWord, paramMap,"r.");
+            countSql+=s;
+            sql+=s;
+        }
+        sql=sql + ResourceOrderUtils.buildOrderSql("", order);
+        sql= sql+ResourceOrderUtils.buildDivPageSql(begin, maxPageSize);
+
+
+        int total=this.getNamedParameterJdbcTemplate().queryForObject(countSql, paramMap, Integer.class);
+        List<Resource> r = getNamedParameterJdbcTemplate().query(sql, paramMap, resourceRowMapper);
+        PaginationBean<Resource> result =new PaginationBean<Resource>();
+        result.setBegin(begin);
+        result.setData(r);
+        result.setSize(maxPageSize);
+        result.setTotal(total);
+        return result;
+    }
 
 }

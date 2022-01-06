@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -30,9 +30,9 @@ import java.security.Principal;
  * memberships can be changed by callers). Administrators who wish to grant
  * privileges to specific wiki groups via the security policy file should always
  * specify principals of type GroupPrincipal.
- * 
+ *
  * @see com.ecyrd.jspwiki.auth.authorize.Group
- * 
+ *
  * @date Feb 3, 2010
  * @author zzb
  */
@@ -41,7 +41,7 @@ public final class GroupPrincipal implements Principal {
 
     /**
      * Constructs a new GroupPrincipal object with a supplied name.
-     * 
+     *
      * @param group
      *            the wiki group; cannot be <code>null</code>
      */
@@ -54,7 +54,7 @@ public final class GroupPrincipal implements Principal {
 
     /**
      * Returns the name of the group principal.
-     * 
+     *
      * @return the name
      * @see java.security.Principal#getName()
      */
@@ -64,7 +64,7 @@ public final class GroupPrincipal implements Principal {
 
     /**
      * Two GroupPrincipals are equal if their names are equal.
-     * 
+     *
      * @param obj
      *            the object to compare
      * @return the result of the equality test
@@ -80,7 +80,7 @@ public final class GroupPrincipal implements Principal {
 
     /**
      * Returns the hashcode for this object.
-     * 
+     *
      * @return the hash code
      * @see java.lang.Object#hashCode()
      */
@@ -90,7 +90,7 @@ public final class GroupPrincipal implements Principal {
 
     /**
      * Returns a string representation of this object.
-     * 
+     *
      * @return the string
      * @see java.lang.Object#toString()
      */

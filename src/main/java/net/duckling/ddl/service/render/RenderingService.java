@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -25,25 +25,25 @@ import net.duckling.ddl.service.resource.Resource;
 
 /**
  * 页面渲染服务
- * 
+ *
  * @date May 6, 2010
  * @author xiejj@cnic.cn
  */
 public interface RenderingService {
-	/**
-	 * 渲染页面
-	 * 
-	 * @param context
-	 *            当前访问的Context
-	 * @param pagedata
-	 *            页面DML数据
-	 * @return 渲染以后的HTML
-	 */
-	String getHTML(VWBContext context, String pagedata);
+    /**
+     * 渲染页面
+     *
+     * @param context
+     *            当前访问的Context
+     * @param pagedata
+     *            页面DML数据
+     * @return 渲染以后的HTML
+     */
+    String getHTML(VWBContext context, String pagedata);
 
-	String getHTML(VWBContext vwbcontext, PageRender render);
+    String getHTML(VWBContext vwbcontext, PageRender render);
 
-	String getHTML(VWBContext context, Resource page);
+    String getHTML(VWBContext context, Resource page);
 
-	Rendable createRendable(int tid, int pid);
+    Rendable createRendable(int tid, int pid);
 }

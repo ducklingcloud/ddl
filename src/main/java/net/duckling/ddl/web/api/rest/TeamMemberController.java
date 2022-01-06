@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.api.rest;
@@ -46,48 +46,48 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/v1/team")
 @RequirePermission(target="team",operation="admin")
 public class TeamMemberController extends AbstractController {
-	private static final Logger LOG = Logger.getLogger(TeamMemberController.class);
-	
-	@RequestMapping(value="/memberBatchAdd", method = RequestMethod.POST)
-	public void batchAdd(@RequestParam("uids") String [] uids, @RequestParam("names") String [] names,	
-			 @RequestParam("auth") String auth,
-			 HttpServletRequest request, HttpServletResponse response) throws IOException {
-		int tid = getCurrentTid();
-		
-		//验证auth
-		if(Team.AUTH_ADMIN.equals(auth)||Team.AUTH_EDIT.equals(auth)||Team.AUTH_VIEW.equals(auth)){
-			//nothing
-		}else{
-			LOG.info("team auth wrong. {\"tid\":" + tid + ", \"auth\":" + auth +"}");
-			writeError(ErrorMsg.TEAM_AUTH_WRONG, response);
-			return;
-		}
-		
-		//初始化权限数组，和uids等长
-		String [] auths = new String[uids.length];
-		for(int i=0; i< uids.length; i++){
-			auths[i] = auth;
-		}
-		
-		teamService.addTeamMembers(tid, uids, names, auths);
-		
-		LOG.info("Team members added successfully. {\"tid\":" + tid + ",\"uids\":" + Arrays.toString(uids) +
-					",\"names\":" + Arrays.toString(names) + ", \"auth\":" + auth +"}");
-		
-		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-	}
-	
-	
-	@RequestMapping(value="/memberBatchDelete", method = RequestMethod.POST)
-	public void batchDelete(@RequestParam("uids") String [] uids, 
-			 HttpServletRequest request, HttpServletResponse response) throws IOException {
-		int tid = getCurrentTid();
-		teamService.removeMembers(tid, uids, true);
-		LOG.info("Team members removed successfully. {\"tid\":" + tid + ",\"uids\":" + Arrays.toString(uids) +"}");
-		
-		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-	}
-	
-	@Autowired
-	private TeamService teamService;
+    private static final Logger LOG = Logger.getLogger(TeamMemberController.class);
+
+    @RequestMapping(value="/memberBatchAdd", method = RequestMethod.POST)
+    public void batchAdd(@RequestParam("uids") String [] uids, @RequestParam("names") String [] names,
+                         @RequestParam("auth") String auth,
+                         HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int tid = getCurrentTid();
+
+        //验证auth
+        if(Team.AUTH_ADMIN.equals(auth)||Team.AUTH_EDIT.equals(auth)||Team.AUTH_VIEW.equals(auth)){
+            //nothing
+        }else{
+            LOG.info("team auth wrong. {\"tid\":" + tid + ", \"auth\":" + auth +"}");
+            writeError(ErrorMsg.TEAM_AUTH_WRONG, response);
+            return;
+        }
+
+        //初始化权限数组，和uids等长
+        String [] auths = new String[uids.length];
+        for(int i=0; i< uids.length; i++){
+            auths[i] = auth;
+        }
+
+        teamService.addTeamMembers(tid, uids, names, auths);
+
+        LOG.info("Team members added successfully. {\"tid\":" + tid + ",\"uids\":" + Arrays.toString(uids) +
+                 ",\"names\":" + Arrays.toString(names) + ", \"auth\":" + auth +"}");
+
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+    }
+
+
+    @RequestMapping(value="/memberBatchDelete", method = RequestMethod.POST)
+    public void batchDelete(@RequestParam("uids") String [] uids,
+                            HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int tid = getCurrentTid();
+        teamService.removeMembers(tid, uids, true);
+        LOG.info("Team members removed successfully. {\"tid\":" + tid + ",\"uids\":" + Arrays.toString(uids) +"}");
+
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+    }
+
+    @Autowired
+    private TeamService teamService;
 }

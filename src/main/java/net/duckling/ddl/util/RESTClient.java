@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.util;
@@ -49,8 +49,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class RESTClient {
-	
-	public final static String STATUS_CODE_200 = "200";
+
+    public final static String STATUS_CODE_200 = "200";
 
     public JsonObject httpGet(String url, List<NameValuePair> params) throws  IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -109,13 +109,13 @@ public class RESTClient {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
             HttpPost httppost = new HttpPost(url);
-            
+
             MultipartEntityBuilder builder = MultipartEntityBuilder.create()
                     .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
                     .addBinaryBody(dataFieldName, data, ContentType.DEFAULT_BINARY, "tempfile");
             for (NameValuePair hp : params) {
                 builder.addPart(hp.getName(),
-                        new StringBody(hp.getValue(), ContentType.create("text/plain", Consts.UTF_8)));
+                                new StringBody(hp.getValue(), ContentType.create("text/plain", Consts.UTF_8)));
             }
             HttpEntity reqEntity = builder.setCharset(CharsetUtils.get("UTF-8")).build();
             httppost.setEntity(reqEntity);

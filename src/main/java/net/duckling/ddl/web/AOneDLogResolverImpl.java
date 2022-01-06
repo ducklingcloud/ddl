@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web;
@@ -33,9 +33,9 @@ import cn.cnic.cerc.dlog.client.WebLogResolver;
 public class AOneDLogResolverImpl extends WebLogResolver {
     @Override
     public String getUserID(HttpServletRequest request) {
-    	String uid = VWBSession.getCurrentUid(request);
+        String uid = VWBSession.getCurrentUid(request);
         if (StringUtils.isEmpty(uid)) {
-        	uid="guest";
+            uid="guest";
         }
         return uid;
     }
@@ -76,11 +76,11 @@ public class AOneDLogResolverImpl extends WebLogResolver {
         mention(map, request);
         return map;
     }
-    
+
     private void mention(Map<String, String> map,HttpServletRequest request){
-    	if(!StringUtils.isEmpty(request.getParameter("mention"))){
-    		map.put("mention", "mention");
-    	}
+        if(!StringUtils.isEmpty(request.getParameter("mention"))){
+            map.put("mention", "mention");
+        }
     }
 
 }

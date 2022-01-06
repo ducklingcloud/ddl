@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.resource.impl;
@@ -50,12 +50,12 @@ import org.springframework.util.CollectionUtils;
 public class ResourceServiceImpl implements IResourceService {
 
     private static final String ITEM_SIMPLE_RESOURCE = "item-simpleresource";
-	private static final String RID_SIMPLE_RESOURCE = "rid-simpleresource";
-	/**
-	 * 团队资源数量缓存key前缀
-	 */
-	private static final String TEAM_RESOURCE_AMOUNT = "team-resource-amount";
-	private static final Logger LOG = Logger.getLogger(ResourceServiceImpl.class);
+    private static final String RID_SIMPLE_RESOURCE = "rid-simpleresource";
+    /**
+     * 团队资源数量缓存key前缀
+     */
+    private static final String TEAM_RESOURCE_AMOUNT = "team-resource-amount";
+    private static final Logger LOG = Logger.getLogger(ResourceServiceImpl.class);
 
     @Autowired
     private ICacheService memcachedService;
@@ -68,11 +68,11 @@ public class ResourceServiceImpl implements IResourceService {
 
     @Override
     public Resource getTree(int tid, int folderRid){
-    	//获取目录下所有层级的文件和目录
-    	List<Resource> list = resourcePathDAO.getDescendants(tid, folderRid);
-    	return recursiveTree(folderRid, list);
+        //获取目录下所有层级的文件和目录
+        List<Resource> list = resourcePathDAO.getDescendants(tid, folderRid);
+        return recursiveTree(folderRid, list);
     }
-    
+
     @Override
     public void batchDelete(int tid, List<Integer> rids) {
         if (null == rids) {
@@ -107,40 +107,40 @@ public class ResourceServiceImpl implements IResourceService {
     }
 
     @Override
-	public List<Resource> getDDoc(int tid, List<Integer> rids) {
-		return resourceDAO.getDDoc(tid,rids);
-	}
-
-    @Override
-	public List<Resource> getFileByStartName(int tid, String name) {
-		return resourceDAO.getFileByStartName(tid, name);
-	}
-    
-    @Override
-	public List<Resource> getFileByTitle(int tid, int parentRid, String title) {
-		return resourceDAO.getFileByTitle(tid, parentRid, title);
-	}
-    
-    @Override
-	public List<Resource> getResourceByTitle(int tid, int parentRid, String type, String title) {
-		return resourceDAO.getResourceByTitle(tid,parentRid,type,title);
-	}
-    @Override
-    public List<Resource> getResourceByTitle(int tid, int parentRid, String type, String title,String status) {
-    	return resourceDAO.getResourceByTitle(tid,parentRid,type,title,status);
+    public List<Resource> getDDoc(int tid, List<Integer> rids) {
+        return resourceDAO.getDDoc(tid,rids);
     }
 
     @Override
-	public PaginationBean<Resource> getMyCreatedFiles(int tid, String uId,
-			int offset, int size, String order, String keyWord) {
-		return resourceDAO.getMyCreatedFiles(tid, uId, offset, size, order, keyWord);
-	}
+    public List<Resource> getFileByStartName(int tid, String name) {
+        return resourceDAO.getFileByStartName(tid, name);
+    }
 
     @Override
-	public PaginationBean<Resource> getMyRecentFiles(int tid, String uId,
-			int offset, int size, String order) {
-		return resourceDAO.getMyRecentFiles(tid, uId, offset, size, order);
-	}
+    public List<Resource> getFileByTitle(int tid, int parentRid, String title) {
+        return resourceDAO.getFileByTitle(tid, parentRid, title);
+    }
+
+    @Override
+    public List<Resource> getResourceByTitle(int tid, int parentRid, String type, String title) {
+        return resourceDAO.getResourceByTitle(tid,parentRid,type,title);
+    }
+    @Override
+    public List<Resource> getResourceByTitle(int tid, int parentRid, String type, String title,String status) {
+        return resourceDAO.getResourceByTitle(tid,parentRid,type,title,status);
+    }
+
+    @Override
+    public PaginationBean<Resource> getMyCreatedFiles(int tid, String uId,
+                                                      int offset, int size, String order, String keyWord) {
+        return resourceDAO.getMyCreatedFiles(tid, uId, offset, size, order, keyWord);
+    }
+
+    @Override
+    public PaginationBean<Resource> getMyRecentFiles(int tid, String uId,
+                                                     int offset, int size, String order) {
+        return resourceDAO.getMyRecentFiles(tid, uId, offset, size, order);
+    }
 
     @Override
     public Resource getResource(int rid) {
@@ -166,29 +166,29 @@ public class ResourceServiceImpl implements IResourceService {
     public List<Resource> getResourcesBySphinxID(List<Long> ids) {
         return resourceDAO.getResourceByRids(ids);
     }
-    
+
     @Override
     public List<Resource> getResource(List<Integer> rids) {
-    	if(rids==null||rids.isEmpty()){
-    		return new ArrayList<Resource>();
-    	}
-    	List<Long> temp=new ArrayList<Long>();
-    	for(int id:rids){
-    		temp.add((long)id);
-    	}
+        if(rids==null||rids.isEmpty()){
+            return new ArrayList<Resource>();
+        }
+        List<Long> temp=new ArrayList<Long>();
+        for(int id:rids){
+            temp.add((long)id);
+        }
         return resourceDAO.getResourceByRids(temp);
     }
-    
+
     @Override
     public Map<Integer,Resource> getResourceMap(List<Resource> resourceList) {
-    	Map<Integer,Resource> result=new HashMap<Integer,Resource>();
-    	if(resourceList==null||resourceList.isEmpty()){
-    		return new HashMap<Integer,Resource>();
-    	}
-    	for(Resource re:resourceList){
-    		result.put(re.getRid(), re);
-    	}
-    	return result;
+        Map<Integer,Resource> result=new HashMap<Integer,Resource>();
+        if(resourceList==null||resourceList.isEmpty()){
+            return new HashMap<Integer,Resource>();
+        }
+        for(Resource re:resourceList){
+            result.put(re.getRid(), re);
+        }
+        return result;
     }
 
     public Map<String,List<Integer>> getResourceTypeMap(int tid,List<Integer> rids){
@@ -212,17 +212,17 @@ public class ResourceServiceImpl implements IResourceService {
             }
 
             switch (itemType) {
-            case LynxConstants.TYPE_FOLDER:
-                folderIds.add(tRid);
-                break;
-            case LynxConstants.TYPE_FILE:
-                fileIds.add(tRid);
-                break;
-            case LynxConstants.TYPE_PAGE:
-                pageIds.add(tRid);
-                break;
-            default:
-                LOG.error("Error Resource item type = " + itemType + ", while batchDelete resource");
+                case LynxConstants.TYPE_FOLDER:
+                    folderIds.add(tRid);
+                    break;
+                case LynxConstants.TYPE_FILE:
+                    fileIds.add(tRid);
+                    break;
+                case LynxConstants.TYPE_PAGE:
+                    pageIds.add(tRid);
+                    break;
+                default:
+                    LOG.error("Error Resource item type = " + itemType + ", while batchDelete resource");
             }
         }
         map.put(LynxConstants.TYPE_PAGE, pageIds);
@@ -312,7 +312,7 @@ public class ResourceServiceImpl implements IResourceService {
     /**
      * 将Bundle中 不包含但itemsList中包含的Tag，更新到Bundle及Bundle内已有资源上。<br/>
      * 即建立资源与Tag的关联关系(a1_tag_item)。
-     * 
+     *
      * @param itemsList
      *            资源集合
      * @param oldBundle
@@ -403,13 +403,13 @@ public class ResourceServiceImpl implements IResourceService {
         resourceDAO.updateBid(bid, rids);
     }
 
-	@Override
+    @Override
     public void updateBundleFileType(int bid, int tid) {
         String fileType = resourceDAO.getAllBundleItemFileType(bid, tid);
         resourceDAO.updateBundleFileType(bid, tid, fileType);
     }
 
-	@Override
+    @Override
     public void updateExistBundleTagAndStarmark(int bid, int tid, int[] bundleItemRids) {
         // 新添加进Bundle，但tagMap还未更新的Resource对象
         List<Resource> itemsList = getResourcesBySphinxID(int2Long(bundleItemRids));
@@ -431,18 +431,18 @@ public class ResourceServiceImpl implements IResourceService {
         }
     }
 
-	@Override
+    @Override
     public void updateMarkedUserSet(List<Resource> resList) {
         resourceDAO.updateMarkedUserSet(resList);
     }
 
-	@Override
+    @Override
     public void updateNewBundleTagAndStarmark(int bid, int tid, int[] bundleItemRids) {
         // 新添加进Bundle，但tagMap还未更新的Resource对象
         List<Resource> itemsList = getResourcesBySphinxID(int2Long(bundleItemRids));
         Resource oldBundle = getResource(bid, tid);
         @SuppressWarnings("unchecked")
-		List<Integer> oldItemRids = CollectionUtils.arrayToList(bundleItemRids);
+            List<Integer> oldItemRids = CollectionUtils.arrayToList(bundleItemRids);
         mergeAndUpdateMarkedUserSetOfBundle(bid, tid, oldItemRids);
         mergeAndUpdateTagMapOfBundle(bid, tid,oldItemRids);
         // 取出更新后的tagMap
@@ -453,172 +453,172 @@ public class ResourceServiceImpl implements IResourceService {
         addNewBundleTagRelationship(oldBundle, updatedBundle);
     }
 
-	@Override
+    @Override
     public void updateOrderColumn(List<Resource> itemResList) {
         resourceDAO.updateOrderColumn(itemResList);
     }
 
-	@Override
+    @Override
     public void updateResourceTagMap(List<Resource> resList) {
         resourceDAO.updateTagMap(resList);
     }
 
-	@Override
-	public List<Resource> fetchDPageBasicListByPageIncrementId(List<Long> rid) {
-		return resourceDAO.fetchDPageBasicListByPageIncrementId(rid);
-	}
+    @Override
+    public List<Resource> fetchDPageBasicListByPageIncrementId(List<Long> rid) {
+        return resourceDAO.fetchDPageBasicListByPageIncrementId(rid);
+    }
 
-	@Override
-	public List<PageContentRender> fetchDPageContentByIncrementId(List<Long> rids) {
-		return resourceDAO.fetchDPageContentByIncrementId(rids);
-	}
+    @Override
+    public List<PageContentRender> fetchDPageContentByIncrementId(List<Long> rids) {
+        return resourceDAO.fetchDPageContentByIncrementId(rids);
+    }
 
-	@Override
-	public PaginationBean<Resource> getTeamRecentChange(int tid, int offset,
-			int size, String order, String keyWord) {
-		return resourceDAO.getTeamRecentChange(tid, offset, size, keyWord, order);
-	}
+    @Override
+    public PaginationBean<Resource> getTeamRecentChange(int tid, int offset,
+                                                        int size, String order, String keyWord) {
+        return resourceDAO.getTeamRecentChange(tid, offset, size, keyWord, order);
+    }
 
-	@Override
-	public PaginationBean<Resource> getResourceByFileType(int tid, String type, int offset, int size, String order,String keyWord) {
-		return resourceDAO.getResourceByFileType(tid, type,offset,size,order,keyWord);
-	}
+    @Override
+    public PaginationBean<Resource> getResourceByFileType(int tid, String type, int offset, int size, String order,String keyWord) {
+        return resourceDAO.getResourceByFileType(tid, type,offset,size,order,keyWord);
+    }
 
-	@Override
-	public PaginationBean<Resource> query(ResourceQuery q) {
-		return resourceDAO.query(q);
-	}
+    @Override
+    public PaginationBean<Resource> query(ResourceQuery q) {
+        return resourceDAO.query(q);
+    }
 
-	@Override
-	public Map<Integer, Resource> getResourceMapByRids(List<Integer> rids) {
-		return this.getResourceMap(getResource(rids));
-	}
-	
-	 public void updateTagMap(int newRid, Tag tag) {
-	        Resource resourceNew = getResource(newRid);
-	        Map<Integer, String> tagMap = resourceNew.getTagMap();
-	        if (CommonUtil.isNullArray(tagMap)) {
-	            tagMap = new HashMap<Integer, String>();
-	            resourceNew.setTagMap(tagMap);
-	        }
-	        tagMap.put(tag.getId(), tag.getTitle());
-	        List<Resource> resources = new ArrayList<Resource>();
-	        resources.add(resourceNew);
-	        updateResourceTagMap(resources);
-	    }
+    @Override
+    public Map<Integer, Resource> getResourceMapByRids(List<Integer> rids) {
+        return this.getResourceMap(getResource(rids));
+    }
 
-	@Override
-	public void update(List<Resource> res) {
-		resourceDAO.update(res);
-	}
+    public void updateTagMap(int newRid, Tag tag) {
+        Resource resourceNew = getResource(newRid);
+        Map<Integer, String> tagMap = resourceNew.getTagMap();
+        if (CommonUtil.isNullArray(tagMap)) {
+            tagMap = new HashMap<Integer, String>();
+            resourceNew.setTagMap(tagMap);
+        }
+        tagMap.put(tag.getId(), tag.getTitle());
+        List<Resource> resources = new ArrayList<Resource>();
+        resources.add(resourceNew);
+        updateResourceTagMap(resources);
+    }
 
-	@Override
-	public long getTeamResourceSize(int tid) {
-		Long l = (Long)memcachedService.get(getTeamSizeKey(tid));
-		if(l==null){
-			return updateTeamResSize(tid);
-		}else{
-			return l;
-		}
-	}
-	
-	private long getTeamResSizeFromDB(int tid){
-		return resourceDAO.getTeamResourceSize(tid);
-	}
-	@Override
-	public long updateTeamResSize(int tid){
-		long n = getTeamResSizeFromDB(tid);
-		memcachedService.set(getTeamSizeKey(tid), n);
-		return n;
-	}
-	
-	@Override
-	public void resetTeamResSize(int tid) {
-		memcachedService.remove(getTeamSizeKey(tid));
-	}
-	private String getTeamSizeKey(int tid){
-		return "team-res-size-tid:"+tid;
-	}
+    @Override
+    public void update(List<Resource> res) {
+        resourceDAO.update(res);
+    }
 
-	@Override
-	public void updateResourceStatus(Collection<Integer> rids, String status, int tid) {
-		resourceDAO.updateResourceStatus(rids, status);
-		clearResourceAmountCache(tid);
-	}
-	
-	@Override
-	public int getTeamResourceAmount(int tid) {
-		Object cache = memcachedService.get(TEAM_RESOURCE_AMOUNT + tid);
-		Integer amount = null;
-		if(cache==null){
-			amount = new Integer(resourceDAO.getTeamResourceAmount(tid));
-			memcachedService.set(TEAM_RESOURCE_AMOUNT + tid, amount);
-		}else{
-			amount = (Integer)cache;
-		}
-		return amount;
-	}
-	
-	/**
-	 * 由资源列表递归成资源树
-	 * @param folderRid
-	 * @param resourceList
-	 * @return
-	 */
-	private Resource recursiveTree(int folderRid, List<Resource> list){
-		Resource node = getFromList(folderRid, list);
-		
-		List<Resource> nodeList = getChildrensFromList(folderRid, list);
-		for(Resource item : nodeList){
-			//如果是文件夹，继续递归子目录文件
-			Resource n = item.isFolder() ? recursiveTree(item.getRid(), list) : item;
-			node.addChildren(n);
-			
-			//移除节点，增加查询速度
-			list.remove(n);
-		}
-		return node;
-	}
-	
-	/**
-	 * 从列表中查询资源
-	 * @param rid
-	 * @param list
-	 * @return
-	 */
-	private Resource getFromList(int rid, List<Resource> list){
-		Resource r = new Resource();
-		for(int i = list.size()-1; i>=0 ; i--){
-			Resource item = list.get(i);
-			if(item.getRid() == rid){
-				r = item;
-				break;
-			}
-		}
-		return r;
-	}
-	
-	/**
-	 * 从列表中查询直系子文件和目录
-	 * @param rid
-	 * @param list
-	 * @return
-	 */
-	private List<Resource> getChildrensFromList(int rid, List<Resource> list){
-		List<Resource> resList = new ArrayList<Resource>();
-		for(int i = list.size()-1; i>=0 ; i--){
-			Resource item = list.get(i);
-			if(item.getBid() == rid){
-				resList.add(item);
-			}
-		}
-		return resList;
-	}
+    @Override
+    public long getTeamResourceSize(int tid) {
+        Long l = (Long)memcachedService.get(getTeamSizeKey(tid));
+        if(l==null){
+            return updateTeamResSize(tid);
+        }else{
+            return l;
+        }
+    }
 
-	/**
+    private long getTeamResSizeFromDB(int tid){
+        return resourceDAO.getTeamResourceSize(tid);
+    }
+    @Override
+    public long updateTeamResSize(int tid){
+        long n = getTeamResSizeFromDB(tid);
+        memcachedService.set(getTeamSizeKey(tid), n);
+        return n;
+    }
+
+    @Override
+    public void resetTeamResSize(int tid) {
+        memcachedService.remove(getTeamSizeKey(tid));
+    }
+    private String getTeamSizeKey(int tid){
+        return "team-res-size-tid:"+tid;
+    }
+
+    @Override
+    public void updateResourceStatus(Collection<Integer> rids, String status, int tid) {
+        resourceDAO.updateResourceStatus(rids, status);
+        clearResourceAmountCache(tid);
+    }
+
+    @Override
+    public int getTeamResourceAmount(int tid) {
+        Object cache = memcachedService.get(TEAM_RESOURCE_AMOUNT + tid);
+        Integer amount = null;
+        if(cache==null){
+            amount = new Integer(resourceDAO.getTeamResourceAmount(tid));
+            memcachedService.set(TEAM_RESOURCE_AMOUNT + tid, amount);
+        }else{
+            amount = (Integer)cache;
+        }
+        return amount;
+    }
+
+    /**
+     * 由资源列表递归成资源树
+     * @param folderRid
+     * @param resourceList
+     * @return
+     */
+    private Resource recursiveTree(int folderRid, List<Resource> list){
+        Resource node = getFromList(folderRid, list);
+
+        List<Resource> nodeList = getChildrensFromList(folderRid, list);
+        for(Resource item : nodeList){
+            //如果是文件夹，继续递归子目录文件
+            Resource n = item.isFolder() ? recursiveTree(item.getRid(), list) : item;
+            node.addChildren(n);
+
+            //移除节点，增加查询速度
+            list.remove(n);
+        }
+        return node;
+    }
+
+    /**
+     * 从列表中查询资源
+     * @param rid
+     * @param list
+     * @return
+     */
+    private Resource getFromList(int rid, List<Resource> list){
+        Resource r = new Resource();
+        for(int i = list.size()-1; i>=0 ; i--){
+            Resource item = list.get(i);
+            if(item.getRid() == rid){
+                r = item;
+                break;
+            }
+        }
+        return r;
+    }
+
+    /**
+     * 从列表中查询直系子文件和目录
+     * @param rid
+     * @param list
+     * @return
+     */
+    private List<Resource> getChildrensFromList(int rid, List<Resource> list){
+        List<Resource> resList = new ArrayList<Resource>();
+        for(int i = list.size()-1; i>=0 ; i--){
+            Resource item = list.get(i);
+            if(item.getBid() == rid){
+                resList.add(item);
+            }
+        }
+        return resList;
+    }
+
+    /**
      * 作用：比较updatedBundle和oldBundle中的tagMap，将oldBundle中未包含的tag与Bundle<br>
      * 关联起来（在a1_tag_item中建立关联关系）
-     * 
+     *
      * @param oldBundle
      * @param updatedBundle
      */
@@ -638,7 +638,7 @@ public class ResourceServiceImpl implements IResourceService {
             }
         }
     }
-    
+
     private List<Resource> getBundleResourceList(int bid,int tid,List<Integer> itemRids) {
         List<Long> rids = new ArrayList<Long>();
         for(Integer rid:itemRids){
@@ -651,15 +651,15 @@ public class ResourceServiceImpl implements IResourceService {
         }
         return resList;
     }
-    
+
     private SimpleResource getSimpleResourceFromCache(int tid,int rid){
         return (SimpleResource)memcachedService.get(RID_SIMPLE_RESOURCE+"."+tid+"."+rid);
     }
-    
+
     private SimpleResource getSimpleResourceFromCache(int tid,String itemKey){
         return (SimpleResource)memcachedService.get(RID_SIMPLE_RESOURCE+"."+tid+"."+itemKey);
     }
-    
+
     private List<Long> int2Long(int[] rids) {
         List<Long> result = new ArrayList<Long>();
         for (int i = 0; i < rids.length; i++) {
@@ -667,11 +667,11 @@ public class ResourceServiceImpl implements IResourceService {
         }
         return result;
     }
-    
+
     /**
      * 前提：Bundle中的tagMap拥有所有资源的tag，且itemsList中资源的tagMap没有更新<br/>
      * 作用：利用Bundle的tagMap，补齐itemsList中每个资源所欠缺的tag <br/>
-     * 
+     *
      * @param itemsList
      *            Bundle内资源对象集合
      * @param bundle
@@ -714,6 +714,6 @@ public class ResourceServiceImpl implements IResourceService {
     }
 
     private void clearResourceAmountCache(int tid){
-		memcachedService.remove(TEAM_RESOURCE_AMOUNT + tid);
-	}
+        memcachedService.remove(TEAM_RESOURCE_AMOUNT + tid);
+    }
 }

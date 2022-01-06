@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -30,179 +30,179 @@ import net.duckling.ddl.util.TextUtil;
  * @author xiejj@cnic.cn
  */
 public class TabTag extends VWBBaseTag {
-	   private static final long serialVersionUID = -8534125226484616489L;
-	    private String m_accesskey;
-	    private String m_tabTitle;
-	    private String m_url;
-	    private String m_click; //kevin added
-	    
-	    /**
-	     * {@inheritDoc}
-	     */
-	    public void doFinally()
-	    {
-	        super.doFinally();
+    private static final long serialVersionUID = -8534125226484616489L;
+    private String m_accesskey;
+    private String m_tabTitle;
+    private String m_url;
+    private String m_click; //kevin added
 
-	        m_accesskey = null;
-	        m_tabTitle  = null;
-	        m_url       = null;
-	    }
+    /**
+     * {@inheritDoc}
+     */
+    public void doFinally()
+    {
+        super.doFinally();
 
-	    /**
-	     * Sets the tab title.
-	     * @param aTabTitle the tab title
-	     */
-	    public void setTitle(String aTabTitle)
-	    {
-	        m_tabTitle = TextUtil.replaceEntities( aTabTitle );
-	    }
+        m_accesskey = null;
+        m_tabTitle  = null;
+        m_url       = null;
+    }
 
-	    /**
-	     * Sets the tab access key.
-	     * @param anAccesskey the access key
-	     */
-	    public void setAccesskey(String anAccesskey)
-	    {
-	        m_accesskey = TextUtil.replaceEntities( anAccesskey ); //take only the first char
-	    }
+    /**
+     * Sets the tab title.
+     * @param aTabTitle the tab title
+     */
+    public void setTitle(String aTabTitle)
+    {
+        m_tabTitle = TextUtil.replaceEntities( aTabTitle );
+    }
 
-	    /**
-	     * Sets the tab URL.
-	     * @param url the URL
-	     */
-	    public void setUrl( String url )
-	    {
-	        m_url = TextUtil.replaceEntities( url );
-	    }
-	    
-	    //kevin added at 20080122
-	    public void setClick(String action) {
-	        m_click = action;
-	    }
+    /**
+     * Sets the tab access key.
+     * @param anAccesskey the access key
+     */
+    public void setAccesskey(String anAccesskey)
+    {
+        m_accesskey = TextUtil.replaceEntities( anAccesskey ); //take only the first char
+    }
 
-	    // insert <u> ..accesskey.. </u> in title
-	    private boolean handleAccesskey()
-	    {
-	        if( (m_tabTitle == null) || (m_accesskey == null) ){
-	        	return false;
-	        }
+    /**
+     * Sets the tab URL.
+     * @param url the URL
+     */
+    public void setUrl( String url )
+    {
+        m_url = TextUtil.replaceEntities( url );
+    }
 
-	        int pos = m_tabTitle.toLowerCase().indexOf( m_accesskey.toLowerCase() );
-	        if( pos > -1 )
-	        {
-	            m_tabTitle = m_tabTitle.substring( 0, pos ) + "<span class='accesskey'>"
-	                       + m_tabTitle.charAt( pos ) + "</span>" + m_tabTitle.substring( pos+1 );
-	        }
-	        return true;
-	    }
+    //kevin added at 20080122
+    public void setClick(String action) {
+        m_click = action;
+    }
 
-	    /**
-	     * {@inheritDoc}
-	     */
-	    public int doVWBStart() throws JspTagException
-	    {
-	        TabbedSectionTag parent=(TabbedSectionTag)findAncestorWithClass( this, TabbedSectionTag.class );
+    // insert <u> ..accesskey.. </u> in title
+    private boolean handleAccesskey()
+    {
+        if( (m_tabTitle == null) || (m_accesskey == null) ){
+            return false;
+        }
 
-	        //
-	        //  Sanity checks
-	        //
-	        if( getId() == null )
-	        {
-	            throw new JspTagException("Tab Tag without \"id\" attribute");
-	        }
-	        if( m_tabTitle == null )
-	        {
-	            throw new JspTagException("Tab Tag without \"tabTitle\" attribute");
-	        }
-	        if( parent == null )
-	        {
-	            throw new JspTagException("Tab Tag without parent \"TabbedSection\" Tag");
-	        }
+        int pos = m_tabTitle.toLowerCase().indexOf( m_accesskey.toLowerCase() );
+        if( pos > -1 )
+        {
+            m_tabTitle = m_tabTitle.substring( 0, pos ) + "<span class='accesskey'>"
+                    + m_tabTitle.charAt( pos ) + "</span>" + m_tabTitle.substring( pos+1 );
+        }
+        return true;
+    }
 
-	        if( !parent.isStateGenerateTabBody() ){
-	        	return SKIP_BODY;
-	        }
+    /**
+     * {@inheritDoc}
+     */
+    public int doVWBStart() throws JspTagException
+    {
+        TabbedSectionTag parent=(TabbedSectionTag)findAncestorWithClass( this, TabbedSectionTag.class );
 
-	        StringBuffer sb = new StringBuffer(32);
+        //
+        //  Sanity checks
+        //
+        if( getId() == null )
+        {
+            throw new JspTagException("Tab Tag without \"id\" attribute");
+        }
+        if( m_tabTitle == null )
+        {
+            throw new JspTagException("Tab Tag without \"tabTitle\" attribute");
+        }
+        if( parent == null )
+        {
+            throw new JspTagException("Tab Tag without parent \"TabbedSection\" Tag");
+        }
 
-	        sb.append( "<div id=\""+ getId() + "\"" );
+        if( !parent.isStateGenerateTabBody() ){
+            return SKIP_BODY;
+        }
 
-	        if( !parent.validateDefaultTab( getId()) )
-	        {
-	            sb.append( " class=\"DCT_hidetab\"" );
-	        }
-	        sb.append( " >\n" );
+        StringBuffer sb = new StringBuffer(32);
 
-	        try
-	        {
-	            pageContext.getOut().write( sb.toString() );
-	        }
-	        catch( java.io.IOException e )
-	        {
-	            throw new JspTagException( "IO Error: " + e.getMessage() );
-	        }
+        sb.append( "<div id=\""+ getId() + "\"" );
 
-	        return EVAL_BODY_INCLUDE;
-	    }
+        if( !parent.validateDefaultTab( getId()) )
+        {
+            sb.append( " class=\"DCT_hidetab\"" );
+        }
+        sb.append( " >\n" );
 
-	    /**
-	     * {@inheritDoc}
-	     */
-	    public int doEndTag() throws javax.servlet.jsp.JspTagException
-	    {
-	        TabbedSectionTag parent=(TabbedSectionTag)findAncestorWithClass( this, TabbedSectionTag.class );
+        try
+        {
+            pageContext.getOut().write( sb.toString() );
+        }
+        catch( java.io.IOException e )
+        {
+            throw new JspTagException( "IO Error: " + e.getMessage() );
+        }
 
-	        StringBuffer sb = new StringBuffer();
+        return EVAL_BODY_INCLUDE;
+    }
 
-	        if( parent.isStateFindDefaultTab() )
-	        {
-	            //inform the parent of each tab
-	            parent.validateDefaultTab( getId() );
-	        }
-	        else if( parent.isStateGenerateTabBody() )
-	        {
-	            sb.append( "</div>\n" );
-	        }
-	        else if( parent.isStateGenerateTabMenu() )
-	        {
-	            sb.append( "<a" );
+    /**
+     * {@inheritDoc}
+     */
+    public int doEndTag() throws javax.servlet.jsp.JspTagException
+    {
+        TabbedSectionTag parent=(TabbedSectionTag)findAncestorWithClass( this, TabbedSectionTag.class );
 
-	            if( parent.validateDefaultTab( getId() ) )
-	            {
-	                sb.append( " class=\"activetab\"" );
-	            }
+        StringBuffer sb = new StringBuffer();
 
-	            sb.append( " id=\"menu-" + getId() + "\"" );
+        if( parent.isStateFindDefaultTab() )
+        {
+            //inform the parent of each tab
+            parent.validateDefaultTab( getId() );
+        }
+        else if( parent.isStateGenerateTabBody() )
+        {
+            sb.append( "</div>\n" );
+        }
+        else if( parent.isStateGenerateTabMenu() )
+        {
+            sb.append( "<a" );
 
-	            if( m_url != null )
-	            {
-	                sb.append( " href='"+m_url+"'" );
-	            }
+            if( parent.validateDefaultTab( getId() ) )
+            {
+                sb.append( " class=\"activetab\"" );
+            }
 
-	            if( handleAccesskey() )
-	            {
-	                sb.append( " accesskey=\"" + m_accesskey + "\"" );
-	            }
-	            
-	            //kevin added at 20080122
-	            if (m_click !=null) {
-	                sb.append( " onClick=\"" + m_click + "\"");
-	            }
+            sb.append( " id=\"menu-" + getId() + "\"" );
 
-	            sb.append( " >" );
-	            sb.append( m_tabTitle );
-	            sb.append( "</a>" );
-	        }
+            if( m_url != null )
+            {
+                sb.append( " href='"+m_url+"'" );
+            }
 
-	        try
-	        {
-	            pageContext.getOut().write( sb.toString() );
-	        }
-	        catch( java.io.IOException e )
-	        {
-	            throw new JspTagException( "IO Error: " + e.getMessage() );
-	        }
+            if( handleAccesskey() )
+            {
+                sb.append( " accesskey=\"" + m_accesskey + "\"" );
+            }
 
-	        return EVAL_PAGE;
-	    }
+            //kevin added at 20080122
+            if (m_click !=null) {
+                sb.append( " onClick=\"" + m_click + "\"");
+            }
+
+            sb.append( " >" );
+            sb.append( m_tabTitle );
+            sb.append( "</a>" );
+        }
+
+        try
+        {
+            pageContext.getOut().write( sb.toString() );
+        }
+        catch( java.io.IOException e )
+        {
+            throw new JspTagException( "IO Error: " + e.getMessage() );
+        }
+
+        return EVAL_PAGE;
+    }
 }

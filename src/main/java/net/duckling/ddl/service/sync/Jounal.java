@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.sync;
@@ -24,11 +24,11 @@ import net.duckling.falcon.api.serialize.JSONMapper;
 
 public class Jounal {
 
-	public static final String OPERATION_ADD = "add";
-	public static final String OPERATION_EDIT = "edit";
-	public static final String OPERATION_DELETE = "delete";
-	public static final String OPERATION_MOVE = "move";
-	
+    public static final String OPERATION_ADD = "add";
+    public static final String OPERATION_EDIT = "edit";
+    public static final String OPERATION_DELETE = "delete";
+    public static final String OPERATION_MOVE = "move";
+
     private long jid;
     private int tid;
     private String operation;
@@ -38,12 +38,12 @@ public class Jounal {
     private Date occurTime;
     private String path;
     private String toPath;
-    private boolean isDir; 
-    
+    private boolean isDir;
+
     public String toString() {
         return JSONMapper.getJSONString(this);
     }
-    
+
     public Date getOccurTime() {
         return occurTime;
     }
@@ -100,28 +100,28 @@ public class Jounal {
         this.fver = fver;
     }
 
-	public String getPath() {
-		return path;
-	}
+    public String getPath() {
+        return path;
+    }
 
-	public void setPath(String path) {
-		this.path = path;
-	}
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-	public String getToPath() {
-		return toPath;
-	}
+    public String getToPath() {
+        return toPath;
+    }
 
-	public void setToPath(String toPath) {
-		this.toPath = toPath;
-	}
+    public void setToPath(String toPath) {
+        this.toPath = toPath;
+    }
 
-	public boolean isDir() {
-		return isDir;
-	}
+    public boolean isDir() {
+        return isDir;
+    }
 
-	public void setDir(boolean isDir) {
-		this.isDir = isDir;
-	}
-    
+    public void setDir(boolean isDir) {
+        this.isDir = isDir;
+    }
+
 }

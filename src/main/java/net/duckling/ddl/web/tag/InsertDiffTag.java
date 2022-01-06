@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -31,14 +31,14 @@ import net.duckling.ddl.service.diff.DifferenceService;
 /**
  * Writes difference between two pages using a HTML table. If there is no
  * difference, includes the body.
- * 
+ *
  * <P>
  * <B>Attributes</B>
  * </P>
  * <UL>
  * <LI>page - Page name to refer to. Default is the current page.
  * </UL>
- * 
+ *
  * @author Yong Ke
  */
 public class InsertDiffTag extends VWBBaseTag {
@@ -64,7 +64,7 @@ public class InsertDiffTag extends VWBBaseTag {
 
     /**
      * Sets the page name.
-     * 
+     *
      * @param page
      *            Page to get diff from.
      */
@@ -74,7 +74,7 @@ public class InsertDiffTag extends VWBBaseTag {
 
     /**
      * Gets the page name.
-     * 
+     *
      * @return The page name.
      */
     public String getPage() {
@@ -90,7 +90,7 @@ public class InsertDiffTag extends VWBBaseTag {
             ctx = vwbcontext;
         } else {
             ctx = new VWBContext(vwbcontext.getURLPattern(), vwbcontext.getHttpRequest(), vwbcontext.getSite(),
-                    vwbcontext.getResource());
+                                 vwbcontext.getResource());
 
         }
 
@@ -103,7 +103,7 @@ public class InsertDiffTag extends VWBBaseTag {
             JspWriter out = pageContext.getOut();
 
             String diff = DDLFacade.getBean(DifferenceService.class).makeDiff(ctx, ctx.getResource(),
-                    verold.intValue(), vernew.intValue());
+                                                                              verold.intValue(), vernew.intValue());
 
             if (diff.length() == 0) {
                 return EVAL_BODY_INCLUDE;

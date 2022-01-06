@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,47 +33,47 @@ import org.jdom.JDOMException;
  */
 public class ParseHtmlH1 extends AbstractParseHtmlElement {
 
-	private static final Logger LOG = Logger.getLogger(ParseHtmlH1.class);
+    private static final Logger LOG = Logger.getLogger(ParseHtmlH1.class);
 
-	@Override
-	public void printAttribute(Element e,Html2DmlEngine html2dmlengine) {
-		  Map<String,String> map = new ForgetNullValuesLinkedHashMap<String,String>();
-          map.put( "style", e.getAttributeValue( "style" ) );                    
-          if( map.size() > 0 )
-          {
-              for( Iterator ito = map.entrySet().iterator(); ito.hasNext(); )
-              {
-                  Map.Entry entry = (Map.Entry)ito.next();
-                  if( !entry.getValue().equals( "" ) )
-                  {
-                	  html2dmlengine.getMout().print( " " + entry.getKey() + "=\"" + entry.getValue() + "\"" );
-                  }
-              }
-          }
-		
-	}
+    @Override
+    public void printAttribute(Element e,Html2DmlEngine html2dmlengine) {
+        Map<String,String> map = new ForgetNullValuesLinkedHashMap<String,String>();
+        map.put( "style", e.getAttributeValue( "style" ) );
+        if( map.size() > 0 )
+        {
+            for( Iterator ito = map.entrySet().iterator(); ito.hasNext(); )
+            {
+                Map.Entry entry = (Map.Entry)ito.next();
+                if( !entry.getValue().equals( "" ) )
+                {
+                    html2dmlengine.getMout().print( " " + entry.getKey() + "=\"" + entry.getValue() + "\"" );
+                }
+            }
+        }
 
-	@Override
-	public void printElement(Element e,Html2DmlEngine html2dmlengine ){
-		html2dmlengine.getMout().print("<h1");
-		printAttribute(e, html2dmlengine);
-		if(html2dmlengine.getPreType()>0){
-			html2dmlengine.getMout().print(">");
-		}else{
-			html2dmlengine.getMout().println(">");
-		}
-		try {
-			h2d.getChildren(e, html2dmlengine);
-		} catch (IOException e1) {
-			LOG.error(e1);
-		} catch (JDOMException e1) {
-			LOG.error(e1);
-		}
-		if(html2dmlengine.getPreType()>0){
-			html2dmlengine.getMout().print("</h1>");
-		}else{
-			html2dmlengine.getMout().println("</h1>");
-		}
-	}
+    }
+
+    @Override
+    public void printElement(Element e,Html2DmlEngine html2dmlengine ){
+        html2dmlengine.getMout().print("<h1");
+        printAttribute(e, html2dmlengine);
+        if(html2dmlengine.getPreType()>0){
+            html2dmlengine.getMout().print(">");
+        }else{
+            html2dmlengine.getMout().println(">");
+        }
+        try {
+            h2d.getChildren(e, html2dmlengine);
+        } catch (IOException e1) {
+            LOG.error(e1);
+        } catch (JDOMException e1) {
+            LOG.error(e1);
+        }
+        if(html2dmlengine.getPreType()>0){
+            html2dmlengine.getMout().print("</h1>");
+        }else{
+            html2dmlengine.getMout().println("</h1>");
+        }
+    }
 
 }

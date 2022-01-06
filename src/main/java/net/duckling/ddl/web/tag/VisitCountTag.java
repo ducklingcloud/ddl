@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -27,22 +27,22 @@ import net.duckling.ddl.service.browselog.BrowseLogService;
  * @author xiejj@cnic.cn
  */
 public class VisitCountTag extends VWBBaseTag {
-	private static final long serialVersionUID = 1L;
-	private int rid;
-	public void setRid(int rid){
-		this.rid=rid;
-	}
-	protected void initTag(){
-		super.initTag();
-		rid=-1;
-	}
-	@Override
-	public int doVWBStart() throws Exception {
-		if (rid==-1){
-			rid=vwbcontext.getResource().getRid();
-		}
-		int count = DDLFacade.getBean(BrowseLogService.class).getVisitCount(rid);
-		pageContext.getOut().write(Integer.toString(count));
-		return EVAL_PAGE;
-	}
+    private static final long serialVersionUID = 1L;
+    private int rid;
+    public void setRid(int rid){
+        this.rid=rid;
+    }
+    protected void initTag(){
+        super.initTag();
+        rid=-1;
+    }
+    @Override
+    public int doVWBStart() throws Exception {
+        if (rid==-1){
+            rid=vwbcontext.getResource().getRid();
+        }
+        int count = DDLFacade.getBean(BrowseLogService.class).getVisitCount(rid);
+        pageContext.getOut().write(Integer.toString(count));
+        return EVAL_PAGE;
+    }
 }

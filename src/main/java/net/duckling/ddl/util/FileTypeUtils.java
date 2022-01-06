@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.util;
@@ -21,20 +21,20 @@ package net.duckling.ddl.util;
 import org.apache.commons.lang.StringUtils;
 
 public final class FileTypeUtils {
-	private static String[] pictureSuffix = new String[]{".bmp",".jpg",".png", ".jpeg", ".gif"};
-	public static boolean isClbDealImage(String fileName){
-		if(StringUtils.isEmpty(fileName)){
-			return false;
-		}
-		String f = fileName.toLowerCase();
-		for(String suffix : pictureSuffix){
-			if(f.endsWith(suffix)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	
-	
+    private static String[] pictureSuffix = new String[]{".bmp",".jpg",".png", ".jpeg", ".gif"};
+    public static boolean isClbDealImage(String fileName){
+        if(StringUtils.isEmpty(fileName)){
+            return false;
+        }
+        String f = fileName.toLowerCase();
+        for(String suffix : pictureSuffix){
+            if(f.endsWith(suffix)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 }

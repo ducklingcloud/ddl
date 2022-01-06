@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller.pan;
@@ -63,11 +63,11 @@ public class WopiController {
     @Autowired
     private DucklingProperties systemProperty;
 
-    
+
     @Autowired
     private ICacheService cacheService;
-    
-    
+
+
 
     public void sendPreviewDoc(String skey, HttpServletRequest request, HttpServletResponse response) {
         OutputStream os = null;
@@ -82,10 +82,10 @@ public class WopiController {
             response.setHeader("Content-Length", info.getSize() + "");
             os = response.getOutputStream();
             if(StringUtils.isEmpty(info.getPanAcl().getUmtToken())){
-            	//pan的分享内容提取
-            	panService.getShareContent(info.getRemotePath(), null, os);
+                //pan的分享内容提取
+                panService.getShareContent(info.getRemotePath(), null, os);
             }else{
-            	panService.download(info.getPanAcl(), info.getRemotePath(), info.getVersion(), os);
+                panService.download(info.getPanAcl(), info.getRemotePath(), info.getVersion(), os);
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -121,9 +121,9 @@ public class WopiController {
         long version = 0;
         long size = meta.size;
         if(!StringUtils.isEmpty(versionStr)){
-             version = Long.parseLong(versionStr);
-             MeePoRevision tv = findTargetRevision(acl,remotePath,version);
-             size = tv.size;
+            version = Long.parseLong(versionStr);
+            MeePoRevision tv = findTargetRevision(acl,remotePath,version);
+            size = tv.size;
         }
         String skey = meta.modified+meta.modifiedBy+version;
         FileInfo info = new FileInfo(skey, meta.name, remotePath, size,acl.getUid(), acl.getUmtToken(), version);
@@ -132,7 +132,7 @@ public class WopiController {
         String url = info.getOwaServerUrl(getOwaServerDomain(), mode, getEncodedCheckFileUrl(skey), accessToken);
         return new ModelAndView(new RedirectView(url));
     }
-    
+
     @WebLog(method = "PanShareSSLRedirectView", params = "panShareId")
     @RequestMapping("/s")
     public ModelAndView getShareSSLRedirectView(@RequestParam("panShareId") String panShareId, HttpServletRequest request)
@@ -148,10 +148,10 @@ public class WopiController {
         String url = info.getOwaServerUrl(getOwaServerDomain(), mode, getEncodedCheckFileUrl(skey), accessToken);
         return new ModelAndView(new RedirectView(url));
     }
-    
-    
-    
-    
+
+
+
+
     private MeePoRevision findTargetRevision(PanAcl acl, String path, long version) throws MeePoException{
         MeePoRevision tv = null;
         if (version != 0) {
@@ -185,7 +185,7 @@ public class WopiController {
     @WebLog(method = "PanFileContent", params = "rid,skey")
     @RequestMapping("/files/{skey}/contents")
     public void getFileContent(@PathVariable("skey") String skey, HttpServletRequest request,
-            HttpServletResponse response) {
+                               HttpServletResponse response) {
         sendPreviewDoc(skey, request, response);
     }
 

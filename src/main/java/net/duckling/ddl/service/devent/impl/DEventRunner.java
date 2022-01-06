@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -42,86 +42,86 @@ import org.springframework.util.Assert;
  */
 @Service
 public class DEventRunner {
-	private class EventWorker extends Thread {
-		private boolean stopped = false;
-		
-		public EventWorker(){
-			super("MessageThread");
-		}
+    private class EventWorker extends Thread {
+        private boolean stopped = false;
 
-		public void run() {
-			while (!stopped) {
-				try {
-					DEvent event = eventQueue.take();
-					VWBContext.setCurrentTid(event.getTid());
-					DEventQueue handlerQueue = handlerMap.get(event.getEventType());
-					if (handlerQueue != null) {
-						handlerQueue.handle(event);
-					} else {
-						log.error("Event handler for " + event.getEventType()
-								+ " not found.");
-						log.error(event);
-					}
-				} catch (InterruptedException e) {
-					log.info("Thread for event service is interrupted.");
-				} catch (Exception e) {
-					log.error("Error occured: ", e);
-				}
-			}
-		}
+        public EventWorker(){
+            super("MessageThread");
+        }
 
-		public void stopLoop() {
-			this.stopped = true;
-		}
-	}
+        public void run() {
+            while (!stopped) {
+                try {
+                    DEvent event = eventQueue.take();
+                    VWBContext.setCurrentTid(event.getTid());
+                    DEventQueue handlerQueue = handlerMap.get(event.getEventType());
+                    if (handlerQueue != null) {
+                        handlerQueue.handle(event);
+                    } else {
+                        log.error("Event handler for " + event.getEventType()
+                                  + " not found.");
+                        log.error(event);
+                    }
+                } catch (InterruptedException e) {
+                    log.info("Thread for event service is interrupted.");
+                } catch (Exception e) {
+                    log.error("Error occured: ", e);
+                }
+            }
+        }
 
-	private final  static Logger log = Logger.getLogger(DEventRunner.class);
+        public void stopLoop() {
+            this.stopped = true;
+        }
+    }
 
-	private BlockingQueue<DEvent> eventQueue;
+    private final  static Logger log = Logger.getLogger(DEventRunner.class);
 
-	private Map<String, DEventQueue> handlerMap;
+    private BlockingQueue<DEvent> eventQueue;
 
-	private EventWorker worker;
+    private Map<String, DEventQueue> handlerMap;
 
-	public DEventRunner() {
-		eventQueue = new LinkedBlockingQueue<DEvent>();
-		handlerMap = Collections.synchronizedMap(new HashMap<String, DEventQueue>());
-		worker = new EventWorker();
-	}
-	/**
-	 * 注册事件监听处理程序
-	 * @param queueName	事件队列
-	 * @param listener	监听处理程序
-	 */
-	public void registListener(String queueName, DEventListener listener){
-		//由于这个函数只在系统初始化时被调用，因此这里不再加synchronized同步语义。
-		Assert.notNull(queueName,"queue's name can't be null");
-		Assert.notNull(listener, "listener can't be null");
-		DEventQueue queue = handlerMap.get(queueName);
-		if (queue==null){
-			queue = new DEventQueue(queueName);
-			handlerMap.put(queueName, queue);
-		}
-		queue.addListener(listener);
-	}
-	public void raise(DEvent event) {
-		try {
-			eventQueue.put(event);
-		} catch (InterruptedException e) {
+    private EventWorker worker;
 
-		}
-	}
-	
-	@PostConstruct
-	public void start() {
-		worker.start();
-	}
+    public DEventRunner() {
+        eventQueue = new LinkedBlockingQueue<DEvent>();
+        handlerMap = Collections.synchronizedMap(new HashMap<String, DEventQueue>());
+        worker = new EventWorker();
+    }
+    /**
+     * 注册事件监听处理程序
+     * @param queueName 事件队列
+     * @param listener  监听处理程序
+     */
+    public void registListener(String queueName, DEventListener listener){
+        //由于这个函数只在系统初始化时被调用，因此这里不再加synchronized同步语义。
+        Assert.notNull(queueName,"queue's name can't be null");
+        Assert.notNull(listener, "listener can't be null");
+        DEventQueue queue = handlerMap.get(queueName);
+        if (queue==null){
+            queue = new DEventQueue(queueName);
+            handlerMap.put(queueName, queue);
+        }
+        queue.addListener(listener);
+    }
+    public void raise(DEvent event) {
+        try {
+            eventQueue.put(event);
+        } catch (InterruptedException e) {
 
-	@PreDestroy
-	public void stop(){
-		worker.stopLoop();
-		worker.interrupt();
-		handlerMap.clear();
-		eventQueue.clear();
-	}
+        }
+    }
+
+    @PostConstruct
+    public void start() {
+        worker.start();
+    }
+
+    @PreDestroy
+    public void stop(){
+        worker.stopLoop();
+        worker.interrupt();
+        handlerMap.clear();
+        eventQueue.clear();
+    }
 }

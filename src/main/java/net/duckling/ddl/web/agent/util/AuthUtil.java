@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.agent.util;
@@ -42,68 +42,68 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 public class AuthUtil {
-	private final static Logger LOG = Logger.getLogger(AuthUtil.class); 
-	
-	private static byte[] clientKey=null;
-	
-	public static String getAuthEmail(String auth){
-		try {
-			String decode = decodeAuth(auth);
-			JSONObject obj = new JSONObject(decode);
-			String email = obj.getString("email");
-			String date = obj.getString("date");
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date d = sdf.parse(date);
-			if(notExpired(d)){
-				return email;
-			}
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
-				| BadPaddingException | UnsupportedEncodingException e) {
-			return null;
-		} catch (ParseException e) {
-			return null;
-		}
-		return null;
-	}
+    private final static Logger LOG = Logger.getLogger(AuthUtil.class);
 
-	private static boolean notExpired(Date d) {
-		long now = System.currentTimeMillis();
-		long dd = d.getTime();
-		//有效期前后30分钟
-		if(Math.abs((now-dd))<(1000*60*30)){
-			return true;
-		}
-		return false;
-	}
+    private static byte[] clientKey=null;
 
-	private static String decodeAuth(String auth) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
-		SecretKeySpec spec = new SecretKeySpec(getKey(), "AES");
-		Cipher cipher = Cipher.getInstance("AES");
-		cipher.init(Cipher.DECRYPT_MODE, spec);
-		byte[] result = cipher.doFinal(Base64.decodeBase64(auth));
-		return new String(result,"UTF-8");
-	}
-	
-	public static byte[] getKey(){
-		if(clientKey==null){
-			initClientKey();
-		}
-		return clientKey;
-	}
-	
-	private synchronized static void initClientKey() {
-		if(clientKey==null){
-			try {
-				InputStream in = LynxEmailResourceController.class.getResourceAsStream("/ddlclientkey");
-				BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
-				String key = reader.readLine();
-				reader.close();
-				clientKey = Base64.decodeBase64(key);
-			} catch (UnsupportedEncodingException e) {
-				LOG.error("",e);
-			} catch (IOException e) {
-				LOG.error("",e);
-			}
-		}
-	}
+    public static String getAuthEmail(String auth){
+        try {
+            String decode = decodeAuth(auth);
+            JSONObject obj = new JSONObject(decode);
+            String email = obj.getString("email");
+            String date = obj.getString("date");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d = sdf.parse(date);
+            if(notExpired(d)){
+                return email;
+            }
+        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException
+                 | BadPaddingException | UnsupportedEncodingException e) {
+            return null;
+        } catch (ParseException e) {
+            return null;
+        }
+        return null;
+    }
+
+    private static boolean notExpired(Date d) {
+        long now = System.currentTimeMillis();
+        long dd = d.getTime();
+        //有效期前后30分钟
+        if(Math.abs((now-dd))<(1000*60*30)){
+            return true;
+        }
+        return false;
+    }
+
+    private static String decodeAuth(String auth) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+        SecretKeySpec spec = new SecretKeySpec(getKey(), "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, spec);
+        byte[] result = cipher.doFinal(Base64.decodeBase64(auth));
+        return new String(result,"UTF-8");
+    }
+
+    public static byte[] getKey(){
+        if(clientKey==null){
+            initClientKey();
+        }
+        return clientKey;
+    }
+
+    private synchronized static void initClientKey() {
+        if(clientKey==null){
+            try {
+                InputStream in = LynxEmailResourceController.class.getResourceAsStream("/ddlclientkey");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
+                String key = reader.readLine();
+                reader.close();
+                clientKey = Base64.decodeBase64(key);
+            } catch (UnsupportedEncodingException e) {
+                LOG.error("",e);
+            } catch (IOException e) {
+                LOG.error("",e);
+            }
+        }
+    }
 }

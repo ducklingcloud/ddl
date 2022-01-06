@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.grid.impl;
@@ -83,29 +83,29 @@ public class GridGroup implements Serializable {
         return gridItemMap;
     }
     public Map<String,String> getGridItemJsonMap(){
-    	Map<String,String> result = new HashMap<String,String>();
-    	for(Entry<String, GridItem> item : gridItemMap.entrySet()){
-    		if(item.getValue()!=null){
-    			result.put(item.getKey(), item.getValue().toJSONString());
-    		}
-    	}
-    	return result;
+        Map<String,String> result = new HashMap<String,String>();
+        for(Entry<String, GridItem> item : gridItemMap.entrySet()){
+            if(item.getValue()!=null){
+                result.put(item.getKey(), item.getValue().toJSONString());
+            }
+        }
+        return result;
     }
     public void setGridItemMap(Map<String, GridItem> gridItemMap) {
         this.gridItemMap = gridItemMap;
     }
     public void setGridItemJSONMap(Map<String,String> map){
-    	if(map!=null){
-    		Map<String,GridItem> result = new HashMap<String,GridItem>();
-    		for(Entry<String,String> item : map.entrySet()){
-    			if(StringUtils.isNotEmpty(item.getValue())){
-    				GridItem r = GridItem.parseFromJOSN(item.getValue());
-    				if(r!=null){
-    					result.put(item.getKey(), r);
-    				}
-    			}
-    		}
-    		this.gridItemMap = result;
-    	}
+        if(map!=null){
+            Map<String,GridItem> result = new HashMap<String,GridItem>();
+            for(Entry<String,String> item : map.entrySet()){
+                if(StringUtils.isNotEmpty(item.getValue())){
+                    GridItem r = GridItem.parseFromJOSN(item.getValue());
+                    if(r!=null){
+                        result.put(item.getKey(), r);
+                    }
+                }
+            }
+            this.gridItemMap = result;
+        }
     }
 }

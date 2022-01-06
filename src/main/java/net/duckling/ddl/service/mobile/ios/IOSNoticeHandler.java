@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.mobile.ios;
@@ -33,42 +33,42 @@ import org.springframework.stereotype.Service;
 
 @Service("iosNoticeHandler")
 public class IOSNoticeHandler implements NoticeHandler {
-	private final Logger LOG = Logger.getLogger(IOSNoticeHandler.class);
-	@Autowired
-	private DeviceTokenService deviceTokenService;
-	@Autowired
-	private IOSMessageSender sender;
-	@Autowired
-	private TeamPreferenceService teamPreferenceService;
+    private final Logger LOG = Logger.getLogger(IOSNoticeHandler.class);
+    @Autowired
+    private DeviceTokenService deviceTokenService;
+    @Autowired
+    private IOSMessageSender sender;
+    @Autowired
+    private TeamPreferenceService teamPreferenceService;
 
-	private IOSMessageBean getMessageBean(Notice notice, IphoneDeviceToken token) {
-		UserNoticeCount count = teamPreferenceService.getUserNoticeCount(notice
-				.getRecipient());
-		if (count == null) {
-			return null;
-		}
-		IOSMessageBean bean = new IOSMessageBean();
-		bean.setNoticeCount(count.getMonitorNoticeCount()
-				+ count.getPersonNoticeCount());
-		bean.setDeviceToken(token.getDeviceToken());
-		bean.setUid(notice.getRecipient());
-		if ("noticeRemove".equals(notice.getNoticeType())) {
-		} else {
-			bean.setMessage(Notice2Message.convert(notice));
-			bean.setSound("default");
-		}
-		return bean;
-	}
+    private IOSMessageBean getMessageBean(Notice notice, IphoneDeviceToken token) {
+        UserNoticeCount count = teamPreferenceService.getUserNoticeCount(notice
+                                                                         .getRecipient());
+        if (count == null) {
+            return null;
+        }
+        IOSMessageBean bean = new IOSMessageBean();
+        bean.setNoticeCount(count.getMonitorNoticeCount()
+                            + count.getPersonNoticeCount());
+        bean.setDeviceToken(token.getDeviceToken());
+        bean.setUid(notice.getRecipient());
+        if ("noticeRemove".equals(notice.getNoticeType())) {
+        } else {
+            bean.setMessage(Notice2Message.convert(notice));
+            bean.setSound("default");
+        }
+        return bean;
+    }
 
-	public void addNotice(Notice notice) {
-		String uid = notice.getRecipient();
-		IphoneDeviceToken token = deviceTokenService.getTokenByUid(uid);
-		if (token != null) {
-			try {
-				sender.sendMessage(getMessageBean(notice, token));
-			} catch (JSONException e) {
-				LOG.error("", e);
-			}
-		}
-	}
+    public void addNotice(Notice notice) {
+        String uid = notice.getRecipient();
+        IphoneDeviceToken token = deviceTokenService.getTokenByUid(uid);
+        if (token != null) {
+            try {
+                sender.sendMessage(getMessageBean(notice, token));
+            } catch (JSONException e) {
+                LOG.error("", e);
+            }
+        }
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -45,16 +45,16 @@ import com.google.zxing.EncodeHintType;
 @RequestMapping("/f/qrcode")
 public class QRCodeController extends BaseController {
     private final static int DEFAULT_SIZE = 148;
-	
-	@RequestMapping
-	public void display(@RequestParam("text")String text, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+    @RequestMapping
+    public void display(@RequestParam("text")String text, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ByteArrayOutputStream out = QRCode.from(text).to(ImageType.PNG)
-        		.withHint(EncodeHintType.MARGIN, 1).withSize(DEFAULT_SIZE, DEFAULT_SIZE).stream();
+                .withHint(EncodeHintType.MARGIN, 1).withSize(DEFAULT_SIZE, DEFAULT_SIZE).stream();
         resp.setContentType("image/png");
         resp.setContentLength(out.size());
         OutputStream outStream = resp.getOutputStream();
-		outStream.write(out.toByteArray());
-		outStream.flush();
+        outStream.write(out.toByteArray());
+        outStream.flush();
         outStream.close();
-	}
+    }
 }

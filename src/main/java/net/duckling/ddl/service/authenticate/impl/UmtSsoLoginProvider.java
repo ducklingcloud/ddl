@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -53,181 +53,181 @@ import cn.vlabs.duckling.common.util.Base64Util;
  * @author xiejj@cnic.cn
  */
 public class UmtSsoLoginProvider implements LoginProvider {
-	private static final Logger LOG = Logger.getLogger(UmtSsoLoginProvider.class);
+    private static final Logger LOG = Logger.getLogger(UmtSsoLoginProvider.class);
 
-	private static RSAKey umtKey = null;
+    private static RSAKey umtKey = null;
 
-	private String keyPath;
+    private String keyPath;
 
-	private String publicKeyUrl;
+    private String publicKeyUrl;
 
-	private String loginUrl;
-	
-	private UserService userService;
-	public void setServiceUrl(String url){
-		userService = new UserService(url);
-	}
-	public UserPrincipal login(String userName, String password){
-		return userService.login(userName, password);
-	}
-	public Collection<Principal> commit(HttpServletRequest request) {
-		String signedCredential = request.getParameter("signedCredential");
-		if (umtKey == null) {
-			downloadUMTKey(request);
-			loadUMTKeyFromLocal(request);
-		}
-		if (umtKey != null) {
-			if (StringUtils.isNotEmpty(signedCredential)) {
-				signedCredential = Base64Util.decodeBase64(signedCredential);
-				try {
-					SignedEnvelope signedData = SignedEnvelope
-							.valueOf(signedCredential);
-					if (signedData.verify(umtKey)) {
-						UserPrincipal user = UserCredentialEnvelope.valueOf(
-								signedData.getContent()).getUser();
-						LinkedList<Principal> principals = new LinkedList<Principal>();
-						principals.add(user);
-						return principals;
-					} else {
-						LOG.error("UMT credential verify failed.");
-					}
-				} catch (Throwable e) {
-					LOG
-							.error("Signed credential is incorrent"
-									+ e.getMessage());
-					LOG.debug(signedCredential);
-					LOG.debug("Detail is :", e);
-				}
+    private String loginUrl;
 
-			} else {
-				LOG.error("signedCredential is empty");
-			}
-		}
-		return null;
-	}
+    private UserService userService;
+    public void setServiceUrl(String url){
+        userService = new UserService(url);
+    }
+    public UserPrincipal login(String userName, String password){
+        return userService.login(userName, password);
+    }
+    public Collection<Principal> commit(HttpServletRequest request) {
+        String signedCredential = request.getParameter("signedCredential");
+        if (umtKey == null) {
+            downloadUMTKey(request);
+            loadUMTKeyFromLocal(request);
+        }
+        if (umtKey != null) {
+            if (StringUtils.isNotEmpty(signedCredential)) {
+                signedCredential = Base64Util.decodeBase64(signedCredential);
+                try {
+                    SignedEnvelope signedData = SignedEnvelope
+                            .valueOf(signedCredential);
+                    if (signedData.verify(umtKey)) {
+                        UserPrincipal user = UserCredentialEnvelope.valueOf(
+                            signedData.getContent()).getUser();
+                        LinkedList<Principal> principals = new LinkedList<Principal>();
+                        principals.add(user);
+                        return principals;
+                    } else {
+                        LOG.error("UMT credential verify failed.");
+                    }
+                } catch (Throwable e) {
+                    LOG
+                            .error("Signed credential is incorrent"
+                                   + e.getMessage());
+                    LOG.debug(signedCredential);
+                    LOG.debug("Detail is :", e);
+                }
 
-	private LoginSession getLoginSession(HttpServletRequest request) {
-		String sessionid = request.getSession().getId();
-		return LoginSession.getLoginSession(sessionid);
-	}
+            } else {
+                LOG.error("signedCredential is empty");
+            }
+        }
+        return null;
+    }
 
-	public PageView localLogin(HttpServletRequest request, String acceptUrl,
-			String userName, String password) {
-		LoginSession vwbsession = getLoginSession(request);
-		vwbsession.setAttribute("username", userName);
-		vwbsession.setAttribute("password", password);
-		vwbsession.setAttribute("ssourl", makeSsoLoginUrl(request, acceptUrl));
-		PageView pv = new PageView(true, getLoginPage());
-		return pv;
-	}
+    private LoginSession getLoginSession(HttpServletRequest request) {
+        String sessionid = request.getSession().getId();
+        return LoginSession.getLoginSession(sessionid);
+    }
 
-	private String getLoginPage() {
-		return VWBContainerImpl.findContainer().getBaseURL() + "/umtlogin.jsp";
-	}
+    public PageView localLogin(HttpServletRequest request, String acceptUrl,
+                               String userName, String password) {
+        LoginSession vwbsession = getLoginSession(request);
+        vwbsession.setAttribute("username", userName);
+        vwbsession.setAttribute("password", password);
+        vwbsession.setAttribute("ssourl", makeSsoLoginUrl(request, acceptUrl));
+        PageView pv = new PageView(true, getLoginPage());
+        return pv;
+    }
 
-	public PageView login(HttpServletRequest request, String acceptUrl) {
-		return new PageView(true, makeSsoLoginUrl(request, acceptUrl));
-	}
+    private String getLoginPage() {
+        return VWBContainerImpl.findContainer().getBaseURL() + "/umtlogin.jsp";
+    }
 
-	private String makeSsoLoginUrl(HttpServletRequest request, String acceptUrl) {
-		VWBContainer container = VWBContainerImpl.findContainer();
-		String ssourl = loginUrl;
-		try {
-			String registerURL = container
-					.getProperty("duckling.umt.link.regist");
-			ssourl = loginUrl
-					+ "?WebServerURL="
-					+ URLEncoder.encode(acceptUrl, "UTF-8")
-					+ "&appname="
-					+ URLEncoder.encode(container
-							.getProperty("duckling.dct.localName"), "UTF-8")
-					+ "&theme="
-					+ container.getProperty("duckling.umt.theme")
-					+ "&sid="
-					+ request.getSession(true).getId()
-					+ "&logoutURL="
-					+ URLEncoder.encode(container.getURL("plain", "logout",
-							"umtSsoLogout=true", true), "UTF-8") + "&"
-					+ ILoginHandle.APP_REGISTER_URL_KEY + "="
-					+ URLEncoder.encode(registerURL, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			LOG.error(e.getMessage(),e);
-		}
-		return ssourl;
-	}
-	
-	/**
-	 * 构建umt注册并返回url
-	 * @param request
-	 * @return
-	 */
-	public String makeUmtRegistUrl(HttpServletRequest request,String regist){
-		VWBContainer container = VWBContainerImpl.findContainer();
-		String rootUrl = container.getProperty("duckling.umt.regist");
-		String ssourl = rootUrl;
-		try {
-			String registURL= URLEncoder.encode(regist, "UTF-8");
-			String appName = URLEncoder.encode(container.getProperty("ducking.ddl.appName"), "UTF-8");
-			String sid = request.getSession(true).getId();
-			String errorBack = URLEncoder.encode(VWBContainerImpl.findContainer().getURL("regist", null, null, true),"utf-8");
-			ssourl = rootUrl+"?appname="+appName+"&sid="+sid+"&loginURL="+registURL+"&registURL="+errorBack;
-		} catch (UnsupportedEncodingException e) {
-			LOG.error("",e);
-		}
-		return ssourl;
-	}
+    public PageView login(HttpServletRequest request, String acceptUrl) {
+        return new PageView(true, makeSsoLoginUrl(request, acceptUrl));
+    }
 
-	public PageView logout(HttpServletRequest request, String acceptUrl) {
-		VWBContainer container = VWBContainerImpl.findContainer();
-		String ssourl = container.getProperty("duckling.umt.logout");
-		try {
-			ssourl = ssourl
-					+ "?WebServerURL="
-					+ URLEncoder.encode(acceptUrl, "UTF-8")
-					+ "&sid="
-					+ request.getSession().getId()
-					+ "&appname="
-					+ URLEncoder.encode(container
-							.getProperty("duckling.dct.localName"), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			LOG.error(e.getMessage(),e);
-		}
-		return new PageView(true, ssourl);
-	}
+    private String makeSsoLoginUrl(HttpServletRequest request, String acceptUrl) {
+        VWBContainer container = VWBContainerImpl.findContainer();
+        String ssourl = loginUrl;
+        try {
+            String registerURL = container
+                    .getProperty("duckling.umt.link.regist");
+            ssourl = loginUrl
+                    + "?WebServerURL="
+                    + URLEncoder.encode(acceptUrl, "UTF-8")
+                    + "&appname="
+                    + URLEncoder.encode(container
+                                        .getProperty("duckling.dct.localName"), "UTF-8")
+                    + "&theme="
+                    + container.getProperty("duckling.umt.theme")
+                    + "&sid="
+                    + request.getSession(true).getId()
+                    + "&logoutURL="
+                    + URLEncoder.encode(container.getURL("plain", "logout",
+                                                         "umtSsoLogout=true", true), "UTF-8") + "&"
+                    + ILoginHandle.APP_REGISTER_URL_KEY + "="
+                    + URLEncoder.encode(registerURL, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOG.error(e.getMessage(),e);
+        }
+        return ssourl;
+    }
 
-	public void setKeyPath(String keyPath) {
-		this.keyPath = keyPath;
-	}
+    /**
+     * 构建umt注册并返回url
+     * @param request
+     * @return
+     */
+    public String makeUmtRegistUrl(HttpServletRequest request,String regist){
+        VWBContainer container = VWBContainerImpl.findContainer();
+        String rootUrl = container.getProperty("duckling.umt.regist");
+        String ssourl = rootUrl;
+        try {
+            String registURL= URLEncoder.encode(regist, "UTF-8");
+            String appName = URLEncoder.encode(container.getProperty("ducking.ddl.appName"), "UTF-8");
+            String sid = request.getSession(true).getId();
+            String errorBack = URLEncoder.encode(VWBContainerImpl.findContainer().getURL("regist", null, null, true),"utf-8");
+            ssourl = rootUrl+"?appname="+appName+"&sid="+sid+"&loginURL="+registURL+"&registURL="+errorBack;
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("",e);
+        }
+        return ssourl;
+    }
 
-	public void setPublicKeyUrl(String publicKeyUrl) {
-		this.publicKeyUrl = publicKeyUrl;
-	}
+    public PageView logout(HttpServletRequest request, String acceptUrl) {
+        VWBContainer container = VWBContainerImpl.findContainer();
+        String ssourl = container.getProperty("duckling.umt.logout");
+        try {
+            ssourl = ssourl
+                    + "?WebServerURL="
+                    + URLEncoder.encode(acceptUrl, "UTF-8")
+                    + "&sid="
+                    + request.getSession().getId()
+                    + "&appname="
+                    + URLEncoder.encode(container
+                                        .getProperty("duckling.dct.localName"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOG.error(e.getMessage(),e);
+        }
+        return new PageView(true, ssourl);
+    }
 
-	public void setLoginUrl(String loginUrl) {
-		this.loginUrl = loginUrl;
-	}
+    public void setKeyPath(String keyPath) {
+        this.keyPath = keyPath;
+    }
+
+    public void setPublicKeyUrl(String publicKeyUrl) {
+        this.publicKeyUrl = publicKeyUrl;
+    }
+
+    public void setLoginUrl(String loginUrl) {
+        this.loginUrl = loginUrl;
+    }
 
     private void downloadUMTKey(HttpServletRequest request) {
-		String umtPublicKeyContent = WebSite.getBodyContent(publicKeyUrl);
-		try {
-			FileUtils.writeStringToFile(new File(keyPath), umtPublicKeyContent);
-		} catch (IOException e) {
-			LOG.error("failed:write umtpublickey to file(" + keyPath + ")", e);
-		}
-	}
+        String umtPublicKeyContent = WebSite.getBodyContent(publicKeyUrl);
+        try {
+            FileUtils.writeStringToFile(new File(keyPath), umtPublicKeyContent);
+        } catch (IOException e) {
+            LOG.error("failed:write umtpublickey to file(" + keyPath + ")", e);
+        }
+    }
 
     private void loadUMTKeyFromLocal(HttpServletRequest request) {
-		if (new File(keyPath).exists()) {
-			KeyFile keyFile = new KeyFile();
-			try {
-				umtKey = keyFile.loadFromPublicKeyContent(PublicKeyEnvelope
-						.valueOf(FileUtils.readFileToString(new File(keyPath)))
-						.getPublicKey());
-			} catch (IOException e) {
-				LOG.error("keyPath="+keyPath,e);
-				throw new RuntimeException("");
-			}
-		}
-	}
+        if (new File(keyPath).exists()) {
+            KeyFile keyFile = new KeyFile();
+            try {
+                umtKey = keyFile.loadFromPublicKeyContent(PublicKeyEnvelope
+                                                          .valueOf(FileUtils.readFileToString(new File(keyPath)))
+                                                          .getPublicKey());
+            } catch (IOException e) {
+                LOG.error("keyPath="+keyPath,e);
+                throw new RuntimeException("");
+            }
+        }
+    }
 
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -29,76 +29,76 @@ import net.duckling.ddl.service.user.SimpleUser;
  * @author xiejj@cnic.cn
  */
 public class Comment {
-	private int id;
-	private int tid;
-	private SimpleUser sender; //sender_id to save
-	private String content;
-	private Date createTime;
-	private String itemType;
-	private SimpleUser receiver; //receiver_id to save
-	private int rid;
-	
-	public int getRid() {
-		return rid;
-	}
+    private int id;
+    private int tid;
+    private SimpleUser sender; //sender_id to save
+    private String content;
+    private Date createTime;
+    private String itemType;
+    private SimpleUser receiver; //receiver_id to save
+    private int rid;
 
-	public void setRid(int rid) {
-		this.rid = rid;
-	}
+    public int getRid() {
+        return rid;
+    }
 
-	public int getTid() {
-		return tid;
-	}
+    public void setRid(int rid) {
+        this.rid = rid;
+    }
 
-	public void setTid(int tid) {
-		this.tid = tid;
-	}
+    public int getTid() {
+        return tid;
+    }
 
-	public String getItemType() {
-		return itemType;
-	}
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
 
-	public void setItemType(String itemType) {
-		this.itemType = itemType;
-	}
+    public String getItemType() {
+        return itemType;
+    }
 
-	public SimpleUser getSender() {
-		return sender;
-	}
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
 
-	public void setSender(SimpleUser sender) {
-		this.sender = sender;
-	}
+    public SimpleUser getSender() {
+        return sender;
+    }
 
-	public SimpleUser getReceiver() {
-		return receiver;
-	}
+    public void setSender(SimpleUser sender) {
+        this.sender = sender;
+    }
 
-	public void setReceiver(SimpleUser receiver) {
-		this.receiver = receiver;
-	}
+    public SimpleUser getReceiver() {
+        return receiver;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setReceiver(SimpleUser receiver) {
+        this.receiver = receiver;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -41,183 +41,183 @@ import org.apache.commons.lang.time.DateUtils;
 
 /**
  * OAuth相关的服务
- * 
+ *
  * @date 2011-8-29
  * @author xiejj@cnic.cn
  */
 public class OAuthServiceImpl implements OAuthService {
-	private class CleanTask implements JobTask {
-		private int timeToLive;
+    private class CleanTask implements JobTask {
+        private int timeToLive;
 
-		public CleanTask(int timeToLive) {
-			this.timeToLive = timeToLive;
-		}
+        public CleanTask(int timeToLive) {
+            this.timeToLive = timeToLive;
+        }
 
-		public void execute(Date scheduledDate) {
-			Date deadLine = DateUtils.addMinutes(scheduledDate, -timeToLive);
-			accessorDAO.removetTimeOut(deadLine);
-		}
-	}
+        public void execute(Date scheduledDate) {
+            Date deadLine = DateUtils.addMinutes(scheduledDate, -timeToLive);
+            accessorDAO.removetTimeOut(deadLine);
+        }
+    }
 
-	private AccessorDAO accessorDAO;
-	private ConsumerDAO consumerDAO;
+    private AccessorDAO accessorDAO;
+    private ConsumerDAO consumerDAO;
 
-	private CleanTask task;
-	private TimerService timerService;
+    private CleanTask task;
+    private TimerService timerService;
 
-	public void destroy() {
-		timerService.removeTask("OAuthClean");
-	}
+    public void destroy() {
+        timerService.removeTask("OAuthClean");
+    }
 
-	@Override
-	public void generateAccessToken(OAuthAccessor accessor) {
+    @Override
+    public void generateAccessToken(OAuthAccessor accessor) {
 
-		// generate oauth_token and oauth_secret
-		String consumerKey = (String) accessor.consumer.getProperty("name");
-		// generate token and secret based on consumer_key
+        // generate oauth_token and oauth_secret
+        String consumerKey = (String) accessor.consumer.getProperty("name");
+        // generate token and secret based on consumer_key
 
-		// for now use md5 of name + current time as token
-		String token_data = consumerKey + System.nanoTime();
-		String token = DigestUtils.md5Hex(token_data);
+        // for now use md5 of name + current time as token
+        String token_data = consumerKey + System.nanoTime();
+        String token = DigestUtils.md5Hex(token_data);
 
-		String oldRequestToken = accessor.requestToken;
-		// first remove the accessor from cache
-		accessor.requestToken = null;
-		accessor.accessToken = token;
+        String oldRequestToken = accessor.requestToken;
+        // first remove the accessor from cache
+        accessor.requestToken = null;
+        accessor.accessToken = token;
 
-		AccessorPo po;
-		if (oldRequestToken != null) {
-			po = accessorDAO.getAccessor(oldRequestToken);
-			po.copyDateFrom(accessor);
-			accessorDAO.updateAccessor(po);
-		} else {
-			po = new AccessorPo();
-			po.copyDateFrom(accessor);
-			accessorDAO.createAccessor(po);
-		}
-	}
+        AccessorPo po;
+        if (oldRequestToken != null) {
+            po = accessorDAO.getAccessor(oldRequestToken);
+            po.copyDateFrom(accessor);
+            accessorDAO.updateAccessor(po);
+        } else {
+            po = new AccessorPo();
+            po.copyDateFrom(accessor);
+            accessorDAO.createAccessor(po);
+        }
+    }
 
-	@Override
-	public void generateRequestToken(OAuthAccessor accessor) {
+    @Override
+    public void generateRequestToken(OAuthAccessor accessor) {
 
-		// generate oauth_token and oauth_secret
-		String consumerKey = (String) accessor.consumer.getProperty("name");
-		// generate token and secret based on consumer_key
+        // generate oauth_token and oauth_secret
+        String consumerKey = (String) accessor.consumer.getProperty("name");
+        // generate token and secret based on consumer_key
 
-		// for now use md5 of name + current time as token
-		String tokenData = consumerKey + System.nanoTime();
-		String token = DigestUtils.md5Hex(tokenData);
-		// for now use md5 of name + current time + token as secret
-		String secretData = consumerKey + System.nanoTime() + token;
-		String secret = DigestUtils.md5Hex(secretData);
+        // for now use md5 of name + current time as token
+        String tokenData = consumerKey + System.nanoTime();
+        String token = DigestUtils.md5Hex(tokenData);
+        // for now use md5 of name + current time + token as secret
+        String secretData = consumerKey + System.nanoTime() + token;
+        String secret = DigestUtils.md5Hex(secretData);
 
-		accessor.requestToken = token;
-		accessor.tokenSecret = secret;
-		accessor.accessToken = null;
+        accessor.requestToken = token;
+        accessor.tokenSecret = secret;
+        accessor.accessToken = null;
 
-		AccessorPo accessorPo = new AccessorPo();
-		accessorPo.copyDateFrom(accessor);
-		// add to the local cache
-		accessorDAO.createAccessor(accessorPo);
-	}
+        AccessorPo accessorPo = new AccessorPo();
+        accessorPo.copyDateFrom(accessor);
+        // add to the local cache
+        accessorDAO.createAccessor(accessorPo);
+    }
 
-	/**
-	 * Get the access token and token secret for the given oauth_token.
-	 */
-	@Override
-	public OAuthAccessor getAccessor(OAuthMessage requestMessage)
-			throws IOException, OAuthProblemException {
-		// try to load from local cache if not throw exception
-		String consumerToken = requestMessage.getToken();
-		return getAccessor(consumerToken);
-	}
+    /**
+     * Get the access token and token secret for the given oauth_token.
+     */
+    @Override
+    public OAuthAccessor getAccessor(OAuthMessage requestMessage)
+            throws IOException, OAuthProblemException {
+        // try to load from local cache if not throw exception
+        String consumerToken = requestMessage.getToken();
+        return getAccessor(consumerToken);
+    }
 
-	@Override
-	public OAuthAccessor getAccessor(String consumer_token)
-			throws OAuthProblemException {
-		OAuthAccessor accessor = null;
-		AccessorPo accessorPo = accessorDAO.getAccessor(consumer_token);
-		if (accessorPo != null) {
-			OAuthConsumer consumer = consumerDAO.getConsumer(accessorPo
-					.getConsumerKey());
-			accessor = new OAuthAccessor(consumer);
-			accessorPo.copyDateTo(accessor);
-		}
+    @Override
+    public OAuthAccessor getAccessor(String consumer_token)
+            throws OAuthProblemException {
+        OAuthAccessor accessor = null;
+        AccessorPo accessorPo = accessorDAO.getAccessor(consumer_token);
+        if (accessorPo != null) {
+            OAuthConsumer consumer = consumerDAO.getConsumer(accessorPo
+                                                             .getConsumerKey());
+            accessor = new OAuthAccessor(consumer);
+            accessorPo.copyDateTo(accessor);
+        }
 
-		if (accessor == null) {
-			OAuthProblemException problem = new OAuthProblemException(
-					"token_expired");
-			throw problem;
-		}
+        if (accessor == null) {
+            OAuthProblemException problem = new OAuthProblemException(
+                "token_expired");
+            throw problem;
+        }
 
-		return accessor;
-	}
+        return accessor;
+    }
 
-	@Override
-	public OAuthConsumerExt getConsumer(OAuthMessage requestMessage)
-			throws IOException, OAuthProblemException {
+    @Override
+    public OAuthConsumerExt getConsumer(OAuthMessage requestMessage)
+            throws IOException, OAuthProblemException {
 
-		OAuthConsumerExt consumer = null;
-		// try to load from local cache if not throw exception
-		String consumerKey = requestMessage.getConsumerKey();
+        OAuthConsumerExt consumer = null;
+        // try to load from local cache if not throw exception
+        String consumerKey = requestMessage.getConsumerKey();
 
-		consumer = consumerDAO.getConsumer(consumerKey);
+        consumer = consumerDAO.getConsumer(consumerKey);
 
-		if (consumer == null || !consumer.isEnabled()) {
-			OAuthProblemException problem = new OAuthProblemException(
-					"token_rejected");
-			throw problem;
-		}
+        if (consumer == null || !consumer.isEnabled()) {
+            OAuthProblemException problem = new OAuthProblemException(
+                "token_rejected");
+            throw problem;
+        }
 
-		return consumer;
-	}
+        return consumer;
+    }
 
-	@Override
-	public void handleException(Exception e, HttpServletRequest request,
-			HttpServletResponse response, boolean sendBody) throws IOException,
-			ServletException {
-		String realm = (request.isSecure()) ? "https://" : "http://";
-		realm += request.getLocalName();
-		OAuthServlet.handleException(response, e, realm, sendBody);
-	}
+    @Override
+    public void handleException(Exception e, HttpServletRequest request,
+                                HttpServletResponse response, boolean sendBody) throws IOException,
+            ServletException {
+        String realm = (request.isSecure()) ? "https://" : "http://";
+        realm += request.getLocalName();
+        OAuthServlet.handleException(response, e, realm, sendBody);
+    }
 
-	public void init() {
-		timerService.addMinutelyTask("OAuthClean", task);
-	}
+    public void init() {
+        timerService.addMinutelyTask("OAuthClean", task);
+    }
 
-	@Override
-	public void markAsAuthorized(OAuthAccessor accessor, String userId,
-			String screenName) {
-		accessor.setProperty("user", userId);
-		accessor.setProperty("screenName", screenName);
-		accessor.setProperty("authorized", Boolean.TRUE);
-		if (accessor.requestToken != null) {
-			AccessorPo po = accessorDAO.getAccessor(accessor.requestToken);
-			po.copyDateFrom(accessor);
-			accessorDAO.updateAccessor(po);
-		}
-	}
+    @Override
+    public void markAsAuthorized(OAuthAccessor accessor, String userId,
+                                 String screenName) {
+        accessor.setProperty("user", userId);
+        accessor.setProperty("screenName", screenName);
+        accessor.setProperty("authorized", Boolean.TRUE);
+        if (accessor.requestToken != null) {
+            AccessorPo po = accessorDAO.getAccessor(accessor.requestToken);
+            po.copyDateFrom(accessor);
+            accessorDAO.updateAccessor(po);
+        }
+    }
 
-	public void setAccessorDAO(AccessorDAO accessorDAO) {
-		this.accessorDAO = accessorDAO;
-	}
+    public void setAccessorDAO(AccessorDAO accessorDAO) {
+        this.accessorDAO = accessorDAO;
+    }
 
-	public void setConsumerDAO(ConsumerDAO consumerDAO) {
-		this.consumerDAO = consumerDAO;
-	}
+    public void setConsumerDAO(ConsumerDAO consumerDAO) {
+        this.consumerDAO = consumerDAO;
+    }
 
-	public void setTimerService(TimerService timerService) {
-		this.timerService = timerService;
-	}
+    public void setTimerService(TimerService timerService) {
+        this.timerService = timerService;
+    }
 
-	public void setTimeToLive(int timeToLive) {
-		task = new CleanTask(timeToLive);
-	}
+    public void setTimeToLive(int timeToLive) {
+        task = new CleanTask(timeToLive);
+    }
 
-	@Override
-	public void validateMessage(OAuthMessage requestMessage,
-			OAuthAccessor accessor) {
-		// VALIDATOR.validateMessage(requestMessage, accessor);
-	}
+    @Override
+    public void validateMessage(OAuthMessage requestMessage,
+                                OAuthAccessor accessor) {
+        // VALIDATOR.validateMessage(requestMessage, accessor);
+    }
 
 }

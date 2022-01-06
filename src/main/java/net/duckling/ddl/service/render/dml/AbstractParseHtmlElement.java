@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -31,12 +31,12 @@ import org.jdom.Element;
 public abstract class AbstractParseHtmlElement{
     private Writer moutTimmer = new WhitespaceTrimWriter();
     private PrintWriter mout = new PrintWriter( moutTimmer );
-    
-	Html2Dml h2d=new Html2Dml();
 
-	public abstract  void printElement(Element e,Html2DmlEngine html2dmlengine);
-	
-	public abstract  void printAttribute(Element e,Html2DmlEngine html2dmlengine);
+    Html2Dml h2d=new Html2Dml();
+
+    public abstract  void printElement(Element e,Html2DmlEngine html2dmlengine);
+
+    public abstract  void printAttribute(Element e,Html2DmlEngine html2dmlengine);
 
     public Writer getMoutTimmer()
     {

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -32,7 +32,7 @@ import net.duckling.ddl.service.url.UrlPatterns;
 
 /**
  * Introduction Here.
- * 
+ *
  * @date Mar 2, 2010
  * @author xiejj@cnic.cn
  */
@@ -92,16 +92,16 @@ public class EditLinkTag extends VWBLinkTag {
         URLGenerator urlGenerator = DDLFacade.getBean(URLGenerator.class);
         JspWriter out = pageContext.getOut();
         switch (m_format) {
-        case ANCHOR:
-            out.print("<a href=\"" + urlGenerator.getURL(tid, UrlPatterns.T_EDIT_PAGE, Integer.toString(rid), versionString)
-                    + "\" accesskey=\"" + m_accesskey + "\" title=\"" + m_title + "\">");
-            break;
+            case ANCHOR:
+                out.print("<a href=\"" + urlGenerator.getURL(tid, UrlPatterns.T_EDIT_PAGE, Integer.toString(rid), versionString)
+                          + "\" accesskey=\"" + m_accesskey + "\" title=\"" + m_title + "\">");
+                break;
 
-        case URL:
-            out.print(urlGenerator.getURL(tid, UrlPatterns.T_EDIT_PAGE, Integer.toString(rid), versionString));
-            break;
-        default:
-            break;
+            case URL:
+                out.print(urlGenerator.getURL(tid, UrlPatterns.T_EDIT_PAGE, Integer.toString(rid), versionString));
+                break;
+            default:
+                break;
         }
 
         return EVAL_BODY_INCLUDE;

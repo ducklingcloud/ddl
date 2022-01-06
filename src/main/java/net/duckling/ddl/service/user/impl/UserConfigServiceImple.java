@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.user.impl;
@@ -27,36 +27,36 @@ import net.duckling.ddl.service.user.UserConfig;
 import net.duckling.ddl.service.user.UserConfigService;
 @Service
 public class UserConfigServiceImple implements UserConfigService {
-	@Autowired
-	private UserConfigDAO userConfigDAO;
-	@Override
-	public UserConfig getById(int id) {
-		return userConfigDAO.getById(id);
-	}
+    @Autowired
+    private UserConfigDAO userConfigDAO;
+    @Override
+    public UserConfig getById(int id) {
+        return userConfigDAO.getById(id);
+    }
 
-	@Override
-	public UserConfig getByUid(String uid) {
-		return userConfigDAO.getByUid(uid);
-	}
+    @Override
+    public UserConfig getByUid(String uid) {
+        return userConfigDAO.getByUid(uid);
+    }
 
-	@Override
-	public boolean update(UserConfig config) {
-		return userConfigDAO.update(config);
-	}
+    @Override
+    public boolean update(UserConfig config) {
+        return userConfigDAO.update(config);
+    }
 
-	@Override
-	public boolean insert(UserConfig config) {
-		return userConfigDAO.insert(config);
-	}
+    @Override
+    public boolean insert(UserConfig config) {
+        return userConfigDAO.insert(config);
+    }
 
-	@Override
-	public boolean delete(int id) {
-		return userConfigDAO.delete(id);
-	}
+    @Override
+    public boolean delete(int id) {
+        return userConfigDAO.delete(id);
+    }
 
-	@Override
-	public List<UserConfig> getAllConfig() {
-		return userConfigDAO.getAllConfig();
-	}
+    @Override
+    public List<UserConfig> getAllConfig() {
+        return userConfigDAO.getAllConfig();
+    }
 
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,11 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 /**
- * 
+ *
  */
 package net.duckling.ddl.service.mail.compile;
 
@@ -31,7 +31,7 @@ import java.io.InputStream;
 public class MyClassLoader extends ClassLoader {
     private InputStream classFile = null;
     private String name = null;
-  
+
     /**
      * @param name String  类全名
      * @param url URL  类路径
@@ -42,7 +42,7 @@ public class MyClassLoader extends ClassLoader {
             FileNotFoundException, IOException {
         super(getSystemClassLoader());
         this.name = name + ".class";
- 
+
         InputStream classIs = new FileInputStream(new File(dirPath+this.name));
         this.classFile = classIs;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -53,13 +53,13 @@ public class MyClassLoader extends ClassLoader {
         }
         classIs.close();
         baos.close();
- 
+
 
         //创建新的类对象
         byte[] data = baos.toByteArray();
         defineClass(name, data, 0, data.length);
     }
- 
+
 
     /**
      * 重载 getResourceAsStream() 是为了返回该类的文件流。

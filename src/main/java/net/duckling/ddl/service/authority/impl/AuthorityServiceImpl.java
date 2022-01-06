@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -35,121 +35,121 @@ import org.apache.log4j.Logger;
  */
 public class AuthorityServiceImpl implements AuthorityService {
 
-	private static final Logger LOG = Logger
-			.getLogger(AuthorityServiceImpl.class);
+    private static final Logger LOG = Logger
+            .getLogger(AuthorityServiceImpl.class);
 
-	
-	private TeamAclDAO teamAclDao;
 
-	private String getActuralTeamPermission(int tid, String currUser) {
-		LOG.debug("search team permission:" + tid + "," + currUser);
-		return teamAclDao.getSingleMemberAuthority(tid, currUser);
-	}
+    private TeamAclDAO teamAclDao;
 
-	private String getCurrUser(VWBSession session) {
-		return session.getCurrentUser().getName();
-	}
+    private String getActuralTeamPermission(int tid, String currUser) {
+        LOG.debug("search team permission:" + tid + "," + currUser);
+        return teamAclDao.getSingleMemberAuthority(tid, currUser);
+    }
 
-	private String getExpectedPermission(String operation) {
-		if (VIEW.equals(operation)) {
-			return VIEW;
-		}
-		if (ADMIN.equals(operation)) {
-			return ADMIN;
-		}
-		if (EDIT.equals(operation)) {
-			return EDIT;
-		}
-		return FORBID;
-	}
+    private String getCurrUser(VWBSession session) {
+        return session.getCurrentUser().getName();
+    }
 
-	private int getPermissionPriority(String permission) {
-		if (FORBID.equals(permission)) {
-			return 4;
-		}
-		if (VIEW.equals(permission)) {
-			return 3;
-		}
-		if (EDIT.equals(permission)) {
-			return 2;
-		}
-		if (ADMIN.equals(permission)) {
-			return 1;
-		}
-		return 6;
-	}
+    private String getExpectedPermission(String operation) {
+        if (VIEW.equals(operation)) {
+            return VIEW;
+        }
+        if (ADMIN.equals(operation)) {
+            return ADMIN;
+        }
+        if (EDIT.equals(operation)) {
+            return EDIT;
+        }
+        return FORBID;
+    }
 
-	private boolean isPermissionEough(String expected, String actural) {
-		int expectLevel = getPermissionPriority(expected);
-		int acturalLevel = getPermissionPriority(actural);
-		return expectLevel >= acturalLevel;
-	}
+    private int getPermissionPriority(String permission) {
+        if (FORBID.equals(permission)) {
+            return 4;
+        }
+        if (VIEW.equals(permission)) {
+            return 3;
+        }
+        if (EDIT.equals(permission)) {
+            return 2;
+        }
+        if (ADMIN.equals(permission)) {
+            return 1;
+        }
+        return 6;
+    }
 
-	/*----Domain Methods--*/
+    private boolean isPermissionEough(String expected, String actural) {
+        int expectLevel = getPermissionPriority(expected);
+        int acturalLevel = getPermissionPriority(actural);
+        return expectLevel >= acturalLevel;
+    }
 
-	public void setTeamAclDao(TeamAclDAO teamAclDao) {
-		this.teamAclDao = teamAclDao;
-	}
+    /*----Domain Methods--*/
 
-	public List<TeamAcl> getTeamAdminByTid(int tid) {
-		List<TeamAcl> result = teamAclDao.getTeamAclByTidAndAuth(tid, ADMIN);
-		if (result == null) {
-			result = Collections.emptyList();
-		}
-		return result;
-	}
+    public void setTeamAclDao(TeamAclDAO teamAclDao) {
+        this.teamAclDao = teamAclDao;
+    }
 
-	public List<UserTeamAclBean> getTeamAclByUidAndAuth(String uid, String auth) {
-		return teamAclDao.getTeamAclByUidAndAuth(uid, auth);
-	}
+    public List<TeamAcl> getTeamAdminByTid(int tid) {
+        List<TeamAcl> result = teamAclDao.getTeamAclByTidAndAuth(tid, ADMIN);
+        if (result == null) {
+            result = Collections.emptyList();
+        }
+        return result;
+    }
 
-	public List<TeamAcl> getTeamMembersAuthority(int tid) {
-		return teamAclDao.getTeamMembersAuthority(tid);
-	}
+    public List<UserTeamAclBean> getTeamAclByUidAndAuth(String uid, String auth) {
+        return teamAclDao.getTeamAclByUidAndAuth(uid, auth);
+    }
 
-	@Override
-	public List<TeamAcl> getUserAllTeamAcl(String uid) {
-		return teamAclDao.getUserAllTeamAcl(uid);
-	}
+    public List<TeamAcl> getTeamMembersAuthority(int tid) {
+        return teamAclDao.getTeamMembersAuthority(tid);
+    }
 
-	public String getTeamAuthority(int tid, String uid) {
-		return teamAclDao.getSingleMemberAuthority(tid, uid);
-	}
+    @Override
+    public List<TeamAcl> getUserAllTeamAcl(String uid) {
+        return teamAclDao.getUserAllTeamAcl(uid);
+    }
 
-	public boolean teamAccessability(int tid, VWBSession session,
-			String operation) {
-		String expected = getExpectedPermission(operation);
-		String actural = getActuralTeamPermission(tid, getCurrUser(session));
-		LOG.debug("Team Permission{expected=" + expected + ",actural="
-				+ actural + "}");
-		return isPermissionEough(expected, actural);
-	}
+    public String getTeamAuthority(int tid, String uid) {
+        return teamAclDao.getSingleMemberAuthority(tid, uid);
+    }
 
-	@Override
-	public void addBatchTeamAcl(String[] newUsers, int tid, String[] auth) {
-		this.teamAclDao.addBatchTeamAcl(newUsers, tid, auth);
-	}
+    public boolean teamAccessability(int tid, VWBSession session,
+                                     String operation) {
+        String expected = getExpectedPermission(operation);
+        String actural = getActuralTeamPermission(tid, getCurrUser(session));
+        LOG.debug("Team Permission{expected=" + expected + ",actural="
+                  + actural + "}");
+        return isPermissionEough(expected, actural);
+    }
 
-	@Override
-	public UserTeamAclBean getUserTeamAcl(int tid, String uid) {
-		return this.teamAclDao.getUserTeamAcl(tid, uid);
-	}
+    @Override
+    public void addBatchTeamAcl(String[] newUsers, int tid, String[] auth) {
+        this.teamAclDao.addBatchTeamAcl(newUsers, tid, auth);
+    }
 
-	@Override
-	public void updateMembersAuthority(int tid, String[] oldUsers,
-			String[] newAuths) {
-		teamAclDao.updateMembersAuthority(tid, oldUsers, newAuths);
-	}
+    @Override
+    public UserTeamAclBean getUserTeamAcl(int tid, String uid) {
+        return this.teamAclDao.getUserTeamAcl(tid, uid);
+    }
 
-	@Override
-	public void removeMemberAcls(int tid, String[] uids) {
-		teamAclDao.removeMemberAcls(tid, uids);
-	}
+    @Override
+    public void updateMembersAuthority(int tid, String[] oldUsers,
+                                       String[] newAuths) {
+        teamAclDao.updateMembersAuthority(tid, oldUsers, newAuths);
+    }
 
-	@Override
-	public boolean haveTeamEditeAuth(int tid, String uid) {
-		String auth = getTeamAuthority(tid, uid);
-		return AuthorityService.ADMIN.equals(auth)||AuthorityService.EDIT.equals(auth);
-	}
+    @Override
+    public void removeMemberAcls(int tid, String[] uids) {
+        teamAclDao.removeMemberAcls(tid, uids);
+    }
+
+    @Override
+    public boolean haveTeamEditeAuth(int tid, String uid) {
+        String auth = getTeamAuthority(tid, uid);
+        return AuthorityService.ADMIN.equals(auth)||AuthorityService.EDIT.equals(auth);
+    }
 
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -46,27 +46,27 @@ public class Html2DmlEngine {
     private List listCreateFormTable=new ArrayList();
     private VWBContext vwbcontext;
     private DmlContext dmlcontext;
-    
+
     /**
-	 * @return the dmlcontext
-	 */
-	public DmlContext getDmlcontext() {
-		return dmlcontext;
-	}
-	/**
-	 * @param dmlcontext the dmlcontext to set
-	 */
-	public void setDmlcontext(DmlContext dmlcontext) {
-		this.dmlcontext = dmlcontext;
-	}
-	public VWBContext getVwbcontext() {
-		return vwbcontext;
-	}
-	public void setVwbcontext(VWBContext vwbcontext) {
-		this.vwbcontext = vwbcontext;
-	}
-	
-	public String getStrCreateFormTable()
+     * @return the dmlcontext
+     */
+    public DmlContext getDmlcontext() {
+        return dmlcontext;
+    }
+    /**
+     * @param dmlcontext the dmlcontext to set
+     */
+    public void setDmlcontext(DmlContext dmlcontext) {
+        this.dmlcontext = dmlcontext;
+    }
+    public VWBContext getVwbcontext() {
+        return vwbcontext;
+    }
+    public void setVwbcontext(VWBContext vwbcontext) {
+        this.vwbcontext = vwbcontext;
+    }
+
+    public String getStrCreateFormTable()
     {
         return strCreateFormTable;
     }
@@ -104,7 +104,7 @@ public class Html2DmlEngine {
     public void setMout(Html2DmlEngine html2dmlengine) {
         this.mout = html2dmlengine.getMout();
     }
-    
+
     public String getBaseURL()
     {
         return baseURL;
@@ -140,16 +140,16 @@ public class Html2DmlEngine {
     public String findAttachment( String link,Html2DmlEngine html2dmlengine){
         String baseurl=html2dmlengine.getBaseURL();
         if(link!=null && link.startsWith(baseurl)){
-			int index = link.lastIndexOf('/');
-			link = link.substring(index + 1);
-			String strhash = getFromBASE64(link);
-			if (strhash.indexOf("clb") != -1) {
-				return link;
-			}
+            int index = link.lastIndexOf('/');
+            link = link.substring(index + 1);
+            String strhash = getFromBASE64(link);
+            if (strhash.indexOf("clb") != -1) {
+                return link;
+            }
         }
         return null;
     }
- // 将 BASE64 编码的字符串 s 进行解码
+    // 将 BASE64 编码的字符串 s 进行解码
     public static String getFromBASE64(String s)
     {
         if (s == null)
@@ -164,19 +164,19 @@ public class Html2DmlEngine {
             return null;
         }
     }
-    
+
     public String getDDataSiteTableName(String tablename){
-    	String sitename="site"+vwbcontext.getSite().getId()+"_";
-    	return sitename+tablename;
+        String sitename="site"+vwbcontext.getSite().getId()+"_";
+        return sitename+tablename;
     }
-    
+
     public String removeDDataSiteTableName(String tablename){
-    	String sitename="site"+vwbcontext.getSite().getId()+"_";
-    	if(tablename.startsWith(sitename)){
-    		tablename=tablename.substring(sitename.length());
-    	}
-    	return tablename;
-    	
+        String sitename="site"+vwbcontext.getSite().getId()+"_";
+        if(tablename.startsWith(sitename)){
+            tablename=tablename.substring(sitename.length());
+        }
+        return tablename;
+
     }
 
 }

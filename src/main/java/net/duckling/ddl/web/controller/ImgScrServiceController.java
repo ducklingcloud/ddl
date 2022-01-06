@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 /*
@@ -45,34 +45,34 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/{teamCode}/imgScrService")
 @RequirePermission(target="team", operation="view")
 public class ImgScrServiceController extends BaseController {
-	@RequestMapping
-	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
-		String strpathes=request.getParameter("path");
-		String[] pathes=strpathes.split("\\|");
-		StringBuffer str=new StringBuffer();
-		for(String strarr:pathes){
-			String[] arr=strarr.split(":");
-			String id=arr[0];
-			str.append("var "+id+"=[");
-			str.append("];\n");
-			
-		}
-		response.setContentType("text;charset=UTF-8");
-		try {
-		    Writer wr = response.getWriter();
-		    wr.write(str.toString());
-		    wr.close();
-		} catch (IOException e) {
-			LOGGER.error("",e);
-		}
-		return null;
-	}
+    @RequestMapping
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
+        String strpathes=request.getParameter("path");
+        String[] pathes=strpathes.split("\\|");
+        StringBuffer str=new StringBuffer();
+        for(String strarr:pathes){
+            String[] arr=strarr.split(":");
+            String id=arr[0];
+            str.append("var "+id+"=[");
+            str.append("];\n");
 
-	@RequestMapping(params="func='open")
-	public ModelAndView opendialog(HttpServletRequest request) {
-		ArrayList<String> results=new ArrayList<String>();
-		request.setAttribute("results", results);
-		return new ModelAndView("fck_imagescroll.jsp");
-	}
-   
+        }
+        response.setContentType("text;charset=UTF-8");
+        try {
+            Writer wr = response.getWriter();
+            wr.write(str.toString());
+            wr.close();
+        } catch (IOException e) {
+            LOGGER.error("",e);
+        }
+        return null;
+    }
+
+    @RequestMapping(params="func='open")
+    public ModelAndView opendialog(HttpServletRequest request) {
+        ArrayList<String> results=new ArrayList<String>();
+        request.setAttribute("results", results);
+        return new ModelAndView("fck_imagescroll.jsp");
+    }
+
 }

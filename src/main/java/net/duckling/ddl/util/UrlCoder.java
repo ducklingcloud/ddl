@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -29,19 +29,19 @@ import java.net.URLEncoder;
  *
  */
 public final class UrlCoder {
-	private static final String URF8 = "UTF-8";
-	public static String encode(String s){
-		try {
-			return URLEncoder.encode(s, URF8);
-		} catch (UnsupportedEncodingException e) {
-			return "";
-		}
-	}
-	public static String decode(String s){
-		try {
-			return URLDecoder.decode(s, URF8);
-		} catch (Exception e) {
-			return "";
-		}
-	}
+    private static final String URF8 = "UTF-8";
+    public static String encode(String s){
+        try {
+            return URLEncoder.encode(s, URF8);
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
+    }
+    public static String decode(String s){
+        try {
+            return URLDecoder.decode(s, URF8);
+        } catch (Exception e) {
+            return "";
+        }
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
 /**
  * In this class, the saver method will save the file received from CLB under
  * the @param path path.
- * 
+ *
  * @date 2011-9-24
  * @author JohnX
  */
@@ -124,9 +124,9 @@ public class ExportAttachSaver implements DFileSaver {
         return ss;
     }
 
-	@Override
-	public void setLength(long length) {
-		
-	}
+    @Override
+    public void setLength(long length) {
+
+    }
 
 }

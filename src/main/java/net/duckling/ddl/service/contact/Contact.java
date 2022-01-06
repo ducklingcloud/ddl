@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -24,277 +24,277 @@ package net.duckling.ddl.service.contact;
  * @author JohnX
  */
 public class Contact {
-	private String uid;
-	
-	private String mainEmail;
-	
-	private String optionEmail;
-	
-	private String name;
-	
-	private String orgnization;
-	
-	private String department;
-	
-	private String sex;
-	
-	private String telephone;
-	
-	private String mobile;
-	
-	private String qq;
-	
-	private String msn;
-	
-	private String address;
-	
-	private String photo;
-	
-	private String birthday;
-	
-	private String weibo;
-	
-	private String pinyin;
-	
-	private int id;
+    private String uid;
 
-	/**
-	 * @return the uid
-	 */
-	public String getUid() {
-		return uid;
-	}
+    private String mainEmail;
 
-	/**
-	 * @param uid the uid to set
-	 */
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
+    private String optionEmail;
 
-	/**
-	 * @return the main_email
-	 */
-	public String getMainEmail() {
-		return mainEmail;
-	}
+    private String name;
 
-	/**
-	 * @param main_email the main_email to set
-	 */
-	public void setMainEmail(String main_email) {
-		this.mainEmail = main_email;
-	}
+    private String orgnization;
 
-	/**
-	 * @return the option_email
-	 */
-	public String getOptionEmail() {
-		return optionEmail;
-	}
+    private String department;
 
-	/**
-	 * @param option_email the option_email to set
-	 */
-	public void setOptionEmail(String option_email) {
-		this.optionEmail = option_email;
-	}
+    private String sex;
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    private String telephone;
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String mobile;
 
-	/**
-	 * @return the orgnization
-	 */
-	public String getOrgnization() {
-		return orgnization;
-	}
+    private String qq;
 
-	/**
-	 * @param orgnization the orgnization to set
-	 */
-	public void setOrgnization(String orgnization) {
-		this.orgnization = orgnization;
-	}
+    private String msn;
 
-	/**
-	 * @return the department
-	 */
-	public String getDepartment() {
-		return department;
-	}
+    private String address;
 
-	/**
-	 * @param department the department to set
-	 */
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+    private String photo;
 
-	/**
-	 * @return the sex
-	 */
-	public String getSex() {
-		return sex;
-	}
+    private String birthday;
 
-	/**
-	 * @param sex the sex to set
-	 */
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
+    private String weibo;
 
-	/**
-	 * @return the telephone
-	 */
-	public String getTelephone() {
-		return telephone;
-	}
+    private String pinyin;
 
-	/**
-	 * @param telephone the telephone to set
-	 */
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
+    private int id;
 
-	/**
-	 * @return the mobile
-	 */
-	public String getMobile() {
-		return mobile;
-	}
+    /**
+     * @return the uid
+     */
+    public String getUid() {
+        return uid;
+    }
 
-	/**
-	 * @param mobile the mobile to set
-	 */
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    /**
+     * @param uid the uid to set
+     */
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
-	/**
-	 * @return the qq
-	 */
-	public String getQq() {
-		return qq;
-	}
+    /**
+     * @return the main_email
+     */
+    public String getMainEmail() {
+        return mainEmail;
+    }
 
-	/**
-	 * @param qq the qq to set
-	 */
-	public void setQq(String qq) {
-		this.qq = qq;
-	}
+    /**
+     * @param main_email the main_email to set
+     */
+    public void setMainEmail(String main_email) {
+        this.mainEmail = main_email;
+    }
 
-	/**
-	 * @return the msn
-	 */
-	public String getMsn() {
-		return msn;
-	}
+    /**
+     * @return the option_email
+     */
+    public String getOptionEmail() {
+        return optionEmail;
+    }
 
-	/**
-	 * @param msn the msn to set
-	 */
-	public void setMsn(String msn) {
-		this.msn = msn;
-	}
+    /**
+     * @param option_email the option_email to set
+     */
+    public void setOptionEmail(String option_email) {
+        this.optionEmail = option_email;
+    }
 
-	/**
-	 * @return the address
-	 */
-	public String getAddress() {
-		return address;
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @param address the address to set
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * @return the photo
-	 */
-	public String getPhoto() {
-		return photo;
-	}
+    /**
+     * @return the orgnization
+     */
+    public String getOrgnization() {
+        return orgnization;
+    }
 
-	/**
-	 * @param photo the photo to set
-	 */
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    /**
+     * @param orgnization the orgnization to set
+     */
+    public void setOrgnization(String orgnization) {
+        this.orgnization = orgnization;
+    }
 
-	/**
-	 * @return the birthday
-	 */
-	public String getBirthday() {
-		return birthday;
-	}
+    /**
+     * @return the department
+     */
+    public String getDepartment() {
+        return department;
+    }
 
-	/**
-	 * @param birthday the birthday to set
-	 */
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
+    /**
+     * @param department the department to set
+     */
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
-	/**
-	 * @return the weibo
-	 */
-	public String getWeibo() {
-		return weibo;
-	}
+    /**
+     * @return the sex
+     */
+    public String getSex() {
+        return sex;
+    }
 
-	/**
-	 * @param weibo the weibo to set
-	 */
-	public void setWeibo(String weibo) {
-		this.weibo = weibo;
-	}
+    /**
+     * @param sex the sex to set
+     */
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
-	/**
-	 * @return the pinyin
-	 */
-	public String getPinyin() {
-		return pinyin;
-	}
+    /**
+     * @return the telephone
+     */
+    public String getTelephone() {
+        return telephone;
+    }
 
-	/**
-	 * @param pinyin the pinyin to set
-	 */
-	public void setPinyin(String pinyin) {
-		this.pinyin = pinyin;
-	}
+    /**
+     * @param telephone the telephone to set
+     */
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
 
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
+    /**
+     * @return the mobile
+     */
+    public String getMobile() {
+        return mobile;
+    }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
+    /**
+     * @param mobile the mobile to set
+     */
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    /**
+     * @return the qq
+     */
+    public String getQq() {
+        return qq;
+    }
+
+    /**
+     * @param qq the qq to set
+     */
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    /**
+     * @return the msn
+     */
+    public String getMsn() {
+        return msn;
+    }
+
+    /**
+     * @param msn the msn to set
+     */
+    public void setMsn(String msn) {
+        this.msn = msn;
+    }
+
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /**
+     * @return the photo
+     */
+    public String getPhoto() {
+        return photo;
+    }
+
+    /**
+     * @param photo the photo to set
+     */
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    /**
+     * @return the birthday
+     */
+    public String getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * @param birthday the birthday to set
+     */
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    /**
+     * @return the weibo
+     */
+    public String getWeibo() {
+        return weibo;
+    }
+
+    /**
+     * @param weibo the weibo to set
+     */
+    public void setWeibo(String weibo) {
+        this.weibo = weibo;
+    }
+
+    /**
+     * @return the pinyin
+     */
+    public String getPinyin() {
+        return pinyin;
+    }
+
+    /**
+     * @param pinyin the pinyin to set
+     */
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
 }

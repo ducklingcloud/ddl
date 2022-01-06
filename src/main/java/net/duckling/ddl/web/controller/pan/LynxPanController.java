@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller.pan;
@@ -89,7 +89,7 @@ public class LynxPanController extends BaseController {
     @Autowired
     private PanShareResourceService panShareResourceService;
     @Autowired
-	private UserSortPreferenceService userSortPreferenceService;
+    private UserSortPreferenceService userSortPreferenceService;
     @Autowired
     private TeamService teamService;
     @RequestMapping
@@ -113,23 +113,23 @@ public class LynxPanController extends BaseController {
     @WebLog(method = "PanQueryList", params = "path,keyWord")
     @RequestMapping(params = "func=query")
     public void queryResource(HttpServletRequest request, HttpServletResponse response) {
-    	String keyword = request.getParameter("keyWord");
-    	String uid = VWBSession.getCurrentUid(request);
-    	if(StringUtils.isNotEmpty(keyword)){
-    		dealSearch(request,response);
-    		return;
-    	}
+        String keyword = request.getParameter("keyWord");
+        String uid = VWBSession.getCurrentUid(request);
+        if(StringUtils.isNotEmpty(keyword)){
+            dealSearch(request,response);
+            return;
+        }
         JSONObject j = null;
         String path = getRequestPath(request);
         MeePoMeta meta = null;
         try {
             meta = queryMeta(request, path, true);
         } catch (MeePoException e) {
-			j = new JSONObject();
-			dealMetaException(e, j);
-			LOG.error(e.getMessage()+e.getClass(),e);
-			JsonUtil.writeJSONObject(response, j);
-			return;
+            j = new JSONObject();
+            dealMetaException(e, j);
+            LOG.error(e.getMessage()+e.getClass(),e);
+            JsonUtil.writeJSONObject(response, j);
+            return;
         }
         if (meta == null) {
             LOG.error("Path error");
@@ -141,7 +141,7 @@ public class LynxPanController extends BaseController {
         }
         SimpleUser user = aoneUserService.getSimpleUserByUid(uid);
         List<PanResourceBean> result = conductShared(uid, adapterMeta(meta,user));
-        
+
         filterByType(result,request.getParameter("type"));
         List<PanResourceBean> ancestors = getAncestors(meta);
         String tokenKey = request.getParameter("tokenKey");
@@ -153,7 +153,7 @@ public class LynxPanController extends BaseController {
         j.put("showSearch", true);
         JsonUtil.writeJSONObject(response, j);
     }
-    
+
     /**
      * 设置文件是否已分享
      * @param uid
@@ -161,36 +161,36 @@ public class LynxPanController extends BaseController {
      * @return
      */
     private List<PanResourceBean> conductShared(String uid, List<PanResourceBean> resourceList){
-    	Map<String,PanShareResource> sharedMap = new HashMap<String,PanShareResource>();
-    	List<PanShareResource> list = panShareResourceService.getByUid(uid);
-    	for(PanShareResource item : list){
-    		sharedMap.put(item.getSharePath(), item);
-    	}
-    	for(PanResourceBean item : resourceList){
-        	if(sharedMap.containsKey(item.getPath())){
-        		item.setShared(true);
-        	}else{
-        		item.setShared(false);
-        	}
+        Map<String,PanShareResource> sharedMap = new HashMap<String,PanShareResource>();
+        List<PanShareResource> list = panShareResourceService.getByUid(uid);
+        for(PanShareResource item : list){
+            sharedMap.put(item.getSharePath(), item);
         }
-    	return resourceList;
+        for(PanResourceBean item : resourceList){
+            if(sharedMap.containsKey(item.getPath())){
+                item.setShared(true);
+            }else{
+                item.setShared(false);
+            }
+        }
+        return resourceList;
     }
-    
+
     /**
-     * 
+     *
      * @param request
      * @param response
      */
     private void dealSearch(HttpServletRequest request, HttpServletResponse response) {
-    	String path = getRequestPath(request);
-    	String keyword = request.getParameter("keyWord");
-    	String uid = VWBSession.getCurrentUid(request);
-    	try {
-    		MeePoMeta meta = queryMeta(request, path, false);
-    		PanQueryResult[] result = service.search(PanAclUtil.getInstance(request), path, keyword, 100);
-    		SimpleUser user = aoneUserService.getSimpleUserByUid(uid);
-    		List<PanResourceBean> pbs = conductShared(uid, adapterMeta(result,user));
-    		JSONObject j = new JSONObject();
+        String path = getRequestPath(request);
+        String keyword = request.getParameter("keyWord");
+        String uid = VWBSession.getCurrentUid(request);
+        try {
+            MeePoMeta meta = queryMeta(request, path, false);
+            PanQueryResult[] result = service.search(PanAclUtil.getInstance(request), path, keyword, 100);
+            SimpleUser user = aoneUserService.getSimpleUserByUid(uid);
+            List<PanResourceBean> pbs = conductShared(uid, adapterMeta(result,user));
+            JSONObject j = new JSONObject();
             j.put("total", pbs.size());
             j.put("currentResource", LynxResourceUtils.getPanResourceJson(MeePoMetaToPanBeanUtil.transfer(meta,user), user.getUid()));
             j.put("nextBeginNum", "0");
@@ -206,43 +206,43 @@ public class LynxPanController extends BaseController {
             j.put("unshowSort", true);
             j.put("isSearch", true);
             JsonUtil.writeJSONObject(response, j);
-		} catch (MeePoException e) {
-			JSONObject j = new JSONObject();
-			dealMetaException(e, j);
-			LOG.error(e.getMessage()+e.getClass(),e);
-			JsonUtil.writeJSONObject(response, j);
-		}
-	}
+        } catch (MeePoException e) {
+            JSONObject j = new JSONObject();
+            dealMetaException(e, j);
+            LOG.error(e.getMessage()+e.getClass(),e);
+            JsonUtil.writeJSONObject(response, j);
+        }
+    }
 
-	private List<PanResourceBean> adapterMeta(PanQueryResult[] result, SimpleUser user) {
-		List<PanResourceBean> rs = new ArrayList<PanResourceBean>();
-		if(result!=null){
-			for(PanQueryResult r : result){
-				rs.add(MeePoMetaToPanBeanUtil.transferSearchResoult(r,user));
-			}
-		}
-		return rs;
-	}
+    private List<PanResourceBean> adapterMeta(PanQueryResult[] result, SimpleUser user) {
+        List<PanResourceBean> rs = new ArrayList<PanResourceBean>();
+        if(result!=null){
+            for(PanQueryResult r : result){
+                rs.add(MeePoMetaToPanBeanUtil.transferSearchResoult(r,user));
+            }
+        }
+        return rs;
+    }
 
-	private String getOrder(HttpServletRequest request){
-		String order=request.getParameter("sortType");
-		String uid = VWBSession.getCurrentUid(request);
-		order = userSortPreferenceService.getUidSortPreference(uid, order, UserSortPreference.WEB_TYPE);
-		return StringUtils.isEmpty(order)?"timeDesc":order;
-	}
+    private String getOrder(HttpServletRequest request){
+        String order=request.getParameter("sortType");
+        String uid = VWBSession.getCurrentUid(request);
+        order = userSortPreferenceService.getUidSortPreference(uid, order, UserSortPreference.WEB_TYPE);
+        return StringUtils.isEmpty(order)?"timeDesc":order;
+    }
     private void filterByType(List<PanResourceBean> result, String type) {
-    	if("Picture".equals(type)){
-    		Iterator<PanResourceBean> it = result.iterator();
-    		while(it.hasNext()){
-    			PanResourceBean bean = it.next();
-    			if(!FileTypeUtils.isClbDealImage(bean.getTitle())){
-    				it.remove();
-    			}
-    		}
-    	}
-	}
+        if("Picture".equals(type)){
+            Iterator<PanResourceBean> it = result.iterator();
+            while(it.hasNext()){
+                PanResourceBean bean = it.next();
+                if(!FileTypeUtils.isClbDealImage(bean.getTitle())){
+                    it.remove();
+                }
+            }
+        }
+    }
 
-	private List<PanResourceBean> getAncestors(MeePoMeta meta) {
+    private List<PanResourceBean> getAncestors(MeePoMeta meta) {
         List<PanResourceBean> rs = new ArrayList<PanResourceBean>();
         String path = meta.restorePath;
         if (path != null) {
@@ -280,26 +280,26 @@ public class LynxPanController extends BaseController {
         }
         return result;
     }
-    
+
     private void dealMetaException(MeePoException e,JSONObject obj){
-    	obj.put("success", "false");
-    	if(e instanceof NetworkIO||e instanceof RetryLater){
-    		obj.put("message", "网络忙，请稍后再试！");
-    	}else if( e instanceof InvalidAccessToken){
-    		obj.put("message", "您的登录出现异常，请重新登录！");
-    	}else if( e instanceof BadRequest){
-    		obj.put("message", "服务器异常，请稍后再试！");
-    	}else if(e instanceof QuotaOutage){
-    		obj.put("message", "空间已满，请核对后再试！");
-    	}else if(e instanceof OperationNotAllowed){
-    		obj.put("message", "权限不足，请核对后再试！");
-    	}else if(e instanceof AccessDenied){
-    		obj.put("message", "网络忙，请稍后再试！");
-    	}else if(e instanceof NotFound){
-    		obj.put("message", "文件没找到，请核对后重试！");
-    	}else{
-    		obj.put("message", "服务器异常，请稍后再试！");
-    	}
+        obj.put("success", "false");
+        if(e instanceof NetworkIO||e instanceof RetryLater){
+            obj.put("message", "网络忙，请稍后再试！");
+        }else if( e instanceof InvalidAccessToken){
+            obj.put("message", "您的登录出现异常，请重新登录！");
+        }else if( e instanceof BadRequest){
+            obj.put("message", "服务器异常，请稍后再试！");
+        }else if(e instanceof QuotaOutage){
+            obj.put("message", "空间已满，请核对后再试！");
+        }else if(e instanceof OperationNotAllowed){
+            obj.put("message", "权限不足，请核对后再试！");
+        }else if(e instanceof AccessDenied){
+            obj.put("message", "网络忙，请稍后再试！");
+        }else if(e instanceof NotFound){
+            obj.put("message", "文件没找到，请核对后重试！");
+        }else{
+            obj.put("message", "服务器异常，请稍后再试！");
+        }
     }
 
 
@@ -323,7 +323,7 @@ public class LynxPanController extends BaseController {
     }
 
     private JSONObject buildQueryResultJson( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
-            List<PanResourceBean> ancestors) {
+                                             List<PanResourceBean> ancestors) {
         if (resources == null) {
             resources = new ArrayList<PanResourceBean>();
         }
@@ -362,10 +362,10 @@ public class LynxPanController extends BaseController {
             }
         } catch (MeePoException e) {
             JSONObject j = new JSONObject();
-			dealMetaException(e, j);
-			LOG.error(e.getMessage()+e.getClass(),e);
-			JsonUtil.writeJSONObject(response, j);
-			return;
+            dealMetaException(e, j);
+            LOG.error(e.getMessage()+e.getClass(),e);
+            JsonUtil.writeJSONObject(response, j);
+            return;
         }
         if (result) {
             try {
@@ -374,7 +374,7 @@ public class LynxPanController extends BaseController {
                 String isSearchResultEditor = request.getParameter("isSeachResult");
                 PanResourceBean bean = MeePoMetaToPanBeanUtil.transfer(meta,user);
                 if(StringUtils.isNotEmpty(isSearchResultEditor)){
-                	bean.setBeanType(PanResourceBean.BEAN_TYPE_SEARCH);
+                    bean.setBeanType(PanResourceBean.BEAN_TYPE_SEARCH);
                 }
                 o.put("resource", LynxResourceUtils.getPanResourceJson(bean, uid));
             } catch (MeePoException e) {
@@ -407,18 +407,18 @@ public class LynxPanController extends BaseController {
         String uid = VWBSession.getCurrentUid(request);
         String parentRid = decode(request.getParameter("parentRid"));
         if("-1".equals(parentRid)||"0".equals(parentRid)){
-        	parentRid="/";
+            parentRid="/";
         }
         if(StringUtil.illCharCheck(request, response, "fileName")){
-			return;
-		}
+            return;
+        }
         String fileName = "/" + request.getParameter("fileName");
         if (!StringUtils.isEmpty(parentRid)) {
             fileName = parentRid + fileName;
         }
         PanAcl acl = PanAclUtil.getInstance(request);
         JSONObject o = new JSONObject();
-        
+
         boolean result = false;
         String message = null;
         try {
@@ -428,11 +428,11 @@ public class LynxPanController extends BaseController {
                 o.put("errorCode", "errorName");
             }
         } catch (MeePoException e) {
-        	JSONObject j = new JSONObject();
-			dealMetaException(e, j);
-			LOG.error(e.getMessage()+e.getClass(),e);
-			JsonUtil.writeJSONObject(response, j);
-			return;
+            JSONObject j = new JSONObject();
+            dealMetaException(e, j);
+            LOG.error(e.getMessage()+e.getClass(),e);
+            JsonUtil.writeJSONObject(response, j);
+            return;
         }
         if (result) {
             try {
@@ -441,15 +441,15 @@ public class LynxPanController extends BaseController {
                 PanResourceBean bean = MeePoMetaToPanBeanUtil.transfer(meta,user);
                 String isSearchResultEditor = request.getParameter("isSeachResult");
                 if(StringUtils.isNotEmpty(isSearchResultEditor)){
-                	bean.setBeanType(PanResourceBean.BEAN_TYPE_SEARCH);
+                    bean.setBeanType(PanResourceBean.BEAN_TYPE_SEARCH);
                 }
                 o.put("resource", LynxResourceUtils.getPanResourceJson(bean, uid));
             } catch (MeePoException e) {
-            	JSONObject j = new JSONObject();
-    			dealMetaException(e, j);
-    			LOG.error(e.getMessage()+e.getClass(),e);
-    			JsonUtil.writeJSONObject(response, j);
-    			return;
+                JSONObject j = new JSONObject();
+                dealMetaException(e, j);
+                LOG.error(e.getMessage()+e.getClass(),e);
+                JsonUtil.writeJSONObject(response, j);
+                return;
             }
             LOG.info(uid+" create folder "+fileName);
         }
@@ -457,7 +457,7 @@ public class LynxPanController extends BaseController {
         o.put("message", message);
         JsonUtil.writeJSONObject(response, o);
     }
-    
+
     @WebLog(method = "PandeleteResource", params = "rid")
     @RequestMapping(params = "func=deleteResource")
     public void deleteResource(HttpServletRequest request, HttpServletResponse response) {
@@ -469,68 +469,68 @@ public class LynxPanController extends BaseController {
         try {
             result = service.rm(acl, rid);
         } catch (MeePoException e) {
-        	JSONObject j = new JSONObject();
-			dealMetaException(e, j);
-			LOG.error(e.getMessage()+e.getClass(),e);
-			JsonUtil.writeJSONObject(response, j);
-			return;
+            JSONObject j = new JSONObject();
+            dealMetaException(e, j);
+            LOG.error(e.getMessage()+e.getClass(),e);
+            JsonUtil.writeJSONObject(response, j);
+            return;
         }
         if(result){
-        	LOG.info(acl.getUid()+" delete "+rid);
+            LOG.info(acl.getUid()+" delete "+rid);
         }
         o.put("result", result);
         o.put("message", message);
         JsonUtil.writeJSONObject(response, o);
     }
-    
+
     @WebLog(method = "PandeleteResources", params = "rids[]")
     @RequestMapping(params="func=deleteResources")
     public void deleteResources(HttpServletRequest request,HttpServletResponse response){
-		String[] ridStrs = request.getParameterValues("rids[]");
-		List<String> rids = new ArrayList<String>();
-		for(String r : ridStrs){
-			rids.add(decode(r));
-		}
-		List<String> errorList = new ArrayList<String>();
-		List<String> successList = new ArrayList<>();
-		PanAcl acl = PanAclUtil.getInstance(request);
-		for (String r : rids) {
-			try {
-				boolean result = service.rm(acl, r);
-				if (!result) {
-					errorList.add(encode(r));
-				}else{
-					successList.add(encode(r));
-				}
-			} catch (MeePoException e) {
-				LOG.error("", e);
-				errorList.add(encode(r));
-			}
-		}
-		JSONObject o = new JSONObject();
-		o.put("result", errorList.isEmpty());
-		if(!errorList.isEmpty()){
-			JSONArray array = new JSONArray();
-			for(String s : errorList){
-				array.add(s);
-			}
-			o.put("errorRids", array);
-			JSONArray suc = new JSONArray();
-			for(String s : successList){
-				suc.add(s);
-			}
-			o.put("sucRids", suc);
-		}
-		LOG.info(acl.getUid()+" delete "+successList+" ;delete error"+errorList);
+        String[] ridStrs = request.getParameterValues("rids[]");
+        List<String> rids = new ArrayList<String>();
+        for(String r : ridStrs){
+            rids.add(decode(r));
+        }
+        List<String> errorList = new ArrayList<String>();
+        List<String> successList = new ArrayList<>();
+        PanAcl acl = PanAclUtil.getInstance(request);
+        for (String r : rids) {
+            try {
+                boolean result = service.rm(acl, r);
+                if (!result) {
+                    errorList.add(encode(r));
+                }else{
+                    successList.add(encode(r));
+                }
+            } catch (MeePoException e) {
+                LOG.error("", e);
+                errorList.add(encode(r));
+            }
+        }
+        JSONObject o = new JSONObject();
+        o.put("result", errorList.isEmpty());
+        if(!errorList.isEmpty()){
+            JSONArray array = new JSONArray();
+            for(String s : errorList){
+                array.add(s);
+            }
+            o.put("errorRids", array);
+            JSONArray suc = new JSONArray();
+            for(String s : successList){
+                suc.add(s);
+            }
+            o.put("sucRids", suc);
+        }
+        LOG.info(acl.getUid()+" delete "+successList+" ;delete error"+errorList);
         JsonUtil.writeJSONObject(response, o);
     }
-    
+
     private String encode(String s){
-    	try {
-			return URLEncoder.encode(s, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return "";
-		}
+        try {
+            return URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 
 }

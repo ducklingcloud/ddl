@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.api.pan;
@@ -46,35 +46,35 @@ import com.meepotech.sdk.PanQueryResult;
 @Controller
 @RequestMapping("/api/pan/search")
 public class APIPanSearchController {
-	@Autowired
+    @Autowired
     private IPanService service;
-	@Autowired
+    @Autowired
     private AoneUserService aoneUserService;
-	@RequestMapping
-	public void service(@RequestParam("keyword") String keyword,
-			HttpServletRequest request, HttpServletResponse response){
-		
-		try {
-			PanQueryResult[] result = service.search(PanAclUtil.getInstance(request), "/", keyword, 100);
-			JSONObject obj = new JSONObject();
-			SimpleUser user = aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request));
-    		List<PanResourceBean> pbs = adapterMeta(result,user);
-			obj.put("fileResult",LynxResourceUtils.getPanResourceList(pbs,user.getUid()) );
-			JsonUtil.writeJSONObject(response, obj);
-		} catch (MeePoException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	private List<PanResourceBean> adapterMeta(PanQueryResult[] result, SimpleUser user) {
-		List<PanResourceBean> rs = new ArrayList<PanResourceBean>();
-		if(result!=null){
-			for(PanQueryResult r : result){
-				rs.add(MeePoMetaToPanBeanUtil.transferSearchResoult(r,user));
-			}
-		}
-		return rs;
-	}
+    @RequestMapping
+    public void service(@RequestParam("keyword") String keyword,
+                        HttpServletRequest request, HttpServletResponse response){
+
+        try {
+            PanQueryResult[] result = service.search(PanAclUtil.getInstance(request), "/", keyword, 100);
+            JSONObject obj = new JSONObject();
+            SimpleUser user = aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request));
+            List<PanResourceBean> pbs = adapterMeta(result,user);
+            obj.put("fileResult",LynxResourceUtils.getPanResourceList(pbs,user.getUid()) );
+            JsonUtil.writeJSONObject(response, obj);
+        } catch (MeePoException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private List<PanResourceBean> adapterMeta(PanQueryResult[] result, SimpleUser user) {
+        List<PanResourceBean> rs = new ArrayList<PanResourceBean>();
+        if(result!=null){
+            for(PanQueryResult r : result){
+                rs.add(MeePoMetaToPanBeanUtil.transferSearchResoult(r,user));
+            }
+        }
+        return rs;
+    }
 }

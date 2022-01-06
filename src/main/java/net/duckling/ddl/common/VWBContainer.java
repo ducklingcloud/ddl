@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -22,7 +22,7 @@ package net.duckling.ddl.common;
 
 /**
  * VWB容器对象
- * 
+ *
  * @date Feb 4, 2010
  * @author xiejj@cnic.cn
  */
@@ -31,7 +31,7 @@ public interface VWBContainer {
 
     /**
      * 查询站点ID对应的Site
-     * 
+     *
      * @param id
      * @return
      */
@@ -39,7 +39,7 @@ public interface VWBContainer {
 
     /**
      * 查询站点
-     * 
+     *
      * @param id
      * @return
      */
@@ -48,14 +48,14 @@ public interface VWBContainer {
     /**
      * 获取默认的域名<br>
      * 默认域名作用：当站点没有设置域名的时候，默认使用该默认域名，格式：http://默认域名:端口/site/siteId/<br>
-     * 
+     *
      * @return
      */
     String getDefaultDomain();
 
     /**
      * 通过站点的Context获取站点
-     * 
+     *
      * @param name
      * @return
      */
@@ -63,7 +63,7 @@ public interface VWBContainer {
 
     /**
      * 构造全容器的URL
-     * 
+     *
      * @param context
      *            URLPattern中的名称
      * @param pageName
@@ -78,7 +78,7 @@ public interface VWBContainer {
 
     /**
      * 查询全局配置信息
-     * 
+     *
      * @param propertyName
      * @return
      */
@@ -87,21 +87,21 @@ public interface VWBContainer {
 
     /**
      * 站点的字符编码类型
-     * 
+     *
      * @return 站点字符编码
      */
     String getContentEncoding();
 
     /**
      * 容器的BaseURL
-     * 
+     *
      * @return
      */
     String getBaseURL();
 
     /**
      * 容器的BasePath
-     * 
+     *
      * @return
      */
     String getBasePath();

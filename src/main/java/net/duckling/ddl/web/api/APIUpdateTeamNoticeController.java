@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.api;
@@ -40,18 +40,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/api/updateTeamNotice")
 public class APIUpdateTeamNoticeController extends APIBaseController{
-	@Autowired
-	private TeamPreferenceService teamPreferenceService;
-	@RequestMapping
-	public void updateTeamNotice(HttpServletRequest request, HttpServletResponse response) {
-		String type = request.getParameter("messageType");
-		int tid = Integer.parseInt(request.getParameter("teamId"));
-		VWBContext context = VWBContext.createContext(request, UrlPatterns.SWITCH_TEAM);
-		String uid = context.getCurrentUID();
-		teamPreferenceService.updateNoticeAccessTime(uid, tid, type);
-		JSONObject json = new JSONObject();
-		json.put("status", "success");
-		json.put("tid", tid);
-		JsonUtil.writeJSONObject(response, json);
-	}
+    @Autowired
+    private TeamPreferenceService teamPreferenceService;
+    @RequestMapping
+    public void updateTeamNotice(HttpServletRequest request, HttpServletResponse response) {
+        String type = request.getParameter("messageType");
+        int tid = Integer.parseInt(request.getParameter("teamId"));
+        VWBContext context = VWBContext.createContext(request, UrlPatterns.SWITCH_TEAM);
+        String uid = context.getCurrentUID();
+        teamPreferenceService.updateNoticeAccessTime(uid, tid, type);
+        JSONObject json = new JSONObject();
+        json.put("status", "success");
+        json.put("tid", tid);
+        JsonUtil.writeJSONObject(response, json);
+    }
 }

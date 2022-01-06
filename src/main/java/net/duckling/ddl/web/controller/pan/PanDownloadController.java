@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller.pan;
@@ -49,12 +49,12 @@ import com.meepotech.sdk.MeePoRevision;
 @RequirePermission(authenticated = true)
 @RequestMapping("/pan/download")
 public class PanDownloadController {
-	private static final Logger LOG = Logger.getLogger(PanDownloadController.class);
+    private static final Logger LOG = Logger.getLogger(PanDownloadController.class);
     @Autowired
     private IPanService panService;
 
     private void sendPreviewDoc(String filename, long size, String remotePath, long version,
-            HttpServletRequest request, HttpServletResponse response) {
+                                HttpServletRequest request, HttpServletResponse response) {
         OutputStream os = null;
         long p0 = System.currentTimeMillis();
         long tmpSize = size;
@@ -68,13 +68,13 @@ public class PanDownloadController {
             os = response.getOutputStream();
             panService.download(PanAclUtil.getInstance(request), remotePath,version, os);
         } catch (UnsupportedEncodingException e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         } catch (MeePoException e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         } catch (IOException e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         } catch (Exception e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         } finally {
             IOUtils.closeQuietly(os);
             long p1 = System.currentTimeMillis();
@@ -86,11 +86,11 @@ public class PanDownloadController {
     @RequestMapping
     public void download(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) {
         if (StringUtils.isEmpty(path)) {
-        	LOG.info("Path param should never be empty.");
+            LOG.info("Path param should never be empty.");
             return;
         }
         try {
-        	PanAcl acl = PanAclUtil.getInstance(request);
+            PanAcl acl = PanAclUtil.getInstance(request);
             MeePoMeta meta = panService.ls(acl, path, true);
             if (meta != null) {
                 long realSize  = meta.size;
@@ -102,10 +102,10 @@ public class PanDownloadController {
                 sendPreviewDoc(meta.name, realSize, path, version, request, response);
             }
         } catch (MeePoException e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         }
     }
-    
+
     private MeePoRevision findTargetRevision(PanAcl acl, String path, long version) throws MeePoException{
         MeePoRevision tv = null;
         if (version != 0) {
@@ -119,9 +119,9 @@ public class PanDownloadController {
         }
         return tv;
     }
-    
+
     /**
-     * 
+     *
      * @param path
      * @param size 的取值为 xs:32x32, s:64x64, m:128x128, l:640x480, xl:1024x768
      * @param request
@@ -130,7 +130,7 @@ public class PanDownloadController {
     @WebLog(method = "PanThumbnails", params = "path,size")
     @RequestMapping("/thumbnails")
     public void thumbnails(@RequestParam("path") String path, @RequestParam("size") String size,
-            HttpServletRequest request, HttpServletResponse response) {
+                           HttpServletRequest request, HttpServletResponse response) {
         OutputStream os = null;
         try {
             PanAcl acl = PanAclUtil.getInstance(request);
@@ -144,11 +144,11 @@ public class PanDownloadController {
         } catch (UnsupportedEncodingException e) {
             LOG.error("", e);
         } catch (MeePoException e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         } catch (IOException e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         } catch (Exception e) {
-        	LOG.error("", e);
+            LOG.error("", e);
         } finally {
             IOUtils.closeQuietly(os);
         }

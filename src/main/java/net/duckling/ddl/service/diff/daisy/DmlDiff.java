@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.diff.daisy;
@@ -26,7 +26,7 @@ public class DmlDiff {
     int limitLength = 1000;
     double trPecent = 0.8;// 表格的tr结点中的所有文本的匹配精确度。
     double textPecent = 0.7;// 字符串匹配的精确度。如果精确度超过textpecent，就认为是content
-                            // update，否则为add。
+    // update，否则为add。
     int borderLength = 5;// 如果newtree中的某节点文本内容长度大于borderlength，才会使用textpecent参数进行判断。否则，直接认为是add。
 
     public void compareTree(ArrayList<DmlNode> oldNodeList, ArrayList<DmlNode> newNodeList) {// 传入的是两棵树的叶子结点的列表。目的是得到新、老树的叶子结点的handflag以及新、老树的匹配结点对（即变量match）。
@@ -77,7 +77,7 @@ public class DmlDiff {
 
                     if (maxNode.isTr) {
                         if (maxNode.trStr.length() > borderLength && maxNode.trStr.length() < limitLength
-                        /* && maxLength < limitLength */) {// ???????????????????????
+                            /* && maxLength < limitLength */) {// ???????????????????????
                             String stringLCS = LCS.GetLCSString(maxNode.trStr, p.trStr);
                             if ((stringLCS.length() * 2.0) / (maxNode.trStr.length() + p.trStr.length()) > trPecent) {
                                 newMatch[maxId] = tmpId;
@@ -96,7 +96,7 @@ public class DmlDiff {
 
                     } else {
                         if (maxNode.text.length() > borderLength && maxNode.text.length() < limitLength
-                                && maxLength < limitLength) {
+                            && maxLength < limitLength) {
 
                             String stringLCS = LCS.GetLCSString(maxNode.text, p.text);
                             if ((stringLCS.length() * 2.0) / (maxNode.text.length() + p.text.length()) > textPecent) {

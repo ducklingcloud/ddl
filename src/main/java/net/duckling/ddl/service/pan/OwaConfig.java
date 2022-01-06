@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.pan;
@@ -31,7 +31,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class OwaConfig {
-    
+
     private Properties props;
     private static OwaConfig config;
     private Logger log;
@@ -39,7 +39,7 @@ public class OwaConfig {
 
     /**
      * 获取配置文件读取类的实例
-     * 
+     *
      * @return 配置读取对象的实例
      */
     public static OwaConfig getInstance() {
@@ -64,7 +64,7 @@ public class OwaConfig {
             log.error(e);
         }
     }
-    
+
     private String getStringProp(String key, String defaultval) {
         String value = props.getProperty(key);
         if (value != null) {
@@ -72,7 +72,7 @@ public class OwaConfig {
         } else
             return defaultval;
     }
-    
+
     private String replace(String input) {
         input = input.trim();
         int dollerPos = input.indexOf('$');
@@ -91,7 +91,7 @@ public class OwaConfig {
         }
         return input;
     }
-    
+
     public String getServiceUrl(String status, String ext){
         String key = status+"."+ext;
         String value = this.getStringProp(key, null);

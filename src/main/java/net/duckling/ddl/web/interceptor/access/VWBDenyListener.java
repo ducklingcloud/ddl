@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -70,12 +70,12 @@ public class VWBDenyListener implements PermissionDenyListener {
         try {
             if (m_session.isAuthenticated()) {
                 LOGGER.info("User " + currentUser.getName() + " has no access - forbidden (permission="
-                        + getRequiredPermission(requirePermission) + ") URL:" + request.getRequestURI());
+                            + getRequiredPermission(requirePermission) + ") URL:" + request.getRequestURI());
                 response.setHeader("ddl-auth", "Permission dend");
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             } else {
                 LOGGER.info("User " + currentUser.getName() + " has no access - redirecting (permission="
-                        + getRequiredPermission(requirePermission) + ") URL:" + request.getRequestURI());
+                            + getRequiredPermission(requirePermission) + ") URL:" + request.getRequestURI());
 
                 String requesturl = (String) request.getAttribute(Attributes.REQUEST_URL);
                 if (requesturl == null) {
@@ -84,39 +84,39 @@ public class VWBDenyListener implements PermissionDenyListener {
                 m_session.setAttribute(Attributes.REQUEST_URL, requesturl);
                 m_session.setAttribute(Attributes.TEAM_ID_FOR_JOIN_PUBLIC_TEAM, request.getParameter("teamId"));
                 if(isAjaxRequest(request)){
-                	response.setStatus(450);
+                    response.setStatus(450);
                 }else{
-                	if(isHashURL(requesturl)){
-                		m_session.removeAttribute(Attributes.REQUEST_URL);
-                		request.setAttribute("url", UrlUtil.changeSchemeToHttps(container.getURL(UrlPatterns.LOGIN, null, null, false), request));
-                		request.getRequestDispatcher("/jsp/aone/hash/dealHashRequest.jsp").forward(request, response);
-                	}else{
-                		String redirect = UrlUtil.changeSchemeToHttps(container.getURL(UrlPatterns.LOGIN, null, null, false), request);
-                		response.sendRedirect(redirect);
-                	}
+                    if(isHashURL(requesturl)){
+                        m_session.removeAttribute(Attributes.REQUEST_URL);
+                        request.setAttribute("url", UrlUtil.changeSchemeToHttps(container.getURL(UrlPatterns.LOGIN, null, null, false), request));
+                        request.getRequestDispatcher("/jsp/aone/hash/dealHashRequest.jsp").forward(request, response);
+                    }else{
+                        String redirect = UrlUtil.changeSchemeToHttps(container.getURL(UrlPatterns.LOGIN, null, null, false), request);
+                        response.sendRedirect(redirect);
+                    }
                 }
             }
         } catch (IOException e) {
             LOGGER.error("Redirect failed for:" + e.getMessage(),e);
             throw new InternalVWBException(e.getMessage());
         } catch (ServletException e) {
-        	 LOGGER.error("Redirect failed for:" + e.getMessage(),e);
-        	 throw new InternalVWBException(e.getMessage());
-		}
+            LOGGER.error("Redirect failed for:" + e.getMessage(),e);
+            throw new InternalVWBException(e.getMessage());
+        }
     }
-    
+
     private boolean isHashURL(String url){
-    	if(StringUtils.isNotEmpty(url)){
-    		return url.endsWith("/list");
-    	}
-    	return false;
+        if(StringUtils.isNotEmpty(url)){
+            return url.endsWith("/list");
+        }
+        return false;
     }
-    
+
     private boolean isAjaxRequest(HttpServletRequest request){
-    	String ajaxFlag = request.getHeader("X-Requested-With");
-    	if("XMLHttpRequest".equals(ajaxFlag)){
-    		return true;
-    	}
-    	return false;
+        String ajaxFlag = request.getHeader("X-Requested-With");
+        if("XMLHttpRequest".equals(ajaxFlag)){
+            return true;
+        }
+        return false;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller;
@@ -60,23 +60,23 @@ public class LynxStarmarkController extends BaseController {
     private URLGenerator generator;
     @RequestMapping
     public ModelAndView init(HttpServletRequest request) {
-    	String url = generator.getURL(VWBContext.getCurrentTid(), UrlPatterns.T_LIST, null, null)+"#queryType=myStarFiles";
-    	return new ModelAndView(new RedirectView(url));
-    	
-//        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_STARTMARK);
-//        ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/tag/starmark.jsp");
-//        int tid = VWBContext.getCurrentTid();
-//        String uid = context.getCurrentUID();
-//        mv.addObject("tags", tagService.getTagsNotInGroupForTeam(tid));
-//        mv.addObject("tagGroups", tagService.getTagGroupsForTeam(tid));
-//        List<Resource> reslist = resourceService.getStarmarkResource(uid, tid);
-//        // 合并属于Bundle的Resource
-//        Map<Integer, List<Resource>> bundleItemList = new HashMap<Integer, List<Resource>>();
-//        List<Resource> filterResList = filterResult(context.getSite(), reslist, bundleItemList);
-//        mv.addObject("resourceList", filterResList);
-//        mv.addObject("bundleItemMap", bundleItemList);
-//        mv.addObject(LynxConstants.PAGE_TITLE, "星标文档");
-//        return mv;
+        String url = generator.getURL(VWBContext.getCurrentTid(), UrlPatterns.T_LIST, null, null)+"#queryType=myStarFiles";
+        return new ModelAndView(new RedirectView(url));
+
+        //        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_STARTMARK);
+        //        ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/tag/starmark.jsp");
+        //        int tid = VWBContext.getCurrentTid();
+        //        String uid = context.getCurrentUID();
+        //        mv.addObject("tags", tagService.getTagsNotInGroupForTeam(tid));
+        //        mv.addObject("tagGroups", tagService.getTagGroupsForTeam(tid));
+        //        List<Resource> reslist = resourceService.getStarmarkResource(uid, tid);
+        //        // 合并属于Bundle的Resource
+        //        Map<Integer, List<Resource>> bundleItemList = new HashMap<Integer, List<Resource>>();
+        //        List<Resource> filterResList = filterResult(context.getSite(), reslist, bundleItemList);
+        //        mv.addObject("resourceList", filterResList);
+        //        mv.addObject("bundleItemMap", bundleItemList);
+        //        mv.addObject(LynxConstants.PAGE_TITLE, "星标文档");
+        //        return mv;
     }
 
     @RequestMapping(params = "func=add")
@@ -108,7 +108,7 @@ public class LynxStarmarkController extends BaseController {
 
     /**
      * 将属于Bundle的资源替换成对应的bundle并去重, 将Bundle中的Resource缓存在biMap中用于前台显示
-     * 
+     *
      * @param site
      *            Site对象，访问服务时用到
      * @param resList
@@ -150,5 +150,5 @@ public class LynxStarmarkController extends BaseController {
         return result;
     }
 
-  
+
 }

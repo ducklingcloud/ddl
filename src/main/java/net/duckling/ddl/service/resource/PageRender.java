@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,46 +13,46 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.resource;
 
 
 public class PageRender  {
-	private Resource meta;
-	private PageVersion detail;
-	/**
-	 * @return the meta
-	 */
-	public Resource getMeta() {
-		return meta;
-	}
-	/**
-	 * @param meta the meta to set
-	 */
-	public void setMeta(Resource meta) {
-		this.meta = meta;
-	}
-	/**
-	 * @return the detail
-	 */
-	public PageVersion getDetail() {
-		return detail;
-	}
-	/**
-	 * @param detail the detail to set
-	 */
-	public void setDetail(PageVersion detail) {
-		this.detail = detail;
-	}
-	
-	public PageRender(){}
-	public PageRender(Resource meta,PageVersion detail){
-		this.meta = meta;
-		this.detail = detail;
-	}
-	
-	
+    private Resource meta;
+    private PageVersion detail;
+    /**
+     * @return the meta
+     */
+    public Resource getMeta() {
+        return meta;
+    }
+    /**
+     * @param meta the meta to set
+     */
+    public void setMeta(Resource meta) {
+        this.meta = meta;
+    }
+    /**
+     * @return the detail
+     */
+    public PageVersion getDetail() {
+        return detail;
+    }
+    /**
+     * @param detail the detail to set
+     */
+    public void setDetail(PageVersion detail) {
+        this.detail = detail;
+    }
+
+    public PageRender(){}
+    public PageRender(Resource meta,PageVersion detail){
+        this.meta = meta;
+        this.detail = detail;
+    }
+
+
 
 }

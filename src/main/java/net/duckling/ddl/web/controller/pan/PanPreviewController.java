@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller.pan;
@@ -103,7 +103,7 @@ public class PanPreviewController extends BaseController {
         mv.addObject("isPreview", isPreview(mm.name, mm.size));
         String verStr = "";
         if(version>0){
-        	verStr = "&version="+version;
+            verStr = "&version="+version;
         }
         mv.addObject("clbPreviewUrl", properties.getProperty("duckling.baseURL") + "/wopi/p?remotePath=" + MyURLEncoder.encodeURIComponent(path) +verStr);
         mv.addObject("itemType", "DFile");
@@ -118,7 +118,7 @@ public class PanPreviewController extends BaseController {
     private String getDownloadURL(String path, long version) throws UnsupportedEncodingException {
         return urlGenerator.getURL(UrlPatterns.PAN_DOWNLOAD, URLEncoder.encode(path, "UTF-8"), "version=" + version);
     }
-    
+
     private MeePoRevision findTargetRevision(PanAcl acl, String path, long version) throws MeePoException{
         MeePoRevision tv = null;
         if (version != 0) {
@@ -182,7 +182,7 @@ public class PanPreviewController extends BaseController {
         if (MimeType.isImage(filename)) {
             return "IMAGE";
         } else if (PlainTextHelper.isSupported(MimeType.getSuffix(filename))
-                && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {// 文件超过给定大小时不直接显示
+                   && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {// 文件超过给定大小时不直接显示
             return "TEXT";
         }
         return "FILE";

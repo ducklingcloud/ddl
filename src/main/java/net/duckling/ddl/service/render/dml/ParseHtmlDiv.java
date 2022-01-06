@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -34,27 +34,27 @@ import org.jdom.JDOMException;
  * @author 狄
  */
 public class ParseHtmlDiv extends AbstractParseHtmlElement {
-	
-	private static final Logger LOG = Logger.getLogger(ParseHtmlDiv.class);
-	
+
+    private static final Logger LOG = Logger.getLogger(ParseHtmlDiv.class);
+
     @Override
     public void printAttribute(Element e,Html2DmlEngine html2dmlengine) {
-          Map<String,String> map = new ForgetNullValuesLinkedHashMap<String,String>();
-          map.put( "style", e.getAttributeValue( "style" ) );                    
-          map.put( "class", e.getAttributeValue( "class" ) );
-          map.put( "id", e.getAttributeValue( "id" ) );
-          if( map.size() > 0 )
-          {
-              for( Iterator ito = map.entrySet().iterator(); ito.hasNext(); )
-              {
-                  Map.Entry entry = (Map.Entry)ito.next();
-                  if( !entry.getValue().equals( "" ) )
-                  {
-                      html2dmlengine.getMout().print( " " + entry.getKey() + "=\"" + entry.getValue() + "\"" );
-                  }
-              }
-          }
-        
+        Map<String,String> map = new ForgetNullValuesLinkedHashMap<String,String>();
+        map.put( "style", e.getAttributeValue( "style" ) );
+        map.put( "class", e.getAttributeValue( "class" ) );
+        map.put( "id", e.getAttributeValue( "id" ) );
+        if( map.size() > 0 )
+        {
+            for( Iterator ito = map.entrySet().iterator(); ito.hasNext(); )
+            {
+                Map.Entry entry = (Map.Entry)ito.next();
+                if( !entry.getValue().equals( "" ) )
+                {
+                    html2dmlengine.getMout().print( " " + entry.getKey() + "=\"" + entry.getValue() + "\"" );
+                }
+            }
+        }
+
     }
 
     @Override
@@ -69,9 +69,9 @@ public class ParseHtmlDiv extends AbstractParseHtmlElement {
             try {
                 h2d.getChildren(e, html2dmlengine);
             } catch (IOException e1) {
-            	LOG.error(e1);
+                LOG.error(e1);
             } catch (JDOMException e1) {
-            	LOG.error(e1);
+                LOG.error(e1);
             }
             if(html2dmlengine.getPreType()>0){
                 html2dmlengine.getMout().print("</D_section>");
@@ -90,7 +90,7 @@ public class ParseHtmlDiv extends AbstractParseHtmlElement {
             try {
                 h2d.getChildren(e, html2dmlengine);
             } catch (IOException e1) {
-               LOG.error(e1);
+                LOG.error(e1);
             } catch (JDOMException e1) {
                 LOG.error(e1);
             }
@@ -102,7 +102,7 @@ public class ParseHtmlDiv extends AbstractParseHtmlElement {
         }
     }
 
-    
+
     /*
      * 判断是否需要将div转换成Section
      *
@@ -118,10 +118,10 @@ public class ParseHtmlDiv extends AbstractParseHtmlElement {
             reb=true;
         }
         return reb;
-        
+
     }
-    
-    
+
+
     /*
      * 判断是否需要将div转换成puglin
      *
@@ -138,7 +138,7 @@ public class ParseHtmlDiv extends AbstractParseHtmlElement {
         }
 
         return reb;
-        
+
     }
     /*
      * 将转换后的puglin插件按照DML形势输出
@@ -150,7 +150,7 @@ public class ParseHtmlDiv extends AbstractParseHtmlElement {
      *     ...
      *   </div>
      * </div>
-     *   
+     *
      */
     public void printPlugin(Element element,Html2DmlEngine html2dmlengine){
         html2dmlengine.getMout().println("<D_plugin>" );
@@ -165,7 +165,7 @@ public class ParseHtmlDiv extends AbstractParseHtmlElement {
             }
         }
         html2dmlengine.getMout().println("</D_plugin>" );
-        
-        
+
+
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller.task;
@@ -62,7 +62,7 @@ public class TaskShareController extends TaskBaseController {
     /** 查看任务进度 */
     @RequestMapping(params = "func=process")
     public void process(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("teamCode") String teamCode) {
+                        @PathVariable("teamCode") String teamCode) {
         super.process(request, response, TaskService.TYPE_SHARE);
 
     }
@@ -70,7 +70,7 @@ public class TaskShareController extends TaskBaseController {
     /** 查看一个任务 */
     @RequestMapping(params = "func=view")
     public ModelAndView viewTask(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("teamCode") String teamCode) {
+                                 @PathVariable("teamCode") String teamCode) {
         return super.viewTask(request, response, teamCode, TaskService.TYPE_SHARE);
     }
 
@@ -93,7 +93,7 @@ public class TaskShareController extends TaskBaseController {
         service.setReadStatus(taskId, context.getCurrentUID());
         List<TaskItemShare> items = service.getShareItems(taskId);
         JsonUtil.writeJSONObject(response,
-                JsonUtil.getJSONArrayFromList(ItemWrapper.getView(items, context.getCurrentUID())));
+                                 JsonUtil.getJSONArrayFromList(ItemWrapper.getView(items, context.getCurrentUID())));
 
     }
 
@@ -122,7 +122,7 @@ public class TaskShareController extends TaskBaseController {
             service.updateTask(task);
             // noticeS 当任务完成时，给所有人发个通知
             service.sendNotice(site.getId(), addTaker(task.getTakers(), task.getCreator(), task.getTaskId()), task,
-                    DEntity.DTASK_SHARE, DAction.OVER_TASK, context.getCurrentUID());
+                               DEntity.DTASK_SHARE, DAction.OVER_TASK, context.getCurrentUID());
         } else {
             if (Task.OVER.equals(task.getValid())) {
                 task.setValid(Task.VALID);
@@ -135,14 +135,14 @@ public class TaskShareController extends TaskBaseController {
     /** 任务删除，更改状态 */
     @RequestMapping(params = "func=delete")
     public ModelAndView deleteTask(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("teamCode") String teamCode) {
+                                   @PathVariable("teamCode") String teamCode) {
         return super.doDeleteTask(request, response, teamCode, TaskService.TYPE_SHARE);
     }
 
     /** 归档任务 */
     @RequestMapping(params = "func=dustbin")
     public ModelAndView taskToDustbin(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("teamCode") String teamCode) {
+                                      @PathVariable("teamCode") String teamCode) {
         return super.doToDustbin(request, response, teamCode, TaskService.TYPE_SHARE);
     }
 }

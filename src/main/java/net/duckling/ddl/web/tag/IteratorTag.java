@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -47,8 +47,8 @@ import org.apache.log4j.Logger;
  *  @author Yong Ke
  */
 public abstract class IteratorTag
-    extends BodyTagSupport
-    implements TryCatchFinally
+        extends BodyTagSupport
+        implements TryCatchFinally
 {
 
     protected String      m_pageName;
@@ -59,14 +59,14 @@ public abstract class IteratorTag
 
     /**
      *  Sets the collection that is used to form the iteration.
-     *  
+     *
      *  @param arg A Collection which will be iterated.
      */
     public void setList( Collection arg )
     {
-        if( arg != null ){ 
-        	m_iterator = arg.iterator();
-        
+        if( arg != null ){
+            m_iterator = arg.iterator();
+
         }
     }
 
@@ -89,7 +89,7 @@ public abstract class IteratorTag
     {
         m_iterator = null;
     }
-    
+
     /**
      *  Override this method to reset your own iterator.
      */
@@ -97,16 +97,16 @@ public abstract class IteratorTag
     {
         // No operation here
     }
-    
+
     /**
      *  {@inheritDoc}
      */
     public int doStartTag()
     {
         vwbcontext = VWBContext.getContext((HttpServletRequest)pageContext.getRequest());
-        
+
         resetIterator();
-        
+
         if( m_iterator == null ) return SKIP_BODY;
 
         if( m_iterator.hasNext() )
@@ -122,12 +122,12 @@ public abstract class IteratorTag
      */
     private void buildContext()
     {
-        
-    	VWBContext context = null;
+
+        VWBContext context = null;
         Object o = m_iterator.next();
-       /*
-        *  Push it to the iterator stack, and set the id.
-        */
+        /*
+         *  Push it to the iterator stack, and set the id.
+         */
         pageContext.setAttribute( VWBBaseTag.ATTR_CONTEXT,
                                   context,
                                   PageContext.REQUEST_SCOPE );
@@ -176,15 +176,15 @@ public abstract class IteratorTag
 
         return SKIP_BODY;
     }
-    
+
     /**
      *  In case your tag throws an exception at any point, you can
      *  override this method and implement a custom exception handler.
      *  <p>
      *  By default, this handler does nothing.
-     *  
+     *
      *  @param arg0 The Throwable that the tag threw
-     *  
+     *
      *  @throws Throwable I have no idea why this would throw anything
      */
     public void doCatch(Throwable arg0) throws Throwable
@@ -202,7 +202,7 @@ public abstract class IteratorTag
         resetIterator();
         m_iterator = null;
         m_pageName = null;
-        vwbcontext = null;        
+        vwbcontext = null;
     }
 
 }

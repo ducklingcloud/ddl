@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -45,35 +45,35 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("/system/feedback")
 public class FeedbackController extends BaseController {
-    
+
     @Autowired
     private FeedbackServiceImpl feedbackService;
     @Autowired
     private URLGenerator urlGenerator;
 
-	@RequestMapping
-	public ModelAndView prepare(HttpServletRequest request) {
-		VWBContext context = VWBContext.createContext(request,UrlPatterns.FEEDBACK);
-		ModelAndView mv = layout(".aone.portal", context, "/jsp/aone/feedback/feedback.jsp");
-		return mv;
-	}
+    @RequestMapping
+    public ModelAndView prepare(HttpServletRequest request) {
+        VWBContext context = VWBContext.createContext(request,UrlPatterns.FEEDBACK);
+        ModelAndView mv = layout(".aone.portal", context, "/jsp/aone/feedback/feedback.jsp");
+        return mv;
+    }
 
-	@RequestMapping(params="func=submit")
-	public ModelAndView submitFeedback(HttpServletRequest request) {
-		String email = request.getParameter("email");
-		String message = request.getParameter("message");
-		Feedback f = new Feedback();
-		f.setEmail(email);
-		f.setMessage(message);
-		f.setStatus(Feedback.UNHANDLE);
-		f.setSendTime(new Date());
-		feedbackService.insert(f);
-		String url = urlGenerator.getURL(UrlPatterns.FEEDBACK, null,"func=success");
-		return new ModelAndView(new RedirectView(url));
-	}
+    @RequestMapping(params="func=submit")
+    public ModelAndView submitFeedback(HttpServletRequest request) {
+        String email = request.getParameter("email");
+        String message = request.getParameter("message");
+        Feedback f = new Feedback();
+        f.setEmail(email);
+        f.setMessage(message);
+        f.setStatus(Feedback.UNHANDLE);
+        f.setSendTime(new Date());
+        feedbackService.insert(f);
+        String url = urlGenerator.getURL(UrlPatterns.FEEDBACK, null,"func=success");
+        return new ModelAndView(new RedirectView(url));
+    }
 
-	@RequestMapping(params="func=success")
-	public ModelAndView success(HttpServletRequest request) {
-		return layout(".aone.portal",VWBContext.createContext(request, UrlPatterns.FEEDBACK),"/jsp/aone/feedback/success.jsp");
-	}
+    @RequestMapping(params="func=success")
+    public ModelAndView success(HttpServletRequest request) {
+        return layout(".aone.portal",VWBContext.createContext(request, UrlPatterns.FEEDBACK),"/jsp/aone/feedback/success.jsp");
+    }
 }

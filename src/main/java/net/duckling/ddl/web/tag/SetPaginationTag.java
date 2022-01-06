@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -31,7 +31,7 @@ import net.duckling.ddl.util.TextUtil;
 
 /**
  * Calculate pagination string. Used for page-info and search results
- * 
+ *
  * <P>
  * <B>Attributes</B>
  * </P>
@@ -49,7 +49,7 @@ import net.duckling.ddl.util.TextUtil;
  * <LI>href - href of each page link. (optional)
  * <LI>onclick - onclick of each page link. (optional)
  * </UL>
- * 
+ *
  * @author Yong Ke
  */
 public class SetPaginationTag extends VWBBaseTag {
@@ -65,7 +65,7 @@ public class SetPaginationTag extends VWBBaseTag {
     private String mOnclick;
     private int rid;
     private String urlPatterns;
-    
+
 
     public void initTag() {
         super.initTag();
@@ -108,18 +108,18 @@ public class SetPaginationTag extends VWBBaseTag {
     public void setOnclick(String arg) {
         mOnclick = arg;
     }
-    
-    
+
+
 
     public void setRid(int rid) {
-		this.rid = rid;
-	}
+        this.rid = rid;
+    }
 
-	public void setUrlPatterns(String urlPatterns) {
-		this.urlPatterns = urlPatterns;
-	}
+    public void setUrlPatterns(String urlPatterns) {
+        this.urlPatterns = urlPatterns;
+    }
 
-	// 1 21 41 61
+    // 1 21 41 61
     // 1 21 41 61 81 next last
     // first previous 20 40 *60* 80 100 next last
     // fist previous 40 60 80 100 120
@@ -218,14 +218,14 @@ public class SetPaginationTag extends VWBBaseTag {
      * Generate pagination links <a href='' title='' onclick=''>text</a> for
      * pagination blocks starting a page. Uses m_href and m_onclick as attribute
      * patterns '%s' in the patterns are replaced with page offset
-     * 
+     *
      * @param sb
      *            : stringbuffer to write output to
      * @param page
      *            : start of page block
      * @param onclick
      *            : link text
-     * 
+     *
      **/
     private void appendLink(StringBuffer sb, int page, String fmttextkey,int tid) {
         appendLink2(sb, page, LocaleSupport.getLocalizedMessage(pageContext, fmttextkey),tid);
@@ -242,14 +242,14 @@ public class SetPaginationTag extends VWBBaseTag {
             sb.append(LocaleSupport.getLocalizedMessage(pageContext, fmtkey + ".showall.title"));
         } else {
             sb.append(LocaleSupport.getLocalizedMessage(pageContext, fmtkey + ".show.title", new Object[] { (page),
-                    (page + pagesize - 1) }));
+                        (page + pagesize - 1) }));
         }
         sb.append("\" ");
 
         if (href != null) {
             sb.append("href=\"")
-              .append(urlGenerator.getURL(tid,urlPatterns,Integer.toString(rid), 
-                      "start=" + page + "&query=" + pageContext.getAttribute("query", PageContext.REQUEST_SCOPE))).append("\" ");
+                    .append(urlGenerator.getURL(tid,urlPatterns,Integer.toString(rid),
+                                                "start=" + page + "&query=" + pageContext.getAttribute("query", PageContext.REQUEST_SCOPE))).append("\" ");
         }
 
         if (mOnclick != null) {

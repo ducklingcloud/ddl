@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,8 +33,8 @@ import org.jdom.JDOMException;
  */
 public class PaserDmlHeadingElement extends AbstractParseDmlElement {
 
-	private static final Logger LOG = Logger.getLogger(PaserDmlHeadingElement.class);
-	
+    private static final Logger LOG = Logger.getLogger(PaserDmlHeadingElement.class);
+
     @Override
     public void printAttribute(Element e, Dml2HtmlEngine dml2htmlengine) {
         List attList=e.getAttributes();
@@ -42,8 +42,8 @@ public class PaserDmlHeadingElement extends AbstractParseDmlElement {
             String strAttName=((Attribute)attList.get(i)).getName();
             String strAttValue=((Attribute)attList.get(i)).getValue();
             dml2htmlengine.getMout().print( " " + strAttName+ "=\"" + strAttValue + "\"" );
-            
-           
+
+
         }
         if("h1".equals(e.getName().toLowerCase())){
             dml2htmlengine.setH1index(dml2htmlengine.getH1index()+1);
@@ -58,7 +58,7 @@ public class PaserDmlHeadingElement extends AbstractParseDmlElement {
             dml2htmlengine.setH4index(dml2htmlengine.getH4index()+1);
             dml2htmlengine.getMout().print( " id=\"" +e.getName().toLowerCase()+"_"+ dml2htmlengine.getH4index() + "\"" );
         }
-        
+
 
     }
 
@@ -74,11 +74,11 @@ public class PaserDmlHeadingElement extends AbstractParseDmlElement {
         try {
             d2h.getChildren(element, dml2htmlengine);
         } catch (IOException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         } catch (JDOMException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         }
-        
+
         if(dml2htmlengine.getPreType()>0){
             dml2htmlengine.getMout().print("</"+element.getName().toLowerCase()+">");
         }else{

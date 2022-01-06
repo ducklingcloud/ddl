@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller.pan;
@@ -68,7 +68,7 @@ public class LynxPanUploadController {
     public void uploadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String fileName = getFileNameFromHeader(request);
         if(StringUtil.illTitle(response, fileName)){
-        	return;
+            return;
         }
         String uid = VWBSession.getCurrentUid(request);
         long size = request.getContentLength();
@@ -88,7 +88,7 @@ public class LynxPanUploadController {
     @WebLog(method = "PanUploadFilesIE", params = "parentRid")
     @RequestMapping(method = RequestMethod.POST, params = "func=uploadFiles")
     public void updatePageFile(@RequestParam("qqfile") MultipartFile uplFile, HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+                               HttpServletResponse response) throws IOException {
         String fileName = uplFile.getOriginalFilename();
         String uid = VWBSession.getCurrentUid(request);
         long size = uplFile.getSize();
@@ -101,7 +101,7 @@ public class LynxPanUploadController {
     private void dealResult(HttpServletResponse response, UploadResult re, String uid) {
         JSONObject result = new JSONObject();
         if (re.isStatus()) {
-        	SimpleUser user = aoneUserService.getSimpleUserByUid(uid);
+            SimpleUser user = aoneUserService.getSimpleUserByUid(uid);
             PanResourceBean bean = MeePoMetaToPanBeanUtil.transfer(re.getMeta(),user);
             result.put("success", true);
             result.put("fileExtend", bean.getFileType());
@@ -137,11 +137,11 @@ public class LynxPanUploadController {
         UploadResult re = new UploadResult();
         MeePoMeta meta = null;
         try {
-        	if(FileSizeUtils.ONE_MB*20>size){
-        		meta = service.upload(PanAclUtil.getInstance(request), in, size, remotePath, false);
-        	}else{
-        		meta = service.uploadChunkedFile(PanAclUtil.getInstance(request), in, size, remotePath, false);
-        	}
+            if(FileSizeUtils.ONE_MB*20>size){
+                meta = service.upload(PanAclUtil.getInstance(request), in, size, remotePath, false);
+            }else{
+                meta = service.uploadChunkedFile(PanAclUtil.getInstance(request), in, size, remotePath, false);
+            }
             if (meta == null) {
                 re.status = false;
                 re.setMessage("上传出现问题");

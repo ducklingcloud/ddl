@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -30,10 +30,10 @@ import org.apache.commons.lang.StringUtils;
  *  @author Yong Ke
  */
 public class CheckRequestContextTag
-    extends VWBBaseTag
+        extends VWBBaseTag
 {
     private static final long serialVersionUID = 0L;
-    
+
     private String m_context;
     private String[] m_contextList = {};
 
@@ -44,7 +44,7 @@ public class CheckRequestContextTag
         m_context = null;
         m_contextList = new String[0];
     }
-    
+
     public String getContext()
     {
         return m_context;
@@ -53,18 +53,18 @@ public class CheckRequestContextTag
     public void setContext( String arg )
     {
         m_context = arg;
-        
+
         m_contextList = StringUtils.split(arg,'|');
     }
 
     public final int doVWBStart()
-        throws IOException,
-               ProviderException
+            throws IOException,
+            ProviderException
     {
         for(int i = 0; i < m_contextList.length; i++ )
         {
             String ctx = vwbcontext.getURLPattern();
-            
+
             String checkedCtx = m_contextList[i];
 
             if( checkedCtx.length() > 0 )

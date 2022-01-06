@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.api.pan;
@@ -45,19 +45,19 @@ import com.meepotech.sdk.MeePoException;
 @RequestMapping("/api/pan/pageDelete")
 @RequirePermission(authenticated=true)
 public class APIPanDeleteController {
-	private static final Logger LOG = Logger.getLogger(APIPanDeleteController.class);
-	@Autowired
+    private static final Logger LOG = Logger.getLogger(APIPanDeleteController.class);
+    @Autowired
     private IPanService service;
-	/**
-	 * @param pid 准备删除的页面的ID
-	 * @param request
-	 * @param response
-	 * 返回信息有三个状态，1为删除成功，0为删除失败，-1为页面有人在编辑等操作被锁定，不能删除
-	 */
-	@WebLog(method = "apiPanDelete", params = "rid,itemId,itemType")
-	@RequestMapping
-	public void delete(HttpServletRequest request, HttpServletResponse response){
-		JSONObject obj = new JSONObject();
+    /**
+     * @param pid 准备删除的页面的ID
+     * @param request
+     * @param response
+     * 返回信息有三个状态，1为删除成功，0为删除失败，-1为页面有人在编辑等操作被锁定，不能删除
+     */
+    @WebLog(method = "apiPanDelete", params = "rid,itemId,itemType")
+    @RequestMapping
+    public void delete(HttpServletRequest request, HttpServletResponse response){
+        JSONObject obj = new JSONObject();
         int delete = 1;
         String rid = decode(request.getParameter("rid"));
         boolean result = false;
@@ -68,17 +68,17 @@ public class APIPanDeleteController {
             LOG.error("", e);
         }
         if(result){
-        	LOG.info(acl.getUid()+" delete "+rid);
+            LOG.info(acl.getUid()+" delete "+rid);
         }
-		if(result){
-			delete = 1;
-		}
-		obj.put("succ", delete);
-    	JsonUtil.writeJSONObject(response, obj);
-	}
-	
-	
-	private String decode(String s) {
+        if(result){
+            delete = 1;
+        }
+        obj.put("succ", delete);
+        JsonUtil.writeJSONObject(response, obj);
+    }
+
+
+    private String decode(String s) {
         try {
             return URLDecoder.decode(s, "UTF-8");
         } catch (UnsupportedEncodingException e) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.controller;
@@ -34,14 +34,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequirePermission(target = "team", operation = "view")
 @RequestMapping("/{teamCode}/previewRedirect")
 public class PreviewRedirectController extends BaseController {
-	@Autowired
-	private DucklingProperties properties;
-	@RequestMapping
-	public void display(HttpServletRequest request,HttpServletResponse response) throws IOException{
-		int docid = Integer.parseInt(request.getParameter("docid"));
-		int version = Integer.parseInt(request.getParameter("version"));
-		response.sendRedirect(properties.get("duckling.clb.url")+"/wopi/p?accessToken="+AttachmentController.getClbToken(docid, version, properties));
-	}
-	
-}
+    @Autowired
+    private DucklingProperties properties;
+    @RequestMapping
+    public void display(HttpServletRequest request,HttpServletResponse response) throws IOException{
+        int docid = Integer.parseInt(request.getParameter("docid"));
+        int version = Integer.parseInt(request.getParameter("version"));
+        response.sendRedirect(properties.get("duckling.clb.url")+"/wopi/p?accessToken="+AttachmentController.getClbToken(docid, version, properties));
+    }
 
+}

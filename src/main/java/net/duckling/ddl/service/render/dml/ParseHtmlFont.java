@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,25 +33,25 @@ import org.jdom.JDOMException;
  */
 public class ParseHtmlFont extends AbstractParseHtmlElement {
 
-	private static final Logger LOG = Logger.getLogger(ParseHtmlFont.class);
+    private static final Logger LOG = Logger.getLogger(ParseHtmlFont.class);
 
     @Override
     public void printAttribute(Element e,Html2DmlEngine html2dmlengine) {
-          Map<String,String> map = new ForgetNullValuesLinkedHashMap<String,String>();
-          map.put( "style", e.getAttributeValue( "style" ) );   
-          map.put( "color", e.getAttributeValue( "color" ) );  
-          if( map.size() > 0 )
-          {
-              for( Iterator ito = map.entrySet().iterator(); ito.hasNext(); )
-              {
-                  Map.Entry entry = (Map.Entry)ito.next();
-                  if( !entry.getValue().equals( "" ) )
-                  {
-                      html2dmlengine.getMout().print( " " + entry.getKey() + "=\"" + entry.getValue() + "\"" );
-                  }
-              }
-          }
-        
+        Map<String,String> map = new ForgetNullValuesLinkedHashMap<String,String>();
+        map.put( "style", e.getAttributeValue( "style" ) );
+        map.put( "color", e.getAttributeValue( "color" ) );
+        if( map.size() > 0 )
+        {
+            for( Iterator ito = map.entrySet().iterator(); ito.hasNext(); )
+            {
+                Map.Entry entry = (Map.Entry)ito.next();
+                if( !entry.getValue().equals( "" ) )
+                {
+                    html2dmlengine.getMout().print( " " + entry.getKey() + "=\"" + entry.getValue() + "\"" );
+                }
+            }
+        }
+
     }
 
     @Override
@@ -66,9 +66,9 @@ public class ParseHtmlFont extends AbstractParseHtmlElement {
         try {
             h2d.getChildren(e, html2dmlengine);
         } catch (IOException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         } catch (JDOMException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         }
         if(html2dmlengine.getPreType()>0){
             html2dmlengine.getMout().print("</font>");

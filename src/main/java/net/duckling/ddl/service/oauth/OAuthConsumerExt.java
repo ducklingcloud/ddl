@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -27,26 +27,26 @@ import net.oauth.OAuthConsumer;
  * @author xiejj@cnic.cn
  */
 public class OAuthConsumerExt extends OAuthConsumer {
-	private static final long serialVersionUID = -350707016188146128L;
-	public OAuthConsumerExt(String callbackURL, String consumerKey,
-            String consumerSecret) {
-		super(callbackURL, consumerKey, consumerSecret, null);
-		enabled=true;
-	}
+    private static final long serialVersionUID = -350707016188146128L;
+    public OAuthConsumerExt(String callbackURL, String consumerKey,
+                            String consumerSecret) {
+        super(callbackURL, consumerKey, consumerSecret, null);
+        enabled=true;
+    }
 
-	private boolean enabled;
-	public boolean isEnabled(){
-		return this.enabled;
-	}
-	public void setEnable(boolean enable){
-		this.enabled=enable;
-	}
-	public boolean isUseXAuth() {
-		return useXAuth;
-	}
-	public void setUseXAuth(boolean useXAuth) {
-		this.useXAuth = useXAuth;
-	}
+    private boolean enabled;
+    public boolean isEnabled(){
+        return this.enabled;
+    }
+    public void setEnable(boolean enable){
+        this.enabled=enable;
+    }
+    public boolean isUseXAuth() {
+        return useXAuth;
+    }
+    public void setUseXAuth(boolean useXAuth) {
+        this.useXAuth = useXAuth;
+    }
 
-	private boolean useXAuth;
+    private boolean useXAuth;
 }

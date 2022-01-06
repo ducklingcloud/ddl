@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -36,9 +36,9 @@ import net.duckling.ddl.util.SiteUtil;
 
 /**
  * 代表当前请求的类
- * 
+ *
  * @author xiejj@cnic.cn
- * 
+ *
  * @creation Jan 28, 2010 9:14:35 AM
  */
 public class VWBContext {
@@ -51,7 +51,7 @@ public class VWBContext {
     public static final int LATEST_VERSION = -1;
 
     private static Resource getResource(int rid){
-    	return DDLFacade.getBean(IResourceService.class).getResource(rid);
+        return DDLFacade.getBean(IResourceService.class).getResource(rid);
     }
 
     public static VWBContext createContext(HttpServletRequest request, String requestContext) {
@@ -97,17 +97,17 @@ public class VWBContext {
     }
 
     public static Site findSite(HttpServletRequest request) {
-		Site site = (Site) request.getAttribute(Attributes.REQUEST_SITE_KEY);
-		if (site == null) {
-			String teamCode = SiteUtil.parseTeamCode(request);
-			if (teamCode != null) {
-				VWBContainer container = VWBContainerImpl.findContainer();
-				site = container.getSiteByName(teamCode);
-				request.setAttribute(Attributes.REQUEST_SITE_KEY, site);
-			}
-		}
-		return site;
-	}
+        Site site = (Site) request.getAttribute(Attributes.REQUEST_SITE_KEY);
+        if (site == null) {
+            String teamCode = SiteUtil.parseTeamCode(request);
+            if (teamCode != null) {
+                VWBContainer container = VWBContainerImpl.findContainer();
+                site = container.getSiteByName(teamCode);
+                request.setAttribute(Attributes.REQUEST_SITE_KEY, site);
+            }
+        }
+        return site;
+    }
 
     public static VWBContext getContext(HttpServletRequest request) {
         return (VWBContext) request.getAttribute(CONTEXT_KEY);
@@ -121,23 +121,23 @@ public class VWBContext {
         }
     }
     public static String getCurrentTeamCode(){
-    	int tid = getCurrentTid();
-    	Team team =DDLFacade.getBean(TeamService.class).getTeamByID(tid);
-    	if(team!=null){
-    		return team.getName();
-    	}
-    	return null;
+        int tid = getCurrentTid();
+        Team team =DDLFacade.getBean(TeamService.class).getTeamByID(tid);
+        if(team!=null){
+            return team.getName();
+        }
+        return null;
     }
 
     public static Resource getResource(int rid, String itemType){
-    	return DDLFacade.getBean(IResourceService.class).getResource(rid, getCurrentTid());
+        return DDLFacade.getBean(IResourceService.class).getResource(rid, getCurrentTid());
     }
 
     public static void saveSite(HttpServletRequest request, Site site) {
-		if (site != null) {
-			request.setAttribute(Attributes.REQUEST_SITE_KEY, site);
-		}
-	}
+        if (site != null) {
+            request.setAttribute(Attributes.REQUEST_SITE_KEY, site);
+        }
+    }
 
     public static void setCurrentTid(int tid) {
         if (tid != -1) {
@@ -154,7 +154,7 @@ public class VWBContext {
     private HttpServletRequest request;
 
     private Resource resource;
-    
+
     private int rid;
 
     private VWBSession session;
@@ -301,7 +301,7 @@ public class VWBContext {
         return VWBContext.getCurrentTid();
     }
 
-    
+
     public String getURLPattern() {
         return urlPattern;
     }
@@ -346,9 +346,9 @@ public class VWBContext {
         this.itemType = itemType;
     }
     public void setResource(Resource resource){
-    	this.resource = resource;
+        this.resource = resource;
     }
-    
+
     public void setRid(int rid) {
         this.rid = rid;
     }
@@ -356,11 +356,11 @@ public class VWBContext {
     public void setUseDData(boolean useDData) {
         this.useDData = useDData;
     }
-	public void setVariable(String key, Object val) {
+    public void setVariable(String key, Object val) {
         m_variables.put(key, val);
     }
 
-	public void setWysiwygEditorMode(String wysiwygEditorMode) {
+    public void setWysiwygEditorMode(String wysiwygEditorMode) {
         this.wysiwygEditorMode = wysiwygEditorMode;
     }
 }

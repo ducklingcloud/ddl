@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -24,28 +24,28 @@ package net.duckling.ddl.util;
  * @author xiejj@cnic.cn
  */
 public final class NumberFormatUtil {
-	private NumberFormatUtil(){};
-	public static int parseInt(String intStr, int defaultValue){
-		try{
-			return Integer.parseInt(intStr);
-		}catch (NumberFormatException e){
-			return defaultValue;
-		}
-	}
-	public static String getSizeShort(long size){
-		String sizeShort;
-		if (size>ONE_GB){
-			sizeShort=String.format("%.2fGB", ((float)size/ONE_GB));
-		}else if (size>ONE_MB){
-			sizeShort=String.format("%.2fMB", ((float)size/ONE_MB));
-		}else if (size>ONE_KB){
-			sizeShort=String.format("%.2fKB", ((float)size/ONE_KB));
-		}else{
-			sizeShort=String.format("%dB", size);
-		}
-		return sizeShort;
-	}
-	private static final int ONE_KB=1024;
-	private static final int ONE_MB=1024*1024;
-	private static final int ONE_GB=1024*1024*1024;
+    private NumberFormatUtil(){};
+    public static int parseInt(String intStr, int defaultValue){
+        try{
+            return Integer.parseInt(intStr);
+        }catch (NumberFormatException e){
+            return defaultValue;
+        }
+    }
+    public static String getSizeShort(long size){
+        String sizeShort;
+        if (size>ONE_GB){
+            sizeShort=String.format("%.2fGB", ((float)size/ONE_GB));
+        }else if (size>ONE_MB){
+            sizeShort=String.format("%.2fMB", ((float)size/ONE_MB));
+        }else if (size>ONE_KB){
+            sizeShort=String.format("%.2fKB", ((float)size/ONE_KB));
+        }else{
+            sizeShort=String.format("%dB", size);
+        }
+        return sizeShort;
+    }
+    private static final int ONE_KB=1024;
+    private static final int ONE_MB=1024*1024;
+    private static final int ONE_GB=1024*1024*1024;
 }

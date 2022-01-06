@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,27 +13,27 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 /**
- * 
+ *
  */
 package net.duckling.ddl.service.mail.compile;
 
 /**
- * 
+ *
  * 渲染工具类会抛出的一场
  * @author lvly
  * @since 2012-11-7
  */
 public class RenderException extends RuntimeException{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1146432029661518051L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1146432029661518051L;
 
-	public RenderException(String msg){
-		super(msg);
-	}
+    public RenderException(String msg){
+        super(msg);
+    }
 }

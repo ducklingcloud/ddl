@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.interceptor.access;
@@ -53,7 +53,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     private PermissionResolver resolver = new PermissionResolver();
 
     private boolean checkTeamNotFound(HttpServletRequest request, HttpServletResponse response,
-            RequirePermission permission) throws IOException {
+                                      RequirePermission permission) throws IOException {
         Site site = VWBContext.findSite(request);
         if (isTeamTarget(permission.target()) && site == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -72,7 +72,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             Team team = getTeamFromRegistURL(viewUrl);
             if (null != team) {
                 if (Team.ACCESS_PROTECTED.equals(team.getAccessType())
-                        || Team.ACCESS_PUBLIC.equals(team.getAccessType())) {
+                    || Team.ACCESS_PUBLIC.equals(team.getAccessType())) {
                     redirectURL = urlGenerator.getURL(UrlPatterns.JOIN_PUBLIC_TEAM, null, "func=join&teamId="+team.getId());
                 } else {
                     redirectURL = urlGenerator.getURL(UrlPatterns.T_TEAM_HOME, null,null);
@@ -113,15 +113,15 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             response.sendRedirect(url);
             return true;
         }
-//        System.out.println("uri:" + request.getRequestURI());
-        
+        //        System.out.println("uri:" + request.getRequestURI());
+
         String methodName = request.getParameter(param);
         RequirePermission permission = resolver.findPermission(handlerMethod.getBean(), methodName);
         if (permission == null) {
             return true;
         }
         if(isPanFileQuery(request)){
-        	return true;
+            return true;
         }
         if (!checkTeamNotFound(request, response, permission)) {
             return false;
@@ -147,17 +147,17 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         }
     }
     public void setTeamService(TeamService teamService){
-    	this.teamService= teamService;
+        this.teamService= teamService;
     }
     public void setListener(PermissionDenyListener listener) {
         this.listener = listener;
     }
     public boolean isPanFileQuery(HttpServletRequest request){
-    	if(request.getRequestURI().contains("/pan/fileManager")){
-    		VWBSession vwbSession = VWBSession.findSession(request);
-			return vwbSession.isAuthenticated();
-    	}
-    	return false;
+        if(request.getRequestURI().contains("/pan/fileManager")){
+            VWBSession vwbSession = VWBSession.findSession(request);
+            return vwbSession.isAuthenticated();
+        }
+        return false;
     }
     public void setParam(String param) {
         this.param = param;

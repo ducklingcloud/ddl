@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -34,7 +34,7 @@ import org.jdom.output.XMLOutputter;
 
 /**
  * Introduction Here.
- * 
+ *
  * @date 2010-3-4
  * @author diyanliang@cnic.cn
  */
@@ -59,7 +59,7 @@ public class HtmlStringToDMLTranslator {
         }
         if (html.length() > 35) {
             if ((html.substring(html.length() - 35, html.length()))
-                    .equalsIgnoreCase("<p><br type=\"_moz\"></br></p></body>")) {
+                .equalsIgnoreCase("<p><br type=\"_moz\"></br></p></body>")) {
                 html = html.substring(0, html.length() - 35) + "</BODY>";
             }
         }

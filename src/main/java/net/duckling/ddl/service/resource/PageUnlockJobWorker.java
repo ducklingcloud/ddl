@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -38,35 +38,35 @@ import net.duckling.ddl.service.timer.JobTask;
  * @author Clive Lee
  */
 public class PageUnlockJobWorker implements JobTask  {
-	private static final Logger LOG = Logger.getLogger(PageUnlockJobWorker.class);
-	@Autowired
-	private PageLockProvider provider;
-	@Autowired
-	private JobmasterService jobmaster;
+    private static final Logger LOG = Logger.getLogger(PageUnlockJobWorker.class);
+    @Autowired
+    private PageLockProvider provider;
+    @Autowired
+    private JobmasterService jobmaster;
 
-	public void execute(Date scheduledDate) {
-		if (jobmaster.take(buildJobName(scheduledDate))){
-			cleanTimeoutLock();
-		}
-	}
-	
-	private void cleanTimeoutLock(){
-		List<PageLock> timeoutLocks = provider.getTimeoutLocks();
-		for(PageLock lock:timeoutLocks) {
-			Draft draft = DDLFacade.getBean(IDraftService.class).getManualSaveDraft(lock.getTid(), lock.getRid(), lock.getUid());
-			if(draft!=null){
-				try{
-					DDLFacade.getBean(ResourceOperateService.class).publishManualSaveDraft(lock.getMaxVersion(),draft);
-				}catch(Exception e){
-					LOG.error("清除页面锁错误", e);
-				}
-			}
-		}
-		provider.clearTimeoutLock(timeoutLocks);
-	}
-	
-	private String buildJobName(Date currentDay) {
-		return "pageUnlockJob"+DateFormatUtils.format(currentDay, "yyyy-MM-dd HH:mm");
-	}
+    public void execute(Date scheduledDate) {
+        if (jobmaster.take(buildJobName(scheduledDate))){
+            cleanTimeoutLock();
+        }
+    }
+
+    private void cleanTimeoutLock(){
+        List<PageLock> timeoutLocks = provider.getTimeoutLocks();
+        for(PageLock lock:timeoutLocks) {
+            Draft draft = DDLFacade.getBean(IDraftService.class).getManualSaveDraft(lock.getTid(), lock.getRid(), lock.getUid());
+            if(draft!=null){
+                try{
+                    DDLFacade.getBean(ResourceOperateService.class).publishManualSaveDraft(lock.getMaxVersion(),draft);
+                }catch(Exception e){
+                    LOG.error("清除页面锁错误", e);
+                }
+            }
+        }
+        provider.clearTimeoutLock(timeoutLocks);
+    }
+
+    private String buildJobName(Date currentDay) {
+        return "pageUnlockJob"+DateFormatUtils.format(currentDay, "yyyy-MM-dd HH:mm");
+    }
 
 }

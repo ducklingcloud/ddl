@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.sync;
@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.List;
 
 public class FileMeta {
-	
-	private int tid;
+
+    private int tid;
     /**
      * 文件id号,全称为file\_id
      */
@@ -40,7 +40,7 @@ public class FileMeta {
      * 文件名
      */
     private String name;
-    
+
     private String size;
     /**
      * 客户器端最后修改时间
@@ -68,14 +68,14 @@ public class FileMeta {
     private List<FileMeta> children;
 
     public int getTid() {
-		return tid;
-	}
+        return tid;
+    }
 
-	public void setTid(int tid) {
-		this.tid = tid;
-	}
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
 
-	public long getFid() {
+    public long getFid() {
         return fid;
     }
 
@@ -98,16 +98,16 @@ public class FileMeta {
     public void setPath(String path) {
         this.path = path;
     }
-    
+
     public String getName() {
-		return name;
-	}
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getSize() {
+    public String getSize() {
         return size;
     }
 
@@ -124,14 +124,14 @@ public class FileMeta {
     }
 
     public boolean isDir() {
-		return isDir;
-	}
+        return isDir;
+    }
 
-	public void setDir(boolean isDir) {
-		this.isDir = isDir;
-	}
+    public void setDir(boolean isDir) {
+        this.isDir = isDir;
+    }
 
-	public long getPfid() {
+    public long getPfid() {
         return pfid;
     }
 
@@ -163,28 +163,28 @@ public class FileMeta {
         this.checksum = checksum;
     }
 
-	public String getUploadUser() {
-		return uploadUser;
-	}
+    public String getUploadUser() {
+        return uploadUser;
+    }
 
-	public void setUploadUser(String uploadUser) {
-		this.uploadUser = uploadUser;
-	}
+    public void setUploadUser(String uploadUser) {
+        this.uploadUser = uploadUser;
+    }
 
-	public String getMimetype() {
-		return mimetype;
-	}
+    public String getMimetype() {
+        return mimetype;
+    }
 
-	public void setMimetype(String mimetype) {
-		this.mimetype = mimetype;
-	}
+    public void setMimetype(String mimetype) {
+        this.mimetype = mimetype;
+    }
 
-	public List<FileMeta> getChildren() {
-		return children;
-	}
+    public List<FileMeta> getChildren() {
+        return children;
+    }
 
-	public void setChildren(List<FileMeta> children) {
-		this.children = children;
-	}
+    public void setChildren(List<FileMeta> children) {
+        this.children = children;
+    }
 
 }

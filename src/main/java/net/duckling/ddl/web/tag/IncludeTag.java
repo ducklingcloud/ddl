@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -35,10 +35,10 @@ import net.duckling.ddl.util.TextUtil;
  *  @author Yong Ke
  */
 public class IncludeTag
-    extends VWBBaseTag
+        extends VWBBaseTag
 {
     private static final long serialVersionUID = 0L;
-    
+
     protected String m_page;
 
     public void initTag()
@@ -58,8 +58,8 @@ public class IncludeTag
     }
 
     public final int doVWBStart()
-        throws IOException,
-               ProviderException
+            throws IOException,
+            ProviderException
     {
         // WikiEngine engine = m_wikiContext.getEngine();
 
@@ -67,12 +67,12 @@ public class IncludeTag
     }
 
     public final int doEndTag()
-        throws JspException
+            throws JspException
     {
         try
         {
             String page = m_page;
-            
+
             if( page == null )
             {
                 pageContext.getOut().println("No template file called '"+TextUtil.replaceEntities(m_page)+"'");

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -27,7 +27,7 @@ import net.duckling.ddl.util.TextUtil;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * 
+ *
  * @date Mar 2, 2010
  * @author xiejj@cnic.cn
  */
@@ -36,13 +36,13 @@ public class ContainerURLConstructor implements URLConstructor {
     private String baseURL = "";
     private boolean m_useRelative = false;
     public ContainerURLConstructor(String baseUrl, String useRelative){
-    	this.baseURL = baseUrl;
-    	this.basePath = getBasePath(baseUrl);
-    	if ( "relative".equals(useRelative)){
-    		this.m_useRelative = true;
-    	}else{
-    		this.m_useRelative = false;
-    	}
+        this.baseURL = baseUrl;
+        this.basePath = getBasePath(baseUrl);
+        if ( "relative".equals(useRelative)){
+            this.m_useRelative = true;
+        }else{
+            this.m_useRelative = false;
+        }
     }
     private String buildURLWithFullParam(String action, String name, String params, boolean absolute) {
         if (UrlPatterns.PLAIN.equals(action) && !StringUtils.isEmpty(params)) {
@@ -67,7 +67,7 @@ public class ContainerURLConstructor implements URLConstructor {
      * 合成URL URLPattern中包含以下内容时: %u 使用相对地址时使用basepath替换,使用绝对地址时使用baseURL替换 %U
      * 使用绝对地址BaseURL替换 %p 用basePath替换 %n 用page替换 %v 用ViewPort替换(page/) %s 用站点替换
      * %t Team ID
-     * 
+     *
      * @param urlpattern
      *            url的模式
      * @param page

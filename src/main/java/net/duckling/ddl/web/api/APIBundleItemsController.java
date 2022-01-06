@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -46,26 +46,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/bundleItems")
 @RequirePermission(target="team", operation="view")
 public class APIBundleItemsController extends APIBaseResourceController {
-    
-	@Autowired
-	private FolderPathService folderPathService;
-	@SuppressWarnings("unchecked")
-	@RequestMapping
-	public void service(HttpServletRequest request, HttpServletResponse response){
-		JSONObject object= new JSONObject();
-		Site site =  findSite(request);
-		List<Resource> elementList = null;
-		
-		String bidStr = request.getParameter("bid");
-		if(StringUtils.isNotEmpty(bidStr)) {// 查找指定bundle下的所有文件
-			int tid = site.getId();
-			int bid = Integer.parseInt(bidStr);
-			elementList = folderPathService.getChildren(tid, bid);
-		}
-		
-		JSONArray array = JsonUtil.getJSONArrayFromResourceList(elementList);
-		object.put("records", array);
-		JsonUtil.writeJSONObject(response, object);
-	}
-	
+
+    @Autowired
+    private FolderPathService folderPathService;
+    @SuppressWarnings("unchecked")
+    @RequestMapping
+    public void service(HttpServletRequest request, HttpServletResponse response){
+        JSONObject object= new JSONObject();
+        Site site =  findSite(request);
+        List<Resource> elementList = null;
+
+        String bidStr = request.getParameter("bid");
+        if(StringUtils.isNotEmpty(bidStr)) {// 查找指定bundle下的所有文件
+            int tid = site.getId();
+            int bid = Integer.parseInt(bidStr);
+            elementList = folderPathService.getChildren(tid, bid);
+        }
+
+        JSONArray array = JsonUtil.getJSONArrayFromResourceList(elementList);
+        object.put("records", array);
+        JsonUtil.writeJSONObject(response, object);
+    }
+
 }

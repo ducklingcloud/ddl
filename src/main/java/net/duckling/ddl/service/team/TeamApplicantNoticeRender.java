@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.team;
@@ -29,25 +29,25 @@ import java.io.Serializable;
  */
 public class TeamApplicantNoticeRender implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private TeamApplicant teamApplicant;
-	private String teamName;
-	
-	public TeamApplicant getTeamApplicant() {
-		return teamApplicant;
-	}
-	public void setTeamApplicant(TeamApplicant teamApplicant) {
-		this.teamApplicant = teamApplicant;
-	}
-	public String getTeamName() {
-		return teamName;
-	}
-	public void setTeamName(String teamName) {
-		this.teamName = teamName;
-	}
-	
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    private TeamApplicant teamApplicant;
+    private String teamName;
+
+    public TeamApplicant getTeamApplicant() {
+        return teamApplicant;
+    }
+    public void setTeamApplicant(TeamApplicant teamApplicant) {
+        this.teamApplicant = teamApplicant;
+    }
+    public String getTeamName() {
+        return teamName;
+    }
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
 }

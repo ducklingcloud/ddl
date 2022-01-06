@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.tag;
@@ -32,99 +32,99 @@ import net.duckling.ddl.service.url.URLGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class URLGeneratorTag extends VWBBaseTag implements BodyTag {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7607579157789951939L;
-	private String pattern;
-	private String nValue;
-	private String params;
-	private boolean absolute;
-	URLGenerator generator;
-	
-	public String getPattern() {
-		return pattern;
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7607579157789951939L;
+    private String pattern;
+    private String nValue;
+    private String params;
+    private boolean absolute;
+    URLGenerator generator;
 
-	public void setPattern(String pattern) {
-		this.pattern = pattern;
-	}
+    public String getPattern() {
+        return pattern;
+    }
 
-	public String getnValue() {
-		return nValue;
-	}
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
 
-	public void setnValue(String nValue) {
-		this.nValue = nValue;
-	}
+    public String getnValue() {
+        return nValue;
+    }
 
-	public String getParams() {
-		return params;
-	}
+    public void setnValue(String nValue) {
+        this.nValue = nValue;
+    }
 
-	public void setParams(String params) {
-		this.params = params;
-	}
+    public String getParams() {
+        return params;
+    }
 
-	public boolean isAbsolute() {
-		return absolute;
-	}
+    public void setParams(String params) {
+        this.params = params;
+    }
 
-	public void setAbsolute(boolean absolute) {
-		this.absolute = absolute;
-	}
+    public boolean isAbsolute() {
+        return absolute;
+    }
 
-	@Override
-	public void setBodyContent(BodyContent b) {
-		
-	}
-	
-	private String getUrl(){
-		initGenerator();
-		int tid = VWBContext.getCurrentTid();
-		if(tid<=0){
-			if(absolute){
-				return generator.getAbsoluteURL(pattern, nValue, params);
-			}else{
-				return generator.getURL(pattern, nValue, params);
-			}
-		}else{
-			if(absolute){
-				return generator.getAbsoluteURL(tid,pattern, nValue, params);
-			}else{
-				return generator.getURL(tid, pattern, nValue, params);
-			}
-		}
-	}
-	private void initGenerator() {
-		if(generator==null){
-			synchronized (this) {
-				if(generator==null){
-					generator = DDLFacade.getBean(URLGenerator.class);
-				}
-			}
-		}
-	}
+    public void setAbsolute(boolean absolute) {
+        this.absolute = absolute;
+    }
 
-	@Override
-	public int doEndTag() throws JspException {
-		JspWriter out = pageContext.getOut();
-		try {
-			out.append(getUrl());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return EVAL_PAGE;
-	}
-	
-	@Override
-	public void doInitBody() throws JspException {
-		
-	}
+    @Override
+    public void setBodyContent(BodyContent b) {
 
-	@Override
-	public int doVWBStart() throws Exception {
-		return 0;
-	}
+    }
+
+    private String getUrl(){
+        initGenerator();
+        int tid = VWBContext.getCurrentTid();
+        if(tid<=0){
+            if(absolute){
+                return generator.getAbsoluteURL(pattern, nValue, params);
+            }else{
+                return generator.getURL(pattern, nValue, params);
+            }
+        }else{
+            if(absolute){
+                return generator.getAbsoluteURL(tid,pattern, nValue, params);
+            }else{
+                return generator.getURL(tid, pattern, nValue, params);
+            }
+        }
+    }
+    private void initGenerator() {
+        if(generator==null){
+            synchronized (this) {
+                if(generator==null){
+                    generator = DDLFacade.getBean(URLGenerator.class);
+                }
+            }
+        }
+    }
+
+    @Override
+    public int doEndTag() throws JspException {
+        JspWriter out = pageContext.getOut();
+        try {
+            out.append(getUrl());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return EVAL_PAGE;
+    }
+
+    @Override
+    public void doInitBody() throws JspException {
+
+    }
+
+    @Override
+    public int doVWBStart() throws Exception {
+        return 0;
+    }
 
 }

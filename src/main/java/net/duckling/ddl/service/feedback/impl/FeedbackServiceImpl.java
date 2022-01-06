@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,21 +33,21 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
-	@Autowired
-	private FeedbackDAO feedbackDao;
+    @Autowired
+    private FeedbackDAO feedbackDao;
 
-	@Override
-	public void insert(Feedback f) {
-		feedbackDao.inset(f);
-	}
+    @Override
+    public void insert(Feedback f) {
+        feedbackDao.inset(f);
+    }
 
-	@Override
-	public List<Feedback> getFeedbackList(String type) {
-		return feedbackDao.getFeedbackByType(type);
-	}
+    @Override
+    public List<Feedback> getFeedbackList(String type) {
+        return feedbackDao.getFeedbackByType(type);
+    }
 
-	@Override
-	public List<Feedback> getAll() {
-		return feedbackDao.getAll();
-	}
+    @Override
+    public List<Feedback> getAll() {
+        return feedbackDao.getAll();
+    }
 }

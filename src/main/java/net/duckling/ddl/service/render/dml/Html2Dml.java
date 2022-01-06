@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -47,7 +47,7 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * Introduction Here.
- * 
+ *
  * @date 2010-3-8
  * @author 狄
  */
@@ -301,7 +301,7 @@ public class Html2Dml {
                     html2dmlengine.getMout().print(s);
                 } else {
                     s = s.replaceAll("[\\r\\n\\f\\u0085\\u2028\\u2029\\ufeff]", "");
-                    
+
                     html2dmlengine.getMout().println(s);
 
                 }
@@ -357,7 +357,7 @@ public class Html2Dml {
 
             String plugin = res.group(2);
             String args = pluginstr.substring(res.endOffset(0),
-                    pluginstr.length() - (pluginstr.charAt(pluginstr.length() - 1) == '}' ? 1 : 0));
+                                              pluginstr.length() - (pluginstr.charAt(pluginstr.length() - 1) == '}' ? 1 : 0));
             try {
 
                 Map<String,String> arglist = parseArgs(args);
@@ -401,33 +401,33 @@ public class Html2Dml {
             type = tok.nextToken();
 
             switch (type) {
-            case StreamTokenizer.TT_EOF:
-                quit = true;
-                s = null;
-                break;
+                case StreamTokenizer.TT_EOF:
+                    quit = true;
+                    s = null;
+                    break;
 
-            case StreamTokenizer.TT_WORD:
-                s = tok.sval;
-                potentialEmptyLine = false;
-                break;
+                case StreamTokenizer.TT_WORD:
+                    s = tok.sval;
+                    potentialEmptyLine = false;
+                    break;
 
-            case StreamTokenizer.TT_EOL:
-                quit = potentialEmptyLine;
-                potentialEmptyLine = true;
-                s = null;
-                break;
+                case StreamTokenizer.TT_EOL:
+                    quit = potentialEmptyLine;
+                    potentialEmptyLine = true;
+                    s = null;
+                    break;
 
-            case StreamTokenizer.TT_NUMBER:
-                s = Integer.toString(new Double(tok.nval).intValue());
-                potentialEmptyLine = false;
-                break;
+                case StreamTokenizer.TT_NUMBER:
+                    s = Integer.toString(new Double(tok.nval).intValue());
+                    potentialEmptyLine = false;
+                    break;
 
-            case '\'':
-                s = tok.sval;
-                break;
+                case '\'':
+                    s = tok.sval;
+                    break;
 
-            default:
-                s = null;
+                default:
+                    s = null;
             }
 
             //
@@ -478,8 +478,8 @@ public class Html2Dml {
             Object key = entry.getKey();
             Object value = entry.getValue();
             html2dmlengine.getMout().println(
-                    "<D_parameter " + ((String) key).trim().replaceAll("[\\r\\n\\f\\u0085\\u2028\\u2029\\ufeff]", "")
-                            + "=\"" + ((String) value) + "\"/>");
+                "<D_parameter " + ((String) key).trim().replaceAll("[\\r\\n\\f\\u0085\\u2028\\u2029\\ufeff]", "")
+                + "=\"" + ((String) value) + "\"/>");
 
         }
         html2dmlengine.getMout().println("</D_plugin>");

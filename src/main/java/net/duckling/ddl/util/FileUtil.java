@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -52,92 +52,92 @@ import org.apache.log4j.Logger;
  * @author zzb
  */
 public final class FileUtil {
-	
-	public static final String POINT = ".";
-	
-	/**
-	 * Brief Intro Here
-	 * @param file 需要写的文件
-	 * @param content 需要写的文件内容
-	 * @param charset 指定字符编码
-	 * @return 写文件是否成功
-	 */
-	public static boolean writeFile(File file, String content, String charset) {
-		try {
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(file), charset));
-			bw.write(content);
-			bw.flush();
-			bw.close();
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-	
-	/**
-	 * Brief Intro Here
-	 * 复制文件
-	 * @param
-	 */
-	public static void copyFile(File sourceFile, File targetFile)
-			throws IOException {
-		// 新建文件输入流并对它进行缓冲
-		FileInputStream input = new FileInputStream(sourceFile);
-		BufferedInputStream inBuff = new BufferedInputStream(input);
 
-		// 新建文件输出流并对它进行缓冲
-		FileOutputStream output = new FileOutputStream(targetFile);
-		BufferedOutputStream outBuff = new BufferedOutputStream(output);
+    public static final String POINT = ".";
 
-		// 缓冲数组
-		byte[] b = new byte[1024 * 5];
-		int len;
-		while ((len = inBuff.read(b)) != -1) {
-			outBuff.write(b, 0, len);
-		}
-		// 刷新此缓冲的输出流
-		outBuff.flush();
+    /**
+     * Brief Intro Here
+     * @param file 需要写的文件
+     * @param content 需要写的文件内容
+     * @param charset 指定字符编码
+     * @return 写文件是否成功
+     */
+    public static boolean writeFile(File file, String content, String charset) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), charset));
+            bw.write(content);
+            bw.flush();
+            bw.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 
-		// 关闭流
-		inBuff.close();
-		outBuff.close();
-		output.close();
-		input.close();
-	}
+    /**
+     * Brief Intro Here
+     * 复制文件
+     * @param
+     */
+    public static void copyFile(File sourceFile, File targetFile)
+            throws IOException {
+        // 新建文件输入流并对它进行缓冲
+        FileInputStream input = new FileInputStream(sourceFile);
+        BufferedInputStream inBuff = new BufferedInputStream(input);
 
-	/**
-	 * Brief Intro Here
-	 * 复制文件夹
-	 * @param
-	 */
-	public static void copyDirectory(String sourceDir, String targetDir)
-			throws IOException {
-		// 新建目标目录
-		(new File(targetDir)).mkdirs();
-		// 获取源文件夹当前下的文件或目录
-		File[] file = (new File(sourceDir)).listFiles();
-		for (int i = 0; i < file.length; i++) {
-			if (file[i].isFile()) {
-				// 源文件
-				File sourceFile = file[i];
-				// 目标文件
-				File targetFile = new File(new File(targetDir)
-						.getAbsolutePath()
-						+ File.separator + file[i].getName());
-				copyFile(sourceFile, targetFile);
-			}
-			if (file[i].isDirectory()) {
-				// 准备复制的源文件夹
-				String dir1 = sourceDir + "/" + file[i].getName();
-				// 准备复制的目标文件夹
-				String dir2 = targetDir + "/" + file[i].getName();
-				copyDirectory(dir1, dir2);
-			}
-		}
-	}
-	
-	  /** Size of the buffer used when copying large chunks of data. */
+        // 新建文件输出流并对它进行缓冲
+        FileOutputStream output = new FileOutputStream(targetFile);
+        BufferedOutputStream outBuff = new BufferedOutputStream(output);
+
+        // 缓冲数组
+        byte[] b = new byte[1024 * 5];
+        int len;
+        while ((len = inBuff.read(b)) != -1) {
+            outBuff.write(b, 0, len);
+        }
+        // 刷新此缓冲的输出流
+        outBuff.flush();
+
+        // 关闭流
+        inBuff.close();
+        outBuff.close();
+        output.close();
+        input.close();
+    }
+
+    /**
+     * Brief Intro Here
+     * 复制文件夹
+     * @param
+     */
+    public static void copyDirectory(String sourceDir, String targetDir)
+            throws IOException {
+        // 新建目标目录
+        (new File(targetDir)).mkdirs();
+        // 获取源文件夹当前下的文件或目录
+        File[] file = (new File(sourceDir)).listFiles();
+        for (int i = 0; i < file.length; i++) {
+            if (file[i].isFile()) {
+                // 源文件
+                File sourceFile = file[i];
+                // 目标文件
+                File targetFile = new File(new File(targetDir)
+                                           .getAbsolutePath()
+                                           + File.separator + file[i].getName());
+                copyFile(sourceFile, targetFile);
+            }
+            if (file[i].isDirectory()) {
+                // 准备复制的源文件夹
+                String dir1 = sourceDir + "/" + file[i].getName();
+                // 准备复制的目标文件夹
+                String dir2 = targetDir + "/" + file[i].getName();
+                copyDirectory(dir1, dir2);
+            }
+        }
+    }
+
+    /** Size of the buffer used when copying large chunks of data. */
     private static final int      BUFFER_SIZE = 4096;
     private static final Logger   LOG         = Logger.getLogger(FileUtil.class);
 
@@ -159,7 +159,7 @@ public final class FileUtil {
      *  @see java.io.File#createTempFile(String,String,File)
      */
     public static File newTmpFile( String content, String encoding )
-        throws IOException
+            throws IOException
     {
         Writer out = null;
         Reader in  = null;
@@ -179,10 +179,10 @@ public final class FileUtil {
         finally
         {
             if( in  != null ) {
-            	in.close();
+                in.close();
             }
             if( out != null ) {
-            	out.close();
+                out.close();
             }
         }
 
@@ -200,7 +200,7 @@ public final class FileUtil {
      *  @see java.io.File#createTempFile(String,String,File)
      */
     public static File newTmpFile( String content )
-        throws IOException
+            throws IOException
     {
         return newTmpFile( content, "ISO-8859-1" );
     }
@@ -217,8 +217,8 @@ public final class FileUtil {
      *  @throws InterruptedException If the command was halted
      */
     public static String runSimpleCommand( String command, String directory )
-        throws IOException,
-               InterruptedException
+            throws IOException,
+            InterruptedException
     {
         StringBuffer result = new StringBuffer();
 
@@ -260,10 +260,10 @@ public final class FileUtil {
             // we must close all by exec(..) opened streams: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
             process.getInputStream().close();
             if( stdout != null ){
-            	stdout.close();
+                stdout.close();
             }
             if( stderr != null ){
-            	stderr.close();
+                stderr.close();
             }
         }
 
@@ -281,7 +281,7 @@ public final class FileUtil {
      *  @throws IOException If reading or writing failed.
      */
     public static void copyContents( Reader in, Writer out )
-        throws IOException
+            throws IOException
     {
         char[] buf = new char[BUFFER_SIZE];
         int bytesRead = 0;
@@ -304,7 +304,7 @@ public final class FileUtil {
      *  @throws IOException In case reading or writing fails.
      */
     public static void copyContents( InputStream in, OutputStream out )
-        throws IOException
+            throws IOException
     {
         byte[] buf = new byte[BUFFER_SIZE];
         int bytesRead = 0;
@@ -330,7 +330,7 @@ public final class FileUtil {
      *          decoded (even) in Latin1
      */
     public static String readContents( InputStream input, String encoding )
-        throws IOException
+            throws IOException
     {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         FileUtil.copyContents( input, out );
@@ -381,7 +381,7 @@ public final class FileUtil {
      *  @throws IOException If reading fails.
      */
     public static String readContents( Reader in )
-        throws IOException
+            throws IOException
     {
         Writer out = null;
 
@@ -448,7 +448,7 @@ public final class FileUtil {
                 if (temp.isFile()) {
                     FileInputStream input = new FileInputStream(temp);
                     FileOutputStream output = new FileOutputStream(newPath
-                            + "/" + (temp.getName()).toString());
+                                                                   + "/" + (temp.getName()).toString());
                     byte[] b = new byte[1024 * 5];
                     int len;
                     while ((len = input.read(b)) != -1) {
@@ -466,7 +466,7 @@ public final class FileUtil {
             LOG.error(e);
         }
 
-    }  
+    }
     public static boolean deleteFolders(String strFolder)
     {
         boolean flag = false;
@@ -480,14 +480,14 @@ public final class FileUtil {
             return flag;
         }
         flag = deleteFilesInFolder(strFolder);
-        folder.delete(); 
+        folder.delete();
         return flag;
     }
     public static boolean deleteFilesInFolder(String strFolder)
     {
         boolean flag = false;
         File folder = new File(strFolder);
-         if (!folder.exists()) {
+        if (!folder.exists()) {
             return flag;
         }
         String[] files = folder.list();
@@ -506,46 +506,46 @@ public final class FileUtil {
         }
         return flag;
     }
-    
+
     public static String saveAsFile(InputStream in, String path) {
-		try {
-			File file=new File(path);
-			FileOutputStream fos = new FileOutputStream(file);
-			IOUtils.copy(in, fos);
-			in.close();
-			fos.close();
-		} catch (IOException e) {
-			throw new RuntimeException("save tmp file error:"+path,e);
-		}
-		return path;
-	}
-    
-    
-    /** 
-     * 删除单个文件 
-     * @param path 被删除文件的文件名 
-     * @return 删除成功true，否则false 
-     */  
-    public static boolean deleteFile(String path) {  
-        File file = new File(path);  
-        // 路径为文件且不为空则进行删除  
-        if (file.isFile() && file.exists()) {  
-            file.delete();  
+        try {
+            File file=new File(path);
+            FileOutputStream fos = new FileOutputStream(file);
+            IOUtils.copy(in, fos);
+            in.close();
+            fos.close();
+        } catch (IOException e) {
+            throw new RuntimeException("save tmp file error:"+path,e);
+        }
+        return path;
+    }
+
+
+    /**
+     * 删除单个文件
+     * @param path 被删除文件的文件名
+     * @return 删除成功true，否则false
+     */
+    public static boolean deleteFile(String path) {
+        File file = new File(path);
+        // 路径为文件且不为空则进行删除
+        if (file.isFile() && file.exists()) {
+            file.delete();
             return true;
-        }  
+        }
         return false;
-    }  
-    
+    }
+
     /**
      * 获取文件扩展名
-	 * @param fileName
-	 * @return
-	 */
+     * @param fileName
+     * @return
+     */
     public static String getFileExt(String fileName) {
-    	int index = fileName.lastIndexOf('.');
-		if(index<0){
-			return null;
-		}
-		return fileName.substring(index+1).toLowerCase();
-	}
+        int index = fileName.lastIndexOf('.');
+        if(index<0){
+            return null;
+        }
+        return fileName.substring(index+1).toLowerCase();
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.param.impl;
@@ -36,59 +36,59 @@ import org.springframework.stereotype.Service;
  * */
 @Service
 public class ParamServiceImpl implements IParamService{
-    
+
     @Autowired
-	private ParamDAO paramDAO;
+    private ParamDAO paramDAO;
 
-	public ParamDAO getParamDAO() {
-		return paramDAO;
-	}
+    public ParamDAO getParamDAO() {
+        return paramDAO;
+    }
 
-	public void setParamDAO(ParamDAO paramDAO) {
-		this.paramDAO = paramDAO;
-	}
+    public void setParamDAO(ParamDAO paramDAO) {
+        this.paramDAO = paramDAO;
+    }
 
-	@Override
-	public List<Param> getParamByType(String type) {
-		return paramDAO.getParamByType(type);
-	}
-	@Override
-	public void addParam(Param param) {
-		paramDAO.create(param);
-	}
-	@Override
-	public List<Param> getByTypeAndValue(String type,String value) {
-		return paramDAO.getByTypeAndValue(type,value);
-	}
-	@Override
-	public void updateParam(Param param) {
-		paramDAO.update(param);
-		
-	}
-	@Override
-	public List<Param> getList(String type,String itemId) {
-		return paramDAO.getList(type,itemId);
-	}
-	@Override
-	public Map<String, String> getMap(String type,String itemId) {
-		List<Param> list=paramDAO.getList(type,itemId);
-		Map<String,String> map=new HashMap<String,String>();
-		if(CommonUtil.isNullArray(list)){
-			return map;
-		}else{
-			for(Param param:list){
-				map.put(param.getKey(), param.getValue());
-			}
-		}
-		return map;
-	}
-	@Override
-	public String getValue(String type, String key,String itemId) {
-		return get(type,key,itemId).getValue();
-	}
-	@Override
-	public Param get(String type, String key,String itemId) {
-		return paramDAO.get(type,key,itemId);
-	}
-	
+    @Override
+    public List<Param> getParamByType(String type) {
+        return paramDAO.getParamByType(type);
+    }
+    @Override
+    public void addParam(Param param) {
+        paramDAO.create(param);
+    }
+    @Override
+    public List<Param> getByTypeAndValue(String type,String value) {
+        return paramDAO.getByTypeAndValue(type,value);
+    }
+    @Override
+    public void updateParam(Param param) {
+        paramDAO.update(param);
+
+    }
+    @Override
+    public List<Param> getList(String type,String itemId) {
+        return paramDAO.getList(type,itemId);
+    }
+    @Override
+    public Map<String, String> getMap(String type,String itemId) {
+        List<Param> list=paramDAO.getList(type,itemId);
+        Map<String,String> map=new HashMap<String,String>();
+        if(CommonUtil.isNullArray(list)){
+            return map;
+        }else{
+            for(Param param:list){
+                map.put(param.getKey(), param.getValue());
+            }
+        }
+        return map;
+    }
+    @Override
+    public String getValue(String type, String key,String itemId) {
+        return get(type,key,itemId).getValue();
+    }
+    @Override
+    public Param get(String type, String key,String itemId) {
+        return paramDAO.get(type,key,itemId);
+    }
+
 }

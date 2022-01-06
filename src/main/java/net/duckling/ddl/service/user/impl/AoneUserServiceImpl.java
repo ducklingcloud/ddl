@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -50,14 +50,14 @@ import com.mysql.jdbc.StringUtils;
  * @author Clive Lee
  */
 public class AoneUserServiceImpl implements AoneUserService {
-	private static final String USER = "simple-user";
-	private static final String USER_DETAIL = "user-detail";
-	private static final Logger LOG = Logger.getLogger(AoneUserServiceImpl.class);
-    
+    private static final String USER = "simple-user";
+    private static final String USER_DETAIL = "user-detail";
+    private static final Logger LOG = Logger.getLogger(AoneUserServiceImpl.class);
+
     private UserExt getDetailUserFromCache(int uxid){
         return (UserExt) memcachedService.get(USER_DETAIL+"." + uxid);
     }
-    
+
 
     private SimpleUser getSimpleUserFromCache(String uid) {
         return (SimpleUser) memcachedService.get(USER + "." + uid);
@@ -69,14 +69,14 @@ public class AoneUserServiceImpl implements AoneUserService {
     private void setDetailUserToCache(int uxid,UserExt ext){
         memcachedService.set(USER_DETAIL+"." + uxid, ext);
     }
-    
+
     private void setSimpleUserToCache(String uid,SimpleUser u){
         memcachedService.set(USER + "." + uid,u);
     }
 
     /**
      * 如果用户不存在，将用户批量加入到userExt中
-     * 
+     *
      * @param users
      * @param usernames
      */
@@ -85,7 +85,7 @@ public class AoneUserServiceImpl implements AoneUserService {
             registInAONE(users[i], usernames[i]);
         }
     }
-    
+
     public boolean createAccountInUMT(String email, String name, String password) {
         UserService us = new UserService(serviceUrl);
         if (!us.isExist(email)) {
@@ -100,7 +100,7 @@ public class AoneUserServiceImpl implements AoneUserService {
         }
         return false;
     }
-    
+
     public int createUserGuide(UserGuide userGuide) {
         return userGuideDAO.create(userGuide);
     }
@@ -152,11 +152,11 @@ public class AoneUserServiceImpl implements AoneUserService {
     }
 
     public List<UserExt> getUserExtByIds(Set<Integer> userId) {
-		return userExtDao.getUserExtByIds(userId);
-	}
+        return userExtDao.getUserExtByIds(userId);
+    }
     public List<UserExt> getUserExtByUids(Set<String> userId) {
-		return userExtDao.getUserExtByUids(userId);
-	}
+        return userExtDao.getUserExtByUids(userId);
+    }
     /*---------------Finish Update Cache-----------*/
 
     public UserExt getUserExtInfo(String uid) {
@@ -213,34 +213,34 @@ public class AoneUserServiceImpl implements AoneUserService {
     }
 
     public void modifyUserProfile(UserExt user) {
-    	UserExt older = getUserExtByAutoID(user.getId());
+        UserExt older = getUserExtByAutoID(user.getId());
         userExtDao.updateUserExt(user);
         setDetailUserToCache(user.getId(), user);
         setSimpleUserToCache(user.getUid(), SimpleUser.transfer(user));
         if(isChange(older,user)){
-        	UserService us = new UserService(serviceUrl);
-        	UMTUser umt = new UMTUser(user.getUid(), user.getName(), user.getUid(), null);
-        	try {
-        		us.updateUserWithoutPwd(umt);
-        	} catch (UserNotFoundException e) {
-        		LOG.error(e);
-        	}
+            UserService us = new UserService(serviceUrl);
+            UMTUser umt = new UMTUser(user.getUid(), user.getName(), user.getUid(), null);
+            try {
+                us.updateUserWithoutPwd(umt);
+            } catch (UserNotFoundException e) {
+                LOG.error(e);
+            }
         }
     }
 
     private boolean isChange(UserExt older, UserExt user) {
-    	if(!older.getUid().equals(user.getUid())){
-    		return true;
-    	}
-    	if(!older.getName().equals(user.getName())){
-    		return true;
-    	}
-		return false;
-	}
+        if(!older.getUid().equals(user.getUid())){
+            return true;
+        }
+        if(!older.getName().equals(user.getName())){
+            return true;
+        }
+        return false;
+    }
 
-	/**
+    /**
      * 向usrExt中加入用户
-     * 
+     *
      * @param uid
      * @param name
      */
@@ -287,7 +287,7 @@ public class AoneUserServiceImpl implements AoneUserService {
     public List<UserExt> searchUserByUserTeamAndName(String uid, String name) {
         return userExtDao.searchUserByUserTeamAndName(uid, name);
     }
-    
+
     @Override
     public List<UserExt> searchByUnallocatedSpace() {
         return userExtDao.searchByUnallocatedSpace();
@@ -305,55 +305,55 @@ public class AoneUserServiceImpl implements AoneUserService {
         userGuideDAO.updateStep(uid, module, step);
     }
 
-	public int updateUserPreferences(UserPreferences userPre) {
+    public int updateUserPreferences(UserPreferences userPre) {
         return userPreferencesDAO.update(userPre);
     }
 
-	@Override
-	public void updateSpaceIncrease(String uid, long size, String remark, int objId) {
-		UserExt older = getUserExtInfo(uid);
-		older.setUnallocatedSpace(older.getUnallocatedSpace() + size);
-		modifyUserProfile(older);
-		
-		SpaceGained obj = new SpaceGained();
-		obj.setUid(uid);
-		obj.setObjId(objId);
-		obj.setSize(size);
-		obj.setRemark(remark);
-		obj.setCreateTime(new Date());
-		spaceGainedDao.insert(obj);
-	}
+    @Override
+    public void updateSpaceIncrease(String uid, long size, String remark, int objId) {
+        UserExt older = getUserExtInfo(uid);
+        older.setUnallocatedSpace(older.getUnallocatedSpace() + size);
+        modifyUserProfile(older);
 
-	public ActivationDAO getActivationDao() {
-		return activationDao;
-	}
-	public void setActivationDao(ActivationDAO activationDao) {
-		this.activationDao = activationDao;
-	}
-	public void setMemcachedService(ICacheService memcachedService) {
-		this.memcachedService = memcachedService;
-	}
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
-	}
-	public void setUserExtDao(UserExtDAO userExtDao) {
-		this.userExtDao = userExtDao;
-	}
-	public void setUserGuideDAO(UserGuideDAO userGuideDAO) {
-		this.userGuideDAO = userGuideDAO;
-	}
-	public void setUserPreferencesDAO(UserPreferencesDAO userPreferencesDAO) {
-		this.userPreferencesDAO = userPreferencesDAO;
-	}
+        SpaceGained obj = new SpaceGained();
+        obj.setUid(uid);
+        obj.setObjId(objId);
+        obj.setSize(size);
+        obj.setRemark(remark);
+        obj.setCreateTime(new Date());
+        spaceGainedDao.insert(obj);
+    }
+
+    public ActivationDAO getActivationDao() {
+        return activationDao;
+    }
+    public void setActivationDao(ActivationDAO activationDao) {
+        this.activationDao = activationDao;
+    }
+    public void setMemcachedService(ICacheService memcachedService) {
+        this.memcachedService = memcachedService;
+    }
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
+    }
+    public void setUserExtDao(UserExtDAO userExtDao) {
+        this.userExtDao = userExtDao;
+    }
+    public void setUserGuideDAO(UserGuideDAO userGuideDAO) {
+        this.userGuideDAO = userGuideDAO;
+    }
+    public void setUserPreferencesDAO(UserPreferencesDAO userPreferencesDAO) {
+        this.userPreferencesDAO = userPreferencesDAO;
+    }
     public void setSpaceGainedDao(SpaceGainedDao spaceGainedDao) {
-		this.spaceGainedDao = spaceGainedDao;
-	}
+        this.spaceGainedDao = spaceGainedDao;
+    }
 
-	private ActivationDAO activationDao;
+    private ActivationDAO activationDao;
     private ICacheService memcachedService;
     private String serviceUrl;
     private UserExtDAO userExtDao;
     private UserGuideDAO userGuideDAO;
     private UserPreferencesDAO userPreferencesDAO;
-	private SpaceGainedDao spaceGainedDao;
+    private SpaceGainedDao spaceGainedDao;
 }

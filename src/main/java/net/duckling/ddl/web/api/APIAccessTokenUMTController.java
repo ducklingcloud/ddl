@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.api;
@@ -39,36 +39,36 @@ import cn.vlabs.umt.oauth.common.exception.OAuthProblemException;
 @Controller
 @RequestMapping("/oauth/umt/access_token")
 public class APIAccessTokenUMTController {
-	private static final Logger LOG = Logger.getLogger(APIAccessTokenUMTController.class);
-	@Autowired
-	private AuthorizationCodeService authcodeService;
-	
-	@SuppressWarnings("unchecked")
-	@WebLog(method = " APIAccessTokenUMT", params = "userName")
-	@RequestMapping(method=RequestMethod.POST)
-	public void service(HttpServletRequest request,HttpServletResponse response){
-		JSONObject obj = new JSONObject();
-		String uid = request.getParameter("userName");
-		String password = request.getParameter("password");
-		try {
-			AccessToken token = authcodeService.umtPasswordAccessToken(uid, password);
-			obj.put("accessToken", token.getAccessToken());
-			obj.put("refreshToken", token.getRefreshToken());
-			obj.put("expiresIn", token.getExpiresIn());
-			obj.put("DisplayName", token.getUserInfo().getTrueName());
-			String cstnetId = token.getUserInfo().getCstnetId();
-			obj.put("uid", cstnetId);
-			
-			LOG.info("uid="+cstnetId+",accessToken="+token.getAccessToken()+",refreshToken="+token.getRefreshToken());
-		} catch (OAuthProblemException e) {
-			String s = e.getDescription();
-			if("用户名或密码校验错误".equals(s)){
-				obj.put("message", "用户名或密码错误");
-			}else{
-				obj.put("message", e.getDescription());
-			}
-			LOG.error("", e);
-		}
-		JsonUtil.writeJSONObject(response, obj);
-	}
+    private static final Logger LOG = Logger.getLogger(APIAccessTokenUMTController.class);
+    @Autowired
+    private AuthorizationCodeService authcodeService;
+
+    @SuppressWarnings("unchecked")
+    @WebLog(method = " APIAccessTokenUMT", params = "userName")
+    @RequestMapping(method=RequestMethod.POST)
+    public void service(HttpServletRequest request,HttpServletResponse response){
+        JSONObject obj = new JSONObject();
+        String uid = request.getParameter("userName");
+        String password = request.getParameter("password");
+        try {
+            AccessToken token = authcodeService.umtPasswordAccessToken(uid, password);
+            obj.put("accessToken", token.getAccessToken());
+            obj.put("refreshToken", token.getRefreshToken());
+            obj.put("expiresIn", token.getExpiresIn());
+            obj.put("DisplayName", token.getUserInfo().getTrueName());
+            String cstnetId = token.getUserInfo().getCstnetId();
+            obj.put("uid", cstnetId);
+
+            LOG.info("uid="+cstnetId+",accessToken="+token.getAccessToken()+",refreshToken="+token.getRefreshToken());
+        } catch (OAuthProblemException e) {
+            String s = e.getDescription();
+            if("用户名或密码校验错误".equals(s)){
+                obj.put("message", "用户名或密码错误");
+            }else{
+                obj.put("message", e.getDescription());
+            }
+            LOG.error("", e);
+        }
+        JsonUtil.writeJSONObject(response, obj);
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.task.impl;
@@ -58,51 +58,51 @@ public class TaskServiceImpl implements TaskService {
     public void setTaskDAO(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
-	
-	@Override
-	public List<Task> getTasksCreateByMe(String currentUID, String teamCode) {
-		List<Task> tasks=taskDAO.getTasksByUID(currentUID, teamCode);
-		if(tasks==null){
-			return null;
-		}
-		for(int i=0;i<tasks.size();i++){
-			Task task=tasks.get(i);
-			task.setTakers(taskDAO.getTakers(task.getTaskId()+""));
-		}
-		return tasks;
-	}
-	@Override
-	public List<Task> getTasksByImTaker(String currentUID, String teamCode) {
-		List<Task> tasks=taskDAO.getTasksByImTaker(currentUID, teamCode);
-		if(tasks==null){
-			return null;
-		}
-		for(int i=0;i<tasks.size();i++){
-			Task task=tasks.get(i);
-			task.setTakers(taskDAO.getTakers(task.getTaskId()+""));
-		}
-		return tasks;
-	}
-	@Override
-	public List<Task> getFinishedTasks(String teamCode,String userId) {
-		List<Task> tasks= taskDAO.getTasksByHistory(teamCode,userId);
-		if(tasks==null){
-			return null;
-		}
-		for(int i=0;i<tasks.size();i++){
-			Task task=tasks.get(i);
-			task.setTakers(taskDAO.getTakers(task.getTaskId()+""));
-		}
-		return tasks;
-	}
-	@Override
-	public Task getTask(String taskId) {
-		Task task=taskDAO.getTask(taskId);
-		task.setTakers(taskDAO.getTakers(taskId));
-		task.setItems(taskDAO.getItems(taskId));
-		task.setUserProcess(getAllUserProcess(taskId));
-		return task;
-	}
+
+    @Override
+    public List<Task> getTasksCreateByMe(String currentUID, String teamCode) {
+        List<Task> tasks=taskDAO.getTasksByUID(currentUID, teamCode);
+        if(tasks==null){
+            return null;
+        }
+        for(int i=0;i<tasks.size();i++){
+            Task task=tasks.get(i);
+            task.setTakers(taskDAO.getTakers(task.getTaskId()+""));
+        }
+        return tasks;
+    }
+    @Override
+    public List<Task> getTasksByImTaker(String currentUID, String teamCode) {
+        List<Task> tasks=taskDAO.getTasksByImTaker(currentUID, teamCode);
+        if(tasks==null){
+            return null;
+        }
+        for(int i=0;i<tasks.size();i++){
+            Task task=tasks.get(i);
+            task.setTakers(taskDAO.getTakers(task.getTaskId()+""));
+        }
+        return tasks;
+    }
+    @Override
+    public List<Task> getFinishedTasks(String teamCode,String userId) {
+        List<Task> tasks= taskDAO.getTasksByHistory(teamCode,userId);
+        if(tasks==null){
+            return null;
+        }
+        for(int i=0;i<tasks.size();i++){
+            Task task=tasks.get(i);
+            task.setTakers(taskDAO.getTakers(task.getTaskId()+""));
+        }
+        return tasks;
+    }
+    @Override
+    public Task getTask(String taskId) {
+        Task task=taskDAO.getTask(taskId);
+        task.setTakers(taskDAO.getTakers(taskId));
+        task.setItems(taskDAO.getItems(taskId));
+        task.setUserProcess(getAllUserProcess(taskId));
+        return task;
+    }
 
     @Override
     public Task getTaskWithStatus(String taskId, String currentUID) {
@@ -137,7 +137,7 @@ public class TaskServiceImpl implements TaskService {
             return;
         } else {
             // 多的挑出来
-            loop: for (TaskTaker org : takersOrg) {
+      loop: for (TaskTaker org : takersOrg) {
                 for (TaskTaker dest : takersDest) {
                     if (org.equals(dest)) {
                         continue loop;
@@ -149,7 +149,7 @@ public class TaskServiceImpl implements TaskService {
                 sendNotice(tid, org, task, noticeType, DAction.DELETE_TAKER, org.getUserIDStr());
             }
             // 少的挑出来
-            loop: for (TaskTaker dest : takersDest) {
+      loop: for (TaskTaker dest : takersDest) {
                 for (TaskTaker org : takersOrg) {
                     if (org.equals(dest)) {
                         continue loop;
@@ -168,31 +168,31 @@ public class TaskServiceImpl implements TaskService {
 
         }
     }
-	/**从队列中剥离出来userId
-	 * @param takers 接受者队列
-	 * @return id[]  taker_id
-	 * */
-	private String[] getUIds(List<TaskTaker> takers){
-		String ids[]=new String[takers.size()];
-		int index=0;
-		for(TaskTaker taker:takers){
-			ids[index++]=taker.getUserIDStr();
-		}
-		return ids;
-	}
+    /**从队列中剥离出来userId
+     * @param takers 接受者队列
+     * @return id[]  taker_id
+     * */
+    private String[] getUIds(List<TaskTaker> takers){
+        String ids[]=new String[takers.size()];
+        int index=0;
+        for(TaskTaker taker:takers){
+            ids[index++]=taker.getUserIDStr();
+        }
+        return ids;
+    }
 
-	/**从队列中剥离出来id
-	 * @param takers 接受者队列
-	 * @return id[]  taker_id
-	 * */
-	private int[] getIds(List<TaskTaker> takers){
-		int ids[]=new int[takers.size()];
-		int index=0;
-		for(TaskTaker taker:takers){
-			ids[index++]=taker.getTakerId();
-		}
-		return ids;
-	}
+    /**从队列中剥离出来id
+     * @param takers 接受者队列
+     * @return id[]  taker_id
+     * */
+    private int[] getIds(List<TaskTaker> takers){
+        int ids[]=new int[takers.size()];
+        int index=0;
+        for(TaskTaker taker:takers){
+            ids[index++]=taker.getTakerId();
+        }
+        return ids;
+    }
     @Override
     public void addItems(String[] needAddItemsContent, String taskId) {
         if (CommonUtil.isNullArray(needAddItemsContent)) {
@@ -227,18 +227,18 @@ public class TaskServiceImpl implements TaskService {
     public int addTask(Task task) {
         return taskDAO.addTask(task);
     }
-	/**只抽取ID，从taskItem列表中
-	 * @param list TaskItem列表
-	 * */
-	private int[] getIdsFromItemList(List<TaskItem> list){
-		int ids[]=new int[list.size()];
-		int index=0;
-		for(TaskItem item:list){
-			ids[index]=item.getItemId();
-			index++;
-		}
-		return ids;
-	}
+    /**只抽取ID，从taskItem列表中
+     * @param list TaskItem列表
+     * */
+    private int[] getIdsFromItemList(List<TaskItem> list){
+        int ids[]=new int[list.size()];
+        int index=0;
+        for(TaskItem item:list){
+            ids[index]=item.getItemId();
+            index++;
+        }
+        return ids;
+    }
     @Override
     public void addTakers(String[] userIds, String taskId) {
         if (CommonUtil.isNullArray(userIds)) {
@@ -249,25 +249,25 @@ public class TaskServiceImpl implements TaskService {
         taskDAO.addTakersItemRef(task.getTakers(), getIdsFromItemList(task.getItems()), task.getTaskId());
 
     }
-	/**通过用户Id和任务Id构造出需要持久化的taker队列
-	 * @param userIds 用户id队列
-	 * @param taskId  任务Id
-	 * @return result List<TaskTaker>队列，不包含Id，待持久化
-	 * */
-	private List<TaskTaker> getListFromArray(String[] userIds,int taskId){
-		List<TaskTaker> result=new ArrayList<TaskTaker>();
-		if(CommonUtil.isNullArray(userIds)){
-			return result;
-		}
-		for(String id:userIds){
-			TaskTaker taker=new TaskTaker();
-			taker.setTaskId(taskId);
-			taker.setUserId(id);
-			taker.setReadStatus(TaskTaker.READ_STATUS_UNREAD);
-			result.add(taker);
-		}
-		return result;
-	}
+    /**通过用户Id和任务Id构造出需要持久化的taker队列
+     * @param userIds 用户id队列
+     * @param taskId  任务Id
+     * @return result List<TaskTaker>队列，不包含Id，待持久化
+     * */
+    private List<TaskTaker> getListFromArray(String[] userIds,int taskId){
+        List<TaskTaker> result=new ArrayList<TaskTaker>();
+        if(CommonUtil.isNullArray(userIds)){
+            return result;
+        }
+        for(String id:userIds){
+            TaskTaker taker=new TaskTaker();
+            taker.setTaskId(taskId);
+            taker.setUserId(id);
+            taker.setReadStatus(TaskTaker.READ_STATUS_UNREAD);
+            result.add(taker);
+        }
+        return result;
+    }
     @Override
     public Map<Integer, String> getProcess(String taskId) {
         return taskDAO.getProcess(taskId);

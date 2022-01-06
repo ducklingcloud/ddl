@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.share;
@@ -21,17 +21,17 @@ package net.duckling.ddl.service.share;
 
 public interface ShareFileAccessService {
 
-	public static final String OLD_VALID_PASSWORD = "123456";
+    public static final String OLD_VALID_PASSWORD = "123456";
 
-	ShareFileAccess parseShareAccess(String encodeURL);
+    ShareFileAccess parseShareAccess(String encodeURL);
 
-	String getPublicFileURL(ShareFileAccess s);
+    String getPublicFileURL(ShareFileAccess s);
 
-	String getPublicFileURL(int tid, int clbId, int fid, int validOfDays,
-			String fileOwner);
+    String getPublicFileURL(int tid, int clbId, int fid, int validOfDays,
+                            String fileOwner);
 
-	boolean isValidRequest(ShareFileAccess instance);
+    boolean isValidRequest(ShareFileAccess instance);
 
-	String getRestOfVaildDays(ShareFileAccess s);
+    String getRestOfVaildDays(ShareFileAccess s);
 
 }

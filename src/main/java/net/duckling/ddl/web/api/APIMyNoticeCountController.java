@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -40,40 +40,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/myNoticeCount")
 @RequirePermission(target="team",operation="view")
 public class APIMyNoticeCountController extends APIBaseNoticeController {
-	@Autowired
-	private DeviceTokenService deviceTokenService;
-	@SuppressWarnings("unchecked")
-	@RequestMapping
-	public void service(HttpServletRequest request, HttpServletResponse response) {
-		String api = request.getParameter("api");
-		String deviceToken = request.getParameter("deviceToken");
-		deviceToken = validDeviceToken(deviceToken);
-		
-		String uid = findUser(request);
-		Site site = findSite(request);
-		String messageType = request.getParameter("messageType");
-		int totalCount = totalCount(site, messageType, uid);
-		
-		if(deviceToken != null) {
-			IphoneDeviceToken idt = new IphoneDeviceToken();
-			idt.setDeviceToken(deviceToken);
-			idt.setUid(uid);
-			idt.setLastLoginTime(new Date());
-			deviceTokenService.insertOrUpdateDeviceToken(idt);
-		}
-		
-		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("api", api);
-		jsonObj.put("totalCount", totalCount);
-		JsonUtil.writeJSONObject(response, jsonObj);
-	}
-	
-	private String validDeviceToken(String deviceToken) {
-		if(deviceToken == null) return null;
-		deviceToken = deviceToken.replaceAll("<", "");
-		deviceToken = deviceToken.replaceAll(">", "");
-		deviceToken = deviceToken.replaceAll(" ", "");
-		return deviceToken;
-	}
-	
+    @Autowired
+    private DeviceTokenService deviceTokenService;
+    @SuppressWarnings("unchecked")
+    @RequestMapping
+    public void service(HttpServletRequest request, HttpServletResponse response) {
+        String api = request.getParameter("api");
+        String deviceToken = request.getParameter("deviceToken");
+        deviceToken = validDeviceToken(deviceToken);
+
+        String uid = findUser(request);
+        Site site = findSite(request);
+        String messageType = request.getParameter("messageType");
+        int totalCount = totalCount(site, messageType, uid);
+
+        if(deviceToken != null) {
+            IphoneDeviceToken idt = new IphoneDeviceToken();
+            idt.setDeviceToken(deviceToken);
+            idt.setUid(uid);
+            idt.setLastLoginTime(new Date());
+            deviceTokenService.insertOrUpdateDeviceToken(idt);
+        }
+
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("api", api);
+        jsonObj.put("totalCount", totalCount);
+        JsonUtil.writeJSONObject(response, jsonObj);
+    }
+
+    private String validDeviceToken(String deviceToken) {
+        if(deviceToken == null) return null;
+        deviceToken = deviceToken.replaceAll("<", "");
+        deviceToken = deviceToken.replaceAll(">", "");
+        deviceToken = deviceToken.replaceAll(" ", "");
+        return deviceToken;
+    }
+
 }

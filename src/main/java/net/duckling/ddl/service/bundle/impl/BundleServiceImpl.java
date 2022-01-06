@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.bundle.impl;
@@ -130,7 +130,7 @@ public class BundleServiceImpl implements IBundleService {
     }
     /**
      * 更新Tag Title时需要更新所有与该Tag相关的Resource的TagMap
-     * 
+     *
      * @param tagId
      *            标签Id
      * @param title
@@ -163,13 +163,13 @@ public class BundleServiceImpl implements IBundleService {
             return;
         }
         int tid = res.getTid();
-		Map<Integer, String> tagMap = res.getTagMap();
-		if (null != tagMap) {
-			tagMap.remove(tagId);
-		}
-		res.setTagMap(tagMap);
-		resourceService.updateResourceTagMap(Arrays.asList(new Resource[] { res }));
-		tagService.deleteTagItems(Arrays.asList(new Integer[] { rid }), tagId);
+        Map<Integer, String> tagMap = res.getTagMap();
+        if (null != tagMap) {
+            tagMap.remove(tagId);
+        }
+        res.setTagMap(tagMap);
+        resourceService.updateResourceTagMap(Arrays.asList(new Resource[] { res }));
+        tagService.deleteTagItems(Arrays.asList(new Integer[] { rid }), tagId);
         tagService.updateTagCount(tid, tagId);
     }
     public void deleteTagResource(int tid, int bid) {
@@ -199,7 +199,7 @@ public class BundleServiceImpl implements IBundleService {
     }
 
     @Override
-    public int disbandBundle(int bid, int tid) {       
+    public int disbandBundle(int bid, int tid) {
         List<BundleItem> items = bundleItemDAO.getBundleItemsByBidTid(bid, tid);
         bundleItemDAO.deleteAllItemInBundle(tid, bid);
         List<Long> rids = BundleHelper.getRidsFromBundleItems(items);
@@ -228,9 +228,9 @@ public class BundleServiceImpl implements IBundleService {
 
         batchDelete(tid, typeMap.get(LynxConstants.TYPE_BUNDLE));
         deleteTagResource(tid, bid);
-//        pageService.batchDelete(tid, typeMap.get(LynxConstants.TYPE_PAGE));
-//        resourceOperateService.batchDeleteFile(tid, typeMap.get(LynxConstants.TYPE_FILE));
-//        resourceService.batchDelete(tid, rids);
+        //        pageService.batchDelete(tid, typeMap.get(LynxConstants.TYPE_PAGE));
+        //        resourceOperateService.batchDeleteFile(tid, typeMap.get(LynxConstants.TYPE_FILE));
+        //        resourceService.batchDelete(tid, rids);
         int result = bundleDAO.delete(bid, tid);
         return result;
     }
@@ -345,8 +345,8 @@ public class BundleServiceImpl implements IBundleService {
     }
 
     @Override
-    public int createBundleAndPutItems(String uid, String title, 
-            int[] rids, int tid, String description) {
+    public int createBundleAndPutItems(String uid, String title,
+                                       int[] rids, int tid, String description) {
         int bid = createBundle(title, tid, uid, description);
         SimpleResource sr[] = new SimpleResource[rids.length];
         for (int i = 0; i < rids.length; i++) {
@@ -383,7 +383,7 @@ public class BundleServiceImpl implements IBundleService {
         }
     }
 
-    /* 
+    /*
      * 更新Bundle信息
      * 依然是因为冗余信息
      */
@@ -429,7 +429,7 @@ public class BundleServiceImpl implements IBundleService {
 
     /**
      * 将原来在Bundle内的资源，重置它们的排序列（orderTitle, orderDate）为自己的title, last_edit_time
-     * 
+     *
      * @param rids
      */
     private void updateItemOrderColumn(List<Long> rids) {
@@ -446,7 +446,7 @@ public class BundleServiceImpl implements IBundleService {
 
     /**
      * 更新Bundle内所有资源的排序列（orderTitle, orderDate）为Bundle的orderTitle和orderDate
-     * 
+     *
      * @param bid
      * @param tid
      */

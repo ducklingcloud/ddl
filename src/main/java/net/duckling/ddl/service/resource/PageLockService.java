@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.resource;
@@ -21,17 +21,17 @@ package net.duckling.ddl.service.resource;
 
 public interface PageLockService {
 
-	PageLock getCurrentLock(int tid, int pageid);
+    PageLock getCurrentLock(int tid, int pageid);
 
-	void unlockPage(int tid, int pid, String uid);
+    void unlockPage(int tid, int pid, String uid);
 
-	void updateLockTime(int tid, int pageid);
+    void updateLockTime(int tid, int pageid);
 
-	long getLeftTimeOfPageLock(int tid, int pid);
+    long getLeftTimeOfPageLock(int tid, int pid);
 
-	boolean isLockTimeOut(int tid, int pid);
+    boolean isLockTimeOut(int tid, int pid);
 
-	PageLock lockPage(int tid, int pid, String uid, int version);
+    PageLock lockPage(int tid, int pid, String uid, int version);
 
-	boolean isLockTimeOut(PageLock lock);
+    boolean isLockTimeOut(PageLock lock);
 }

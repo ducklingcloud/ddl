@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -47,7 +47,7 @@ import cn.vlabs.clb.api.document.ChunkResponse;
 
 /**
  * 大文件分块上传接口
- * 
+ *
  * @date 2014-8-18
  * @author lishanbo@cstnet.cn
  */
@@ -71,8 +71,8 @@ public class APIUploadChunkController extends BaseController {
      */
     @RequestMapping(method = RequestMethod.POST, params = "func=prepare")
     public void prepare(@RequestParam("fileName") String fileName, @RequestParam("md5") String md5,
-            @RequestParam("size") long size, @RequestParam("parentRid") int parentRid, HttpServletRequest request,
-            HttpServletResponse response) {
+                        @RequestParam("size") long size, @RequestParam("parentRid") int parentRid, HttpServletRequest request,
+                        HttpServletResponse response) {
         VWBContext vwbcontext = VWBContext.createContext(request, UrlPatterns.T_ATTACH);
         String uid = vwbcontext.getCurrentUID();
         int tid = VWBContext.getCurrentTid();
@@ -83,8 +83,8 @@ public class APIUploadChunkController extends BaseController {
             cr = (ChunkResponse) result[0];
             rid = (int) result[1];
         } catch (NoEnoughSpaceException e) {
-        	LOGGER.error(e.getMessage());
-        	printResponse(e.getMessage(), false, null, response);
+            LOGGER.error(e.getMessage());
+            printResponse(e.getMessage(), false, null, response);
             return;
         }
 
@@ -93,7 +93,7 @@ public class APIUploadChunkController extends BaseController {
 
     /**
      * 分块上传执行
-     * 
+     *
      * @param file 文件块
      * @param chunkedIndex 文件块序列索引
      * @param rid 文档id
@@ -104,28 +104,28 @@ public class APIUploadChunkController extends BaseController {
      */
     @RequestMapping(method = RequestMethod.POST, params = "func=execute")
     public void execute(@RequestParam("file") MultipartFile file, @RequestParam("rid") int rid,
-            @RequestParam("chunkedIndex") int chunkedIndex, @RequestParam("numOfBytes") int numOfBytes,
-            HttpServletRequest request, HttpServletResponse response) throws IOException {
+                        @RequestParam("chunkedIndex") int chunkedIndex, @RequestParam("numOfBytes") int numOfBytes,
+                        HttpServletRequest request, HttpServletResponse response) throws IOException {
         int tid = VWBContext.getCurrentTid();
         printUploadResult(operateService.executeChunkUpload(rid, tid, chunkedIndex, file.getBytes(), numOfBytes),
-                rid, response);
+                          rid, response);
     }
 
     /**
      * 完成分块上传
-     * 
+     *
      * @param rid
      * @param request
      * @param response
      */
     @RequestMapping(method = RequestMethod.POST, params = "func=finish")
     public void finish(@RequestParam("rid") int rid, HttpServletRequest request,
-            HttpServletResponse response) {
-    	int tid = VWBContext.getCurrentTid();
-    	printUploadResult(operateService.finishChunkUpload(rid, tid), rid,
-    	        response);
+                       HttpServletResponse response) {
+        int tid = VWBContext.getCurrentTid();
+        printUploadResult(operateService.finishChunkUpload(rid, tid), rid,
+                          response);
     }
-    
+
     /**
      * 输出上传结果
      * @param cr
@@ -133,7 +133,7 @@ public class APIUploadChunkController extends BaseController {
      * @param response
      */
     private void printUploadResult(ChunkResponse cr,int rid, HttpServletResponse response){
-    	Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("phase", cr.getPhase());
         map.put("statusCode", String.valueOf(cr.getStatusCode()));
         map.put("chunkIndex", String.valueOf(cr.getChunkIndex()));
@@ -141,24 +141,24 @@ public class APIUploadChunkController extends BaseController {
         map.put("statusMessage", cr.getStatusMessage());
         map.put("rid", String.valueOf(rid));
         map.put("emptyChunkSet", cr.getEmptyChunkSet());
-    	if(cr.isSccuessStatus()){
+        if(cr.isSccuessStatus()){
             printResponse(cr.getStatusMessage(), true, map, response);
         } else {
-        	LOGGER.error(cr.getStatusCode() + ":" + cr.getStatusMessage());
-        	printResponse(cr.getStatusMessage(), false, map, response);
+            LOGGER.error(cr.getStatusCode() + ":" + cr.getStatusMessage());
+            printResponse(cr.getStatusMessage(), false, map, response);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private void printResponse(String message, Boolean success, Map<String, Object> params, HttpServletResponse response) {
         JSONObject j = new JSONObject();
         j.put("result", success);
         j.put("message", message);
-        
+
         if(params!=null){
-        	j.putAll(params);
+            j.putAll(params);
         }
-        
+
         JsonUtil.writeJSONObject(response, j);
     }
 

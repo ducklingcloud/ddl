@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.lottery;
@@ -49,11 +49,11 @@ public class LotteryService {
 
     /*
      * 三张表
-     * 
+     *
      * daily_lottery date -> seqence_map
-     * 
+     *
      * drawRecord user -> gift
-     * 
+     *
      * dailyIDGenerator date -> nature_seq
      */
 
@@ -328,7 +328,7 @@ public class LotteryService {
     public List<DrawResult> getGiftedUserList() {
         return drawResultDao.getDailyDrawResult(this.lottery.getName(), this.lottery.getMinReportLevel());
     }
-    
+
     // 获得所有实物奖名单
     public List<DrawResult> getAllOfDelivery() {
         return drawResultDao.queryAllOfDelivery();
@@ -501,7 +501,7 @@ public class LotteryService {
     public void resetTodayLottery(String date) {
         Jedis jdc = rdsPool.getResource();
         String[] keys = { String.format(DAILY_LOTTERY_CHANCE, date), String.format(DAILY_LOTTERY_SEQUENCE, date),
-                String.format(DAILY_LOTTERY_IP, date), String.format(DAILY_NATURE_ID, date) };
+            String.format(DAILY_LOTTERY_IP, date), String.format(DAILY_NATURE_ID, date) };
         long d = jdc.del(keys);
         System.out.println(d);
         rdsPool.returnResource(jdc);
@@ -545,7 +545,7 @@ public class LotteryService {
         }
         return OPEN;
     }
-    
+
     public static void main(String[] args) {
         int total = 1000;
         String[] array = new String[total];
@@ -562,5 +562,5 @@ public class LotteryService {
             System.out.print(array[i] + " ");
         }
     }
-    
+
 }

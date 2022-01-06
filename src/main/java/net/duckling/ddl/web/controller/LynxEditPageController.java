@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -84,7 +84,7 @@ import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * 编辑器和浏览的功能都在这里
- * 
+ *
  * @date 2012-05-07
  * @author Clive Lee
  */
@@ -94,8 +94,8 @@ import cn.cnic.cerc.dlog.client.WebLog;
 @RequirePermission(target = "team", operation = "edit")
 public class LynxEditPageController extends BaseController {
     private static final Logger LOG = Logger.getLogger(LynxEditPageController.class);
-	@Autowired
-	private TeamService teamService;
+    @Autowired
+    private TeamService teamService;
     @Autowired
     private IResourceService resourceService;
     @Autowired
@@ -175,7 +175,7 @@ public class LynxEditPageController extends BaseController {
                 resourceService.updateTagMap(rid, tag);
             }
         }
-        
+
         // 增加默认姓名标签
         resourceOperateService.addDefaultTag(rid);
         Team team =teamService.getTeamByID(tid);
@@ -275,14 +275,14 @@ public class LynxEditPageController extends BaseController {
         String title = request.getParameter("pageTitle");
         VWBContext context = getEditPageContext(request, rid);
         PageRender render = getPageRender(rid, context);
-        
+
         //如果文件名冲突则继续使用原有文件名
         int parentRid=render.getMeta().getBid();
         if(!resourceOperateService.canUseFileName(context.getTid(), parentRid, rid,render.getMeta().getItemType(), title)){
-        	title=render.getMeta().getTitle();
+            title=render.getMeta().getTitle();
         }
-        
-        
+
+
         ResourceBundle rb = context.getBundle("templates/default");
         String dml = convertToDML(context, htmlText);
         Resource meta = render.getMeta();
@@ -291,7 +291,7 @@ public class LynxEditPageController extends BaseController {
         meta.setLastEditTime(new Date());
         meta.setTitle(title);
         PageVersion v = PageHelper.createPageVersion(meta, title, context.getCurrentUID(),
-                context.getCurrentUserName(), dml);
+                                                     context.getCurrentUserName(), dml);
         render.setMeta(meta);
         render.setDetail(v);
         draftService.updateAutoSaveDraft(getTeamId(context), render, context.getCurrentUID());
@@ -322,22 +322,22 @@ public class LynxEditPageController extends BaseController {
         meta.setLastEditTime(new Date());
         meta.setTitle(title);
         PageVersion v = PageHelper.createPageVersion(meta, title, context.getCurrentUID(),
-                context.getCurrentUserName(), textWithoutMetaData);
+                                                     context.getCurrentUserName(), textWithoutMetaData);
         render.setMeta(meta);
         render.setDetail(v);
         updateManualDraft(context, render);
         updatePageLockTime(context, meta);
-        
-        
+
+
         //保存相关文档
         saveFileReference(htmlText, rid);
-        
+
         Date redate = meta.getLastEditTime();
         writeToResponse(response, context.getBundle("templates/default").getString("action.savepage.success") + "|"
-                + redate);
-        
+                        + redate);
+
     }
-    
+
 
     @RequestMapping(params = "func=saveexit")
     @WebLog(method = "saveAndPublish", params = "rid")
@@ -371,18 +371,18 @@ public class LynxEditPageController extends BaseController {
             resourceOperateService.updatePageVersion(meta, textWithoutMetaData);
         }
         gridService.editItem(uid, tid, rid, LynxConstants.TYPE_PAGE);
-        
+
         //保存相关文档
         saveFileReference(htmlText, rid);
-        
+
         clearAllDraft(context, meta);
         unlockCurrentPage(context, meta);
         teamSpaceSizeService.resetTeamResSize(tid);
-     //   updateBundle(context, rid, bid);
+        //   updateBundle(context, rid, bid);
         return getRedirectViewByBidAndPid(context, rid, tid);
     }
 
- 
+
 
     @RequestMapping(params = "func=preview")
     @WebLog(method = "previewEditResult", params = "rid")
@@ -447,7 +447,7 @@ public class LynxEditPageController extends BaseController {
 
     @RequestMapping(params = "func=updateLockTime")
     public void updateLockTime(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("rid") Integer rid) {
+                               @RequestParam("rid") Integer rid) {
         VWBContext context = getEditPageContext(request, rid);
         PageRender render = getPageRender(rid, context);
         PageLock lock = pageLockService.getCurrentLock(VWBContext.getCurrentTid(), rid);
@@ -458,33 +458,33 @@ public class LynxEditPageController extends BaseController {
         result.put("status", "success");
         JsonUtil.writeJSONObject(response, result);
     }
-    
+
     /**
      * 保存相关文档
      * @param htmlText
      * @param rid
      */
     private void saveFileReference(String htmlText, Integer rid){
-    	List<Integer> fidList = new ArrayList<Integer>();
-    	Pattern p = Pattern.compile("<A href=\"http://[\\da-zA-Z\\.\\-:/]+/r/(\\d+)\" target=\"_blank\" rid=\"(\\d+)\">");
-    	Matcher  m = p.matcher(htmlText);
-    	while(m.find()){
-    		if(StringUtils.isNumeric(m.group(1))){
-    			fidList.add(Integer.parseInt(m.group(1)));
-    		}
-    	}
-    	
-    	if(fidList.size() == 0){
-    		return;
-    	}
-    	
-    	//转换整型数组
-    	int [] fids = new int[fidList.size()];
-    	for(int i=0; i<fidList.size(); i++){
-    		fids[i] = fidList.get(i);
-    	}
-    	
-    	fileVersionService.referTo(rid,VWBContext.getCurrentTid(),fids);
+        List<Integer> fidList = new ArrayList<Integer>();
+        Pattern p = Pattern.compile("<A href=\"http://[\\da-zA-Z\\.\\-:/]+/r/(\\d+)\" target=\"_blank\" rid=\"(\\d+)\">");
+        Matcher  m = p.matcher(htmlText);
+        while(m.find()){
+            if(StringUtils.isNumeric(m.group(1))){
+                fidList.add(Integer.parseInt(m.group(1)));
+            }
+        }
+
+        if(fidList.size() == 0){
+            return;
+        }
+
+        //转换整型数组
+        int [] fids = new int[fidList.size()];
+        for(int i=0; i<fidList.size(); i++){
+            fids[i] = fidList.get(i);
+        }
+
+        fileVersionService.referTo(rid,VWBContext.getCurrentTid(),fids);
     }
 
     private PageRender getPageRender(int rid, VWBContext context) {
@@ -500,16 +500,16 @@ public class LynxEditPageController extends BaseController {
     }
 
     private void lockCurrentPage(VWBContext context, PageRender render) {
-    	pageLockService.lockPage(getTeamId(context), render.getMeta().getRid(), context.getCurrentUID(), render.getMeta()
-                .getLastVersion());
+        pageLockService.lockPage(getTeamId(context), render.getMeta().getRid(), context.getCurrentUID(), render.getMeta()
+                                 .getLastVersion());
     }
 
     private void unlockCurrentPage(VWBContext context, Resource meta) {
-    	pageLockService.unlockPage(getTeamId(context), meta.getRid(), context.getCurrentUID());
+        pageLockService.unlockPage(getTeamId(context), meta.getRid(), context.getCurrentUID());
     }
 
     private void updatePageLockTime(VWBContext context, Resource meta) {
-    	pageLockService.updateLockTime(getTeamId(context), meta.getRid());
+        pageLockService.updateLockTime(getTeamId(context), meta.getRid());
     }
 
     private void updateManualDraft(VWBContext context, PageRender render) {
@@ -640,26 +640,26 @@ public class LynxEditPageController extends BaseController {
         }
     }
 
-    
-	@RequestMapping(params="func=validateFileName")
-	public void validateFileName(HttpServletRequest request,HttpServletResponse response){
-		int rid = Integer.parseInt(StringUtils.defaultString(request.getParameter("rid"), "0"));
-		JSONObject o = new JSONObject();
-		if(rid ==0){
-			o.put("result", false);
-			o.put("message", "参数错误！");
-		}else{
-			String fileName = request.getParameter("fileName");
-			Resource resource=resourceService.getResource(rid);
-			int parentRid=resource.getBid();
-			if(!resourceOperateService.canUseFileName(VWBContext.getCurrentTid(), parentRid, rid,resource.getItemType(), fileName)){
-				o.put("result", false);
-				o.put("message", "当前文件夹下存在重名文件！");
-			}else{
-				o.put("result", true);
-			}
-		}
-		JsonUtil.writeJSONObject(response, o);
-	}
-    
+
+    @RequestMapping(params="func=validateFileName")
+    public void validateFileName(HttpServletRequest request,HttpServletResponse response){
+        int rid = Integer.parseInt(StringUtils.defaultString(request.getParameter("rid"), "0"));
+        JSONObject o = new JSONObject();
+        if(rid ==0){
+            o.put("result", false);
+            o.put("message", "参数错误！");
+        }else{
+            String fileName = request.getParameter("fileName");
+            Resource resource=resourceService.getResource(rid);
+            int parentRid=resource.getBid();
+            if(!resourceOperateService.canUseFileName(VWBContext.getCurrentTid(), parentRid, rid,resource.getItemType(), fileName)){
+                o.put("result", false);
+                o.put("message", "当前文件夹下存在重名文件！");
+            }else{
+                o.put("result", true);
+            }
+        }
+        JsonUtil.writeJSONObject(response, o);
+    }
+
 }

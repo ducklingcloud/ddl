@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.web.api.pan;
@@ -60,25 +60,25 @@ public class APIPanListController {
     private AoneUserService aoneUserService;
     @Autowired
     private IPanService service;
-	
+
     /**
-	 * 返回记录格式
-	 */
-	public final static String RECORD_FORMAT="recordFormat";
-	public final static String RECORD_FORMAT_LITE="lite"; //简版
-	
-	@RequestMapping
-	public void list(HttpServletRequest request,HttpServletResponse response){
-		//如果不在支持meePo盘那么开启下面注销
-//		JSONObject obj = new JSONObject();
-//		obj.put("success", false);
-//		obj.put("message", "此版本不再支持个人同步盘，请下载新的版本");
-//		JSONHelper.writeJSONObject(response, obj);return;
-		
-		String path = getRequestRid(request);
-		String recordFormat = request.getParameter(RECORD_FORMAT);
-		
-		MeePoMeta meta = null;
+     * 返回记录格式
+     */
+    public final static String RECORD_FORMAT="recordFormat";
+    public final static String RECORD_FORMAT_LITE="lite"; //简版
+
+    @RequestMapping
+    public void list(HttpServletRequest request,HttpServletResponse response){
+        //如果不在支持meePo盘那么开启下面注销
+        //      JSONObject obj = new JSONObject();
+        //      obj.put("success", false);
+        //      obj.put("message", "此版本不再支持个人同步盘，请下载新的版本");
+        //      JSONHelper.writeJSONObject(response, obj);return;
+
+        String path = getRequestRid(request);
+        String recordFormat = request.getParameter(RECORD_FORMAT);
+
+        MeePoMeta meta = null;
         try {
             meta = queryMeta(request, path, true);
         } catch (MeePoException e) {
@@ -90,37 +90,37 @@ public class APIPanListController {
         List<PanResourceBean> ancestors = getAncestors(meta);
         String tokenKey = request.getParameter("tokenKey");
         PanResourceBeanSort.sort(result, request.getParameter("sortType"));
-        
+
         JSONObject j = null;
         if(RECORD_FORMAT_LITE.equals(recordFormat)){
-        	j = buildQueryResultLite(user, meta, result, ancestors);
+            j = buildQueryResultLite(user, meta, result, ancestors);
         }else{
-        	j = buildQueryResult(user, meta, result, ancestors);
+            j = buildQueryResult(user, meta, result, ancestors);
         }
         j.put("tokenKey", tokenKey);
-        
-		JsonUtil.writeJSONObject(response, j);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private JSONObject buildQueryResult(SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
-            List<PanResourceBean> ancestors) {
+
+        JsonUtil.writeJSONObject(response, j);
+    }
+
+    @SuppressWarnings("unchecked")
+    private JSONObject buildQueryResult(SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
+                                        List<PanResourceBean> ancestors) {
         JSONObject j = buildQueryResultCommon(user, meta, resources, ancestors);
         j.put("children", LynxResourceUtils.getPanResourceList(resources, user.getUid()));
         return j;
     }
-	
-	@SuppressWarnings("unchecked")
-	private JSONObject buildQueryResultLite( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
-            List<PanResourceBean> ancestors) {
-		JSONObject j = buildQueryResultCommon(user, meta, resources, ancestors);
+
+    @SuppressWarnings("unchecked")
+    private JSONObject buildQueryResultLite( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
+                                             List<PanResourceBean> ancestors) {
+        JSONObject j = buildQueryResultCommon(user, meta, resources, ancestors);
         j.put("children", LynxResourceUtils.getPanResourceListLite(resources, user.getUid()));
         return j;
     }
-	
-	@SuppressWarnings("unchecked")
-	private JSONObject buildQueryResultCommon( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
-            List<PanResourceBean> ancestors) {
+
+    @SuppressWarnings("unchecked")
+    private JSONObject buildQueryResultCommon( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
+                                               List<PanResourceBean> ancestors) {
         if (resources == null) {
             resources = new ArrayList<PanResourceBean>();
         }
@@ -132,8 +132,8 @@ public class APIPanListController {
         j.put("size", resources.size());
         return j;
     }
-	
-	private List<PanResourceBean> adapterMeta(MeePoMeta meta,SimpleUser user) {
+
+    private List<PanResourceBean> adapterMeta(MeePoMeta meta,SimpleUser user) {
         List<PanResourceBean> result = new ArrayList<PanResourceBean>();
         if (meta == null || meta.contents == null || meta.contents.length == 0) {
             return result;
@@ -144,8 +144,8 @@ public class APIPanListController {
         }
         return result;
     }
-	
-	private List<PanResourceBean> getAncestors(MeePoMeta meta) {
+
+    private List<PanResourceBean> getAncestors(MeePoMeta meta) {
         List<PanResourceBean> rs = new ArrayList<PanResourceBean>();
         String path = meta.restorePath;
         if (path != null) {
@@ -172,54 +172,54 @@ public class APIPanListController {
         return rs;
     }
 
-	
-	private void filterByType(List<PanResourceBean> result, String type) {
-    	if("Picture".equals(type)){
-    		Iterator<PanResourceBean> it = result.iterator();
-    		while(it.hasNext()){
-    			PanResourceBean bean = it.next();
-    			if(!FileTypeUtils.isClbDealImage(bean.getTitle())){
-    				it.remove();
-    			}
-    		}
-    	}
-	}
-	private MeePoMeta queryMeta(HttpServletRequest request, String path, boolean list) throws MeePoException {
+
+    private void filterByType(List<PanResourceBean> result, String type) {
+        if("Picture".equals(type)){
+            Iterator<PanResourceBean> it = result.iterator();
+            while(it.hasNext()){
+                PanResourceBean bean = it.next();
+                if(!FileTypeUtils.isClbDealImage(bean.getTitle())){
+                    it.remove();
+                }
+            }
+        }
+    }
+    private MeePoMeta queryMeta(HttpServletRequest request, String path, boolean list) throws MeePoException {
         return service.ls(PanAclUtil.getInstance(request), path, list);
     }
-	
-	private String getRequestRid(HttpServletRequest request){
-		String tagAll = request.getParameter("tagFilter");
-		if("all".equals(tagAll)){
-			return "/";
-		}
-		String rid = request.getParameter("rid");
-		if(StringUtils.isEmpty(rid)){
-			String path = request.getParameter("path");
-			rid=decode(path);
-		}else{
-			rid=decode(rid);
-		}
-		if(StringUtils.isEmpty(rid)){
-			return "/";
-		}
-		return rid;
-	}
-	
-	private String decode(String rid){
-		try {
-			return URLDecoder.decode(rid, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-		}
-		return "";
-	}
-	@RequestMapping(params="func=getChildrenFolder")
-	public void getFolder(HttpServletRequest request,HttpServletResponse response){
-		String rid = decode(request.getParameter("rid"));
-		if("0".equals(rid)){
-			rid="/";
-		}
-		MeePoMeta meta = null;
+
+    private String getRequestRid(HttpServletRequest request){
+        String tagAll = request.getParameter("tagFilter");
+        if("all".equals(tagAll)){
+            return "/";
+        }
+        String rid = request.getParameter("rid");
+        if(StringUtils.isEmpty(rid)){
+            String path = request.getParameter("path");
+            rid=decode(path);
+        }else{
+            rid=decode(rid);
+        }
+        if(StringUtils.isEmpty(rid)){
+            return "/";
+        }
+        return rid;
+    }
+
+    private String decode(String rid){
+        try {
+            return URLDecoder.decode(rid, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+        }
+        return "";
+    }
+    @RequestMapping(params="func=getChildrenFolder")
+    public void getFolder(HttpServletRequest request,HttpServletResponse response){
+        String rid = decode(request.getParameter("rid"));
+        if("0".equals(rid)){
+            rid="/";
+        }
+        MeePoMeta meta = null;
         try {
             meta = queryMeta(request, rid, true);
         } catch (MeePoException e) {
@@ -227,34 +227,34 @@ public class APIPanListController {
         }
         List<PanResourceBean> childrenList = getChildren(meta, aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request)));
         SimpleUser user = aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request));
-		JSONArray result = LynxResourceUtils.getPanResourceList(childrenList,user.getUid());
-		JSONObject o = new JSONObject();
-		o.put("childrenFolder", result);
-		o.put("total", childrenList.size());
-		JsonUtil.writeJSONObject(response, o);
-	}
-	
-	private List<PanResourceBean> getChildren(MeePoMeta root ,SimpleUser user){
-		List<PanResourceBean> result = new ArrayList<PanResourceBean>();
-		if(root==null||root.contents==null){
-			return result;
-		}
-		MeePoMeta[] ms = root.contents;
-		for(MeePoMeta m : ms){
-			result.add(MeePoMetaToPanBeanUtil.transfer(m, user));
-		}
-		filterFolder(result);
-		PanResourceBeanSort.sort(result, PanResourceBeanSort.TYPE_TIME_DESC);
-		return result;
-	}
-	
-	private void filterFolder(List<PanResourceBean> beans){
-		Iterator<PanResourceBean> it = beans.iterator();
-		while(it.hasNext()){
-			PanResourceBean bean = it.next();
-			if(!LynxConstants.TYPE_FOLDER.equals(bean.getItemType())){
-				it.remove();
-			}
-		}
-	}
+        JSONArray result = LynxResourceUtils.getPanResourceList(childrenList,user.getUid());
+        JSONObject o = new JSONObject();
+        o.put("childrenFolder", result);
+        o.put("total", childrenList.size());
+        JsonUtil.writeJSONObject(response, o);
+    }
+
+    private List<PanResourceBean> getChildren(MeePoMeta root ,SimpleUser user){
+        List<PanResourceBean> result = new ArrayList<PanResourceBean>();
+        if(root==null||root.contents==null){
+            return result;
+        }
+        MeePoMeta[] ms = root.contents;
+        for(MeePoMeta m : ms){
+            result.add(MeePoMetaToPanBeanUtil.transfer(m, user));
+        }
+        filterFolder(result);
+        PanResourceBeanSort.sort(result, PanResourceBeanSort.TYPE_TIME_DESC);
+        return result;
+    }
+
+    private void filterFolder(List<PanResourceBean> beans){
+        Iterator<PanResourceBean> it = beans.iterator();
+        while(it.hasNext()){
+            PanResourceBean bean = it.next();
+            if(!LynxConstants.TYPE_FOLDER.equals(bean.getItemType())){
+                it.remove();
+            }
+        }
+    }
 }

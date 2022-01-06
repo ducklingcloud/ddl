@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.search.impl;
@@ -28,26 +28,26 @@ import net.duckling.ddl.service.search.WeightPair;
  */
 
 public interface SearchDocWeightDAO {
-	/**
-	 * @param keyword 查询词 
-	 * @return 对于用户uid查询的keyword所有文档的的权重值
-	 */
-	List<DocWeightRecord> getDocWeight(String keyword);
-	/**
-	 * @param keyword
-	 * @param uid
-	 * @return
-	 */
-	List<WeightPair> getOwnDocWeight(String keyword,String uid);
-	/**
-	 * 更新根据搜索记录产生的文档的权重值，返回插入记录的条数
-	 */
-	int updateDocWeight();
-	/**
-	 * @param rid 文档编号的列表
-	 * @return 这些文档由浏览产生的权重
-	 */ 
-	List<WeightPair> getViewDocWeight(List<Long> rids);
-	
+    /**
+     * @param keyword 查询词
+     * @return 对于用户uid查询的keyword所有文档的的权重值
+     */
+    List<DocWeightRecord> getDocWeight(String keyword);
+    /**
+     * @param keyword
+     * @param uid
+     * @return
+     */
+    List<WeightPair> getOwnDocWeight(String keyword,String uid);
+    /**
+     * 更新根据搜索记录产生的文档的权重值，返回插入记录的条数
+     */
+    int updateDocWeight();
+    /**
+     * @param rid 文档编号的列表
+     * @return 这些文档由浏览产生的权重
+     */
+    List<WeightPair> getViewDocWeight(List<Long> rids);
+
 
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -50,37 +50,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/myCommons")
 @RequirePermission(target="team", operation="view")
 public class APIMyCommonsController extends APIBaseResourceController {
-	
-	private static final int QUERY_SIZE = 9;
+
+    private static final int QUERY_SIZE = 9;
     @Autowired
     private IResourceService resourceService;
     @Autowired
     private IGridService gridService;
-	
-	@SuppressWarnings("unchecked")
-	@RequestMapping
-	public void service(HttpServletRequest request, HttpServletResponse response){
-		JSONObject object= new JSONObject();
-		Site site =  findSite(request);
-		String uid = findUser(request);
-		int tid = site.getId();
-		List<GridItem> gridItems = gridService.getTopKGridItem(uid, tid, QUERY_SIZE);
-		
-		List<Resource> resourceList = new ArrayList<Resource>();
-		for(GridItem item:gridItems){
-			Resource res = resourceService.getResource(item.getRid(), tid);
-			if(res!=null&&!LynxConstants.STATUS_DELETE.equals(res.getStatus())){
-				resourceList.add(res);
-			}else{
-			    gridService.kickout(uid, tid, item.getRid(), item.getItemType());
-			}
-		}
-		
-		JSONArray array = JsonUtil.getJSONArrayFromList(resourceList);
-		object.put("records", array);
-		String api = request.getParameter("api");
-		object.put("api", api);
-		JsonUtil.writeJSONObject(response, object);
-	}
-	
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping
+    public void service(HttpServletRequest request, HttpServletResponse response){
+        JSONObject object= new JSONObject();
+        Site site =  findSite(request);
+        String uid = findUser(request);
+        int tid = site.getId();
+        List<GridItem> gridItems = gridService.getTopKGridItem(uid, tid, QUERY_SIZE);
+
+        List<Resource> resourceList = new ArrayList<Resource>();
+        for(GridItem item:gridItems){
+            Resource res = resourceService.getResource(item.getRid(), tid);
+            if(res!=null&&!LynxConstants.STATUS_DELETE.equals(res.getStatus())){
+                resourceList.add(res);
+            }else{
+                gridService.kickout(uid, tid, item.getRid(), item.getItemType());
+            }
+        }
+
+        JSONArray array = JsonUtil.getJSONArrayFromList(resourceList);
+        object.put("records", array);
+        String api = request.getParameter("api");
+        object.put("api", api);
+        JsonUtil.writeJSONObject(response, object);
+    }
+
 }

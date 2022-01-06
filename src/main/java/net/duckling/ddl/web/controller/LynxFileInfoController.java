@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -74,8 +74,8 @@ import cn.vlabs.clb.api.SupportedFileFormatForOnLineViewer;
 @RequestMapping("/{teamCode}/file/{fid}")
 @RequirePermission(target = "team", operation = "view")
 public class LynxFileInfoController extends BaseController {
-	@Autowired
-	private AoneMailService aonemailService;
+    @Autowired
+    private AoneMailService aonemailService;
     @Autowired
     private IResourceService resourceService;
     @Autowired
@@ -92,21 +92,21 @@ public class LynxFileInfoController extends BaseController {
     private ResourceOperateService resourceOperateService;
     @Autowired
     private ItemTypeMappingService itemTypeMappingService;
-    
+
     private static final Logger LOG = Logger.getLogger(LynxFileInfoController.class);
     private boolean validateDeleteAuth(VWBContext context, int rid,String resourceType){
-		String u = context.getCurrentUID();
-		if(authorityService.teamAccessability(VWBContext.getCurrentTid(),
-		        VWBSession.findSession(context.getHttpRequest()), AuthorityService.ADMIN)){
-			return true;
-		}else{
-			Resource r = resourceService.getResource(rid, VWBContext.getCurrentTid());
-			if(r!=null&&u.equals(r.getCreator())){
-				return true;
-			}
-		}
-		return false;
-	}
+        String u = context.getCurrentUID();
+        if(authorityService.teamAccessability(VWBContext.getCurrentTid(),
+                                              VWBSession.findSession(context.getHttpRequest()), AuthorityService.ADMIN)){
+            return true;
+        }else{
+            Resource r = resourceService.getResource(rid, VWBContext.getCurrentTid());
+            if(r!=null&&u.equals(r.getCreator())){
+                return true;
+            }
+        }
+        return false;
+    }
     @RequestMapping
     @WebLog(method = "showFileInfo", params = "fid")
     public ModelAndView viewFile(HttpServletRequest request,HttpServletResponse response, @PathVariable("fid") int fid) {
@@ -117,116 +117,116 @@ public class LynxFileInfoController extends BaseController {
         }
         ModelAndView mv = new ModelAndView(new RedirectView(urlGenerator.getURL(tid, UrlPatterns.T_VIEW_R, i.getRid() + "",null)));
         return mv;
-    	/*
-        int fid = getFileId(request, fidStr);
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.FILE, fid, LynxConstants.TYPE_FILE);
-        String uid = context.getCurrentUID();
-        int tid = context.getSite().getId();
-        Resource resource = context.getResource();
-        // add by lvly@2012-07-20
-        if (resource != null && !StringUtils.isNullOrEmpty(resource.getStatus())
-                && LynxConstants.STATUS_DELETE.equals(resource.getStatus())) {
-            ModelAndView mv = BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-            if (resource.getCreator().equals(context.getCurrentUID()) || isAdmin(context, tid)) {
-                mv.addObject("recoverFlag", true);
-                mv.addObject("rid", resource.getRid());
-            }
-            return mv;
-        }
-        if (resource != null && resource.getBid() != 0) {
-            return new ModelAndView(new RedirectView(urlGenerator.getURL(tid,UrlPatterns.LYNX_BUNDLE,
-                    resource.getBid() + "", "rid=" + resource.getRid())));
-        }
-        ModelAndView mv = BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/tag/fileView.jsp");
-        mv.addObject("deleteFileURL",urlGenerator.getURL(tid,UrlPatterns.FILE, fid + "", "func=moveToTrash&bid=0"));
-        mv.addObject("validateURL", urlGenerator.getURL(tid,UrlPatterns.FILE, fid + "", "func=removeValidate"));
-        File dfile = fileService.getFile(fid, tid);
-        if (null == dfile) {
-            return BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-        }
-        int version = getCurrentVersion(request);
-        FileVersion currentVersion;
-        if (version > 0) {
-            currentVersion = fileVersionService.getFileVersion(fid, tid, version);
-        } else {
-            currentVersion = fileVersionService.getLatestFileVersion(fid, tid);
-        }
-        mv.addObject("resource", resource);
-        Set<String> starmark = resource.getMarkedUserSet();
-        if (null != starmark && starmark.contains(context.getCurrentUID())) {
-            mv.addObject("starmark", true);
-        } else {
-            mv.addObject("starmark", false);
-        }
-        currentVersion.setEditor(context.getContainer().getAoneUserService()
-                .getUserNameByID(currentVersion.getEditor()));
-        int cid = dfile.getClbId();
-        mv.addObject("cid", cid);
-        mv.addObject("copyLog", copyService.getCopyedDisplay(resource.getRid(), currentVersion.getVersion()));
-        mv.addObject("curVersion", currentVersion);
-        mv.addObject("latestVersion", dfile.getLastVersion());
-        mv.addObject("sizeShort", NumberFormatUtil.getSizeShort(currentVersion.getSize()));
-        mv.addObject("fileExtend", getFileExtend(currentVersion.getTitle(), currentVersion.getSize()));
-        if (version > 0) {
-            mv.addObject("downloadURL",
-                    urlGenerator.getURL(tid,"download", Integer.toString(fid), "type=doc&version=" + version));
-        } else {
-            mv.addObject("downloadURL", urlGenerator.getURL(tid,"download", Integer.toString(fid), "type=doc"));
-        }
-        // Load Version List
-        List<FileVersion> versionList = fileVersionService.getFileVersions(fid, tid);
-        mv.addObject("versionList", versionList);
+        /*
+          int fid = getFileId(request, fidStr);
+          VWBContext context = VWBContext.createContext(request, UrlPatterns.FILE, fid, LynxConstants.TYPE_FILE);
+          String uid = context.getCurrentUID();
+          int tid = context.getSite().getId();
+          Resource resource = context.getResource();
+          // add by lvly@2012-07-20
+          if (resource != null && !StringUtils.isNullOrEmpty(resource.getStatus())
+          && LynxConstants.STATUS_DELETE.equals(resource.getStatus())) {
+          ModelAndView mv = BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
+          if (resource.getCreator().equals(context.getCurrentUID()) || isAdmin(context, tid)) {
+          mv.addObject("recoverFlag", true);
+          mv.addObject("rid", resource.getRid());
+          }
+          return mv;
+          }
+          if (resource != null && resource.getBid() != 0) {
+          return new ModelAndView(new RedirectView(urlGenerator.getURL(tid,UrlPatterns.LYNX_BUNDLE,
+          resource.getBid() + "", "rid=" + resource.getRid())));
+          }
+          ModelAndView mv = BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/tag/fileView.jsp");
+          mv.addObject("deleteFileURL",urlGenerator.getURL(tid,UrlPatterns.FILE, fid + "", "func=moveToTrash&bid=0"));
+          mv.addObject("validateURL", urlGenerator.getURL(tid,UrlPatterns.FILE, fid + "", "func=removeValidate"));
+          File dfile = fileService.getFile(fid, tid);
+          if (null == dfile) {
+          return BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
+          }
+          int version = getCurrentVersion(request);
+          FileVersion currentVersion;
+          if (version > 0) {
+          currentVersion = fileVersionService.getFileVersion(fid, tid, version);
+          } else {
+          currentVersion = fileVersionService.getLatestFileVersion(fid, tid);
+          }
+          mv.addObject("resource", resource);
+          Set<String> starmark = resource.getMarkedUserSet();
+          if (null != starmark && starmark.contains(context.getCurrentUID())) {
+          mv.addObject("starmark", true);
+          } else {
+          mv.addObject("starmark", false);
+          }
+          currentVersion.setEditor(context.getContainer().getAoneUserService()
+          .getUserNameByID(currentVersion.getEditor()));
+          int cid = dfile.getClbId();
+          mv.addObject("cid", cid);
+          mv.addObject("copyLog", copyService.getCopyedDisplay(resource.getRid(), currentVersion.getVersion()));
+          mv.addObject("curVersion", currentVersion);
+          mv.addObject("latestVersion", dfile.getLastVersion());
+          mv.addObject("sizeShort", NumberFormatUtil.getSizeShort(currentVersion.getSize()));
+          mv.addObject("fileExtend", getFileExtend(currentVersion.getTitle(), currentVersion.getSize()));
+          if (version > 0) {
+          mv.addObject("downloadURL",
+          urlGenerator.getURL(tid,"download", Integer.toString(fid), "type=doc&version=" + version));
+          } else {
+          mv.addObject("downloadURL", urlGenerator.getURL(tid,"download", Integer.toString(fid), "type=doc"));
+          }
+          // Load Version List
+          List<FileVersion> versionList = fileVersionService.getFileVersions(fid, tid);
+          mv.addObject("versionList", versionList);
 
-        // Load Reference List
-        List<DFileRef> refList = fileService.getDFileReferences(fid, tid);
-        List<DFileRefView> refViewList = new ArrayList<DFileRefView>();
-        if (refList != null && refList.size() > 0) {
-            for (DFileRef ref : refList) {
-                DFileRefView refview = new DFileRefView();
-                if (ref.getPid() > 0) {
-                    Resource page = resourceService.getResource(ref.getRid());
-                    if (page != null) {
-                        refview.setPageName(page.getTitle());
-                    } else {
-                        LOG.error("page出现不一致情况记录：文件fid=" + fid + "tid=" + tid + "被page ：pid=" + ref.getPid() + "Tid="
-                                + ref.getTid() + "引用，但此文件为空");
-                    }
-                }
-                refview.setDfileRef(ref);
-                refview.setFileName(currentVersion.getTitle());
-                refViewList.add(refview);
-            }
-        }
-        mv.addObject("refView", refViewList);
-        gridService.clickItem(uid, tid, fid, LynxConstants.TYPE_FILE);
-        String strFilename = currentVersion.getTitle();
-        int index = strFilename.lastIndexOf('.');
-        String strFileType = null;
-        if (index != -1 && strFilename.length() > (index + 1)) {
-            strFileType = strFilename.substring(index + 1);
-        }
-        if (null != strFileType) {
-            String pdfstatus = PdfStatus.SOURCE_NOT_FOUND.toString();// 表示该类型文档的PDF不存在
-            boolean supported = SupportedFileFormatForOnLineViewer.isSupported(strFileType);
-            if ("pdf".equals(strFileType)) {
-                pdfstatus = PDF_ORIGINAL;
-            } else if (supported) {
-                pdfstatus = fileService.queryPdfStatus(dfile.getClbId(), "" + currentVersion.getVersion());
-            } else {
-                pdfstatus = PDF_UNSUPPORTED;// 表示不支持该类型文档的在线显示
-            }
-            if (pdfstatus == PDF_UNSUPPORTED && isSupportedFileType(strFileType)) { // 剔除图片的无法转换信息
-                strFileType = "img";
-            }
-            mv.addObject("strFileType", PlainTextHelper.convert2BrushClassFileType(strFileType));
+          // Load Reference List
+          List<DFileRef> refList = fileService.getDFileReferences(fid, tid);
+          List<DFileRefView> refViewList = new ArrayList<DFileRefView>();
+          if (refList != null && refList.size() > 0) {
+          for (DFileRef ref : refList) {
+          DFileRefView refview = new DFileRefView();
+          if (ref.getPid() > 0) {
+          Resource page = resourceService.getResource(ref.getRid());
+          if (page != null) {
+          refview.setPageName(page.getTitle());
+          } else {
+          LOG.error("page出现不一致情况记录：文件fid=" + fid + "tid=" + tid + "被page ：pid=" + ref.getPid() + "Tid="
+          + ref.getTid() + "引用，但此文件为空");
+          }
+          }
+          refview.setDfileRef(ref);
+          refview.setFileName(currentVersion.getTitle());
+          refViewList.add(refview);
+          }
+          }
+          mv.addObject("refView", refViewList);
+          gridService.clickItem(uid, tid, fid, LynxConstants.TYPE_FILE);
+          String strFilename = currentVersion.getTitle();
+          int index = strFilename.lastIndexOf('.');
+          String strFileType = null;
+          if (index != -1 && strFilename.length() > (index + 1)) {
+          strFileType = strFilename.substring(index + 1);
+          }
+          if (null != strFileType) {
+          String pdfstatus = PdfStatus.SOURCE_NOT_FOUND.toString();// 表示该类型文档的PDF不存在
+          boolean supported = SupportedFileFormatForOnLineViewer.isSupported(strFileType);
+          if ("pdf".equals(strFileType)) {
+          pdfstatus = PDF_ORIGINAL;
+          } else if (supported) {
+          pdfstatus = fileService.queryPdfStatus(dfile.getClbId(), "" + currentVersion.getVersion());
+          } else {
+          pdfstatus = PDF_UNSUPPORTED;// 表示不支持该类型文档的在线显示
+          }
+          if (pdfstatus == PDF_UNSUPPORTED && isSupportedFileType(strFileType)) { // 剔除图片的无法转换信息
+          strFileType = "img";
+          }
+          mv.addObject("strFileType", PlainTextHelper.convert2BrushClassFileType(strFileType));
 
-            mv.addObject("pdfstatus", pdfstatus);
-            mv.addObject("supported", supported);
-        }
-        String enableDConvert = context.getContainer().getProperty(KeyConstants.DCONVERT_SERVICE_ENABLE);
-        mv.addObject("enableDConvert", Boolean.valueOf(enableDConvert));
-        mv.addObject("uid", context.getCurrentUID());
-        return mv;
+          mv.addObject("pdfstatus", pdfstatus);
+          mv.addObject("supported", supported);
+          }
+          String enableDConvert = context.getContainer().getProperty(KeyConstants.DCONVERT_SERVICE_ENABLE);
+          mv.addObject("enableDConvert", Boolean.valueOf(enableDConvert));
+          mv.addObject("uid", context.getCurrentUID());
+          return mv;
         */
     }
 
@@ -242,7 +242,7 @@ public class LynxFileInfoController extends BaseController {
         if (MimeType.isImage(filename)) {
             return "IMAGE";
         } else if (PlainTextHelper.isSupported(MimeType.getSuffix(filename))
-                && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {// 文件超过给定大小时不直接显示
+                   && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {// 文件超过给定大小时不直接显示
             return "TEXT";
         }
         return "FILE";
@@ -299,14 +299,14 @@ public class LynxFileInfoController extends BaseController {
 
     /**
      * 恢复文件版本
-     * 
+     *
      * @param request
      * @param response
      * @throws IOException
      */
     @RequestMapping(params = "func=recoverFileVersion")
     public void recoverFileVersion(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("fid") int fid) throws IOException {
+                                   @PathVariable("fid") int fid) throws IOException {
         int version = Integer.parseInt(request.getParameter("version"));
         int tid = Integer.parseInt(request.getParameter("tid"));
         resourceOperateService.recoverFileVersion(tid, fid, version,VWBSession.getCurrentUid(request));
@@ -363,7 +363,7 @@ public class LynxFileInfoController extends BaseController {
     @RequestMapping(params = "func=submitShareExistFile")
     public ModelAndView submitShareFile(HttpServletRequest request) throws UnsupportedEncodingException {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
-//        Site site = context.getSite();
+        //        Site site = context.getSite();
         int tid = context.getTid();
         String uid = context.getCurrentUID();
         String userName = context.getCurrentUserName();
@@ -373,13 +373,13 @@ public class LynxFileInfoController extends BaseController {
         int fid = Integer.parseInt(request.getParameter("fid"));
         String message = request.getParameter("message");
         String encodeURL = shareFileAccessService.getPublicFileURL(VWBContext.getCurrentTid(),
-                Integer.parseInt(clbIds), fid, validOfDays, uid);
+                                                                   Integer.parseInt(clbIds), fid, validOfDays, uid);
         String fileURLs = urlGenerator.getAbsoluteURL(tid, UrlPatterns.DIRECT, encodeURL, null);
         String friendEmails = request.getParameter("targetEmails");
         String[] shareMails = friendEmails.split(",");
         for (int i = 0; i < shareMails.length; i++) {
             aonemailService.sendAccessFileMail(new String[] { fileNames }, new String[] { fileURLs }, userName, shareMails[i],
-                    message);
+                                               message);
         }
         aonemailService.sendShareSuccessMailWithoutActivation(uid, userName, new String[] { fileURLs }, new String[] { fileNames },shareMails);
         String url = urlGenerator.getURL(tid,UrlPatterns.T_FILE, fid + "", "");
@@ -406,7 +406,7 @@ public class LynxFileInfoController extends BaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
         ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/onlineViewer.jsp");
         int tid = context.getSite().getId();
-        
+
         Resource dfile = resourceService.getResource(rid);
         if (dfile==null) {
             return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
@@ -420,7 +420,7 @@ public class LynxFileInfoController extends BaseController {
         }
         if (version > 0) {
             mv.addObject("downloadURL",
-                    urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc&version=" + version));
+                         urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc&version=" + version));
         } else {
             mv.addObject("downloadURL", urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc"));
         }
@@ -434,14 +434,14 @@ public class LynxFileInfoController extends BaseController {
                 // Integer.toString(fid),
                 // "type=doc&version="+currentVersion.getVersion()));
                 mv.addObject(
-                        "pdfviewerURL",
-                        urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc&version="
-                                + currentVersion.getVersion()));
+                    "pdfviewerURL",
+                    urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc&version="
+                                        + currentVersion.getVersion()));
             } else {
                 mv.addObject(
-                        "pdfviewerURL",
-                        urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=pdf&version="
-                                + currentVersion.getVersion()));
+                    "pdfviewerURL",
+                    urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=pdf&version="
+                                        + currentVersion.getVersion()));
             }
             mv.addObject("strFileType", "pdf");
         }
@@ -454,7 +454,7 @@ public class LynxFileInfoController extends BaseController {
 
     @RequestMapping(params = "func=pdfTransform")
     public void sendPdfTransformEvent(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("fid") int rid) {
+                                      @PathVariable("fid") int rid) {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
         int tid = context.getSite().getId();
         int version = getCurrentVersion(request);
@@ -480,9 +480,9 @@ public class LynxFileInfoController extends BaseController {
         }
         return false;
     }
-    
-    
-	@RequestMapping(params = "func=shareFileToOthers")
+
+
+    @RequestMapping(params = "func=shareFileToOthers")
     public void shareFileToOthers(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
         int tid = context.getTid();
@@ -501,18 +501,18 @@ public class LynxFileInfoController extends BaseController {
         String[] shareMails = friendEmails.split(",");
         for (int i = 0; i < shareMails.length; i++) {
             aonemailService.sendAccessFileMail(new String[] { fileNames }, new String[] { fileURLs }, userName, shareMails[i],
-                    message);
+                                               message);
         }
         aonemailService.sendShareSuccessMailWithoutActivation(uid, userName, new String[] { fileURLs }, new String[] { fileNames },shareMails);
-        
+
         JSONObject object = new JSONObject();
-		object.put("status", "success");
-		object.put("itemType", resource.getItemType());
-		object.put("fileURL", fileURLs);
-		object.put("friendEmails", friendEmails);
-		object.put("fileName", fileNames);
-		JsonUtil.writeJSONObject(response, object);
+        object.put("status", "success");
+        object.put("itemType", resource.getItemType());
+        object.put("fileURL", fileURLs);
+        object.put("friendEmails", friendEmails);
+        object.put("fileName", fileNames);
+        JsonUtil.writeJSONObject(response, object);
     }
-    
-    
+
+
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -28,11 +28,11 @@ import java.util.Date;
  */
 public class UserExt implements Serializable {
 
-	public static final String CONF_STATUS_AVA = "available";
-	public static final String CONF_STATUS_FOR = "forbidden";
-	
-	private static final long serialVersionUID = 1L;
-	private int id;
+    public static final String CONF_STATUS_AVA = "available";
+    public static final String CONF_STATUS_FOR = "forbidden";
+
+    private static final long serialVersionUID = 1L;
+    private int id;
     private String uid;
     private String name;
     private String confirmStatus;
@@ -47,43 +47,43 @@ public class UserExt implements Serializable {
     private String qq;
     private String email;
     private String msn;
-	private Date birthday;
-	private String pinyin;
-	private int operation;
-	private Date regist_time;
-	private int frequent;
-	private int requestnum;
-	private int version;
-	private Date modifytime;
-	private long unallocatedSpace;
+    private Date birthday;
+    private String pinyin;
+    private int operation;
+    private Date regist_time;
+    private int frequent;
+    private int requestnum;
+    private int version;
+    private Date modifytime;
+    private long unallocatedSpace;
 
-	
-	/**
-	 * @return the pinyin
-	 */
-	public String getPinyin() {
-		return pinyin;
-	}
-	/**
-	 * @param pinyin the pinyin to set
-	 */
-	public void setPinyin(String pinyin) {
-		this.pinyin = pinyin;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public String getConfirmStatus() {
-		return confirmStatus;
-	}
-	public void setConfirmStatus(String confirmStatus) {
-		this.confirmStatus = confirmStatus;
-	}
-	/**
+
+    /**
+     * @return the pinyin
+     */
+    public String getPinyin() {
+        return pinyin;
+    }
+    /**
+     * @param pinyin the pinyin to set
+     */
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getConfirmStatus() {
+        return confirmStatus;
+    }
+    public void setConfirmStatus(String confirmStatus) {
+        this.confirmStatus = confirmStatus;
+    }
+    /**
      * @return the uid
      */
     public String getUid() {
@@ -121,16 +121,16 @@ public class UserExt implements Serializable {
     public void setQq(String qq) {
         this.qq = qq;
     }
-    
-    
+
+
 
     public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	/**
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    /**
      * @return the msn
      */
     public String getMsn() {
@@ -260,65 +260,65 @@ public class UserExt implements Serializable {
     public void setWeibo(String weibo) {
         this.weibo = weibo;
     }
-    
-	public Date getRegist_time() {
-		return regist_time;
-	}
-	public void setRegist_time(Date regist_time) {
-		this.regist_time = regist_time;
-	}
-	public int getFrequent() {
-		return frequent;
-	}
-	public void setFrequent(int frequent) {
-		this.frequent = frequent;
-	}
-	public int getRequestnum() {
-		return requestnum;
-	}
-	public void setRequestnum(int requestnum) {
-		this.requestnum = requestnum;
-	}
-	public int getVersion() {
-		return version;
-	}
-	public void setVersion(int version) {
-		this.version = version;
-	}
-	public Date getModifytime() {
-		return modifytime;
-	}
-	public void setModifytime(Date modifytime) {
-		this.modifytime = modifytime;
-	}
-	
-	public int getOperation() {
-		return operation;
-	}
-	public void setOperation(int operation) {
-		this.operation = operation;
-	}
-	public long getUnallocatedSpace() {
-		return unallocatedSpace;
-	}
-	public void setUnallocatedSpace(long unallocatedSpace) {
-		this.unallocatedSpace = unallocatedSpace;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof UserExt) {
-			UserExt ue = (UserExt)obj;
-			return this.uid.equals(ue.getUid());
-		}
-		return false;
-	}
-	@Override
-	public int hashCode() {
-		return this.uid.hashCode();
-	}
-	
-	public boolean isConfStatusAvailable(){
-		return CONF_STATUS_AVA.equals(confirmStatus);
-	}
-    
+
+    public Date getRegist_time() {
+        return regist_time;
+    }
+    public void setRegist_time(Date regist_time) {
+        this.regist_time = regist_time;
+    }
+    public int getFrequent() {
+        return frequent;
+    }
+    public void setFrequent(int frequent) {
+        this.frequent = frequent;
+    }
+    public int getRequestnum() {
+        return requestnum;
+    }
+    public void setRequestnum(int requestnum) {
+        this.requestnum = requestnum;
+    }
+    public int getVersion() {
+        return version;
+    }
+    public void setVersion(int version) {
+        this.version = version;
+    }
+    public Date getModifytime() {
+        return modifytime;
+    }
+    public void setModifytime(Date modifytime) {
+        this.modifytime = modifytime;
+    }
+
+    public int getOperation() {
+        return operation;
+    }
+    public void setOperation(int operation) {
+        this.operation = operation;
+    }
+    public long getUnallocatedSpace() {
+        return unallocatedSpace;
+    }
+    public void setUnallocatedSpace(long unallocatedSpace) {
+        this.unallocatedSpace = unallocatedSpace;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof UserExt) {
+            UserExt ue = (UserExt)obj;
+            return this.uid.equals(ue.getUid());
+        }
+        return false;
+    }
+    @Override
+    public int hashCode() {
+        return this.uid.hashCode();
+    }
+
+    public boolean isConfStatusAvailable(){
+        return CONF_STATUS_AVA.equals(confirmStatus);
+    }
+
 }

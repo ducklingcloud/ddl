@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.util;
@@ -22,16 +22,16 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.log4j.Logger;
 
 public class HttpClientUtil {
-	private static HttpClient httpClient;
+    private static HttpClient httpClient;
     public static HttpClient getHttpClient(Logger logger){
-    	if(httpClient==null){
-    		synchronized (logger) {
-				if(httpClient==null){
-					httpClient = new HttpClient();
-					httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(30000);
-				}
-			}
-    	}
-    	return httpClient;
+        if(httpClient==null){
+            synchronized (logger) {
+                if(httpClient==null){
+                    httpClient = new HttpClient();
+                    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(30000);
+                }
+            }
+        }
+        return httpClient;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -39,28 +39,28 @@ import org.apache.log4j.Logger;
  */
 public abstract class SiteUtil {
     private static final String[] URL_KEY_WORDS_BLACK_LIST = { "system", "jsp", "scripts", "dashboard", "home",
-            "images", "mobile", "api", "oauth", "dataCollect", "skins", "error", "uafServices", "ddl", "uafLogin", "help",
-            "logout", "diff", "dct", "direct", "copyfile","login","layout","pan","wopi","t","f","ff","activity","user","r","v1"};
+        "images", "mobile", "api", "oauth", "dataCollect", "skins", "error", "uafServices", "ddl", "uafLogin", "help",
+        "logout", "diff", "dct", "direct", "copyfile","login","layout","pan","wopi","t","f","ff","activity","user","r","v1"};
     private static final String[] URL_FILTER_TYPE_SET = { ".jsp", ".ico", ".txt", ".css", ".js", ".jpg", ".png",
-            ".svg", ".pdf", ".htm", ".zip", ".swf", ".ico", ".html", ".xml",".xls" };
+        ".svg", ".pdf", ".htm", ".zip", ".swf", ".ico", ".html", ".xml",".xls" };
 
     static class SetHolder{
-    	private static Set<String> blackSet;
+        private static Set<String> blackSet;
         private static Set<String> typeSet;
         static{
-        	typeSet = new HashSet<String>();
-			for (String typeItem : URL_FILTER_TYPE_SET) {
-				typeSet.add(typeItem);
-			}
-			blackSet = new HashSet<String>();
-			for (String blackItem : URL_KEY_WORDS_BLACK_LIST) {
-				blackSet.add(blackItem);
-			}
+            typeSet = new HashSet<String>();
+            for (String typeItem : URL_FILTER_TYPE_SET) {
+                typeSet.add(typeItem);
+            }
+            blackSet = new HashSet<String>();
+            for (String blackItem : URL_KEY_WORDS_BLACK_LIST) {
+                blackSet.add(blackItem);
+            }
         }
     }
-    
+
     private static final Logger LOGGER = Logger.getLogger(SiteUtil.class);
-    
+
     public static boolean isValidateTeamCode(String source) {
         if (source == null || source.isEmpty() || source.trim().length() == 0) {
             return false;
@@ -68,7 +68,7 @@ public abstract class SiteUtil {
         Pattern pattern = Pattern.compile("[a-z0-9-]+");
         Matcher matcher = pattern.matcher(source);
         if(!matcher.matches()){
-        	return false;
+            return false;
         }
         for (String type : SetHolder.typeSet) {
             if (source.toLowerCase().endsWith(type)) {

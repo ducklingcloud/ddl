@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.search.impl;
@@ -45,9 +45,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 @Service
 public class SearchServiceImpl implements ISearchService {
-    
+
     private static final int AROUND = 15;
-    
+
     private static final String ITEM_TYPE = "item_type";
 
     private static final int LIMIT = 120;
@@ -104,7 +104,7 @@ public class SearchServiceImpl implements ISearchService {
         if (null != q.getType() && !"".equals(q.getType())) {
             String type = q.getType();
             if (LynxConstants.TYPE_FOLDER.equals(type) || LynxConstants.TYPE_PAGE.equals(type)
-                    || LynxConstants.TYPE_FILE.equals(type)) {
+                || LynxConstants.TYPE_FILE.equals(type)) {
                 client.SetFilter(ITEM_TYPE, getCRC32Value(type), false);
             } else if (File.isOfficeFileTypeForSearch(type)) {
                 client.SetFilter(ITEM_TYPE, getCRC32Value(LynxConstants.TYPE_FILE), false);
@@ -185,7 +185,7 @@ public class SearchServiceImpl implements ISearchService {
 
     /**
      * 通过相似的用户得到文档id—weight 并且累加到docMaps 及记录各类因子优化后的权重
-     * 
+     *
      * @param docMaps
      *            所有的 id-weight 键值对
      * @param q
@@ -198,7 +198,7 @@ public class SearchServiceImpl implements ISearchService {
 
     /**
      * 通过文档热度 得到文档id—weight 并且累加到docMaps 及记录各类因子优化后的权重
-     * 
+     *
      * @param docMaps
      *            所有的 id-weight 键值对
      * @param retrieveresult
@@ -211,7 +211,7 @@ public class SearchServiceImpl implements ISearchService {
 
     /**
      * 通过感兴趣的用户得到文档id—weight 并且累加到docMaps 及记录各类因子优化后的权重
-     * 
+     *
      * @param docMaps
      *            所有的 id-weight 键值对
      * @param q
@@ -225,7 +225,7 @@ public class SearchServiceImpl implements ISearchService {
 
     /**
      * 通过用户自身的点击行为得到文档id—weight 并且累加到docMaps 及记录各类因子优化后的权重
-     * 
+     *
      * @param docMaps
      *            所有的 id-weight 键值对
      * @param keyword
@@ -288,7 +288,7 @@ public class SearchServiceImpl implements ISearchService {
 
     /**
      * 设置结果排序方式
-     * 
+     *
      * @param client
      * @param q
      * @throws SphinxException
@@ -321,7 +321,7 @@ public class SearchServiceImpl implements ISearchService {
 
     /**
      * 该函数用来重新排序，按照docMaps中的weight降序排列，选择排序，该排序必须是稳定的，
-     * 
+     *
      * @param docMaps
      *            文档-权重键值对
      * @return 按照其权重排序后的，有序结果
@@ -368,7 +368,7 @@ public class SearchServiceImpl implements ISearchService {
 
     /**
      * 将该因子下的得到的文档权重累加到全局的权重中rid-weight
-     * 
+     *
      * @param docMaps
      *            全局变量，记录文档编号及其权重，将每个优化因子产生的权重累加到这里
      * @param whtPairList
@@ -399,7 +399,7 @@ public class SearchServiceImpl implements ISearchService {
                 client.SetLimits(0, MAX_COUNT);
                 String queryKeyword = SphinxClient.EscapeString(keyword);
                 if (LynxConstants.TYPE_FOLDER.equals(resourceType) || LynxConstants.TYPE_FILE.equals(resourceType)
-                        || LynxConstants.TYPE_PAGE.equals(resourceType)) {
+                    || LynxConstants.TYPE_PAGE.equals(resourceType)) {
                     client.SetFilter(ITEM_TYPE, getCRC32Value(resourceType), false);
                 }
                 SphinxResult result = client.Query(queryKeyword, "aone_resource");
@@ -450,11 +450,11 @@ public class SearchServiceImpl implements ISearchService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see 从个人搜索点击、关注用户点击、相似用户点击、文档热度优化排序结果
      * 先将所有对该关键词的搜索点击记录从数据库查询出来，再通过当前用户id，关注用户id，相似用户id将相关记录过滤出来。再累加相似度，得到最终得分。
      * 优化只在前60个文档中进行<br/> 只对页面搜索进行重排序
-     * 
+     *
      * @param retrieveresult sphinx搜索结果
      */
     @Override
@@ -568,9 +568,9 @@ public class SearchServiceImpl implements ISearchService {
         return null;
     }
     public void setHost(String host){
-    	this.host = host;
+        this.host = host;
     }
     public void setPort(int port){
-    	this.port = port;
+        this.port = port;
     }
 }

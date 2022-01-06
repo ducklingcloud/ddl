@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.activity.impl;
@@ -28,21 +28,21 @@ import net.duckling.falcon.api.cache.ICacheService;
 @Service
 public class ActivityServiceImpl implements ActivityService{
 
-	@Override
-	public Activity get(String title) {
-		String cacheKey = "activity_" + title;
-		Object obj = cacheService.get(cacheKey);
-		if(obj == null){
-			obj = activityDao.get(title);
-			if(obj!=null){
-				cacheService.set(cacheKey, obj);
-			}
-		}
-		return (Activity) obj;
-	}
-	
-	@Autowired
-	private ActivityDao activityDao;
-	@Autowired
-	private ICacheService cacheService;
+    @Override
+    public Activity get(String title) {
+        String cacheKey = "activity_" + title;
+        Object obj = cacheService.get(cacheKey);
+        if(obj == null){
+            obj = activityDao.get(title);
+            if(obj!=null){
+                cacheService.set(cacheKey, obj);
+            }
+        }
+        return (Activity) obj;
+    }
+
+    @Autowired
+    private ActivityDao activityDao;
+    @Autowired
+    private ICacheService cacheService;
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -39,51 +39,51 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class FeedbackDAO extends AbstractBaseDAO{
-	
-	private RowMapper<Feedback> rowMapper = new RowMapper<Feedback>() {
-		public Feedback mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Feedback f = new Feedback();
-			f.setId(rs.getInt("id"));
-			f.setEmail(rs.getString("email"));
-			f.setMessage(rs.getString("message"));
-			f.setSendTime(rs.getTimestamp("send_time"));
-			f.setStatus(rs.getString("status"));
-			return f;
-		}
-	};
-	
-	private static final String GET_ALL = "select * from vwb_user_feedback";
-	private static final String GET_TYPE_FEEDBACKS = "select * from vwb_user_feedback where status=?";
-	private static final String INSERT_FEEDBACK = "insert into vwb_user_feedback(email,message,send_time,status) values(?,?,?,?)";
-	private static final String UPDATE_FEEDBACKS = "update vwb_user_feedback set status=? where id=?";
-	
-	public void inset(Feedback f){
-		getJdbcTemplate().update(INSERT_FEEDBACK,new Object[]{f.getEmail(),f.getMessage(),new Timestamp(f.getSendTime().getTime()),f.getStatus()});
-	}
-	
-	public List<Feedback> getAll(){
-		return getJdbcTemplate().query(GET_ALL, rowMapper);
-	}
-	
-	public List<Feedback> getFeedbackByType(String type){
-		return getJdbcTemplate().query(GET_TYPE_FEEDBACKS, new Object[]{type},rowMapper);
-	}
-	
-	public void updateFeedbacks(final Feedback[] array) {
-		getJdbcTemplate().batchUpdate(UPDATE_FEEDBACKS,
-				new BatchPreparedStatementSetter() {
-					public int getBatchSize() {
-						return array.length;
-					}
 
-					public void setValues(PreparedStatement pst, int index)
-							throws SQLException {
-						int i = 0;
-						pst.setString(++i, array[index].getStatus());
-						pst.setInt(++i, array[index].getId());
-					}
+    private RowMapper<Feedback> rowMapper = new RowMapper<Feedback>() {
+            public Feedback mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Feedback f = new Feedback();
+                f.setId(rs.getInt("id"));
+                f.setEmail(rs.getString("email"));
+                f.setMessage(rs.getString("message"));
+                f.setSendTime(rs.getTimestamp("send_time"));
+                f.setStatus(rs.getString("status"));
+                return f;
+            }
+        };
 
-				});
-	}
+    private static final String GET_ALL = "select * from vwb_user_feedback";
+    private static final String GET_TYPE_FEEDBACKS = "select * from vwb_user_feedback where status=?";
+    private static final String INSERT_FEEDBACK = "insert into vwb_user_feedback(email,message,send_time,status) values(?,?,?,?)";
+    private static final String UPDATE_FEEDBACKS = "update vwb_user_feedback set status=? where id=?";
+
+    public void inset(Feedback f){
+        getJdbcTemplate().update(INSERT_FEEDBACK,new Object[]{f.getEmail(),f.getMessage(),new Timestamp(f.getSendTime().getTime()),f.getStatus()});
+    }
+
+    public List<Feedback> getAll(){
+        return getJdbcTemplate().query(GET_ALL, rowMapper);
+    }
+
+    public List<Feedback> getFeedbackByType(String type){
+        return getJdbcTemplate().query(GET_TYPE_FEEDBACKS, new Object[]{type},rowMapper);
+    }
+
+    public void updateFeedbacks(final Feedback[] array) {
+        getJdbcTemplate().batchUpdate(UPDATE_FEEDBACKS,
+                                      new BatchPreparedStatementSetter() {
+                                          public int getBatchSize() {
+                                              return array.length;
+                                          }
+
+                                          public void setValues(PreparedStatement pst, int index)
+                                                  throws SQLException {
+                                              int i = 0;
+                                              pst.setString(++i, array[index].getStatus());
+                                              pst.setInt(++i, array[index].getId());
+                                          }
+
+                                      });
+    }
 
 }

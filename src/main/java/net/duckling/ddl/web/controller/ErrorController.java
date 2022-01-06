@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -40,7 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 错误处理
- * 
+ *
  * @author xiejj@cnic.cn
  * @creation Jan 20, 2011 11:46:19 AM
  */
@@ -48,7 +48,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/error")
 public class ErrorController extends BaseController {
     private static final Logger LOGGER = Logger.getLogger(ErrorController.class);
-    
+
     @Autowired
     private URLGenerator urlGenerator;
     @Autowired
@@ -99,7 +99,7 @@ public class ErrorController extends BaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.ERROR);
         boolean hasTeamAccess = Boolean.TRUE.equals(request.getAttribute("hasTeamAccess"));
         if(!hasTeamAccess){
-        	hasTeamAccess=authorityService.teamAccessability(VWBContext.getCurrentTid(), VWBSession.findSession(request), "view");
+            hasTeamAccess=authorityService.teamAccessability(VWBContext.getCurrentTid(), VWBSession.findSession(request), "view");
         }
         String returnPage;
         if (hasTeamAccess) {

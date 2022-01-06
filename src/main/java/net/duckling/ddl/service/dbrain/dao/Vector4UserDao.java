@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.dbrain.dao;
@@ -21,22 +21,22 @@ package net.duckling.ddl.service.dbrain.dao;
 import net.duckling.ddl.service.dbrain.Vector4User;
 
 public interface Vector4UserDao {
-	
-	Vector4User getUserVecByID(int id);
 
-	/**
-	 * 根据用户通行证查询相应的用户vector
-	 * 
-	 * @param passport
-	 * @return float [] 用户向量
-	 */
-	float[] getUserVecByPassport(String passport);
+    Vector4User getUserVecByID(int id);
 
-	/**
-	 * 插入函数
-	 * 
-	 * @param uservec
-	 * @return
-	 */
-	int insertUserVec(Vector4User uservec);
+    /**
+     * 根据用户通行证查询相应的用户vector
+     *
+     * @param passport
+     * @return float [] 用户向量
+     */
+    float[] getUserVecByPassport(String passport);
+
+    /**
+     * 插入函数
+     *
+     * @param uservec
+     * @return
+     */
+    int insertUserVec(Vector4User uservec);
 }

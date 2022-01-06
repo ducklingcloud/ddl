@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,8 +33,8 @@ import org.jdom.JDOMException;
  */
 public class PaserDmlPreElement extends AbstractParseDmlElement {
 
-	private static final Logger LOG = Logger.getLogger(PaserDmlPreElement.class);
-	
+    private static final Logger LOG = Logger.getLogger(PaserDmlPreElement.class);
+
     @Override
     public void printAttribute(Element e, Dml2HtmlEngine dml2htmlengine) {
         List attList=e.getAttributes();
@@ -61,9 +61,9 @@ public class PaserDmlPreElement extends AbstractParseDmlElement {
         try {
             d2h.getChildren(element, dml2htmlengine);
         } catch (IOException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         } catch (JDOMException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         }
         //设pre标志位
         dml2htmlengine.setPreType(dml2htmlengine.getPreType()-1);

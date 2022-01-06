@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -62,73 +62,73 @@ public class QuitTeamController extends BaseController {
     private TeamMemberService teamMemberService;
     @Autowired
     private TeamPreferenceService teamPreferenceService;
-	@Autowired
-	private TeamService teamService;
+    @Autowired
+    private TeamService teamService;
     @Autowired
     private SubscriptionService subscriptionService;
-	@Autowired
-	private AuthorityService authorityService;
-	@Autowired
-	private AoneUserService aoneUserService;
-	private static final Logger LOG = Logger.getLogger(QuitTeamController.class);
-	private VWBContext getVWBContext(HttpServletRequest pRequest) {
+    @Autowired
+    private AuthorityService authorityService;
+    @Autowired
+    private AoneUserService aoneUserService;
+    private static final Logger LOG = Logger.getLogger(QuitTeamController.class);
+    private VWBContext getVWBContext(HttpServletRequest pRequest) {
         return VWBContext.createContext(pRequest,UrlPatterns.ADMIN);
     }
-	
-	@SuppressWarnings("unchecked")
-	@WebLog(method = "quitTeam", params = "teamName")
-	@RequestMapping
-	public void quitTeam(HttpServletRequest request,HttpServletResponse response){
-		VWBContext context = getVWBContext(request);
-		String uid = context.getCurrentUID();
-		String teamName = request.getParameter("teamName");
-		int tid = teamService.getTeamByName(teamName).getId();
-		boolean isUserInTeam = teamMemberService.checkTeamValidity(uid,tid); 
-		if( isUserInTeam){
-			teamService.removeMembers(tid, new String[]{uid},true); //reuse code
-			UserExt ext = aoneUserService.getUserExtInfo(uid);
-			VWBContext.setCurrentTid(tid);
-			Site site = context.getContainer().getSite(tid);
-			subscriptionService.removePersonSubscription(site.getId(),uid,ext.getId()); //to test
-			List<TeamPreferences> users = teamPreferenceService.getUidByTid(tid);
-			if(users==null||users.isEmpty()){
-				teamService.updateHangup(tid);
-			}
-			LOG.info("user "+uid+" quit team "+teamName);
-		}
-		JSONObject json = new JSONObject();
-		json.put("status", "success");
-		json.put("tid", tid);
-		JsonUtil.writeJSONObject(response, json);
-	}
-	@WebLog(method = "quitTeamValidate", params = "teamName")
-	@RequestMapping(params="func=quitTeamValidate")
-	public void quitTeamValidate(HttpServletRequest request,HttpServletResponse response){
-		VWBContext context = getVWBContext(request);
-		String uid = context.getCurrentUID();
-		String teamName = request.getParameter("teamName");
-		Team team = teamService.getTeamByName(teamName);
-		List<TeamPreferences> users = teamPreferenceService.getUidByTid(team.getId());
-		JSONObject json = new JSONObject();
-		
-		//会议团队不能退出
-		if(Team.CONFERENCE_TEAM.equals(team.getType())){
-			json.put("type", "conferenceTeam");
-			JsonUtil.writeJSONObject(response, json);
-			return;
-		}
-		
-		if(users.size()==1){
-			json.put("type", "onlyOneUser");
-		}else{
-			List<TeamAcl> s = authorityService.getTeamAdminByTid(team.getId());
-			if(s.size()==1&&s.get(0).getUid().equals(uid)){
-				json.put("type", "onlyOneAdmin");
-			}else{
-				json.put("type", "success");
-			}
-		}
-		JsonUtil.writeJSONObject(response, json);
-	}
-	
+
+    @SuppressWarnings("unchecked")
+    @WebLog(method = "quitTeam", params = "teamName")
+    @RequestMapping
+    public void quitTeam(HttpServletRequest request,HttpServletResponse response){
+        VWBContext context = getVWBContext(request);
+        String uid = context.getCurrentUID();
+        String teamName = request.getParameter("teamName");
+        int tid = teamService.getTeamByName(teamName).getId();
+        boolean isUserInTeam = teamMemberService.checkTeamValidity(uid,tid);
+        if( isUserInTeam){
+            teamService.removeMembers(tid, new String[]{uid},true); //reuse code
+            UserExt ext = aoneUserService.getUserExtInfo(uid);
+            VWBContext.setCurrentTid(tid);
+            Site site = context.getContainer().getSite(tid);
+            subscriptionService.removePersonSubscription(site.getId(),uid,ext.getId()); //to test
+            List<TeamPreferences> users = teamPreferenceService.getUidByTid(tid);
+            if(users==null||users.isEmpty()){
+                teamService.updateHangup(tid);
+            }
+            LOG.info("user "+uid+" quit team "+teamName);
+        }
+        JSONObject json = new JSONObject();
+        json.put("status", "success");
+        json.put("tid", tid);
+        JsonUtil.writeJSONObject(response, json);
+    }
+    @WebLog(method = "quitTeamValidate", params = "teamName")
+    @RequestMapping(params="func=quitTeamValidate")
+    public void quitTeamValidate(HttpServletRequest request,HttpServletResponse response){
+        VWBContext context = getVWBContext(request);
+        String uid = context.getCurrentUID();
+        String teamName = request.getParameter("teamName");
+        Team team = teamService.getTeamByName(teamName);
+        List<TeamPreferences> users = teamPreferenceService.getUidByTid(team.getId());
+        JSONObject json = new JSONObject();
+
+        //会议团队不能退出
+        if(Team.CONFERENCE_TEAM.equals(team.getType())){
+            json.put("type", "conferenceTeam");
+            JsonUtil.writeJSONObject(response, json);
+            return;
+        }
+
+        if(users.size()==1){
+            json.put("type", "onlyOneUser");
+        }else{
+            List<TeamAcl> s = authorityService.getTeamAdminByTid(team.getId());
+            if(s.size()==1&&s.get(0).getUid().equals(uid)){
+                json.put("type", "onlyOneAdmin");
+            }else{
+                json.put("type", "success");
+            }
+        }
+        JsonUtil.writeJSONObject(response, json);
+    }
+
 }

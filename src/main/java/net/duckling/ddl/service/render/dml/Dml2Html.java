@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,7 +33,7 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * Introduction Here.
- * 
+ *
  * @date 2010-3-8
  * @author 狄
  */
@@ -46,7 +46,7 @@ public class Dml2Html {
     private static Map<String, AbstractParseDmlElement> hs = new HashMap<String, AbstractParseDmlElement>();
 
     static {
-//        ParseDmlPluginElement parsedmlpluginelement = new ParseDmlPluginElement();
+        //        ParseDmlPluginElement parsedmlpluginelement = new ParseDmlPluginElement();
         ParseDmlSectionElement parsedmlsectionelement = new ParseDmlSectionElement();
         ParserDmlLinkElement parserdmllinkelement = new ParserDmlLinkElement();
         ParserDmlStyleElement parserdmlstyleelement = new ParserDmlStyleElement();

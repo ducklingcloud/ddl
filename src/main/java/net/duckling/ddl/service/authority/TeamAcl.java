@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -35,7 +35,7 @@ public class TeamAcl {
      * @return the tid
      */
     public String getTid() {
-	return tid;
+        return tid;
     }
 
     /**
@@ -43,14 +43,14 @@ public class TeamAcl {
      *            the tid to set
      */
     public void setTid(String tid) {
-	this.tid = tid;
+        this.tid = tid;
     }
 
     /**
      * @return the teamName
      */
     public String getTeamName() {
-	return teamName;
+        return teamName;
     }
 
     /**
@@ -58,14 +58,14 @@ public class TeamAcl {
      *            the teamName to set
      */
     public void setTeamName(String teamName) {
-	this.teamName = teamName;
+        this.teamName = teamName;
     }
 
     /**
      * @return the uid
      */
     public String getUid() {
-	return uid;
+        return uid;
     }
 
     /**
@@ -73,14 +73,14 @@ public class TeamAcl {
      *            the uid to set
      */
     public void setUid(String uid) {
-	this.uid = uid;
+        this.uid = uid;
     }
 
     /**
      * @return the userName
      */
     public String getUserName() {
-	return userName;
+        return userName;
     }
 
     /**
@@ -88,14 +88,14 @@ public class TeamAcl {
      *            the userName to set
      */
     public void setUserName(String userName) {
-	this.userName = userName;
+        this.userName = userName;
     }
 
     /**
      * @return the auth
      */
     public String getAuth() {
-	return auth;
+        return auth;
     }
 
     /**
@@ -103,7 +103,7 @@ public class TeamAcl {
      *            the auth to set
      */
     public void setAuth(String auth) {
-	this.auth = auth;
+        this.auth = auth;
     }
 
 }

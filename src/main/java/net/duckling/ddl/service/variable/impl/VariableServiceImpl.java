@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -31,16 +31,16 @@ import org.springframework.stereotype.Service;
 
 /**
  * Introduction Here.
- * 
+ *
  * @date Feb 25, 2010
  * @author xiejj@cnic.cn
  */
 @Service
 public class VariableServiceImpl implements VariableService {
-    
+
     @Autowired
     private URLGenerator urlGenerator;
-    
+
     public Object getValue(VWBContext context, String varName, String defValue) {
         if (StringUtils.isEmpty(varName)) {
             throw new IllegalArgumentException("");
@@ -62,13 +62,13 @@ public class VariableServiceImpl implements VariableService {
             return context.getContainer().getContentEncoding();
         }
         if (varName.equals("frontPage")){
-        	  String frontpage;
-        	  if (context.getSite()!=null){
-        	  	frontpage = context.getSite().getFrontPage();
-        	  }else{
-        	  	frontpage = urlGenerator.getAbsoluteURL(UrlPatterns.SWITCH_TEAM, null, null);
-        	  }
-        	  return frontpage;
+            String frontpage;
+            if (context.getSite()!=null){
+                frontpage = context.getSite().getFrontPage();
+            }else{
+                frontpage = urlGenerator.getAbsoluteURL(UrlPatterns.SWITCH_TEAM, null, null);
+            }
+            return frontpage;
         }
         String value = context.getContainer().getProperty(varName);
         if (value != null) {

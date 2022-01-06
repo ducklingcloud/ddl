@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -26,7 +26,7 @@ import java.security.Principal;
  * as Anonymous, Asserted and Authenticated. It can also represent dynamic roles
  * used by an external {@link com.ecyrd.jspwiki.auth.Authorizer}, such as a web
  * container.
- * 
+ *
  * @date Feb 3, 2010
  * @author zzb
  */
@@ -51,7 +51,7 @@ public final class Role implements Principal {
 
     /**
      * Constructs a new Role with a given name.
-     * 
+     *
      * @param name
      *            the name of the Role
      */
@@ -63,7 +63,7 @@ public final class Role implements Principal {
      * Returns <code>true</code> if a supplied Role is a built-in Role:
      * {@link #ALL}, {@link #ANONYMOUS}, {@link #ASSERTED}, or
      * {@link #AUTHENTICATED}.
-     * 
+     *
      * @param role
      *            the role to check
      * @return the result of the check
@@ -78,7 +78,7 @@ public final class Role implements Principal {
      * of a built-in Role; that is, the value returned by <code>getName()</code>
      * for built-in Roles {@link #ALL}, {@link #ANONYMOUS}, {@link #ASSERTED},
      * or {@link #AUTHENTICATED}.
-     * 
+     *
      * @param name
      *            the name to be tested
      * @return <code>true</code> if the name is reserved; <code>false</code> if
@@ -91,7 +91,7 @@ public final class Role implements Principal {
 
     /**
      * Returns a unique hashcode for the Role.
-     * 
+     *
      * @return the hashcode
      */
     public int hashCode() {
@@ -100,7 +100,7 @@ public final class Role implements Principal {
 
     /**
      * Two Role objects are considered equal if their names are identical.
-     * 
+     *
      * @param obj
      *            the object to test
      * @return <code>true</code> if both objects are of type Role and have
@@ -117,7 +117,7 @@ public final class Role implements Principal {
 
     /**
      * Returns the name of the Principal.
-     * 
+     *
      * @return the name of the Role
      */
     public String getName() {
@@ -126,7 +126,7 @@ public final class Role implements Principal {
 
     /**
      * Returns a String representation of the role
-     * 
+     *
      * @return the string representation of the role
      * @see java.lang.Object#toString()
      */

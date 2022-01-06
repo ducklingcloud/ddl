@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -173,7 +173,7 @@ public class LinkTag extends VWBLinkTag implements ParamHandler, BodyTag {
                 m_pageId = resource.getRid();
             }
         }
-        
+
         if (mJsp != null) {
             String params = addParamsForRecipient(null, mContainedParams);
             if (mContext != null) {
@@ -198,9 +198,9 @@ public class LinkTag extends VWBLinkTag implements ParamHandler, BodyTag {
             }
             String params = addParamsForRecipient(null, mContainedParams);
             if(m_pageId==-1){
-            	url = this.makeBasicURL(tid, mContext, m_pageName, params, mAbsolute);
+                url = this.makeBasicURL(tid, mContext, m_pageName, params, mAbsolute);
             }else{
-            	url = this.makeBasicURL(tid, mContext, m_pageId+"", params, mAbsolute);
+                url = this.makeBasicURL(tid, mContext, m_pageId+"", params, mAbsolute);
             }
         } else {
             if (site != null && tid != -1) {
@@ -280,7 +280,7 @@ public class LinkTag extends VWBLinkTag implements ParamHandler, BodyTag {
         }
 
         URLGenerator urlGenerator = DDLFacade.getBean(URLGenerator.class);
-        
+
         if((UrlPatterns.PLAIN.equals(context)||UrlPatterns.CONFIG_TEAM.equals(context)) && StringUtils.isNotEmpty(page)){
             if(absolute){
                 url = urlGenerator.getAbsoluteURL(tid, mContext, page, parms);
@@ -302,7 +302,7 @@ public class LinkTag extends VWBLinkTag implements ParamHandler, BodyTag {
                 }
             }
         }
-        
+
 
         return url;
     }
@@ -331,13 +331,13 @@ public class LinkTag extends VWBLinkTag implements ParamHandler, BodyTag {
             sb.append((mAccesskey != null) ? "accesskey=\"" + mAccesskey + "\" " : "");
 
             switch (m_format) {
-            case URL:
-                out.print(url);
-                break;
-            default:
-            case ANCHOR:
-                out.print("<a " + sb.toString() + " href=\"" + url + "\">");
-                break;
+                case URL:
+                    out.print(url);
+                    break;
+                default:
+                case ANCHOR:
+                    out.print("<a " + sb.toString() + " href=\"" + url + "\">");
+                    break;
             }
 
             // Add any explicit body content. This is not the intended use

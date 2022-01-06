@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -28,21 +28,21 @@ import java.util.List;
  */
 public interface ShortcutService {
 
-	boolean updateShortSequece(List<Integer> ids);
+    boolean updateShortSequece(List<Integer> ids);
 
-	boolean updateShortcuts(List<DShortcut> ins);
+    boolean updateShortcuts(List<DShortcut> ins);
 
-	boolean updateShortcuts(DShortcut ins);
+    boolean updateShortcuts(DShortcut ins);
 
-	boolean removeById(int id);
+    boolean removeById(int id);
 
-	DShortcut getDSortcutById(int id);
+    DShortcut getDSortcutById(int id);
 
-	List<DShortcut> getCollectionShortcut(int tid, int[] tgid);
+    List<DShortcut> getCollectionShortcut(int tid, int[] tgid);
 
-	List<DShortcut> getCollectionShortcut(int tid, int tgId);
+    List<DShortcut> getCollectionShortcut(int tid, int tgId);
 
-	boolean deleteShortCut(int sid);
+    boolean deleteShortCut(int sid);
 
-	boolean addShortcut(DShortcut instance);
+    boolean addShortcut(DShortcut instance);
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -31,7 +31,7 @@ import java.util.Comparator;
  * type property of a WikiPrincipal does not affect a WikiPrincipal's logical
  * equality or hash code; two WikiPrincipals with the same name but different
  * types are still considered equal.
- * 
+ *
  * @date Feb 3, 2010
  * @author zzb
  */
@@ -88,7 +88,7 @@ public final class UserPrincipal implements Principal {
      * {@link #LOGIN_NAME}, {@link #FULL_NAME}, {@link #WIKI_NAME} or
      * {@link #WIKI_NAME}, this method throws an
      * {@link IllegalArgumentException}.
-     * 
+     *
      * @param name
      *            the name of the Principal
      * @param type
@@ -103,7 +103,7 @@ public final class UserPrincipal implements Principal {
 
     /**
      * Returns the wiki name of the Principal.
-     * 
+     *
      * @return the name
      */
     public final String getName() {
@@ -117,7 +117,7 @@ public final class UserPrincipal implements Principal {
     /**
      * Two <code>WikiPrincipal</code>s are considered equal if their names are
      * equal (case-sensitive).
-     * 
+     *
      * @param obj
      *            the object to compare
      * @return the result of the equality test
@@ -132,7 +132,7 @@ public final class UserPrincipal implements Principal {
     /**
      * The hashCode() returned for the WikiPrincipal is the same as for its
      * name.
-     * 
+     *
      * @return the hash code
      */
     public final int hashCode() {
@@ -142,7 +142,7 @@ public final class UserPrincipal implements Principal {
     /**
      * Returns the Principal "type": {@link #LOGIN_NAME}, {@link #FULL_NAME},
      * {@link #WIKI_NAME} or {@link #WIKI_NAME}
-     * 
+     *
      * @return the type
      */
     public final String getType() {
@@ -151,7 +151,7 @@ public final class UserPrincipal implements Principal {
 
     /**
      * Returns a human-readable representation of the object.
-     * 
+     *
      * @return the string representation
      */
     public final String toString() {

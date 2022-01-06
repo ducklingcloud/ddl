@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -22,13 +22,13 @@ package net.duckling.ddl.web.tag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
- * ParamTag submits name-value pairs to the first enclosing 
+ * ParamTag submits name-value pairs to the first enclosing
  * ParamHandler instance. Name and value are strings, and can
- * be given as tag attributes, or alternatively the value can be 
- * given as the body contents of this tag. 
+ * be given as tag attributes, or alternatively the value can be
+ * given as the body contents of this tag.
  * <p>
- * The name-value pair is passed to the closest containing 
- * ancestor tag that implements ParamHandler. 
+ * The name-value pair is passed to the closest containing
+ * ancestor tag that implements ParamHandler.
  */
 public class ParamTag extends BodyTagSupport {
 
@@ -52,20 +52,20 @@ public class ParamTag extends BodyTagSupport {
 
     @SuppressWarnings("null")
     public int doEndTag() {
-//        Tag t = null;
-//
-//        if (t != null) {
-//            String val = m_value;
-//            if (val == null) {
-//                BodyContent bc = getBodyContent();
-//                if (bc != null) {
-//                    val = bc.getString();
-//                }
-//            }
-//            if (val != null) {
-//                ((ParamHandler) t).setContainedParameter(m_name, val);
-//            }
-//        }
+        //        Tag t = null;
+        //
+        //        if (t != null) {
+        //            String val = m_value;
+        //            if (val == null) {
+        //                BodyContent bc = getBodyContent();
+        //                if (bc != null) {
+        //                    val = bc.getString();
+        //                }
+        //            }
+        //            if (val != null) {
+        //                ((ParamHandler) t).setContainedParameter(m_name, val);
+        //            }
+        //        }
 
         return EVAL_PAGE;
     }

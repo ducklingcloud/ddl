@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -33,8 +33,8 @@ import org.jdom.JDOMException;
  */
 public class PaserDmlSpanElement extends AbstractParseDmlElement {
 
-	private static final Logger LOG = Logger.getLogger(PaserDmlSpanElement.class);
-	
+    private static final Logger LOG = Logger.getLogger(PaserDmlSpanElement.class);
+
     @Override
     public void printAttribute(Element e, Dml2HtmlEngine dml2htmlengine) {
         List attList=e.getAttributes();
@@ -63,9 +63,9 @@ public class PaserDmlSpanElement extends AbstractParseDmlElement {
         try {
             d2h.getChildren(element, dml2htmlengine);
         } catch (IOException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         } catch (JDOMException e1) {
-        	LOG.error(e1);
+            LOG.error(e1);
         }
 
         //设pre标志位
@@ -78,25 +78,25 @@ public class PaserDmlSpanElement extends AbstractParseDmlElement {
             dml2htmlengine.getMout().println("</span>");
         }
     }
-    
+
     public boolean isNPreSpan(Element e){
         boolean reb=false;
         String classstr=e.getAttributeValue( "style" );
         if(classstr!=null){
             int startnum=classstr.indexOf("white-space");
-                if(startnum!=-1){
-                    if(classstr.length()>startnum+11){
-                        String startstr=classstr.substring(startnum+11);
-                        int endnum=startstr.indexOf(';');
-                        if(endnum!=-1){
-                            String prestr=startstr.substring(0,endnum);
-                            if(prestr.indexOf("pre")!=-1){
-                            	reb=true;
-                            }
+            if(startnum!=-1){
+                if(classstr.length()>startnum+11){
+                    String startstr=classstr.substring(startnum+11);
+                    int endnum=startstr.indexOf(';');
+                    if(endnum!=-1){
+                        String prestr=startstr.substring(0,endnum);
+                        if(prestr.indexOf("pre")!=-1){
+                            reb=true;
                         }
                     }
-                    
                 }
+
+            }
         }
         return reb;
 

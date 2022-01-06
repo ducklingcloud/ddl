@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 
@@ -43,17 +43,17 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/aone/feedback")
 public class AdminFeedbackController extends BaseController {
-    
+
     @Autowired
     private FeedbackServiceImpl feedbackService;
 
-	@RequestMapping
-	public ModelAndView display(HttpServletRequest request){
-		VWBContext context = VWBContext.createContext(request,UrlPatterns.ADMIN);
-		List<Feedback> feedbackList = feedbackService.getAll();
-		ModelAndView mv = layout(".aone.portal",context, "/jsp/aone/feedback/adminFeedback.jsp");
-		mv.addObject("feedbacks", feedbackList);
-		return mv;
-	}
-	
+    @RequestMapping
+    public ModelAndView display(HttpServletRequest request){
+        VWBContext context = VWBContext.createContext(request,UrlPatterns.ADMIN);
+        List<Feedback> feedbackList = feedbackService.getAll();
+        ModelAndView mv = layout(".aone.portal",context, "/jsp/aone/feedback/adminFeedback.jsp");
+        mv.addObject("feedbacks", feedbackList);
+        return mv;
+    }
+
 }

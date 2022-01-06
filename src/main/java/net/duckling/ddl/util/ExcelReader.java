@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.util;
@@ -45,11 +45,11 @@ public class ExcelReader {
     private Workbook wb;
     private Sheet sheet;
     private Row row;
- 
+
     public ExcelReader(InputStream is, String ext) throws IOException {
-    	initWorkbook(is, ext);
+        initWorkbook(is, ext);
     }
-    
+
     public ExcelReader(String filepath) throws IOException {
         if(filepath==null){
             return;
@@ -60,21 +60,21 @@ public class ExcelReader {
             is = new FileInputStream(filepath);
         } catch (FileNotFoundException e) {
             logger.error("FileNotFoundException", e);
-        } 
+        }
         initWorkbook(is, ext);
     }
-    
+
     private void initWorkbook(InputStream is, String ext) throws IOException{
-    	if("XLS".equals(ext.toUpperCase())){
+        if("XLS".equals(ext.toUpperCase())){
             wb = new HSSFWorkbook(is);
         }else if("XLSX".equals(ext.toUpperCase())){
             wb = new XSSFWorkbook(is);
         }
     }
-     
+
     /**
      * 读取Excel表格表头的内容
-     * 
+     *
      * @param InputStream
      * @return String 表头内容的数组
      */
@@ -94,10 +94,10 @@ public class ExcelReader {
         }
         return title;
     }
- 
+
     /**
      * 读取Excel数据内容
-     * 
+     *
      * @param InputStream
      * @return Map 包含单元格数据内容的Map对象
      */
@@ -106,7 +106,7 @@ public class ExcelReader {
             throw new Exception("Workbook对象为空！");
         }
         List<Map<Integer,Object>> content = new ArrayList<Map<Integer,Object>>();
-         
+
         sheet = wb.getSheetAt(0);
         // 得到总行数
         int rowNum = sheet.getLastRowNum();
@@ -125,11 +125,11 @@ public class ExcelReader {
         }
         return content;
     }
- 
+
     /**
-     * 
+     *
      * 根据Cell类型设置数据
-     * 
+     *
      * @param cell
      * @return
      */
@@ -138,37 +138,37 @@ public class ExcelReader {
         if (cell != null) {
             // 判断当前Cell的Type
             switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_NUMERIC:// 如果当前Cell的Type为NUMERIC
-            case Cell.CELL_TYPE_FORMULA: {
-                // 判断当前的cell是否为Date
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    Date date = cell.getDateCellValue();
-                    cellvalue = date;
-                } else {// 如果是纯数字
-                    // 取得当前Cell的数值
-                    cellvalue = String.valueOf(cell.getNumericCellValue());
+                case Cell.CELL_TYPE_NUMERIC:// 如果当前Cell的Type为NUMERIC
+                case Cell.CELL_TYPE_FORMULA: {
+                    // 判断当前的cell是否为Date
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        Date date = cell.getDateCellValue();
+                        cellvalue = date;
+                    } else {// 如果是纯数字
+                        // 取得当前Cell的数值
+                        cellvalue = String.valueOf(cell.getNumericCellValue());
+                    }
+                    break;
                 }
-                break;
-            }
-            case Cell.CELL_TYPE_STRING:// 如果当前Cell的Type为STRING
-                // 取得当前的Cell字符串
-                cellvalue = cell.getRichStringCellValue().getString();
-                break;
-            default:// 默认的Cell值
-                cellvalue = "";
+                case Cell.CELL_TYPE_STRING:// 如果当前Cell的Type为STRING
+                    // 取得当前的Cell字符串
+                    cellvalue = cell.getRichStringCellValue().getString();
+                    break;
+                default:// 默认的Cell值
+                    cellvalue = "";
             }
         } else {
             cellvalue = "";
         }
         return cellvalue;
     }
- 
+
     public static void main(String[] args) throws Exception {
         String filepath = "D:/test.xlsx";
         ExcelReader excelReader = new ExcelReader(filepath);
         // 对读取Excel表格标题
         //String[] title = excelReader.readExcelTitle();
-         
+
         // 对读取Excel表格内容测试
         List<Map<Integer,Object>> list = excelReader.readExcelContent();
         for (int i = 0; i < list.size(); i++) {

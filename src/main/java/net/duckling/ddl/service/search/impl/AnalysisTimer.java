@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2016 Computer Network Information Center (CNIC), Chinese Academy of Sciences.
- * 
+ *
  * This file is part of Duckling project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  */
 package net.duckling.ddl.service.search.impl;
@@ -40,45 +40,45 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AnalysisTimer implements JobTask {
-	private static final Logger LOG = Logger.getLogger(AnalysisTimer.class);
-	@Autowired
-	private SearchLogAnalysis searchLogAnalysis;
-	@Autowired
-	private UserAnalysis userAnalysis;
-	@Autowired
-	private TimerService timerService;
+    private static final Logger LOG = Logger.getLogger(AnalysisTimer.class);
+    @Autowired
+    private SearchLogAnalysis searchLogAnalysis;
+    @Autowired
+    private UserAnalysis userAnalysis;
+    @Autowired
+    private TimerService timerService;
 
-	@PostConstruct
-	public void init() {
-		timerService.addDailyTask("AnalysisTimer", 3, 0, this);
-	}
+    @PostConstruct
+    public void init() {
+        timerService.addDailyTask("AnalysisTimer", 3, 0, this);
+    }
 
-	@PreDestroy
-	public void destroy() {
-		timerService.removeTask("AnalysisTimer");
-	}
+    @PreDestroy
+    public void destroy() {
+        timerService.removeTask("AnalysisTimer");
+    }
 
-	/*
-	 * 每天定时分析当天日志
-	 */
-	@Override
-	public void execute(Date scheduledDate) {
-		try {
-			Date date = new Date();
-			int day = 1;// 每天凌晨更新，添加一天以及以前的所有记录
-			Calendar now = Calendar.getInstance();
-			now.setTime(date);
-			now.set(Calendar.DATE, now.get(Calendar.DATE) - day);
-			SimpleDateFormat edf = new SimpleDateFormat("yyyy-MM-dd");
-			String endLogDate = edf.format(now.getTime());
-			searchLogAnalysis.saveLog(endLogDate, endLogDate);
-		} catch (IOException e) {
-			LOG.error("AnalysisTime ", e);
-		}
-		LOG.info("AnalysisTimer job begin");
-		searchLogAnalysis.anyasisLog();
-		userAnalysis.analysisUser();
-		LOG.info("AnalysisTimer job end");
-	}
+    /*
+     * 每天定时分析当天日志
+     */
+    @Override
+    public void execute(Date scheduledDate) {
+        try {
+            Date date = new Date();
+            int day = 1;// 每天凌晨更新，添加一天以及以前的所有记录
+            Calendar now = Calendar.getInstance();
+            now.setTime(date);
+            now.set(Calendar.DATE, now.get(Calendar.DATE) - day);
+            SimpleDateFormat edf = new SimpleDateFormat("yyyy-MM-dd");
+            String endLogDate = edf.format(now.getTime());
+            searchLogAnalysis.saveLog(endLogDate, endLogDate);
+        } catch (IOException e) {
+            LOG.error("AnalysisTime ", e);
+        }
+        LOG.info("AnalysisTimer job begin");
+        searchLogAnalysis.anyasisLog();
+        userAnalysis.analysisUser();
+        LOG.info("AnalysisTimer job end");
+    }
 
 }
