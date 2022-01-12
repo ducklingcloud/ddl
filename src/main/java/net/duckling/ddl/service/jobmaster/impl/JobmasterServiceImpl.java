@@ -25,9 +25,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import net.duckling.ddl.service.jobmaster.JobmasterService;
-import net.spy.memcached.AddrUtil;
-import net.spy.memcached.MemcachedClient;
-import net.spy.memcached.internal.OperationFuture;
+import net.duckling.falcon.api.cache.ICacheService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,42 +33,31 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JobmsterServiceImpl implements JobmasterService {
+public class JobmasterServiceImpl implements JobmasterService {
     private static final Logger LOG = Logger
-            .getLogger(JobmsterServiceImpl.class);
-
-    private MemcachedClient client;
-    @Value("${duckling.memcached.host}")
-    private String memcachedHost;
+            .getLogger(JobmasterServiceImpl.class);
+    @Autowired
+    private ICacheService cacheService;
     @Autowired
     private JobRecordDAO jobRecords;
 
     @PostConstruct
     public void doInit() {
-        try {
-            client = new MemcachedClient(AddrUtil.getAddresses(memcachedHost));
-        } catch (IOException e) {
-            LOG.error("Couldn't connect memcached server", e);
-        }
     }
 
     @PreDestroy
     public void doDestroy() {
-        client.shutdown();
     }
 
     @Override
     public boolean take(String jobName) {
-        OperationFuture<Boolean> f = client.add(getCacheKey(jobName), 60, "1");
-        try {
-            if (f.get()) {
-                if (!jobRecords.exist(jobName)) {
-                    jobRecords.saveJob(jobName);
-                    return true;
-                }
+        String key = getCacheKey(jobName);
+        if (cacheService.get(key) == null) {
+            cacheService.set(key, "1", 60);
+            if (!jobRecords.exist(jobName)) {
+                jobRecords.saveJob(jobName);
+                return true;
             }
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("JobMaster error:", e);
         }
         return false;
     }
