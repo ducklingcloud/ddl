@@ -100,11 +100,11 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>appServlet</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.js</url-pattern>
@@ -204,6 +204,10 @@
     <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
     <servlet-class>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-class>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
+    <url-pattern>/JSON-RPC</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>ServiceServlet</servlet-name>
@@ -213,14 +217,9 @@
       <param-value>WEB-INF/conf/services.xml</param-value>
     </init-param>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>ServiceServlet</servlet-name>
     <url-pattern>/ServiceServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
-    <url-pattern>/JSON-RPC</url-pattern>
   </servlet-mapping>
 
   <jsp-config>

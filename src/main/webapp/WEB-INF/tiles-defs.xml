@@ -1,89 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
-       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 <tiles-definitions>
-	<definition name="template" template="/layout/collection-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
-		<put-attribute name="userbox" type="template" value="/layout/collection-userbox.jsp"/>
-		<put-attribute name="header" type="template" value="/layout/collection-header.jsp"/>
-		<put-attribute name="footer" type="template" value="/layout/collection-footer.jsp"/>
-		<put-attribute name="content" type="template" value="${content}"/>
-	</definition>
-	<definition name="template2" template="/layout/portal-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
-		<put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
-		<put-attribute name="content" type="template" value="${content}"/>
-	</definition>
-	<definition name=".aone.portal" extends="template2">
-		<put-attribute name="content" type="template" value="/layout/jsp-container.jsp"/>
-	</definition>
-	<definition name=".pan.preview" template="/layout/pan-preview-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
-	</definition>
-	<definition name=".share.download" template="/layout/share-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
-	</definition>
-	<definition name=".aone.attachment" template="/layout/attachment-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
-	</definition>
-	<definition name=".collection.mainpage" extends="template">
-		<put-attribute name="content" type="template" value="/layout/collection-container.jsp"/>
-	</definition>
-	<definition name=".collection.config" extends="template">
-		<put-attribute name="content" type="template" value="/layout/config-container.jsp"/>
-	</definition>
-	<definition name=".collection.edit" extends="template">
-		<put-attribute name="content" type="template" value="/layout/edit-container.jsp"/>
-	</definition>
-	<definition name=".collection.subpage" extends="template">
-		<put-attribute name="content" type="template" value="/layout/dpage-container.jsp"/>
-	</definition>
-	<definition name=".collection.jsp" extends="template">
-		<put-attribute name="content" type="template" value="/layout/jsp-container.jsp"/>
-	</definition>
-	<definition name=".collection.info" extends="template">
-		<put-attribute name="content" type="template" value="/layout/info-container.jsp"/>
-	</definition>
-	<definition name=".collection.portlet" extends="template">
-		<put-attribute name="content" type="template" value="/layout/plugin-container.jsp"/>
-	</definition>
-	<definition name="lynx-template" template="/layout/lynx/lynx-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
-		<put-attribute name="header" type="template" value="/layout/lynx/lynx-header.jsp"/>
-		<put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
-		<put-attribute name="content" type="template" value="${content}"/>
-	</definition>
-	<definition name="lynx.main" extends="lynx-template">
-		<put-attribute name="content" type="template" value="/layout/lynx/container/lynx-main-container.jsp"/>
-	</definition>
-	<definition name="lynx.edit" extends="lynx-template">
-		<put-attribute name="content" type="template" value="/layout/lynx/container/lynx-edit-container.jsp"/>
-	</definition>
-	<definition name="lynx.page" extends="lynx-template">
-		<put-attribute name="content" type="template" value="/layout/lynx/container/lynx-page-container.jsp"/>
-	</definition>
-	<definition name="lynx.info" extends="lynx-template">
-		<put-attribute name="content" type="template" value="/layout/lynx/container/lynx-info-container.jsp"/>
-	</definition>
-	<definition name="lynx.task.edit" template="/layout/lynx/lynx-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
-		<put-attribute name="header" type="template" value="/help/lynxIntro/introSteps.jsp"/>
-		<put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
-		<put-attribute name="content" type="template" value="/jsp/aone/task/task_add.jsp"/>
-	</definition>
-	<definition name="lynx.blank" template="/layout/lynx/lynx-blank.jsp">
-	</definition>
-	<!-- 移动端页面 -->
-	<definition name="mobile.portal.layout" template="/WEB-INF/views/mobile/layout/portal-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/WEB-INF/views/mobile/commonheader.jsp"/>
-		<put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
-		<put-attribute name="content" type="template" value="${content}"/>
-	</definition>
-	<definition name="mobile.share.download" template="/WEB-INF/views/mobile/resource/share-layout.jsp">
-		<put-attribute name="commonheader" type="template" value="/WEB-INF/views/mobile/commonheader.jsp"/>
-	</definition>
-	<definition name="mobile.aone.portal" extends="mobile.portal.layout">
-		<put-attribute name="content" type="template" value="/layout/jsp-container.jsp"/>
-	</definition>
+  <definition name="template" template="/layout/collection-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
+    <put-attribute name="userbox" type="template" value="/layout/collection-userbox.jsp"/>
+    <put-attribute name="header" type="template" value="/layout/collection-header.jsp"/>
+    <put-attribute name="footer" type="template" value="/layout/collection-footer.jsp"/>
+    <put-attribute name="content" type="template" value="${content}"/>
+  </definition>
+  <definition name="template2" template="/layout/portal-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
+    <put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
+    <put-attribute name="content" type="template" value="${content}"/>
+  </definition>
+  <definition name=".aone.portal" extends="template2">
+    <put-attribute name="content" type="template" value="/layout/jsp-container.jsp"/>
+  </definition>
+  <definition name=".pan.preview" template="/layout/pan-preview-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
+  </definition>
+  <definition name=".share.download" template="/layout/share-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
+  </definition>
+  <definition name=".aone.attachment" template="/layout/attachment-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
+  </definition>
+  <definition name=".collection.mainpage" extends="template">
+    <put-attribute name="content" type="template" value="/layout/collection-container.jsp"/>
+  </definition>
+  <definition name=".collection.config" extends="template">
+    <put-attribute name="content" type="template" value="/layout/config-container.jsp"/>
+  </definition>
+  <definition name=".collection.edit" extends="template">
+    <put-attribute name="content" type="template" value="/layout/edit-container.jsp"/>
+  </definition>
+  <definition name=".collection.subpage" extends="template">
+    <put-attribute name="content" type="template" value="/layout/dpage-container.jsp"/>
+  </definition>
+  <definition name=".collection.jsp" extends="template">
+    <put-attribute name="content" type="template" value="/layout/jsp-container.jsp"/>
+  </definition>
+  <definition name=".collection.info" extends="template">
+    <put-attribute name="content" type="template" value="/layout/info-container.jsp"/>
+  </definition>
+  <definition name=".collection.portlet" extends="template">
+    <put-attribute name="content" type="template" value="/layout/plugin-container.jsp"/>
+  </definition>
+  <definition name="lynx-template" template="/layout/lynx/lynx-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
+    <put-attribute name="header" type="template" value="/layout/lynx/lynx-header.jsp"/>
+    <put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
+    <put-attribute name="content" type="template" value="${content}"/>
+  </definition>
+  <definition name="lynx.main" extends="lynx-template">
+    <put-attribute name="content" type="template" value="/layout/lynx/container/lynx-main-container.jsp"/>
+  </definition>
+  <definition name="lynx.edit" extends="lynx-template">
+    <put-attribute name="content" type="template" value="/layout/lynx/container/lynx-edit-container.jsp"/>
+  </definition>
+  <definition name="lynx.page" extends="lynx-template">
+    <put-attribute name="content" type="template" value="/layout/lynx/container/lynx-page-container.jsp"/>
+  </definition>
+  <definition name="lynx.info" extends="lynx-template">
+    <put-attribute name="content" type="template" value="/layout/lynx/container/lynx-info-container.jsp"/>
+  </definition>
+  <definition name="lynx.task.edit" template="/layout/lynx/lynx-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/commonheader.jsp"/>
+    <put-attribute name="header" type="template" value="/help/lynxIntro/introSteps.jsp"/>
+    <put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
+    <put-attribute name="content" type="template" value="/jsp/aone/task/task_add.jsp"/>
+  </definition>
+  <definition name="lynx.blank" template="/layout/lynx/lynx-blank.jsp">
+  </definition>
+  <!-- 移动端页面 -->
+  <definition name="mobile.portal.layout" template="/WEB-INF/views/mobile/layout/portal-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/WEB-INF/views/mobile/commonheader.jsp"/>
+    <put-attribute name="footer" type="template" value="/layout/lynx/lynx-footer.jsp"/>
+    <put-attribute name="content" type="template" value="${content}"/>
+  </definition>
+  <definition name="mobile.share.download" template="/WEB-INF/views/mobile/resource/share-layout.jsp">
+    <put-attribute name="commonheader" type="template" value="/WEB-INF/views/mobile/commonheader.jsp"/>
+  </definition>
+  <definition name="mobile.aone.portal" extends="mobile.portal.layout">
+    <put-attribute name="content" type="template" value="/layout/jsp-container.jsp"/>
+  </definition>
 </tiles-definitions>
