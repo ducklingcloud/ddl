@@ -1,0 +1,36 @@
+@charset "utf-8";
+/*
+VERSION:	dHome 1.0
+AUTHOR:		Vera. zhangshixiang@cnic.cn / shivera2004@163.com
+DATE:		Oct, 2012
+*/
+
+/* PullDown Main Menu */
+.headerBar {
+	background:#1D1D1D; padding:10px 40px 25px 0; 
+	position:fixed; top:25px; left:0; right:0;
+	z-index:99999; border-radius:0; margin:10px 0 0 0;
+}
+.headerBar li {float:left; list-style:none; margin-right:7px; margin-bottom:7px;}
+.headerBar li a {padding:3px 0px; text-decoration:none;}
+.headerBar .header-block {display:block; width:110px; height:100px; }
+.headerBar .header-block .logo {background:url(../images/escience-big-icon.png) 5px -10px no-repeat; width:100px; height:80px; display:block;}
+.headerBar .header-block.escience {background:url(../images/escience-35.png) 8px 33px #da8302 no-repeat;}
+.headerBar .header-block.escience .logo{background-position:5px 90px;}
+.headerBar .header-block.dhome {background:#4084C9;}
+.headerBar .header-block.dhome .logo {background-position:5px -410px;}
+.headerBar .header-block.ddl {background:#71AA00;}
+.headerBar .header-block.ddl .logo {background-position:5px -10px;}
+.headerBar .header-block.csp {background:#CC0033;}
+.headerBar .header-block.csp .logo {background-position:5px -110px;}
+.headerBar .header-block.dc {background:#640F6C;}
+.headerBar .header-block.dc .logo {background-position:5px -210px;}
+.headerBar .header-block.email {background:#0f5083;}
+.headerBar .header-block.email .logo {background-position:5px -1110px;}
+.headerBar .header-block.nav {background:#ec008c;}
+.headerBar .header-block.nav .logo {background-position:5px -1210px;}
+.headerBar .header-block .header-text {
+	display:block; color:#fff; text-align:center; 
+	position:relative; top:-5px; font-size:13px;
+}
+.headerBar ul li {float:left; margin-right:40px;}

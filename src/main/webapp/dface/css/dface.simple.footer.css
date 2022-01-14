@@ -1,0 +1,16 @@
+@charset "utf-8";
+/*
+VERSION:	dHome 1.0
+AUTHOR:		Vera. zhangshixiang@cnic.cn / shivera2004@163.com
+DATE:		Oct, 2012
+*/
+
+/*footer*/
+.clear{clear:both;}
+.dface.footer {font-size:13px; text-align:center; font-family:Arial,"宋体"; margin:0 auto;}
+.dface.footer ul.simple-footer-nav {list-style:none; margin:15px 0 0 6%;}
+.dface.footer ul.simple-footer-nav li {float:left; padding:5px 2%;}
+.dface.footer ul.simple-footer-nav li#footer-logo a {display:inline-block; background:url(../images/logo-rol-beta.png) 0 -37px no-repeat; height:19px; width:70px; margin-top:-5px;}
+.dface.footer ul.simple-footer-nav li a {text-decoration:none; color:#666;}
+.dface.footer p {margin:3px 8% 10px; color:#666; padding:0;}
+.dface.footer p a {color:#666; border-bottom:1px dotted #333; text-decoration:none;}
