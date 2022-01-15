@@ -60,8 +60,26 @@ public class NoticeDAOImpl extends AbstractBaseDAO implements NoticeDAO{
     private static final String QUERY_A_NOTICE_BY_ID="select * from vwb_notice where id=?";
 
     private static final String QUERY_TODAY_TEAM_NOTICE="select * from vwb_notice where  occur_time>=? and notice_type!='"+ NoticeRule.HISTORY_NOTICE  +"' order by occur_time desc";
-    private static final String GET_TOP_K_NOTICE = "SELECT * FROM (SELECT * FROM vwb_notice WHERE recipient=? and tid=? and notice_type=? and occur_time>=? and occur_time<? and event_id in(??) ORDER BY occur_time DESC) n " +
-            "GROUP BY n.target_id,n.target_type ORDER BY n.id DESC LIMIT ?;";
+
+    /* Fix ONLY_FULL_GROUP_BY issue
+     * kai.nan@yahoo.com <2022-01-15 Sat>
+     * TODO: "WITH AS" optimization when MySQL 8.0
+     */
+    private static final String GET_TOP_K_NOTICE =
+            "SELECT * FROM " +
+            "  ( SELECT * FROM vwb_notice WHERE recipient=? " +
+            "    and tid=? and notice_type=? and occur_time>=? " +
+            "    and occur_time<? and event_id in(??) " +
+            "  ) as t1 INNER JOIN " +
+            "  ( SELECT target_id, target_type, " +
+            "    max(occur_time) last_time FROM vwb_notice " +
+            "    GROUP BY target_id, target_type " +
+            "  ) as t2 " +
+            "  ON t1.target_id = t2.target_id and t1.target_type " +
+            "    = t2.target_type and t1.occur_time = t2.last_time " +
+            "ORDER BY t1.id DESC LIMIT ?;";
+    // private static final String GET_TOP_K_NOTICE = "SELECT * FROM (SELECT * FROM vwb_notice WHERE recipient=? and tid=? and notice_type=? and occur_time>=? and occur_time<? and event_id in(??) ORDER BY occur_time DESC) n " +
+    //         "GROUP BY n.target_id,n.target_type ORDER BY n.id DESC LIMIT ?;";
 
     private static final String COUNT_UNREAD_NOTICE = "select count(n.id) from (select id from vwb_notice where recipient=? and tid=? and notice_type=? and occur_time>=? and occur_time<? " +
             "Group BY target_id,target_type ORDER BY occur_time DESC) n";

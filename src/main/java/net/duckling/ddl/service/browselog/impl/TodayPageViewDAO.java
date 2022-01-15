@@ -30,12 +30,39 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TodayPageViewDAO extends AbstractBaseDAO {
+    
     private static final String COUNT_HOTS = "select count(*) from a1_browse_log where rid=? and  browse_time >= ?";
-    private static final String QUERY_RESOURCE_VISITOR = "select tid, rid, max(browse_time) browse_time, user_id, display_name "
-            + " from a1_browse_log where rid=? and browse_time>=? GROUP by tracking_id order by browse_time desc limit ?";
-    private static final String GRAB_PAGE_VIEW = "select max(browse_time) browse_time, tid, rid, item_type, user_id, display_name, tracking_id"
-            + " from a1_browse_log where browse_time>=? and browse_time<=? group by tracking_id";
+
+    /* Fix ONLY_FULL_GROUP_BY issue
+     * kai.nan@yahoo.com <2022-01-15 Sat>
+     */
+    private static final String QUERY_RESOURCE_VISITOR =
+            "SELECT tid, rid, browse_time, user_id, display_name " +
+            "FROM ( SELECT * FROM a1_browse_log " +
+            "  WHERE rid=? and browse_time>=? ) AS t1 INNER JOIN " +
+            "  ( SELECT tracking_id, max(id) last_one " +
+            "  FROM a1_browse_log GROUP BY tracking_id ) AS t2 " +
+            "  ON  t1.tracking_id = t2.tracking_id and " +
+            "  t1.id = t2.last_one " +
+            "ORDER BY browse_time DESC LIMIT ?";
+    // private static final String QUERY_RESOURCE_VISITOR = "select tid, rid, max(browse_time) browse_time, user_id, display_name "
+    //         + " from a1_browse_log where rid=? and browse_time>=? GROUP by tracking_id order by browse_time desc limit ?";
+
+    /* Fix only_full_group_by */
+    private static final String GRAB_PAGE_VIEW =
+            "SELECT browse_time, tid, rid, item_type, user_id, "+
+            "  display_name, tracking_id "+
+            "FROM ( SELECT * FROM  a1_browse_log "+
+            "  WHERE browse_time>=? and browse_time<=? ) AS t1 INNER JOIN "+
+            "  ( SELECT tracking_id, max(id) last_one "+
+            "  FROM a1_browse_log GROUP BY tracking_id ) AS t2 "+
+            "  ON t1.tracking_id = t2.tracking_id and "+
+            "  t1.id = t2.last_one ";
+    // private static final String GRAB_PAGE_VIEW = "select max(browse_time) browse_time, tid, rid, item_type, user_id, display_name, tracking_id"
+    //         + " from a1_browse_log where browse_time>=? and browse_time<=? group by tracking_id";
+    
     private static final String INSERT_SQL = "insert into a1_browse_log(tid, rid, item_type,user_id, display_name, tracking_id,browse_time) values(?,?,?,?,?,?,?)";
+    
     private BrowseLogRowMapper rowmapper = new BrowseLogRowMapper();
 
     private String today() {

@@ -38,12 +38,18 @@ import org.apache.log4j.Logger;
  * @revised 将原有VWBFilter中解析TeamCode的方法移动到此类中 (clive)
  */
 public abstract class SiteUtil {
-    private static final String[] URL_KEY_WORDS_BLACK_LIST = { "system", "jsp", "scripts", "dashboard", "home",
-        "images", "mobile", "api", "oauth", "dataCollect", "skins", "error", "uafServices", "ddl", "uafLogin", "help",
-        "logout", "diff", "dct", "direct", "copyfile","login","layout","pan","wopi","t","f","ff","activity","user","r","v1"};
-    private static final String[] URL_FILTER_TYPE_SET = { ".jsp", ".ico", ".txt", ".css", ".js", ".jpg", ".png",
-        ".svg", ".pdf", ".htm", ".zip", ".swf", ".ico", ".html", ".xml",".xls" };
-
+    private static final String[] URL_KEY_WORDS_BLACK_LIST = {
+        "system", "jsp", "scripts", "dashboard", "home",
+        "images", "mobile", "api", "oauth", "dataCollect",
+        "skins", "error", "uafServices", "ddl", "uafLogin", "help",
+        "logout", "diff", "dct", "direct", "copyfile","login","layout",
+        "pan","wopi","t","f","ff","activity","user","r","v1",
+        "dface"
+    };
+    private static final String[] URL_FILTER_TYPE_SET = {
+        ".jsp", ".ico", ".txt", ".css", ".js", ".jpg", ".png", ".svg",
+        ".pdf", ".htm", ".zip", ".swf", ".ico", ".html", ".xml",".xls"
+    };
     static class SetHolder{
         private static Set<String> blackSet;
         private static Set<String> typeSet;
