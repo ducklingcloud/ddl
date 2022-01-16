@@ -58,7 +58,33 @@ public class UserAnalysisDAOImpl extends AbstractBaseDAO implements UserAnalysis
 
     private static final String CREAT_SIM_TABLE = "CREATE TABLE IF NOT EXISTS `a1_user_sim` (`id` int(11) NOT NULL auto_increment,`uid` varchar(255) NOT NULL,`simuid` varchar(255) NOT NULL,`score` int(11) default '0',`time` timestamp NOT NULL default '1970-01-02 00:00:00' on update CURRENT_TIMESTAMP,  PRIMARY KEY  (`id`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8";
 
-    private static final String INSERT_USER_SIM = "insert into a1_user_sim select NULL,uid,simuid,sum(score),NULL from(select a.user_id as uid ,b.user_id as simuid,if(a.count<b.count,a.count,b.count) as score,a.item_id, a.item_type from(select user_id , item_id,count(item_id) as count, item_type,tid from vwb_browse_log where TO_DAYS(now())-TO_DAYS(browse_time)<=150  group by user_id,tid,item_id) as a inner join (select user_id , item_id,count(item_id) as count, item_type,tid from vwb_browse_log where TO_DAYS(now())-TO_DAYS(browse_time)<=150 group by user_id,tid,item_id) as b on a.user_id <> b.user_id and a.item_id=b.item_id and a.tid=b.tid) as t group by uid,simuid" ;
+    /* Fix only_full_group_by
+     * Remove 'item_type' which seems not-in-use */
+    private static final String INSERT_USER_SIM =
+            "INSERT INTO a1_user_sim "+
+            "  SELECT NULL,uid,simuid,sum(score),NULL "+
+            "  FROM ( "+
+            "    SELECT a.user_id as uid, b.user_id as simuid, "+
+            "           IF (a.count<b.count, a.count, b.count) as score, "+
+            "           a.item_id "+
+            "    FROM ( "+
+            "      SELECT user_id , item_id, count(item_id) as count, tid "+
+            "      FROM vwb_browse_log "+
+            "      WHERE TO_DAYS(now()) - TO_DAYS(browse_time) <= 150 "+
+            "      GROUP BY user_id,tid,item_id "+
+            "    ) AS a "+
+            "    INNER JOIN ( "+
+            "      SELECT user_id , item_id, count(item_id) as count, tid "+
+            "      FROM vwb_browse_log "+
+            "      WHERE TO_DAYS(now()) - TO_DAYS(browse_time) <= 150 "+
+            "      GROUP BY user_id,tid,item_id "+
+            "    ) AS b "+
+            "    ON a.user_id <> b.user_id and a.item_id = b.item_id "+
+            "       and a.tid = b.tid "+
+            "  ) AS t "+
+            "  GROUP BY uid, simuid";
+
+    // private static final String INSERT_USER_SIM = "insert into a1_user_sim select NULL,uid,simuid,sum(score),NULL from(select a.user_id as uid ,b.user_id as simuid,if(a.count<b.count,a.count,b.count) as score,a.item_id, a.item_type from(select user_id , item_id,count(item_id) as count, item_type,tid from vwb_browse_log where TO_DAYS(now())-TO_DAYS(browse_time)<=150  group by user_id,tid,item_id) as a inner join (select user_id , item_id,count(item_id) as count, item_type,tid from vwb_browse_log where TO_DAYS(now())-TO_DAYS(browse_time)<=150 group by user_id,tid,item_id) as b on a.user_id <> b.user_id and a.item_id=b.item_id and a.tid=b.tid) as t group by uid,simuid" ;
 
     private static final String QUERY_USER_SIM = "select simuid from a1_user_sim where uid = ? order by score desc";
 
