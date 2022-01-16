@@ -147,7 +147,7 @@
 	init-method="start" destroy-method="shutdown">
     <property name="baseUrl" value="${duckling.baseURL}" />
     <property name="baseAddress" value="${duckling.baseAddress}" />
-    <property name="triggerWeek" value="${duckling.emailnotice.triggerweek}" />
+    <property name="triggerWeek" value="${duckling.emailnotice.triggerdayofweek}" />
     <property name="wordVectorPath" value="${dbrain.wordvector.path}" />
     <property name="teamService" ref="teamService" />
     <property name="recommendationService" ref="recommendationService" />

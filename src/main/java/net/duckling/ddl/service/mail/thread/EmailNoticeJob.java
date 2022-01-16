@@ -78,9 +78,9 @@ public class EmailNoticeJob implements JobTask {
     private TeamService teamService;
     @Autowired
     private JobmasterService jobmaster;
-    @Value("${duckling.emailnotic.triggertime}")
-    private String triggerTime; //邮件触发事件 格式为 HH:MM HH为0-24 MM为0-60 如 11:0 十一点触发
-    @Value("${duckling.emailnotice.triggerweek}")
+    @Value("${duckling.emailnotice.triggertime}")
+    private String triggerTime; //邮件触发时间 格式为 HH:MM HH为0-24 MM为0-60 如 11:0 十一点触发
+    @Value("${duckling.emailnotice.triggerdayofweek}")
     private int triggerWeek;
 
     /**
