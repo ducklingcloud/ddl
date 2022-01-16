@@ -57,29 +57,22 @@ import com.sun.mail.smtp.SMTPMessage;
  */
 public class MailServiceImpl implements MailService {
     private DucklingProperties systemProperty;
-    public void setSystemProperty(DucklingProperties systemProperty){
-        this.systemProperty = systemProperty;
-    }
-
     private static class ValueBag{
         public Authenticator m_authenticator;
         public InternetAddress m_fromAddress;
         public Properties m_mailProperties;
     }
-    public static final String EMAIL_CONTENT_TYPE="text/html;charset=UTF-8";
-
-    private static final String EMAIL_DISPLAY_NAME="科研在线";
-
+    private ValueBag m_bag;
+    
     private static final Logger LOG = Logger.getLogger(MailService.class);
-
+    private static final String PROP_EMAIL_DISPLAYNAME = "email.displayName";
     private static final String PROP_EMAIL_FROMADDRESS = "email.fromAddress";
     private static final String PROP_EMAIL_PASSWORD = "email.password";
-
     private static final String PROP_EMAIL_USERID = "email.username";
-
     private static final String UTF_8="UTF-8";
 
-    private ValueBag m_bag;
+    public static final String EMAIL_CONTENT_TYPE="text/html;charset=UTF-8";
+
     private void cheat(MimeMessage mimeMessage, String serverDomain)
             throws MessagingException {
         mimeMessage.saveChanges();
@@ -118,20 +111,23 @@ public class MailServiceImpl implements MailService {
         msg.setContent(content, EMAIL_CONTENT_TYPE);
         return msg;
     }
+    
     private ValueBag readProperties() {
         ValueBag bag = new ValueBag();
         bag.m_mailProperties = new Properties();
         bag.m_mailProperties.put("mail.smtp.host", systemProperty.getProperty("email.mail.smtp.host"));
         bag.m_mailProperties.put("mail.smtp.auth", systemProperty.getProperty("email.mail.smtp.auth"));
-        bag.m_mailProperties.put("mail.pop3.host", systemProperty.getProperty("email.mail.pop3.host"));
         String userId = systemProperty.getProperty(PROP_EMAIL_USERID);
         String password = systemProperty.getProperty(PROP_EMAIL_PASSWORD);
         bag.m_authenticator = new EmailAuthenticator(userId, password);
         String mailFrom = systemProperty.getProperty(PROP_EMAIL_FROMADDRESS);
         try {
-            bag.m_fromAddress = new InternetAddress(mailFrom,EMAIL_DISPLAY_NAME,UTF_8);
-        }catch (UnsupportedEncodingException e) {
-            LOG.error("",e);
+            bag.m_fromAddress = new InternetAddress(
+                mailFrom,
+                systemProperty.getProperty(PROP_EMAIL_DISPLAYNAME),
+                UTF_8);
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("Property 'email.displayName' encoding error", e);
         }
         return bag;
     }
@@ -221,4 +217,9 @@ public class MailServiceImpl implements MailService {
             LOG.debug("Details:", e);
         }
     }
+
+    public void setSystemProperty(DucklingProperties systemProperty){
+        this.systemProperty = systemProperty;
+    }
+
 }

@@ -52,15 +52,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public final class TeamInitServiceImpl implements TeamInitService {
-
+    private static final Logger LOG = Logger.getLogger(TeamInitServiceImpl.class);
     @Autowired
     private IResourceService resourceService;
     @Autowired
     private ResourceOperateService resourceOperateService;
     @Autowired
     private ITagService tagService;
-    @Autowired
-    private static final Logger LOG = Logger.getLogger(TeamInitServiceImpl.class);
+
     private Resource addPageToTeam(int tid, String uid, String title, String content) {
         Resource r = ResourceUtils.createDDoc(tid, 0, title, uid);
         resourceOperateService.addResource(r);
