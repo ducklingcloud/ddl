@@ -190,6 +190,7 @@
       <param-value>utf-8</param-value>
     </init-param>
     <init-param>
+      <!-- seems not-in-use? -->
       <param-name>ignore</param-name>
       <param-value>/ServiceServlet</param-value>
     </init-param>
