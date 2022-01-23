@@ -201,8 +201,8 @@ public class VMTMessageHandlerImpl {
 
     @Autowired
     private TeamService teamService;
-    @Value("${duckling.mq.userName}")
-    private String userName;
+    @Value("${duckling.mq.username}")
+    private String username;
 
     @Autowired
     private VMTTeamManager vmtTeamManager;
@@ -342,7 +342,7 @@ public class VMTMessageHandlerImpl {
     @PostConstruct
     public void init() {
         if (subscriber == null) {
-            subscriber = DFMQFactory.buildSubscriber(userName, password,
+            subscriber = DFMQFactory.buildSubscriber(username, password,
                                                      mqHost, mqExchange, queueName + "-group", DFMQMode.TOPIC);
             subscriber.registHandler("#.group", new VmtTeamMessageHandle());
             subscriber.registHandler("#.user", new VmtUserMessageHandle());
