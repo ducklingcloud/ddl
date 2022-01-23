@@ -157,12 +157,6 @@
       <artifactId>redisson</artifactId>
       <version>2.2.10</version>
     </dependency>
-    
-    <dependency>
-      <groupId>com.rabbitmq</groupId>
-      <artifactId>amqp-client</artifactId>
-      <version>5.14.1</version>
-    </dependency>
 
     <!-- for dml? (duckling markup language) -->
     <dependency>
@@ -329,6 +323,13 @@
       <artifactId>falcon-mq</artifactId>
       <version>0.4.0</version>
     </dependency>
+
+    <!-- use the version from falcon-mq -->
+    <!-- <dependency> -->
+    <!--   <groupId>com.rabbitmq</groupId> -->
+    <!--   <artifactId>amqp-client</artifactId> -->
+    <!-- </dependency> -->
+    
     <!-- TODO: Check and update -->
     <dependency>
       <groupId>net.duckling</groupId>
