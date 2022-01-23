@@ -16,9 +16,10 @@
 			   http://www.springframework.org/schema/tx
 			   classpath:org/springframework/transaction/config/spring-tx-3.0.xsd">
 
-  <!-- System JDBC Connection -->
-  <context:property-placeholder location="/WEB-INF/conf/vwbconfig.properties" />
+  <context:property-placeholder location="/WEB-INF/conf/vwbconfig.properties,
+                                          /WEB-INF/conf/vwbconfig-secret.properties" />
 
+  <!-- System JDBC Connection -->
   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 	destroy-method="close">
     <property name="driverClass" value="${c3p0.driverClass}" />

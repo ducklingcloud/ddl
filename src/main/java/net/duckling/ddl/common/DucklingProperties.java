@@ -20,12 +20,15 @@
 package net.duckling.ddl.common;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 2013-09-22
@@ -34,10 +37,17 @@ import java.util.regex.Pattern;
  *
  */
 public class DucklingProperties extends Properties {
+    private static final Logger log =
+            LoggerFactory.getLogger(DucklingProperties.class);
     private static final long serialVersionUID = 1L;
     private static final Pattern PATTERN = Pattern
             .compile("([^\\}]*)\\$\\{([^}]*)\\}(.*)");
 
+    /* <2022-01-22 Sat> kai.nan@icloud.com
+     *
+     * Add '*-secret.properties' feature -- When load a file
+     * 'a.properties', will also try to load 'a-secret.properties' at
+     * the same time. */
     public DucklingProperties(boolean isXml, String filename)
             throws IOException {
         FileInputStream in = new FileInputStream(filename);
@@ -46,6 +56,22 @@ public class DucklingProperties extends Properties {
                 loadFromXML(in);
             } else {
                 load(in);
+                String[] tokens = filename.split("\\.(?=[^\\.]+$)");
+                String secret_file = tokens[0] + "-secret";
+                if (tokens.length > 1) secret_file += "."+tokens[1];
+                try {
+                    FileInputStream in2 = new FileInputStream(secret_file);
+                    log.debug("size: {} before load secret-property-file: {}",
+                              size(), secret_file);
+                    load(in2);
+                    log.debug("size: {} after load secret-property-file: {}",
+                              size(), secret_file);
+                    in2.close();
+                } catch (FileNotFoundException e) {
+                    // No secret_file is normal, so ignore it.
+                    log.info("secret-property-file not exist: '{}'",
+                             secret_file);
+                }
             }
         } finally {
             in.close();

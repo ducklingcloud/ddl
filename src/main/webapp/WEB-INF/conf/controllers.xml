@@ -20,7 +20,9 @@
   <context:spring-configured />
   <context:annotation-config />
 
-  <context:property-placeholder location="/WEB-INF/conf/vwbconfig.properties"/>  
+  <context:property-placeholder location="/WEB-INF/conf/vwbconfig.properties,
+                                          /WEB-INF/conf/vwbconfig-secret.properties"/>  
+
   <!-- Maps '/' requests to the 'home' view -->
   <mvc:view-controller path="/" view-name="home" />
   
