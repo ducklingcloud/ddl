@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.common.VWBSession;
 import net.duckling.ddl.constant.Attributes;

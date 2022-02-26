@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.duckling.common.util.JSONHelper;
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.service.devent.NoticeRule;
 import net.duckling.ddl.service.invitation.InvitationService;
 import net.duckling.ddl.service.team.TeamPreferences;

@@ -23,7 +23,7 @@ import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.constant.ELayout;
 import net.duckling.ddl.constant.LynxConstants;

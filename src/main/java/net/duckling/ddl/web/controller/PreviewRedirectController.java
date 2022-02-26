@@ -23,7 +23,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.springframework.beans.factory.annotation.Autowired;

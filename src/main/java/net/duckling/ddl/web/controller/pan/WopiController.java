@@ -26,7 +26,7 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.service.pan.FileInfo;
 import net.duckling.ddl.service.pan.PanAclUtil;
 import net.duckling.ddl.service.pan.ResponseHeaderUtils;

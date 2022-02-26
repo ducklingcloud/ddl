@@ -33,7 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.exception.MessageException;
 import net.duckling.ddl.service.resource.IResourceService;

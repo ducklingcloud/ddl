@@ -34,7 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.common.VWBSession;
 import net.duckling.ddl.constant.ELayout;

@@ -21,6 +21,7 @@ package net.duckling.ddl.common;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import net.duckling.common.DucklingProperties;
 
 import net.duckling.ddl.constant.Attributes;
 import net.duckling.ddl.constant.KeyConstants;

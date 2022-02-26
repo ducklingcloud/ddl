@@ -23,7 +23,7 @@ package net.duckling.ddl.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.constant.KeyConstants;
 import net.duckling.ddl.service.url.UrlPatterns;

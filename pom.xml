@@ -316,7 +316,7 @@
     <dependency>
       <groupId>net.duckling</groupId>
       <artifactId>falcon-common</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>net.duckling</groupId>

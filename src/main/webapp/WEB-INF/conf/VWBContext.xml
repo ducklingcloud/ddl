@@ -118,7 +118,7 @@
 		     index="4" />
   </bean>
 
-  <bean id="systemProperty" class="net.duckling.ddl.common.DucklingProperties">
+  <bean id="systemProperty" class="net.duckling.common.DucklingProperties">
     <constructor-arg value="false" />
     <constructor-arg value="${ddl.root}/WEB-INF/conf/vwbconfig.properties" />
   </bean>

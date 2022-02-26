@@ -23,7 +23,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.exception.NoEnoughSpaceException;
 import net.duckling.ddl.service.resource.IResourceService;
 import net.duckling.ddl.service.resource.Resource;

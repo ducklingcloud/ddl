@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.duckling.ddl.common.DDLFacade;
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.common.VWBContainerImpl;
 import net.duckling.ddl.service.file.DFileSaver;
 import net.duckling.ddl.service.file.FileStorage;

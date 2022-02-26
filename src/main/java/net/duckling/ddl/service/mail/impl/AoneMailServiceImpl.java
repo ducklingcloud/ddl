@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.constant.KeyConstants;
 import net.duckling.ddl.constant.ParamConstants;
 import net.duckling.ddl.service.devent.DEvent;

@@ -20,7 +20,7 @@ package net.duckling.ddl.web.controller.regist;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.common.VWBSession;
 import net.duckling.ddl.constant.KeyConstants;

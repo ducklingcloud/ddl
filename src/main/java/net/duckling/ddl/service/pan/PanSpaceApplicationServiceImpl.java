@@ -21,7 +21,7 @@ package net.duckling.ddl.service.pan;
 import java.util.Date;
 import java.util.List;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.exception.MessageException;
 import net.duckling.ddl.service.pan.dao.PanSpaceApplicationDao;
 import net.duckling.meepo.api.IPanService;

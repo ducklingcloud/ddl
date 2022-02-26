@@ -29,7 +29,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import net.duckling.ddl.common.DDLFacade;
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.service.browselog.BrowseLogService;
 import net.duckling.ddl.service.file.FileVersion;

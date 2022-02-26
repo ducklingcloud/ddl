@@ -18,7 +18,7 @@
  */
 package net.duckling.ddl.service.user.impl;
 
-import net.duckling.ddl.common.DucklingProperties;
+import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.service.user.AuthorizationCodeService;
 import net.duckling.ddl.web.bean.AuthorizationCode;
 
