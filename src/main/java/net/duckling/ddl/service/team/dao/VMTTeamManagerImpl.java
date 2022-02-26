@@ -47,6 +47,11 @@ public class VMTTeamManagerImpl implements VMTTeamManager {
     }
 
     @Override
+    public boolean ready() {
+        return groupService != null && vmtUserService != null;
+    }
+    
+    @Override
     public String addTeam(Team team) {
         VmtGroup vmtGroup = new VmtGroup();
         try {

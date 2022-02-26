@@ -42,13 +42,6 @@
     </property>
   </bean>
 
-  <bean id="transactionManager"
-	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-    <property name="dataSource" ref="dataSource"></property>
-  </bean>
-
-  <tx:annotation-driven transaction-manager="transactionManager" />
-
   <bean id="namedParameterJdbcTemplate"
 	class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
     <constructor-arg>
@@ -56,7 +49,14 @@
     </constructor-arg>
   </bean>
 
-  <!-- Contianer Abstarct -->
+  <bean id="transactionManager"
+	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"></property>
+  </bean>
+
+  <tx:annotation-driven transaction-manager="transactionManager" />
+
+  <!-- VwbContianer Abstarct -->
   <bean id="baseDAO" abstract="true">
     <property name="jdbcTemplate" ref="jdbcTemplate" />
     <property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate" />
@@ -66,8 +66,7 @@
   <bean id="accessorDao" class="net.duckling.ddl.service.oauth.dao.AccessorDAOImpl"
 	parent="baseDAO" />
 
-  <!-- Container Providers -->
-  <!-- Container Services -->
+  <!-- VwbContainer Services -->
   <bean id="oauthService" class="net.duckling.ddl.service.oauth.impl.OAuthServiceImpl"
 	init-method="init" destroy-method="destroy">
     <property name="consumerDAO" ref="consumerDao" />
@@ -94,16 +93,13 @@
     <constructor-arg value="${duckling.referenceStyle}" />
   </bean>
 
-  <!-- Container -->
+  <!-- VwbContainer -->
   <bean id="container" class="net.duckling.ddl.common.VWBContainerImpl">
     <property name="teamService" ref="teamService" />
     <property name="baseURL" value="${duckling.baseURL}" />
     <property name="urlConstructor" ref="containerUrlConstructor" />
     <property name="systemProperty" ref="systemProperty" />
   </bean>
-
-  <!-- Site Abstract -->
-  <!-- Site Providers -->
 
   <bean id="storage" class="net.duckling.ddl.service.file.impl.CLBFileStorage">
     <constructor-arg value="${duckling.clb.service}"
@@ -119,7 +115,6 @@
   </bean>
 
   <bean id="systemProperty" class="net.duckling.common.DucklingProperties">
-    <constructor-arg value="false" />
     <constructor-arg value="${ddl.root}/WEB-INF/conf/vwbconfig.properties" />
   </bean>
 
@@ -196,6 +191,7 @@
     <property name="teamService" ref="teamService" />
   </bean>
 
+  <!-- depends on vmt -->
   <bean id="teamService" class="net.duckling.ddl.service.team.impl.TeamServiceImpl">
     <property name="teamDao" ref="teamDao" />
     <property name="memcachedService" ref="memcachedService" />
@@ -223,20 +219,30 @@
   </bean>
   <!-- AOne Spring IOC Config end -->
 
-  <bean id="groupService" class="net.duckling.vmt.api.impl.GroupService">
+  <context:annotation-config />
+  <bean class="net.duckling.ddl.common.BeanConfig">
     <constructor-arg>
-      <value>${duckling.vmt.service.address}</value>
+      <ref bean="systemProperty" />
     </constructor-arg>
   </bean>
-  <bean id="vmtUserService" class="net.duckling.vmt.api.impl.UserService">
-    <constructor-arg>
-      <value>${duckling.vmt.service.address}</value>
-    </constructor-arg>
-  </bean>
+
+  <!-- The following beans about VMT configured by BeanConfig -->
+  <!-- <bean id="groupService" class="net.duckling.vmt.api.impl.GroupService"> -->
+  <!--   <constructor-arg> -->
+  <!--     <value>${duckling.vmt.service.address}</value> -->
+  <!--   </constructor-arg> -->
+  <!-- </bean> -->
+  <!-- <bean id="vmtUserService" class="net.duckling.vmt.api.impl.UserService"> -->
+  <!--   <constructor-arg> -->
+  <!--     <value>${duckling.vmt.service.address}</value> -->
+  <!--   </constructor-arg> -->
+  <!-- </bean> -->
+
   <bean id="vmtTeamManager" class="net.duckling.ddl.service.team.dao.VMTTeamManagerImpl">
     <property name="groupService" ref="groupService" />
     <property name="vmtUserService" ref="vmtUserService" />
   </bean>
+  
   <bean id="panService" class="net.duckling.meepo.api.PanServiceImpl">
     <constructor-arg>
       <value>${ddl.profile.env}</value>
@@ -264,7 +270,7 @@
     <constructor-arg index="1" value="${duckling.redis.port}" />
   </bean>
   
-  <!--dataSourceSub JDBC Connection-->
+  <!-- dataSourceSub, for auth tokens, jobs, etc. -->
   <bean id="dataSourceSub" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 	destroy-method="close">
     <property name="user" value="${databaseSub.username}" />
@@ -287,18 +293,18 @@
     </property>
   </bean>
 
-  <bean id="transactionManagerSub"
-	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-    <property name="dataSource" ref="dataSourceSub"></property>
-  </bean>
-
-  <tx:annotation-driven transaction-manager="transactionManagerSub" />
   <bean id="namedParameterJdbcTemplateSub"
 	class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
     <constructor-arg>
       <ref bean="dataSourceSub" />
     </constructor-arg>
   </bean>
+
+  <bean id="transactionManagerSub"
+	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSourceSub"></property>
+  </bean>
+  <tx:annotation-driven transaction-manager="transactionManagerSub" />
 
   <bean id="baseDAOSub" abstract="true">
     <property name="jdbcTemplate" ref="jdbcTemplateSub" />
@@ -314,4 +320,5 @@
   <bean id="vector4UserService" class="net.duckling.ddl.service.dbrain.impl.Vector4UserServiceImpl">
     <property name="vector4UserDao" ref="vector4UserDao" />
   </bean>
+
 </beans>

@@ -26,6 +26,12 @@ import net.duckling.vmt.api.domain.VmtUser;
  *
  */
 public interface VMTTeamManager {
+
+    /**
+     * check whether the service is ready to use
+     */
+    boolean ready();
+    
     /**
      * 在VMT中创建team
      * @param team

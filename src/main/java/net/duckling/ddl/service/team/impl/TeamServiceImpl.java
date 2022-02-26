@@ -51,9 +51,9 @@ import org.apache.log4j.Logger;
  */
 
 public class TeamServiceImpl implements TeamService, VmtUserManager{
-
     private static final String TEAM_NAME = "team-name";
     private static final String TEAM_ID = "team-id";
+
     private static final Logger LOG = Logger.getLogger(TeamServiceImpl.class);
     private AoneUserService aoneUserService;
     private AuthorityService authorityService;
@@ -62,6 +62,8 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
     private TeamMemberService teamMemberService;
     private TeamPreferenceService teamPreferenceService;
     private TeamCreateInfoDAOImpl teamCreateInfoDao;
+    private VMTTeamManager vmtTeamManager;
+    private boolean vmtReady = false;
 
     public void setTeamCreateInfoDao(TeamCreateInfoDAOImpl teamCreateInfoDao) {
         this.teamCreateInfoDao = teamCreateInfoDao;
@@ -70,7 +72,6 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
     public void setTeamPreferenceService(TeamPreferenceService teamPreferenceService){
         this.teamPreferenceService= teamPreferenceService;
     }
-    private VMTTeamManager vmtTeamManager;
 
     private Team addTeamToCache(int tid) {
         Team team = getTeamFromCache(tid);
@@ -112,7 +113,6 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
         return (Integer) memcachedService.get(TEAM_NAME + "."
                                               + name);
     }
-
 
     private void initTeamCache(int tid) {
         Team team = teamDao.getTeamById(tid);
@@ -513,6 +513,7 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
 
     public void setVmtTeamManager(VMTTeamManager vmtTeamManager) {
         this.vmtTeamManager = vmtTeamManager;
+        vmtReady = vmtTeamManager.ready();
     }
 
     public void updateBasicInfo(String teamName, String title,
