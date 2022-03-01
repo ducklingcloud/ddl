@@ -19,11 +19,14 @@ request.setAttribute("contextPath", request.getContextPath());
 	    <li <c:if test="${teamType eq 'dashboard'}">class="current"</c:if>>
 		<a href="<vwb:Link format='url' context='dashboard'/>">首页</a>
 	    </li>
-	    
-	    <li <c:if test="${teamType eq 'pan'}">class="current"</c:if>>
-		<a href="<vwb:Link format='url' context='panList' page=''/>">个人空间<sup class="beta">同步版Beta</sup></a>
-	    </li>
-	    
+
+            <!-- Comment out for a while <2022-03-01 Tue> -->
+	    <!-- 
+	         <li <c:if test="${teamType eq 'pan'}">class="current"</c:if>>
+		 <a href="<vwb:Link format='url' context='panList' page=''/>">个人空间<sup class="beta">同步版Beta</sup></a>
+	         </li>
+	    -->
+            
 	    <li <c:if test="${teamType eq 'myspace'}">class="current"</c:if>>
 		<a href="<vwb:Link format='url' context='switchTeam' page=''/>?func=person">个人空间</a>
 	    </li>

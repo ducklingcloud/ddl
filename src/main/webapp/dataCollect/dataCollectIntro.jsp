@@ -22,16 +22,15 @@
 		<h3>如何使用网页收藏工具？</h3>
 		<h4>1. 打开网页，点击“保存到科研在线”</h4>
 		<p>网页收藏工具将自动为您选取网页正文和标题。</p>
-		<p><img src="${baseURL}${contextPath}/dataCollect/images/tutor-click.jpg" /></p>
+		<p><img src="${baseURL}/dataCollect/images/tutor-click.jpg" /></p>
 		
 		<h4>2. 手动调整选择范围</h4>
 		<p>您也可以手动选取需要的网页段落进行收藏。</p>
-		<p><img src="${baseURL}${contextPath}/dataCollect/images/tutor-select.jpg" /></p>
+		<p><img src="${baseURL}/dataCollect/images/tutor-select.jpg" /></p>
 
 		<h4>3. 提交</h4>
 		<p>选择要存入的团队和集合，点击“提交”，完成网页选中内容的收藏。</p>
-		<p><img src="${baseURL}${contextPath}/dataCollect/images/tutor-panel.jpg" /></p>
-		
+		<p><img src="${baseURL}/dataCollect/images/tutor-panel.jpg" /></p>
 	</div>
 </div>
 
