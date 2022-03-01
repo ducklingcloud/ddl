@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.service.version.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -81,12 +83,9 @@ public class VersionService implements IVersionService {
     @SuppressWarnings("unchecked")
     private Map<String, String> parseResponse(String response) throws ParseException {
         Map<String,String> result = new HashMap<String,String>();
-        org.json.JSONObject obj =new org.json.JSONObject(response);
-        Iterator<String> keys = obj.keys();
-        String key = null;
-        while(keys.hasNext()){
-            key = keys.next();
-            result.put(key,String.valueOf(obj.get(key)));
+        JsonObject obj = new Gson().fromJson(response, JsonObject.class);
+        for (String key : obj.keySet()) {
+            result.put(key, String.valueOf(obj.get(key)));
         }
         return result;
     }

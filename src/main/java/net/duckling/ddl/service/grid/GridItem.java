@@ -20,9 +20,8 @@ package net.duckling.ddl.service.grid;
 
 import java.io.Serializable;
 import java.text.ParseException;
-
-import org.json.JSONObject;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class GridItem implements Serializable,Comparable<GridItem> {
     private static final long serialVersionUID = 1L;
@@ -149,26 +148,26 @@ public class GridItem implements Serializable,Comparable<GridItem> {
     }
 
     public String toJSONString(){
-        JSONObject o = new JSONObject();
-        o.put("uid", getUid());
-        o.put("tid",getTid());
-        o.put("rid", getRid());
-        o.put("itemType", getItemType());
-        o.put("score", getScore());
-        o.put("fixed", isFixed());
+        JsonObject o = new JsonObject();
+        o.addProperty("uid", getUid());
+        o.addProperty("tid",getTid());
+        o.addProperty("rid", getRid());
+        o.addProperty("itemType", getItemType());
+        o.addProperty("score", getScore());
+        o.addProperty("fixed", isFixed());
         return o.toString();
     }
 
     public static GridItem parseFromJOSN(String s){
         try {
-            JSONObject j = new JSONObject(s);
+            JsonObject j = new Gson().fromJson(s, JsonObject.class);
             GridItem result = new GridItem();
-            result.setTid(j.getInt("tid"));
-            result.setUid(j.getString("uid"));
-            result.setRid(j.getInt("rid"));
-            result.setItemType(j.getString("itemType"));
-            result.setScore(j.getDouble("score"));
-            result.setFixed(j.getBoolean("fixed"));
+            result.setTid(j.getAsJsonPrimitive("tid").getAsInt());
+            result.setUid(j.getAsJsonPrimitive("uid").getAsString());
+            result.setRid(j.getAsJsonPrimitive("rid").getAsInt());
+            result.setItemType(j.getAsJsonPrimitive("itemType").getAsString());
+            result.setScore(j.getAsJsonPrimitive("score").getAsDouble());
+            result.setFixed(j.getAsJsonPrimitive("fixed").getAsBoolean());
             return result;
         } catch (Exception e) {
             return null;

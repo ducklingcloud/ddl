@@ -92,7 +92,7 @@ public class TaskIndependentController extends TaskBaseController {
         service.setReadStatus(taskId, context.getCurrentUID());
         Task task = service.getTaskWithStatus(taskId, context.getCurrentUID());
         task.setItems(ItemWrapper.getProcessFromView(task.getItems(), service.getProcess(taskId)));
-        JsonUtil.writeJSONObject(response, JsonUtil.getJSONArrayFromList(task.getItems()));
+        JsonUtil.write(response, JsonUtil.getJSONArrayFromList(task.getItems()));
     }
 
     /** 处理任务 */
@@ -110,7 +110,7 @@ public class TaskIndependentController extends TaskBaseController {
         TaskService service = taskService;
         boolean result = service.updateRefStatus(undoItemIds, doingItemIds, finishItemIds, context.getCurrentUID());
         if (!result) {
-            JsonUtil.writeJSONObject(response, result);
+            JsonUtil.write(response, result);
             return;
         }
         boolean isOver = service.isIndependentTaskOver(taskId);
@@ -127,7 +127,7 @@ public class TaskIndependentController extends TaskBaseController {
                 service.updateTask(task);
             }
         }
-        JsonUtil.writeJSONObject(response, result);
+        JsonUtil.write(response, result);
     }
 
     /** 删除任务 */

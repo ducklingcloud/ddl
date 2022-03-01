@@ -37,8 +37,8 @@ import net.duckling.ddl.web.AbstractRecommendContrller;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,21 +75,21 @@ public class RecommendController extends AbstractRecommendContrller {
     private void getTeamAllUser(VWBContext ctx,HttpServletResponse response){
         List<SimpleUser> candidates = teamMemberService.getTeamMembersOrderByName(ctx.getTid());
         Collections.sort(candidates, comparator);
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for (SimpleUser current : candidates) {
-            JSONObject temp = new JSONObject();
-            temp.put("uid", current.getUid());
-            temp.put("id", current.getId());
-            temp.put("email", current.getEmail());
-            temp.put("pinyin", current.getPinyin());
+            JsonObject temp = new JsonObject();
+            temp.addProperty("uid", current.getUid());
+            temp.addProperty("id", current.getId());
+            temp.addProperty("email", current.getEmail());
+            temp.addProperty("pinyin", current.getPinyin());
             if (StringUtils.isNotEmpty(current.getName())) {
-                temp.put("name", current.getName());
+                temp.addProperty("name", current.getName());
             } else {
-                temp.put("name", current.getUid());
+                temp.addProperty("name", current.getUid());
             }
             array.add(temp);
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
     @SuppressWarnings("unchecked")
     private void submitRecommend(EventDispatcher eventDispatcher, HttpServletRequest request, HttpServletResponse response) {
@@ -111,10 +111,10 @@ public class RecommendController extends AbstractRecommendContrller {
                                                      remark, combineRecipients(userIds),sendType);
         }
 
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        object.put("itemType", res.getItemType());
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
+        object.addProperty("itemType", res.getItemType());
+        JsonUtil.write(response, object);
     }
     private Resource getSavedViewPort(HttpServletRequest request, int rid,
                                       String itemType) {

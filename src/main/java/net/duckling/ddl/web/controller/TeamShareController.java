@@ -38,7 +38,7 @@ import net.duckling.ddl.util.ShareRidCodeUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,9 +62,9 @@ public class TeamShareController {
 
     @ResponseBody
     @RequestMapping(params="func=getFetchCode")
-    public JSONObject getResourceShareCode(@RequestParam("rid")int rid,HttpServletRequest request){
+    public JsonObject getResourceShareCode(@RequestParam("rid")int rid,HttpServletRequest request){
         ShareResource sr = shareResourceService.get(rid);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(sr==null){
             sr = createShareResource(rid, request);
         }else if(sr!=null&&StringUtils.isEmpty(sr.getPassword())){
@@ -73,21 +73,21 @@ public class TeamShareController {
             sr.setPassword(IdentifyingCode.getLowCaseRandomCode(6));
             shareResourceService.update(sr);
         }
-        obj.put("fetchCode", sr.getPassword());
-        obj.put("url", urlGenerator.getAbsoluteURL(UrlPatterns.RESOURCE_SHARE, null, null)+"/"+ShareRidCodeUtil.encode(rid));
+        obj.addProperty("fetchCode", sr.getPassword());
+        obj.addProperty("url", urlGenerator.getAbsoluteURL(UrlPatterns.RESOURCE_SHARE, null, null)+"/"+ShareRidCodeUtil.encode(rid));
         return obj;
     }
     @ResponseBody
     @RequestMapping(params="func=deleteFetchCode")
-    public JSONObject deleteFetchCode(@RequestParam("rid")int rid,HttpServletRequest request){
+    public JsonObject deleteFetchCode(@RequestParam("rid")int rid,HttpServletRequest request){
         ShareResource sr = shareResourceService.get(rid);
         if(sr!=null){
             sr.setPassword(null);
             shareResourceService.update(sr);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
-        obj.put("url", urlGenerator.getAbsoluteURL(UrlPatterns.RESOURCE_SHARE, null, null)+"/"+ShareRidCodeUtil.encode(rid));
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
+        obj.addProperty("url", urlGenerator.getAbsoluteURL(UrlPatterns.RESOURCE_SHARE, null, null)+"/"+ShareRidCodeUtil.encode(rid));
         return obj;
     }
 
@@ -106,55 +106,56 @@ public class TeamShareController {
 
     @ResponseBody
     @RequestMapping(params="func=getUserStatus")
-    public JSONObject getUserStatus(HttpServletRequest request){
+    public JsonObject getUserStatus(HttpServletRequest request){
         UserExt ext = aoneUserService.getUserExtInfo(VWBSession.getCurrentUid(request));
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(StringUtils.isEmpty(ext.getConfirmStatus())){
-            obj.put("status", "false");
+            obj.addProperty("status", "false");
         }else if(ext.isConfStatusAvailable()){
-            obj.put("status", "true");
+            obj.addProperty("status", "true");
             int rid = Integer.parseInt(request.getParameter("rid"));
             setShareUrl(request, obj, rid);
         }else{
-            obj.put("status", "forbidden");
+            obj.addProperty("status", "forbidden");
         }
-        obj.put("userName", VWBSession.getCurrentUidName(request));
+        obj.addProperty("userName", VWBSession.getCurrentUidName(request));
         return obj;
     }
 
     @ResponseBody
     @RequestMapping(params="func=updateUserStatus")
-    public JSONObject updateUserStatus(HttpServletRequest request){
+    public JsonObject updateUserStatus(HttpServletRequest request){
         UserExt ext = aoneUserService.getUserExtInfo(VWBSession.getCurrentUid(request));
         ext.setConfirmStatus(UserExt.CONF_STATUS_AVA);
         aoneUserService.modifyUserProfile(ext);
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
-        obj.put("status", "true");
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
+        obj.addProperty("status", "true");
         int rid = Integer.parseInt(request.getParameter("rid"));
         setShareUrl(request, obj, rid);
         return obj;
     }
-    public void setShareUrl(HttpServletRequest request, JSONObject obj, int rid) {
-        obj.put("url", urlGenerator.getAbsoluteURL(UrlPatterns.RESOURCE_SHARE, null, null)+"/"+ShareRidCodeUtil.encode(rid));
+
+    public void setShareUrl(HttpServletRequest request, JsonObject obj, int rid) {
+        obj.addProperty("url", urlGenerator.getAbsoluteURL(UrlPatterns.RESOURCE_SHARE, null, null)+"/"+ShareRidCodeUtil.encode(rid));
         ShareResource sr = shareResourceService.get(rid);
         if(sr==null){
             sr =createShareResource(rid, request);
         }
-        obj.put("fetchCode", sr.getPassword());
+        obj.addProperty("fetchCode", sr.getPassword());
     }
 
     @ResponseBody
     @RequestMapping(params="func=getShareUrl")
-    public JSONObject getShareUrl(HttpServletRequest request,@RequestParam("rid")int rid){
-        JSONObject obj = new JSONObject();
+    public JsonObject getShareUrl(HttpServletRequest request,@RequestParam("rid")int rid){
+        JsonObject obj = new JsonObject();
         setShareUrl(request, obj, rid);
         return obj;
     }
 
     @ResponseBody
     @RequestMapping(params="func=sendShareResourceEmail")
-    public JSONObject sendShareResourceEmail(HttpServletRequest request,@RequestParam("rid")int rid){
+    public JsonObject sendShareResourceEmail(HttpServletRequest request,@RequestParam("rid")int rid){
         String message = request.getParameter("message");
         String userName = VWBSession.getCurrentUidName(request);
         Resource resource=resourceService.getResource(rid);
@@ -167,12 +168,12 @@ public class TeamShareController {
             aonemailService.sendAccessFileMail(new String[] { fileNames }, new String[] { fileURLs }, userName, shareMails[i],
                                                message);
         }
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        object.put("itemType", resource.getItemType());
-        object.put("fileURL", fileURLs);
-        object.put("friendEmails", friendEmails);
-        object.put("fileName", fileNames);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
+        object.addProperty("itemType", resource.getItemType());
+        object.addProperty("fileURL", fileURLs);
+        object.addProperty("friendEmails", friendEmails);
+        object.addProperty("fileName", fileNames);
         return object;
     }
 

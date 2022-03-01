@@ -40,7 +40,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 import net.duckling.meepo.api.IPanService;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,23 +99,23 @@ public class LynxPanUploadController {
     }
 
     private void dealResult(HttpServletResponse response, UploadResult re, String uid) {
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         if (re.isStatus()) {
             SimpleUser user = aoneUserService.getSimpleUserByUid(uid);
             PanResourceBean bean = MeePoMetaToPanBeanUtil.transfer(re.getMeta(),user);
-            result.put("success", true);
-            result.put("fileExtend", bean.getFileType());
-            result.put("infoURL", "");
-            result.put("previewURL", "");
-            result.put("resource", LynxResourceUtils.getPanResourceJson(bean, uid));
+            result.addProperty("success", true);
+            result.addProperty("fileExtend", bean.getFileType());
+            result.addProperty("infoURL", "");
+            result.addProperty("previewURL", "");
+            result.add("resource", LynxResourceUtils.getPanResourceJson(bean, uid));
             LOG.info(uid+" upload file"+ re.getMeta().restorePath);
         } else {
-            result.put("success", false);
-            result.put("message", re.getMessage());
-            result.put("error", re.getMessage());
+            result.addProperty("success", false);
+            result.addProperty("message", re.getMessage());
+            result.addProperty("error", re.getMessage());
 
         }
-        JsonUtil.writeJSONObject(response, result);
+        JsonUtil.write(response, result);
     }
 
     private String getRemotePath(String parentPath, String fileName) {

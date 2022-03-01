@@ -46,7 +46,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -292,10 +292,10 @@ public class SwitchTeamController extends BaseController {
                 LOG.error(e.getMessage(), e);
             }
         } else {
-            JSONObject json = new JSONObject();
-            json.put("status", "success");
-            json.put("tid", tid);
-            JsonUtil.writeJSONObject(response, json);
+            JsonObject json = new JsonObject();
+            json.addProperty("status", "success");
+            json.addProperty("tid", tid);
+            JsonUtil.write(response, json);
         }
     }
 
@@ -306,9 +306,9 @@ public class SwitchTeamController extends BaseController {
         VWBContext context = getVWBContext(request);
         String uid = context.getCurrentUID();
         teamPreferenceService.updateAllMessage(uid, type);
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params = "func=updateNotice")
@@ -319,10 +319,10 @@ public class SwitchTeamController extends BaseController {
         VWBContext context = getVWBContext(request);
         String uid = context.getCurrentUID();
         teamPreferenceService.updateNoticeAccessTime(uid, tid, type);
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        json.put("tid", tid);
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        json.addProperty("tid", tid);
+        JsonUtil.write(response, json);
     }
 
 }

@@ -31,8 +31,8 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +52,7 @@ public class APIBundleItemsController extends APIBaseResourceController {
     @SuppressWarnings("unchecked")
     @RequestMapping
     public void service(HttpServletRequest request, HttpServletResponse response){
-        JSONObject object= new JSONObject();
+        JsonObject object= new JsonObject();
         Site site =  findSite(request);
         List<Resource> elementList = null;
 
@@ -63,9 +63,9 @@ public class APIBundleItemsController extends APIBaseResourceController {
             elementList = folderPathService.getChildren(tid, bid);
         }
 
-        JSONArray array = JsonUtil.getJSONArrayFromResourceList(elementList);
-        object.put("records", array);
-        JsonUtil.writeJSONObject(response, object);
+        JsonArray array = JsonUtil.getJSONArrayFromResourceList(elementList);
+        object.add("records", array);
+        JsonUtil.write(response, object);
     }
 
 }

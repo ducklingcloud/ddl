@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -81,8 +83,8 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,8 +93,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import cn.cnic.cerc.dlog.client.WebLog;
 import cn.cnic.esac.clb.util.HttpStatus;
@@ -187,11 +187,11 @@ public class BundleController extends BaseController {
                     "updateBundleDesc" })
                     public void onDeny(String methodName, HttpServletRequest request,
                                        HttpServletResponse response) {
-        JSONObject obj = new JSONObject();
-        obj.put("status", "error");
-        obj.put("result", "无权进行此操作！");
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", "error");
+        obj.addProperty("result", "无权进行此操作！");
         response.setStatus(HttpStatus.AUTH_FAILED);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping
@@ -340,12 +340,11 @@ public class BundleController extends BaseController {
         if (null == order || "".equals(order)) {
             return;
         }
-        Map<Integer, Integer> orderMap = JsonUtil.readValue(order,
-                                                            new TypeReference<HashMap<Integer, Integer>>() {
-                                                            });
+        Map<Integer, Integer> orderMap = JsonUtil.readValue(
+            order, new TypeToken<HashMap<Integer, Integer>>(){}.getType());
         bundleService.reorderBundleItems(bid, VWBContext.getCurrentTid(),
                                          orderMap);
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        JsonUtil.write(response, new JsonObject());
     }
 
     @RequestMapping(params = "func=getUnBundle")
@@ -357,8 +356,8 @@ public class BundleController extends BaseController {
         int tid = VWBContext.getCurrentTid();
         List<Resource> resList = resourceService.getUnBundleResource(bid, tid,
                                                                      title, offset, size);
-        JSONArray array = JsonUtil.getJSONArrayFromList(resList);
-        JsonUtil.writeJSONObject(response, array);
+        JsonArray array = new Gson().toJsonTree(resList).getAsJsonArray();
+        JsonUtil.write(response, array);
     }
 
     @RequestMapping(params = "func=saveBundleItem")
@@ -370,7 +369,7 @@ public class BundleController extends BaseController {
         VWBContext context = VWBContext.createContext(request,
                                                       UrlPatterns.T_TEAM_HOME);
         int tid = context.getTid();
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         if (null != rids && rids.length > 0) {
             Bundle b = bundleService.getBundle(bid, tid);
             b.setLastEditor(context.getCurrentUID());
@@ -384,16 +383,16 @@ public class BundleController extends BaseController {
             List<Resource> actualResList = resourceService
                     .getResourcesBySphinxID(ArrayAndListConverter
                                             .convert2Long(itemIds));
-            JSONArray newItems = getJSONArrayOfNewBundleItems(actualResList);
-            result.put("newItems", newItems);
+            JsonArray newItems = getJSONArrayOfNewBundleItems(actualResList);
+            result.add("newItems", newItems);
             if (rids.length > itemIds.length) {
-                JSONArray conflictItems = ConflictBundleItemHelper
+                JsonArray conflictItems = ConflictBundleItemHelper
                         .getJSONArrayOfConflictItems(resourceService, urlGenerator,
                                                      rids, itemIds);
-                result.put("conflictItems", conflictItems);
+                result.add("conflictItems", conflictItems);
             }
         }
-        JsonUtil.writeJSONObject(response, result);
+        JsonUtil.write(response, result);
     }
 
     private int[] putResourceIntoBundle(int tid, List<Resource> resList,
@@ -424,13 +423,13 @@ public class BundleController extends BaseController {
                                                              itemRids);
     }
 
-    private JSONArray getJSONArrayOfNewBundleItems(List<Resource> resList) {
+    private JsonArray getJSONArrayOfNewBundleItems(List<Resource> resList) {
         if (null == resList || resList.isEmpty()) {
-            return new JSONArray();
+            return new JsonArray();
         }
-        JSONArray result = new JSONArray();
+        JsonArray result = new JsonArray();
         for (Resource res : resList) {
-            JSONObject obj = ConflictBundleItemHelper.getJSONResourceForBundleItem(urlGenerator, res);
+            JsonObject obj = ConflictBundleItemHelper.getJSONResourceForBundleItem(urlGenerator, res);
             result.add(obj);
         }
         return result;
@@ -460,7 +459,7 @@ public class BundleController extends BaseController {
         bundleService.removeBundleItems(bid, tid, new int[] { rid });
         Resource resource = resourceService.getResource(rid);
         updateTagCount(resource, tagService);
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        JsonUtil.write(response, new JsonObject());
     }
 
     @RequestMapping(params = "func=deleteBundleItem")
@@ -505,13 +504,13 @@ public class BundleController extends BaseController {
         VWBContext context = VWBContext.createContext(request,
                                                       UrlPatterns.T_TEAM_HOME);
         Resource resource = resourceService.getResource(rid);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if (!validateDeleteAuth(context, resource)) {
-            obj.put("status", false);
+            obj.addProperty("status", false);
         } else {
-            obj.put("status", true);
+            obj.addProperty("status", true);
         }
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping(params = "func=rename")
@@ -532,7 +531,7 @@ public class BundleController extends BaseController {
                 bundleService.updateBundle(bundle);
             }
         }
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        JsonUtil.write(response, new JsonObject());
     }
 
     @RequestMapping(params = "func=updateBundleDesc")
@@ -548,9 +547,9 @@ public class BundleController extends BaseController {
         bundle.setDescription(description);
         bundle.setLastEditor(context.getCurrentUID());
         bundleService.updateBundle(bundle);
-        JSONObject obj = new JSONObject();
-        obj.put("status", true);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", true);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping(params = "func=disbandBundle")
@@ -640,13 +639,13 @@ public class BundleController extends BaseController {
                                      HttpServletResponse response, @PathVariable("bid") int bid) {
         VWBContext context = VWBContext.createContext(request,
                                                       UrlPatterns.T_TEAM_HOME);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if (!validateDeleteBundleAuth(context, bid)) {
-            obj.put("status", false);
+            obj.addProperty("status", false);
         } else {
-            obj.put("status", true);
+            obj.addProperty("status", true);
         }
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     private ModelAndView prepareData(HttpServletRequest request,

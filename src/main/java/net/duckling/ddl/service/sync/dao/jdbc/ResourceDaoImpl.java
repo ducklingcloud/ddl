@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.service.sync.dao.ResourceDao;
@@ -33,8 +34,7 @@ import net.duckling.ddl.util.JsonUtil;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.gson.reflect.TypeToken;
 
 @Repository
 public class ResourceDaoImpl extends AbstractBaseDAO implements ResourceDao {
@@ -96,8 +96,10 @@ public class ResourceDaoImpl extends AbstractBaseDAO implements ResourceDao {
                 r.setLastEditorName(rs.getString(prefix + "last_editor_name"));
                 r.setLastEditTime(rs.getTimestamp(prefix + "last_edit_time"));
                 r.setVersion(rs.getInt(prefix + "last_version"));
-                r.setTags(JsonUtil.readValue(rs.getString(prefix + "tags"),
-                                             new TypeReference<HashMap<Integer, String>>(){}));
+                r.setTags((Map<Integer, String>)
+                          JsonUtil.readValue(rs.getString(prefix + "tags"),
+                                             new TypeToken<HashMap<Integer, String>>(){}
+                                             .getType()));
                 r.setFileType(rs.getString(prefix + "file_type"));
                 r.setStatus(rs.getString(prefix + "status"));
                 r.setBid(rs.getInt(prefix + "bid"));

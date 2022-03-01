@@ -29,7 +29,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,9 +58,9 @@ public class LynxResourceRefController extends BaseController {
     public void deleteFileRef(HttpServletRequest request, HttpServletResponse response, @PathVariable("rid") int rid) {
         int pid = Integer.parseInt(request.getParameter("pid"));
         fileVersionService.deleteFileAndPageRefer(rid, pid, VWBContext.getCurrentTid());
-        JSONObject object = new JSONObject();
-        object.put("docid", rid);
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("docid", rid);
+        JsonUtil.write(response, object);
     }
 
 }

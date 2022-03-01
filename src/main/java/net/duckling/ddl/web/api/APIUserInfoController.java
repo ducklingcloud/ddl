@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +28,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,13 +42,13 @@ public class APIUserInfoController extends APIBaseController {
 
     @RequestMapping
     public void getUserInfo(HttpServletRequest req, HttpServletResponse resp) {
-        JSONObject object = new JSONObject();
+        JsonObject object = new JsonObject();
         String uid = req.getParameter("uid");
         String id = req.getParameter("id");
         if (StringUtils.isEmpty(uid) && StringUtils.isEmpty(id)) {
-            object.put("result", false);
-            object.put("message", "提供的id信息不能为空");
-            JsonUtil.writeJSONObject(resp, object);
+            object.addProperty("result", false);
+            object.addProperty("message", "提供的id信息不能为空");
+            JsonUtil.write(resp, object);
             return;
         }
         UserExt user = null;
@@ -74,21 +75,21 @@ public class APIUserInfoController extends APIBaseController {
             putJson("weibo", user.getWeibo(), object);
             putJson("orgnization", user.getOrgnization(), object);
         } else {
-            object.put("result", false);
-            object.put("message", "提供的id信息不正确");
+            object.addProperty("result", false);
+            object.addProperty("message", "提供的id信息不正确");
         }
-        JsonUtil.writeJSONObject(resp, object);
+        JsonUtil.write(resp, object);
     }
 
-    private void putJson(String key, Object value, JSONObject object) {
+    private void putJson(String key, Object value, JsonObject object) {
         if (value instanceof String) {
-            if (StringUtils.isEmpty((String) value)) {
-                object.put(key, "");
+            if (StringUtils.isEmpty((String)value)) {
+                object.addProperty(key, "");
             } else {
-                object.put(key, value);
+                object.addProperty(key, (String)value);
             }
         } else {
-            object.put(key, value);
+            object.add(key, new Gson().toJsonTree(value));
         }
     }
 }

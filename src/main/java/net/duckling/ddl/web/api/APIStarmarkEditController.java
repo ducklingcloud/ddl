@@ -30,7 +30,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,10 +60,10 @@ public class APIStarmarkEditController extends APIBaseController {
             starmarkService.removeStarmark(uid,rid,tid);
         }
 
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        json.put("rid", rid);
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        json.addProperty("rid", rid);
+        JsonUtil.write(response, json);
     }
 
     private int getRid(HttpServletRequest request,Site site){

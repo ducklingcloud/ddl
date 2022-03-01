@@ -20,14 +20,13 @@
 package net.duckling.ddl.web.tag;
 
 import java.io.IOException;
+import net.duckling.common.util.CommonUtils;
 
 import javax.servlet.jsp.JspException;
 
 import net.duckling.ddl.constant.KeyConstants;
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.util.HTMLConvertUtil;
-
-import com.mysql.jdbc.StringUtils;
 
 
 /**
@@ -45,7 +44,7 @@ public class ApplicationNameTag extends VWBBaseTag {
             sitename=vwbcontext.getSite().getSiteName();
         }else{
             String teamTitle = (String)vwbcontext.getHttpRequest().getAttribute(LynxConstants.TEAM_TITLE);
-            if(StringUtils.isEmptyOrWhitespaceOnly(teamTitle)){
+            if(CommonUtils.isNullOrEmptyOrBlankOrLiteralNull(teamTitle)){
                 sitename = vwbcontext.getContainer().getProperty(KeyConstants.SITE_NAME_KEY);
             }else{
                 sitename = teamTitle;

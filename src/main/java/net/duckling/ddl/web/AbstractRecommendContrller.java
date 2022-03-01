@@ -32,8 +32,8 @@ import net.duckling.ddl.service.user.SimpleUser;
 import net.duckling.ddl.util.JsonUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractRecommendContrller {
@@ -54,19 +54,19 @@ public abstract class AbstractRecommendContrller {
         Team team =teamService.getTeamByID(VWBContext.getCurrentTid());
         List<SimpleUser> candidates = teamMemberService.getTeamMembersOrderByName(team.getId());
         Collections.sort(candidates, comparator);
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for (SimpleUser current : candidates) {
-            JSONObject temp = new JSONObject();
-            temp.put("id", current.getUid());
+            JsonObject temp = new JsonObject();
+            temp.addProperty("id", current.getUid());
             if (StringUtils.isNotEmpty(current.getName())) {
-                temp.put("name", current.getName());
+                temp.addProperty("name", current.getName());
             } else {
-                temp.put("name", current.getUid());
+                temp.addProperty("name", current.getUid());
             }
-            temp.put("userExtId", current.getId());
+            temp.addProperty("userExtId", current.getId());
             array.add(temp);
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
 }

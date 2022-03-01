@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.duckling.ddl.service.team.TeamService;
 import net.duckling.ddl.util.JsonUtil;
 
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,7 +54,7 @@ public class RecLoggingController extends BaseController{
     public void recordClickLog(HttpServletRequest request,HttpServletResponse response, @PathVariable("teamCode")String teamCode){
         int cftid = teamService.getTeamByName(teamCode).getId();
         request.setAttribute("cftid", cftid);
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        JsonUtil.write(response, new JsonObject());
     }
 
     @RequestMapping(params="func=dapgelog")
@@ -76,11 +76,11 @@ public class RecLoggingController extends BaseController{
             request.setAttribute("cftid", cftid);
         }
 
-        JSONObject obj = new JSONObject();
-        obj.put("type",type);
-        obj.put("pid",pid);
-        obj.put("oper_name",operName);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type",type);
+        obj.addProperty("pid",pid);
+        obj.addProperty("oper_name",operName);
+        JsonUtil.write(response, obj);
     }
 
 }

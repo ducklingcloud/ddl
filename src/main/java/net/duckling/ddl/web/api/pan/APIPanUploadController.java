@@ -36,7 +36,7 @@ import net.duckling.ddl.util.StringUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 import net.duckling.meepo.api.IPanService;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,23 +65,23 @@ public class APIPanUploadController {
         long size = uplFile.getSize();
         String remotePath = getRemotePath(parentPath, fileName);
 
-        JSONObject j = new JSONObject();
+        JsonObject j = new JsonObject();
         try {
             UploadResult re = updateFile(request, uplFile.getInputStream(), size, remotePath, serialName);
             if(re.status){
-                j.put("success", true);
-                j.put("rid", encode(re.getMeta().restorePath));
+                j.addProperty("success", true);
+                j.addProperty("rid", encode(re.getMeta().restorePath));
             }else{
-                j.put("success", false);
-                j.put("message", re.getMessage());
+                j.addProperty("success", false);
+                j.addProperty("message", re.getMessage());
             }
         } catch (IOException e) {
             e.printStackTrace();
-            j.put("success", false);
-            j.put("message", e.getMessage());
-            j.put("error", e.getMessage());
+            j.addProperty("success", false);
+            j.addProperty("message", e.getMessage());
+            j.addProperty("error", e.getMessage());
         }
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
     private String getRemotePath(String parentPath, String fileName) {

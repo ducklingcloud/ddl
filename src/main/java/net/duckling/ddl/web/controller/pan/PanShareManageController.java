@@ -40,7 +40,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 import net.duckling.meepo.api.IPanService;
 import net.duckling.meepo.api.PanAcl;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -140,7 +140,7 @@ public class PanShareManageController extends BaseController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(params="func=delete")
-    public JSONObject deleteShareResource(HttpServletRequest request){
+    public JsonObject deleteShareResource(HttpServletRequest request){
         String[] rs = request.getParameterValues("rids[]");
         int[] ids = new int[rs.length];
         for(int i = 0;i<rs.length;i++){
@@ -149,8 +149,8 @@ public class PanShareManageController extends BaseController {
         for(int id:ids){
             panShareResourceService.delete(id);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
         return obj;
     }
 

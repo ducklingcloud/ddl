@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +45,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,17 +81,17 @@ public class APIResourceOperateController extends AbstractRecommendContrller{
     @RequirePermission(target="team", operation="edit")
     public void moveResource(HttpServletRequest request,HttpServletResponse response,@RequestParam("originalRid")int originalRid,
                              @RequestParam("targetRid")int targetRid){
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         if (originalRid == targetRid) { // 1.不能移动到自身
-            result.put("result", false);
-            result.put("message", "不能将文件夹移动到自身");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", "不能将文件夹移动到自身");
+            JsonUtil.write(response, result);
             return ;
         }
         if (isMovingToParent(originalRid, targetRid)) {
-            result.put("result", false);
-            result.put("message", "您要移动的文件已经存在于目标路径");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", "您要移动的文件已经存在于目标路径");
+            JsonUtil.write(response, result);
             return ;
         }
         int tid = VWBContext.getCurrentTid();
@@ -98,9 +99,9 @@ public class APIResourceOperateController extends AbstractRecommendContrller{
         List<Resource> descendants = folderPathService.getDescendants(tid, originalRid);
         for(Resource descendant : descendants) {
             if (targetRid == descendant.getRid()) {
-                result.put("result", false);
-                result.put("message", "不能将文件夹移动到自身的子文件夹中");
-                JsonUtil.writeJSONObject(response, result);
+                result.addProperty("result", false);
+                result.addProperty("message", "不能将文件夹移动到自身的子文件夹中");
+                JsonUtil.write(response, result);
                 return ;
             }
         }
@@ -113,13 +114,13 @@ public class APIResourceOperateController extends AbstractRecommendContrller{
                 targetPathString += "/" + resource.getTitle();
             }
             resourceOperateService.moveResource(tid, targetRid, originalRid,VWBSession.getCurrentUid(request));
-            result.put("result", true);
-            result.put("message", "文档“" + originalPath + "”成功移动到到目录“" + targetPathString + "”");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", true);
+            result.addProperty("message", "文档“" + originalPath + "”成功移动到到目录“" + targetPathString + "”");
+            JsonUtil.write(response, result);
         } catch (RuntimeException re) {
-            result.put("result", false);
-            result.put("message", "移动失败");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", "移动失败");
+            JsonUtil.write(response, result);
         }
     }
 
@@ -128,36 +129,36 @@ public class APIResourceOperateController extends AbstractRecommendContrller{
     public void copyFileTo(HttpServletRequest request, HttpServletResponse response,
                            @RequestParam("originalRid")int originalRid,
                            @RequestParam("targetRid")int targetRid) {
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         if (originalRid == targetRid) { // 1.不能复制到自身
-            result.put("result", false);
-            result.put("message", "不能将文件夹复制到自身");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", "不能将文件夹复制到自身");
+            JsonUtil.write(response, result);
             return ;
         }
         int tid = VWBContext.getCurrentTid();
         int targetTid = getDestTid(request, tid);
         if(!haveTeamEditeAuth(targetTid, VWBSession.getCurrentUid(request))){
-            result.put("result", false);
-            result.put("message", "您没有权限移动此文件夹");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", "您没有权限移动此文件夹");
+            JsonUtil.write(response, result);
             return ;
         }
         // 2.不能复制到自身的子文件夹中
         List<Resource> descendants = folderPathService.getDescendants(tid, originalRid);
         for(Resource descendant : descendants) {
             if (targetRid == descendant.getRid()) {
-                result.put("result", false);
-                result.put("message", "不能将文件夹复制到其子目录中");
-                JsonUtil.writeJSONObject(response, result);
+                result.addProperty("result", false);
+                result.addProperty("message", "不能将文件夹复制到其子目录中");
+                JsonUtil.write(response, result);
                 return ;
             }
         }
         CopyCount c = validateCopyCount(request, descendants,"copy");
         if(c!=null){
-            result.put("result", false);
-            result.put("message", c.getErrorMessage());
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", c.getErrorMessage());
+            JsonUtil.write(response, result);
             return;
         }
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
@@ -172,46 +173,49 @@ public class APIResourceOperateController extends AbstractRecommendContrller{
             }
 
             resourceOperateService.copyResource(targetTid, targetRid,tid, originalRid, uid);
-            result.put("result", true);
-            result.put("message", "文档“" + originalPath + "”成功复制到目录“" + targetPathString + "”");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", true);
+            result.addProperty("message", "文档“" + originalPath + "”成功复制到目录“" + targetPathString + "”");
+            JsonUtil.write(response, result);
         } catch (RuntimeException re) {
-            result.put("result", false);
-            result.put("message", "复制失败");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", "复制失败");
+            JsonUtil.write(response, result);
         }
     }
 
     @RequestMapping(params="func=rename")
     @RequirePermission(target="team", operation="edit")
     public void rename(HttpServletRequest request,HttpServletResponse response,@RequestParam("rid")int rid,@RequestParam("fileName")String fileName){
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         if(StringUtils.isEmpty(fileName)){
-            result.put("result", false);
-            result.put("message", "文件名不能为空");
+            result.addProperty("result", false);
+            result.addProperty("message", "文件名不能为空");
         }else{
             String uid = VWBSession.getCurrentUid(request);
             boolean r = resourceOperateService.renameResource(VWBContext.getCurrentTid(), rid, uid, fileName);
             if(!r){
-                result.put("result", false);
+                result.addProperty("result", false);
             }else{
                 Resource resource = resourceService.getResource(rid);
-                result.put("result", true);
-                result.put("resource", JsonUtil.getJSONObjectFromResource(resource));
+                result.addProperty("result", true);
+                result.add("resource", new Gson().toJsonTree(resource));
             }
         }
 
-        JsonUtil.writeJSONObject(response, result);
+        JsonUtil.write(response, result);
     }
 
     @RequestMapping(params="func=createFolder")
     @RequirePermission(target="team", operation="edit")
-    public void createFolder(HttpServletRequest request,HttpServletResponse response,@RequestParam("parentRid")int parentRid,@RequestParam("fileName")String fileName){
-        JSONObject result = new JSONObject();
+    public void createFolder(HttpServletRequest request,
+                             HttpServletResponse response,
+                             @RequestParam("parentRid")int parentRid,
+                             @RequestParam("fileName")String fileName) {
+        JsonObject result = new JsonObject();
         if(StringUtils.isEmpty(fileName)){
-            result.put("result", false);
-            result.put("message", "文件名不能为空");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("result", false);
+            result.addProperty("message", "文件名不能为空");
+            JsonUtil.write(response, result);
             return;
         }
         if(StringUtil.illCharCheck(request, response, "fileName")){
@@ -246,9 +250,9 @@ public class APIResourceOperateController extends AbstractRecommendContrller{
             resourceOperateService.createFolder(r);
         }
 
-        result.put("result", true);
-        result.put("resource", JsonUtil.getJSONObjectFromResource(r));
-        JsonUtil.writeJSONObject(response, result);
+        result.addProperty("result", true);
+        result.add("resource", new Gson().toJsonTree(r));
+        JsonUtil.write(response, result);
     }
 
     private CopyCount validateCopyCount(HttpServletRequest request,List<Resource> descendants,String type){

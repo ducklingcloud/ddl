@@ -42,7 +42,7 @@ import net.duckling.ddl.web.controller.BaseController;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,10 +96,10 @@ public class QuitTeamController extends BaseController {
             }
             LOG.info("user "+uid+" quit team "+teamName);
         }
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        json.put("tid", tid);
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        json.addProperty("tid", tid);
+        JsonUtil.write(response, json);
     }
     @WebLog(method = "quitTeamValidate", params = "teamName")
     @RequestMapping(params="func=quitTeamValidate")
@@ -109,26 +109,26 @@ public class QuitTeamController extends BaseController {
         String teamName = request.getParameter("teamName");
         Team team = teamService.getTeamByName(teamName);
         List<TeamPreferences> users = teamPreferenceService.getUidByTid(team.getId());
-        JSONObject json = new JSONObject();
+        JsonObject json = new JsonObject();
 
         //会议团队不能退出
         if(Team.CONFERENCE_TEAM.equals(team.getType())){
-            json.put("type", "conferenceTeam");
-            JsonUtil.writeJSONObject(response, json);
+            json.addProperty("type", "conferenceTeam");
+            JsonUtil.write(response, json);
             return;
         }
 
         if(users.size()==1){
-            json.put("type", "onlyOneUser");
+            json.addProperty("type", "onlyOneUser");
         }else{
             List<TeamAcl> s = authorityService.getTeamAdminByTid(team.getId());
             if(s.size()==1&&s.get(0).getUid().equals(uid)){
-                json.put("type", "onlyOneAdmin");
+                json.addProperty("type", "onlyOneAdmin");
             }else{
-                json.put("type", "success");
+                json.addProperty("type", "success");
             }
         }
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
 
 }

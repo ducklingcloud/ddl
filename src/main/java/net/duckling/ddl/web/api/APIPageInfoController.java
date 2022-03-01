@@ -30,7 +30,7 @@ import net.duckling.ddl.service.resource.Resource;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,12 +67,12 @@ public class APIPageInfoController extends APIBaseController {
             }
         }
 
-        JSONObject object= new JSONObject();
-        object.put("marked", marked);
-        object.put("fileType", meta.getFileType());
-        object.put("rid", meta.getRid());
-        object.put("size", meta.getSize());
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object= new JsonObject();
+        object.addProperty("marked", marked);
+        object.addProperty("fileType", meta.getFileType());
+        object.addProperty("rid", meta.getRid());
+        object.addProperty("size", meta.getSize());
+        JsonUtil.write(response, object);
     }
 
 }

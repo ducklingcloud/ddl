@@ -42,9 +42,9 @@ public class PatternsTag extends VWBBaseTag {
     public int doVWBStart() throws Exception {
         StringBuilder buff = new StringBuilder();
         buff.append("{");
-        buff.append("params" + ":" + JsonUtil.map2JSON(getParams()) + ",\n");
+        buff.append("params" + ":" + JsonUtil.getJSONString(getParams()) + ",\n");
         buff.append("patterns" + ":"
-                    + JsonUtil.map2JSON(UrlPatterns.getInstance().getPatterns())
+                    + JsonUtil.getJSONString(UrlPatterns.getInstance().getPatterns())
                     + ",\n");
         buff.append("reversePattern"
                     + ":"

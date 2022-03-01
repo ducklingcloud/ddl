@@ -54,8 +54,8 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,12 +100,12 @@ public class APIPageCopyController extends APIBaseController {
                 teamList.add(new CopyTeam(teamService.getTeamByID(p.getTid()),needCover));
             }
         }
-        JSONObject jsonObj = new JSONObject();
+        JsonObject jsonObj = new JsonObject();
         String api = request.getParameter("api");
-        jsonObj.put("api", api);
-        JSONArray jsonArray = JsonUtil.getJSONArrayFromList(teamList);
-        jsonObj.put("records", jsonArray);
-        JsonUtil.writeJSONObject(response, jsonObj);
+        jsonObj.addProperty("api", api);
+        JsonArray jsonArray = JsonUtil.getJSONArrayFromList(teamList);
+        jsonObj.add("records", jsonArray);
+        JsonUtil.write(response, jsonObj);
     }
 
     @SuppressWarnings("unchecked")
@@ -147,11 +147,11 @@ public class APIPageCopyController extends APIBaseController {
             //              succ = false;
             //          }
         }
-        JSONObject jsonObj = new JSONObject();
+        JsonObject jsonObj = new JsonObject();
         String api = request.getParameter("api");
-        jsonObj.put("api", api);
-        jsonObj.put("succ", succ);
-        JsonUtil.writeJSONObject(response, jsonObj);
+        jsonObj.addProperty("api", api);
+        jsonObj.addProperty("succ", succ);
+        JsonUtil.write(response, jsonObj);
     }
     //-------------------------------临时添加团队间复制开始----------------------------------
     private void teamCopy(int rid,int version,int tid,int[] toTids,String uid){

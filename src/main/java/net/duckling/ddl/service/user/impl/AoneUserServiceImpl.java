@@ -34,6 +34,7 @@ import net.duckling.ddl.service.user.UserExt;
 import net.duckling.ddl.service.user.UserGuide;
 import net.duckling.ddl.service.user.UserPreferences;
 import net.duckling.falcon.api.cache.ICacheService;
+import net.duckling.common.util.CommonUtils;
 
 import org.apache.log4j.Logger;
 
@@ -42,8 +43,6 @@ import cn.vlabs.duckling.api.umt.rmi.exception.UserExistException;
 import cn.vlabs.duckling.api.umt.rmi.exception.UserNotFoundException;
 import cn.vlabs.duckling.api.umt.rmi.user.UMTUser;
 import cn.vlabs.duckling.api.umt.rmi.user.UserService;
-
-import com.mysql.jdbc.StringUtils;
 
 /**
  * @date 2011-5-26
@@ -200,7 +199,7 @@ public class AoneUserServiceImpl implements AoneUserService {
 
     public boolean isExistAoneRegister(String email) {
         // 加入null和空判断，解决后台日志在此处抛出NullPointerException。 yangxiaopeng@cnic.cn
-        return !StringUtils.isNullOrEmpty(email) && getSimpleUserFromCache(email) != null;
+        return !CommonUtils.isNull(email) && getSimpleUserFromCache(email) != null;
     }
 
     public boolean isExistRegister(String uid) {

@@ -42,7 +42,7 @@ import net.duckling.ddl.util.EmailUtil;
 import net.duckling.ddl.util.EncodeUtil;
 import net.duckling.ddl.util.JsonUtil;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,10 +114,10 @@ public class ShareFileController extends BaseController {
     public void isExistRegister(HttpServletRequest request,HttpServletResponse response){
         String email =  request.getParameter("newRegister");
         boolean flag = aoneUserService.isExistAoneRegister(email);
-        JSONObject json = new JSONObject();
-        json.put("result", flag);
-        json.put("message", "Hello");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("result", flag);
+        json.addProperty("message", "Hello");
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params="func=isPasswordCorrect")
@@ -125,15 +125,15 @@ public class ShareFileController extends BaseController {
         String password = request.getParameter("password");
         String uid = request.getParameter("newRegister");
         UserPrincipal p = aoneUserService.getUMTUser(uid, password);
-        JSONObject json = new JSONObject();
+        JsonObject json = new JsonObject();
         if(p!=null){
-            json.put("result", true);
-            json.put("message",p.getDisplayName());
+            json.addProperty("result", true);
+            json.addProperty("message",p.getDisplayName());
         }else{
-            json.put("result", false);
-            json.put("message", "");
+            json.addProperty("result", false);
+            json.addProperty("message", "");
         }
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
 
     private void userShareFile(HttpServletRequest request,ModelAndView mv) throws UnsupportedEncodingException{
@@ -220,14 +220,14 @@ public class ShareFileController extends BaseController {
     private void createTempFile(HttpServletRequest request,HttpServletResponse response, String filename,long size,InputStream is) {
         try {
             int clbId = storage.createFile(filename,size, is);
-            JSONObject object = new JSONObject();
-            object.put("success", true);
-            object.put("clbId", clbId+"");
-            object.put("fileName", filename);
-            object.put("size", size+"");
+            JsonObject object = new JsonObject();
+            object.addProperty("success", true);
+            object.addProperty("clbId", clbId+"");
+            object.addProperty("fileName", filename);
+            object.addProperty("size", size+"");
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_OK);
-            JsonUtil.writeJSONObject(response, object);
+            JsonUtil.write(response, object);
         } catch (Throwable e) {
             LOGGER.error("Unable upload attachment.", e);
         } finally {

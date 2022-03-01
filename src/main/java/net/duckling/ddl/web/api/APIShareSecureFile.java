@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import net.duckling.ddl.util.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,8 +44,8 @@ import net.duckling.ddl.service.team.TeamService;
 import net.duckling.ddl.service.user.AoneUserService;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -126,16 +127,16 @@ public class APIShareSecureFile {
     @SuppressWarnings("unchecked")
     private void printJSON(HttpServletResponse response, APIStatusCode status,
                            Object message) throws IOException {
-        JSONObject obj = new JSONObject();
-        obj.put("code", status.getCode());
-        obj.put("message", status.toString());
+        JsonObject obj = new JsonObject();
+        obj.addProperty("code", status.getCode());
+        obj.addProperty("message", status.toString());
         if (status == APIStatusCode.SUCCESS) {
-            obj.put("result", message);
+            obj.add("result", JsonUtil.getJSONObject(message));
         }
         response.setContentType("text/javascript");
         response.setCharacterEncoding("utf8");
         PrintWriter out = response.getWriter();
-        out.write(obj.toJSONString());
+        out.write(obj.toString());
         out.flush();
         out.close();
     }
@@ -202,9 +203,9 @@ public class APIShareSecureFile {
             }
         }
 
-        JSONObject obj = new JSONObject();
-        obj.put("notfound", list2JsonArray(notfound));
-        obj.put("nospace", list2JsonArray(nospace));
+        JsonObject obj = new JsonObject();
+        obj.add("notfound", list2JsonArray(notfound));
+        obj.add("nospace", list2JsonArray(nospace));
 
         printJSON(response, APIStatusCode.SUCCESS, obj);
     }
@@ -274,14 +275,14 @@ public class APIShareSecureFile {
         VWBSession vwbsession = VWBSession.findSession(request);
         UserPrincipal user = (UserPrincipal) vwbsession.getCurrentUser();
         List<String> messages = inviteService.readMessage(user.getName());
-        JSONArray array = new JSONArray();
-        array.addAll(messages);
+        JsonArray array = new JsonArray();
+        messages.forEach(s -> array.add(s));
         printJSON(response, APIStatusCode.SUCCESS, array);
     }
 
     @SuppressWarnings("unchecked")
-    private JSONArray list2JsonArray(List<String> list) {
-        JSONArray array = new JSONArray();
+    private JsonArray list2JsonArray(List<String> list) {
+        JsonArray array = new JsonArray();
         for (String val : list) {
             array.add(val);
         }

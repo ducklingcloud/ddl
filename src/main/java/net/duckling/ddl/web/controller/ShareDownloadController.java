@@ -67,8 +67,8 @@ import net.duckling.ddl.web.bean.FileTypeHelper;
 import net.duckling.ddl.web.controller.file.BaseAttachController;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -218,7 +218,7 @@ public class ShareDownloadController extends BaseAttachController{
                            @RequestParam("targetRid")String targetRidStr) {
         int originalRid = ShareRidCodeUtil.decode(originalRidStr);
         int targetRid = Integer.parseInt(targetRidStr);
-        JSONObject result=new JSONObject();
+        JsonObject result=new JsonObject();
         try {
             Resource originalRes = resourceService.getResource(originalRid);
             int tid = originalRes.getTid();
@@ -259,16 +259,16 @@ public class ShareDownloadController extends BaseAttachController{
 
             Resource resource = resourceOperateService.copyResource(targetTid, targetRid, tid,originalRid, uid);
             String url = urlGenerator.getURL(targetTid, UrlPatterns.T_VIEW_R, targetRid+"", null);
-            JSONObject resourceJSON=LynxResourceUtils.getResourceJson(uid, resource);
-            result.put("state", SUCCESS);
-            result.put("msg", "“" + originalPath + "” " +
+            JsonObject resourceJSON=LynxResourceUtils.getResourceJson(uid, resource);
+            result.addProperty("state", SUCCESS);
+            result.addProperty("msg", "“" + originalPath + "” " +
                        getLocaleMessage(request, "ddl.tip.t15") + " <a href=\"" + url + "\">" + targetPathString + "</a>");
-            result.put("resource", resourceJSON);
-            JsonUtil.writeJSONObject(response, result);
+            result.add("resource", resourceJSON);
+            JsonUtil.write(response, result);
         } catch (RuntimeException re) {
-            result.put("state", ERROR);
-            result.put("msg", "复制失败");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("state", ERROR);
+            result.addProperty("msg", "复制失败");
+            JsonUtil.write(response, result);
             throw re;
         }
     }
@@ -287,8 +287,8 @@ public class ShareDownloadController extends BaseAttachController{
         int rid = ShareRidCodeUtil.decode(ridCode);
         ShareResource shareRes = shareResourceService.get(rid);
 
-        JSONObject json = new JSONObject();
-        json.put("result", "");
+        JsonObject json = new JsonObject();
+        json.addProperty("result", "");
         if(shareRes!=null && shareRes.getPassword().equalsIgnoreCase(code.trim())){
             Set<Integer> fetchCodes = (Set<Integer>)request.getSession().getAttribute(SHARE_SESSION_KEY);
             if(fetchCodes==null){
@@ -296,11 +296,11 @@ public class ShareDownloadController extends BaseAttachController{
                 request.getSession().setAttribute(SHARE_SESSION_KEY, fetchCodes);
             }
             fetchCodes.add(rid);
-            json.put("result", "ok");
+            json.addProperty("result", "ok");
         } else if(shareRes==null){
-            json.put("result", "ok");
+            json.addProperty("result", "ok");
         }
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
 
     /**
@@ -489,9 +489,9 @@ public class ShareDownloadController extends BaseAttachController{
             status = getImageStatus(fv.getClbId(), fv.getClbVersion()+"", type);
         }
 
-        JSONObject j = new JSONObject();
-        j.put("status", status);
-        JsonUtil.writeJSONObject(resp,j);
+        JsonObject j = new JsonObject();
+        j.addProperty("status", status);
+        JsonUtil.write(resp,j);
     }
 
     @RequestMapping(params="func=downloads")
@@ -546,11 +546,11 @@ public class ShareDownloadController extends BaseAttachController{
             currentRid = -1;
         }
 
-        JSONObject j = buildQueryResultJson( shareRid,currentRid, resources,queryType);
+        JsonObject j = buildQueryResultJson( shareRid,currentRid, resources,queryType);
         String tokenKey=request.getParameter("tokenKey");
-        j.put("tokenKey", tokenKey);
-        j.put("order", queryType);
-        JsonUtil.writeJSONObject(response, j);
+        j.addProperty("tokenKey", tokenKey);
+        j.addProperty("order", queryType);
+        JsonUtil.write(response, j);
     }
 
     private static int getCurrentRid(HttpServletRequest request){
@@ -570,28 +570,28 @@ public class ShareDownloadController extends BaseAttachController{
         return rid;
     }
 
-    private JSONObject buildQueryResultJson(int shareRid,int rid,PaginationBean<Resource> resources,String queryType) {
+    private JsonObject buildQueryResultJson(int shareRid,int rid,PaginationBean<Resource> resources,String queryType) {
         if(resources==null){
             resources=new PaginationBean<Resource>();
         }
 
-        JSONObject j = new JSONObject();
-        j.put("total", resources.getTotal());
+        JsonObject j = new JsonObject();
+        j.addProperty("total", resources.getTotal());
         if(rid>0){
-            j.put("currentResource", LynxResourceUtils.getResourceJson(null, resourceService.getResource(rid)));
-            j.put("path", getNavPath(shareRid, rid));
+            j.add("currentResource", LynxResourceUtils.getResourceJson(null, resourceService.getResource(rid)));
+            j.add("path", getNavPath(shareRid, rid));
         }
-        j.put("nextBeginNum", resources.getNextStartNum());
-        j.put("children", LynxResourceUtils.getResourceJSON(resources.getData(), null));
-        j.put("loadedNum",resources.getLoadedNum());
-        j.put("size", resources.getSize());
+        j.addProperty("nextBeginNum", resources.getNextStartNum());
+        j.add("children", LynxResourceUtils.getResourceJSON(resources.getData(), null));
+        j.addProperty("loadedNum",resources.getLoadedNum());
+        j.addProperty("size", resources.getSize());
 
         return j;
     }
 
-    private JSONArray getNavPath(int shareRid,int curentRid){
+    private JsonArray getNavPath(int shareRid,int curentRid){
         if(curentRid==-1){
-            return  new JSONArray();
+            return  new JsonArray();
         }else{
             List<Resource> r = folderPathService.getResourcePath(curentRid);
             Iterator<Resource> it = r.iterator();
@@ -655,10 +655,10 @@ public class ShareDownloadController extends BaseAttachController{
     }
 
     private static void writeResponse(HttpServletResponse response, int state, String message) {
-        JSONObject msg = new JSONObject();
-        msg.put("state", state);
-        msg.put("msg", message);
-        JsonUtil.writeJSONObject(response, msg);
+        JsonObject msg = new JsonObject();
+        msg.addProperty("state", state);
+        msg.addProperty("msg", message);
+        JsonUtil.write(response, msg);
     }
 
     private Resource inFolderFile(HttpServletRequest request,Resource resource){

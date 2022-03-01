@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,9 +58,9 @@ public class StatisticController {
                                 @RequestParam("time1")int time1,
                                 @RequestParam("time2")int time2,
                                 @RequestParam("total")int total) {
-        JSONObject retVal = new JSONObject();
-        retVal.put("state", "recived");
-        JsonUtil.writeJSONObject(response, retVal);
+        JsonObject retVal = new JsonObject();
+        retVal.addProperty("state", "recived");
+        JsonUtil.write(response, retVal);
     }
 
     /**
@@ -76,8 +76,8 @@ public class StatisticController {
                                 @RequestParam("time1")int time1,
                                 @RequestParam("time2")int time2,
                                 @RequestParam("total")int total) {
-        JSONObject retVal = new JSONObject();
-        retVal.put("state", "recived");
-        JsonUtil.writeJSONObject(response, retVal);
+        JsonObject retVal = new JsonObject();
+        retVal.addProperty("state", "recived");
+        JsonUtil.write(response, retVal);
     }
 }

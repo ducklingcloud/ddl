@@ -32,7 +32,7 @@ import net.duckling.ddl.service.user.UserGuide;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,9 +56,9 @@ public class UserGuideController extends BaseController{
             step = 0;
             aoneUserService.createUserGuide(UserGuide.build(uid, module));
         }
-        JSONObject obj = new JSONObject();
-        obj.put("step", step);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("step", step);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping(params="func=update")
@@ -67,7 +67,7 @@ public class UserGuideController extends BaseController{
         VWBContext context = getVWBContext(request, module);
         String uid = context.getCurrentUID();
         aoneUserService.updateUserGuideStep(uid, module, step);
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        JsonUtil.write(response, new JsonObject());
     }
 
     private VWBContext getVWBContext(HttpServletRequest request, String module){

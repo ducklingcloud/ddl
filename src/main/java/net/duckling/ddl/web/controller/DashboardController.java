@@ -80,8 +80,8 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -385,7 +385,8 @@ public class DashboardController extends AbstractSpaceController {
         mv.addObject("resourceMapMap", mapToMap(map, context.getHttpRequest()));
         mv.addObject("waitingApplicants", waiting.toString());
         mv.addObject("rejectApplicants", reject.toString());
-        JSONArray array = getWaitingAndRejectTeam(uid, context, teamMap);
+        List<Map<String,Object>> array =
+                getWaitingAndRejectTeam(uid, context, teamMap);
         mv.addObject("applicantTeams", array);
         mv.addObject("userAdminTeam", getUserAdminTeam(uid, teamMemberService));
         mv.addObject("teamCreatorInfos", getTeamCreator(prefList));
@@ -452,16 +453,16 @@ public class DashboardController extends AbstractSpaceController {
      * @param teamMap
      * @return
      */
-    private JSONArray getWaitingAndRejectTeam(String uid, VWBContext context,
-                                              Map<Integer, Team> teamMap) {
+    private List<Map<String,Object>> getWaitingAndRejectTeam(
+        String uid, VWBContext context, Map<Integer, Team> teamMap) {
         List<TeamApplicant> applicantTeams =teamApplicantService.getUserApplicant(uid);
-        JSONArray array = new JSONArray();
+        List<Map<String,Object>> array = new ArrayList<Map<String,Object>>();
         if (null != applicantTeams && !applicantTeams.isEmpty()) {
             for (TeamApplicant ta : applicantTeams) {
                 Integer tid = Integer.valueOf(ta.getTid());
                 if (!teamMap.containsKey(tid)) {// 已加入的团队中不包含申请的团队
                     Team team = teamService.getTeamByID(tid);
-                    JSONObject obj = new JSONObject();
+                    Map<String,Object> obj = new HashMap<String,Object>();
                     obj.put("id", ta.getTid());
                     obj.put("displayName", team.getDisplayName());
                     obj.put("accessType", team.getAccessType());
@@ -575,9 +576,9 @@ public class DashboardController extends AbstractSpaceController {
         for (TeamPreferences pref : prefs) {
             gridService.decreaseItemScore(uid, pref.getTid());
         }
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params = "func=historyNotice")
@@ -802,7 +803,7 @@ public class DashboardController extends AbstractSpaceController {
                 shareNotice ? ParamConstants.NoticeEmailShareType.VALUE_CHECKED
                 : ParamConstants.NoticeEmailShareType.VALUE_UN_CHECKED);
         }
-        JsonUtil.writeJSONObject(response, true);
+        JsonUtil.write(response, true);
     }
 
     @RequestMapping(params = "func=emailNoticeDetail")
@@ -835,7 +836,7 @@ public class DashboardController extends AbstractSpaceController {
                                          ParamConstants.NoticeEmailShareType.TYPE,
                                          context.getCurrentUID() + "", shareNoticeUnChecked,
                                          ParamConstants.NoticeEmailShareType.VALUE_UN_CHECKED);
-        JsonUtil.writeJSONObject(response, needRefresh);
+        JsonUtil.write(response, needRefresh);
     }
 
     @RequestMapping(params = "func=teamNotice")
@@ -878,7 +879,7 @@ public class DashboardController extends AbstractSpaceController {
             param.setValue(useNameTag);
             paramService.updateParam(param);
         }
-        JsonUtil.writeJSONObject(response, useNameTag);
+        JsonUtil.write(response, useNameTag);
     }
 
     private boolean checkUserNameTag(String userNameTag){

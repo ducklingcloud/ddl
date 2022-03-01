@@ -19,6 +19,9 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +36,6 @@ import net.duckling.ddl.service.team.TeamService;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,18 +73,18 @@ public class APITeamsController extends APIBaseController {
         for(TeamPreferences tp : p){
             map.put(tp.getTid(), tp);
         }
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for(Team obj:teams){
-            JSONObject o = JsonUtil.getJSONObject(obj);
+            JsonObject o = new Gson().toJsonTree(obj).getAsJsonObject();
             TeamPreferences pp = map.get(obj.getId());
             if(pp!=null&&!obj.isPersonalTeam()){
-                o.put("teamNoticeCount", pp.getTeamNoticeCount());
-                o.put("personNoticeCount", pp.getPersonNoticeCount());
-                o.put("monitorNoticeCount", pp.getMonitorNoticeCount());
+                o.addProperty("teamNoticeCount", pp.getTeamNoticeCount());
+                o.addProperty("personNoticeCount", pp.getPersonNoticeCount());
+                o.addProperty("monitorNoticeCount", pp.getMonitorNoticeCount());
             }
             array.add(o);
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
 
@@ -109,8 +110,8 @@ public class APITeamsController extends APIBaseController {
     }
 
     private void writeTeamJSON(HttpServletResponse response, List<Team> teams) {
-        JSONArray array = JsonUtil.getJSONArrayFromList(teams);
-        JsonUtil.writeJSONObject(response, array);
+        JsonArray array = new Gson().toJsonTree(teams).getAsJsonArray();
+        JsonUtil.write(response, array);
     }
 
 }

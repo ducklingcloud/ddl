@@ -19,6 +19,8 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,8 +47,6 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,14 +119,14 @@ public class APITeamUpdatesController extends APIBaseNoticeController {
             date = tempdate;
         }
         teamPreferenceService.updateNoticeAccessTime(uid, tid, NoticeRule.TEAM_NOTICE);
-        JSONArray jsonArray = JsonUtil.getJSONArrayFromList(results);
-        JSONObject jsonObj = new JSONObject();
-        jsonObj.put(RECORDS, jsonArray);
-        jsonObj.put(DATE, date);
-        jsonObj.put(OFFSET, tempOffset);
+        JsonArray jsonArray = JsonUtil.getJSONArrayFromList(results);
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.add(RECORDS, jsonArray);
+        jsonObj.addProperty(DATE, date);
+        jsonObj.addProperty(OFFSET, tempOffset);
         String api = request.getParameter("api");
-        jsonObj.put("api", api);
-        JsonUtil.writeJSONObject(response, jsonObj);
+        jsonObj.addProperty("api", api);
+        JsonUtil.write(response, jsonObj);
     }
 
     /**

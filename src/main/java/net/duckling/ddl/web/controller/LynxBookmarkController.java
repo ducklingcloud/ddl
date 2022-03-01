@@ -40,8 +40,8 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,14 +70,14 @@ public class LynxBookmarkController {
            ||null==tidStr||"".equals(tidStr)){
             LOG.info("newPage failed:title=null/\"\" | content=null");
             String returnStr="<script>alert('保存失败！title或content为空！');</script>";
-            JsonUtil.writeJSONObject(response, returnStr);
+            JsonUtil.write(response, returnStr);
             return;
         }
         VWBSession session = VWBSession.findSession(request);
         if(null==session||!session.isAuthenticated()){
             LOG.info("newPage failed: session=null or user is guest!");
             String returnStr="<script>alert('保存失败！会话已过期，请重新登录！');</script>";
-            JsonUtil.writeJSONObject(response, returnStr);
+            JsonUtil.write(response, returnStr);
             return;
         }
         int tid = Integer.parseInt(tidStr);
@@ -88,7 +88,7 @@ public class LynxBookmarkController {
         resourceOperateService.createPageVersion(resource, content);
         LOG.info("newPage success: title="+title);
         String returnStr="<script>alert('保存成功！下次访问科研在线时即可查看更新！');</script>";
-        JsonUtil.writeJSONObject(response, returnStr);
+        JsonUtil.write(response, returnStr);
     }
 
     @RequestMapping(params="func=getPermission")
@@ -116,13 +116,13 @@ public class LynxBookmarkController {
         VWBSession session = VWBSession.findSession(request);
         if(null==session||!session.isAuthenticated()){
             sb.append("var logstatus=false;");
-            JsonUtil.writeJSONObject(response, sb);
+            JsonUtil.write(response, sb);
             return ;
         }
         String uid = context.getCurrentUID();
         if(null==uid || "".equals(uid)||"guest".equals(uid.toLowerCase())){
             sb.append("var logstatus=false;");
-            JsonUtil.writeJSONObject(response, sb);
+            JsonUtil.write(response, sb);
             return ;
         }
         sb.append("var logstatus=true;");
@@ -134,15 +134,15 @@ public class LynxBookmarkController {
         String uid = context.getCurrentUID();
         List<Team> allTeams = teamService.getAllUserTeams(uid);
         Iterator<Team> teamItr = allTeams.iterator();
-        JSONArray teamArray = new JSONArray();
+        JsonArray teamArray = new JsonArray();
         while(teamItr.hasNext()){
             Team team = teamItr.next();
-            JSONObject tempTeam = new JSONObject();
-            tempTeam.put("tid", team.getId());
-            tempTeam.put("tname", team.getDisplayName());
+            JsonObject tempTeam = new JsonObject();
+            tempTeam.addProperty("tid", team.getId());
+            tempTeam.addProperty("tname", team.getDisplayName());
             teamArray.add(tempTeam);
         }
         sb.append("var teamColls="+teamArray.toString()+";");
-        JsonUtil.writeJSONObject(response, sb);
+        JsonUtil.write(response, sb);
     }
 }

@@ -44,7 +44,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.controller.file.BaseAttachController;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -210,9 +210,9 @@ public class LynxFileDownloadResourceController  extends BaseAttachController{
             fv= fileVersionService.getFileVersion(rid, VWBContext.getCurrentTid(), version);
         }
         String status = getImageStatus(fv.getClbId(), fv.getClbVersion()+"", type);
-        JSONObject j = new JSONObject();
-        j.put("status", status);
-        JsonUtil.writeJSONObject(resp,j);
+        JsonObject j = new JsonObject();
+        j.addProperty("status", status);
+        JsonUtil.write(resp,j);
     }
 
     @RequestMapping(params = "func=folder")

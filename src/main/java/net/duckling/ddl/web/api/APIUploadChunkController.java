@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ import net.duckling.ddl.web.controller.BaseController;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -150,16 +151,20 @@ public class APIUploadChunkController extends BaseController {
     }
 
     @SuppressWarnings("unchecked")
-    private void printResponse(String message, Boolean success, Map<String, Object> params, HttpServletResponse response) {
-        JSONObject j = new JSONObject();
-        j.put("result", success);
-        j.put("message", message);
+    private void printResponse(String message, Boolean success,
+                               Map<String, Object> params,
+                               HttpServletResponse response) {
+        JsonObject j = new JsonObject();
+        j.addProperty("result", success);
+        j.addProperty("message", message);
 
-        if(params!=null){
-            j.putAll(params);
+        if (params != null) {
+            for (String key : params.keySet()) {
+                j.add(key, new Gson().toJsonTree(params.get(key)));
+            }
         }
 
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
 }

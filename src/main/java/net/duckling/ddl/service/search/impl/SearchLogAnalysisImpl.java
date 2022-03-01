@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.service.search.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,9 +50,8 @@ import net.duckling.ddl.service.search.WeightPair;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -142,28 +143,33 @@ public class SearchLogAnalysisImpl implements SearchLogAnalysis {
 
         List<SearchReocrd> searchRecord = new ArrayList<SearchReocrd>();
 
-        JSONParser parser = new JSONParser();
         try {
-            JSONObject jo = (JSONObject) parser.parse(result);
-            JSONArray jo1 = (JSONArray) jo.get("results");
+            JsonObject jo = new Gson().fromJson(result, JsonObject.class);
+            JsonArray jo1 = jo.getAsJsonArray("results");
             Iterator it = jo1.iterator();
             while (it.hasNext()) {
                 int tempseq =0;
-                JSONObject jsonRecord = (JSONObject) it.next();
-                if (jsonRecord.containsKey("keyword")||jsonRecord.containsKey("oper_name")) {
-                    if (jsonRecord.containsKey("flag") && jsonRecord.get("flag").toString().equals("search")){
+                JsonObject jsonRecord = ((JsonElement)it.next()).getAsJsonObject();
+                if (jsonRecord.has("keyword")
+                    || jsonRecord.has("oper_name")) {
+                    if (jsonRecord.has("flag")
+                        && jsonRecord.getAsJsonPrimitive("flag")
+                        .getAsString().equals("search")) {
                         tempseq = 1;
                     }
-                    if(jsonRecord.containsKey("rank") && jsonRecord.get("rank").toString() != null && !jsonRecord.get("rank").toString().isEmpty()){
+                    if(jsonRecord.has("rank")
+                       && jsonRecord.getAsJsonPrimitive("rank")
+                       .getAsString().isEmpty()) {
                         tempseq = 2;
                     }
-                    if(jsonRecord.containsKey("oper_name") && jsonRecord.get("oper_name").toString() != null && !jsonRecord.get("oper_name").toString().isEmpty()){
+                    if(jsonRecord.has("oper_name")
+                       && jsonRecord.getAsJsonPrimitive("oper_name")
+                       .getAsString().isEmpty()) {
                         tempseq = 3;
                     }
 
-                    ObjectMapper mapper = new ObjectMapper();
-                    SearchReocrd user = mapper.readValue(
-                        jsonRecord.toJSONString(), SearchReocrd.class);
+                    SearchReocrd user = new Gson().fromJson(
+                        jsonRecord, SearchReocrd.class);
                     user.setSeq(tempseq);
                     searchRecord.add(user);
                 }

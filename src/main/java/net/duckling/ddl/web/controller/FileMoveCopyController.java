@@ -18,11 +18,14 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -61,8 +64,6 @@ import net.duckling.meepo.api.IPanService;
 import net.duckling.meepo.api.PanAcl;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -177,7 +178,7 @@ public class FileMoveCopyController {
         }
 
         int targetRid = Integer.parseInt(targetRidStr);
-        JSONObject result=new JSONObject();
+        JsonObject result=new JsonObject();
         try {
             int tid = VWBContext.getCurrentTid();
             int targetTid =getDestTid(request, tid);
@@ -228,15 +229,15 @@ public class FileMoveCopyController {
 
             List<Resource> resultList=resourceOperateService.copyResource(targetTid, targetRid,tid, originalRids, uid);
             String url = urlGenerator.getURL(targetTid, UrlPatterns.T_VIEW_R, targetRid+"", null);
-            JSONArray array=LynxResourceUtils.getResourceJSON(resultList,uid);
-            result.put("state", MessageException.SUCCESS);
-            result.put("msg", "已成功复制到文件夹 <a href=\"" + url + "\">" + targetPathString + "</a>");
-            result.put("resourceList", array);
-            JsonUtil.writeJSONObject(response, result);
+            JsonArray array = LynxResourceUtils.getResourceJSON(resultList,uid);
+            result.addProperty("state", MessageException.SUCCESS);
+            result.addProperty("msg", "已成功复制到文件夹 <a href=\"" + url + "\">" + targetPathString + "</a>");
+            result.add("resourceList", array);
+            JsonUtil.write(response, result);
         } catch (RuntimeException re) {
-            result.put("state", MessageException.ERROR);
-            result.put("msg", "复制失败");
-            JsonUtil.writeJSONObject(response, result);
+            result.addProperty("state", MessageException.ERROR);
+            result.addProperty("msg", "复制失败");
+            JsonUtil.write(response, result);
             throw re;
         }
     }
@@ -320,14 +321,14 @@ public class FileMoveCopyController {
         int rid = getRid(ridStr,0);
         int originalRid = getRid(originalRidStr, -1);
         if (rid == 0) { // 根文件夹需要特殊处理
-            JSONArray rootArray = new JSONArray();
-            JSONObject rootJsonObject = new JSONObject();
-            rootJsonObject.put("data", "全部文件");
-            JSONObject attr = new JSONObject();
-            attr.put("rid", "node_0");
-            rootJsonObject.put("attr", attr);
+            JsonArray rootArray = new JsonArray();
+            JsonObject rootJsonObject = new JsonObject();
+            rootJsonObject.addProperty("data", "全部文件");
+            JsonObject attr = new JsonObject();
+            attr.addProperty("rid", "node_0");
+            rootJsonObject.add("attr", attr);
             // 开始写root的子文件（夹）
-            JSONArray childrenJson = new JSONArray();
+            JsonArray childrenJson = new JsonArray();
             int tid = VWBContext.getCurrentTid();
             List<Resource> childrenList = folderPathService.getChildrenFolder(tid, rid);
             if (childrenList.size() != 0) { // root有子文件夹
@@ -340,12 +341,12 @@ public class FileMoveCopyController {
                             //每一层目录都有展开
                             ridToDeal = parentResources.get(0).getRid();
                             Resource lastResource = parentResources.get(parentResources.size() - 2);
-                            JSONArray lastJsonArray = getChildrenJSONArray(lastResource.getRid());
+                            JsonArray lastJsonArray = getChildrenJSONArray(lastResource.getRid());
                             //由深向浅逐级加入目录
                             for (int index = parentResources.size() - 2; index >= 0 ; index--) {
                                 Resource resource = parentResources.get(index);
-                                JSONObject tmpObject = resourceToJSONObject(resource, true);
-                                tmpObject.put("children", lastJsonArray);
+                                JsonObject tmpObject = resourceToJSONObject(resource, true);
+                                tmpObject.add("children", lastJsonArray);
                                 if (index == 0) {
                                     //最后将顶级目录加入列表
                                     childrenJson.add(tmpObject);
@@ -364,18 +365,18 @@ public class FileMoveCopyController {
                     }
                     childrenJson.add(resourceToJSONObject(child, false));
                 }
-                rootJsonObject.put("children", childrenJson);
-                rootJsonObject.put("state", "open");
-                attr.put("rel", "folder");
+                rootJsonObject.add("children", childrenJson);
+                rootJsonObject.addProperty("state", "open");
+                attr.addProperty("rel", "folder");
             } else { // root没有子文件夹
-                attr.put("rel", "default");
+                attr.addProperty("rel", "default");
             }
 
             rootArray.add(rootJsonObject);
-            JsonUtil.writeJSONObject(response, rootArray);
+            JsonUtil.write(response, rootArray);
         } else {
-            JSONArray childrenJson = getChildrenJSONArray(rid);
-            JsonUtil.writeJSONObject(response, childrenJson);
+            JsonArray childrenJson = getChildrenJSONArray(rid);
+            JsonUtil.write(response, childrenJson);
         }
     }
 
@@ -384,10 +385,10 @@ public class FileMoveCopyController {
         PipeTaskStatus status;
         try {
             status = resourcePipeAgentService.query(taskId);
-            JSONObject msg = new JSONObject();
+            JsonObject msg = new JsonObject();
             dealStatus(status, msg);
-            msg.put("queryTime", queryTime);
-            JsonUtil.writeJSONObject(response, msg);
+            msg.addProperty("queryTime", queryTime);
+            JsonUtil.write(response, msg);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -398,7 +399,7 @@ public class FileMoveCopyController {
 
         checkPan2PanTarget(originalRids, targetRidStr);
 
-        JSONObject result=new JSONObject();
+        JsonObject result=new JsonObject();
         List<PanResourceBean> beans = getPanOriginalResource(originalRid, originalRids, acl);
         if(beans.size() == 0){
             new MessageException("请选择文件", MessageException.WARNING);
@@ -425,32 +426,36 @@ public class FileMoveCopyController {
         for(PanResourceBean item : beans){
             PanMeta meta = null;
             try {
-                meta = panService.copy(acl, item.getPath(), (targetRid.endsWith("/") ? targetRid : targetRid + "/")
-                                       + item.getTitle());
+                meta = panService.copy(
+                    acl, item.getPath(), (targetRid.endsWith("/") ?
+                                          targetRid : targetRid +"/")
+                    + item.getTitle());
             } catch (MeePoException e) {
-                result.put("state", MessageException.ERROR);
+                result.addProperty("state", MessageException.ERROR);
                 String errMsg = "复制操作失败.";
                 try {
-                    org.json.JSONObject errJson = new org.json.JSONObject(e.getMessage());
-                    errMsg = errJson.getString("user_message");
-                } catch (ParseException e1) {
+                    JsonObject errJson = new Gson().fromJson(
+                        e.getMessage(), JsonObject.class);
+                    errMsg = errJson.get("user_message").getAsString();
+                } catch (JsonParseException e1) {
+                    LOG.debug("Failed to parse error message.", e1);
                 }
-                result.put("msg", errMsg);
-                JsonUtil.writeJSONObject(response, result);
+                result.addProperty("msg", errMsg);
+                JsonUtil.write(response, result);
                 return;
             }
             resourceList.add(MeePoMetaToPanBeanUtil.transfer(meta, user));
         }
-        result.put("state", MessageException.SUCCESS);
+        result.addProperty("state", MessageException.SUCCESS);
         String url = urlGenerator.getAbsoluteURL(UrlPatterns.PAN_VIEW, targetRidStr , null);
-        result.put("msg", "已成功复制到文件夹 <a href=\"" + url + "\">" + getTargetName(targetRid) + "</a>");
+        result.addProperty("msg", "已成功复制到文件夹 <a href=\"" + url + "\">" + getTargetName(targetRid) + "</a>");
         if(StringUtils.isEmpty(originalRid)){
-            result.put("resourceList", LynxResourceUtils.getPanResourceJsonList(resourceList,acl.getUid()));
+            result.add("resourceList", LynxResourceUtils.getPanResourceJsonList(resourceList,acl.getUid()));
         }else{
-            result.put("resource", LynxResourceUtils.getPanResourceJson(resourceList.get(0), acl.getUid()));
+            result.add("resource", LynxResourceUtils.getPanResourceJson(resourceList.get(0), acl.getUid()));
         }
 
-        JsonUtil.writeJSONObject(response, result);
+        JsonUtil.write(response, result);
         return;
     }
 
@@ -481,19 +486,19 @@ public class FileMoveCopyController {
         return rid;
     }
 
-    private JSONObject resourceToJSONObject(Resource resource, boolean open) {
-        JSONObject result = new JSONObject();
+    private JsonObject resourceToJSONObject(Resource resource, boolean open) {
+        JsonObject result = new JsonObject();
         int rid = resource.getRid();
         String title = resource.getTitle();
-        result.put("data", title);
-        JSONObject attr = new JSONObject();
-        attr.put("rid", "node_" + rid);
-        attr.put("rel", "folder");
-        result.put("attr", attr);
+        result.addProperty("data", title);
+        JsonObject attr = new JsonObject();
+        attr.addProperty("rid", "node_" + rid);
+        attr.addProperty("rel", "folder");
+        result.add("attr", attr);
         if (open) {
-            result.put("state", "open");
+            result.addProperty("state", "open");
         } else {
-            result.put("state", "closed");
+            result.addProperty("state", "closed");
         }
         return result;
     }
@@ -541,8 +546,8 @@ public class FileMoveCopyController {
             return (d.getTime()+1000)<System.currentTimeMillis();
         }
     }
-    private JSONArray getChildrenJSONArray(int rid) {
-        JSONArray childrenJson = new JSONArray();
+    private JsonArray getChildrenJSONArray(int rid) {
+        JsonArray childrenJson = new JsonArray();
         int tid = VWBContext.getCurrentTid();
         List<Resource> childrenList = folderPathService.getChildrenFolder(tid, rid);
         for (Resource child : childrenList) {
@@ -551,8 +556,8 @@ public class FileMoveCopyController {
         return childrenJson;
     }
 
-    private JSONArray getChildrenJSONArray(int rid, int ignoreRid) {
-        JSONArray childrenJson = new JSONArray();
+    private JsonArray getChildrenJSONArray(int rid, int ignoreRid) {
+        JsonArray childrenJson = new JsonArray();
         int tid = VWBContext.getCurrentTid();
         List<Resource> childrenList = folderPathService.getChildrenFolder(tid, rid);
         for (Resource child : childrenList) {
@@ -565,10 +570,10 @@ public class FileMoveCopyController {
     }
 
     private static void writeResponse(HttpServletResponse response, int state, String message) {
-        JSONObject msg = new JSONObject();
-        msg.put("state", state);
-        msg.put("msg", message);
-        JsonUtil.writeJSONObject(response, msg);
+        JsonObject msg = new JsonObject();
+        msg.addProperty("state", state);
+        msg.addProperty("msg", message);
+        JsonUtil.write(response, msg);
     }
 
     private boolean isMovingToParent(int originalRid, int targetRid) {
@@ -730,12 +735,12 @@ public class FileMoveCopyController {
         PipeTaskStatus status;
         try {
             status = resourcePipeAgentService.query(taskId);
-            JSONObject msg = new JSONObject();
-            msg.put("state", MessageException.SUCCESS);
-            msg.put("type", "meepoCopy");
-            msg.put("msg", "");
+            JsonObject msg = new JsonObject();
+            msg.addProperty("state", MessageException.SUCCESS);
+            msg.addProperty("type", "meepoCopy");
+            msg.addProperty("msg", "");
             dealStatus(status, msg);
-            JsonUtil.writeJSONObject(response, msg);
+            JsonUtil.write(response, msg);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -777,19 +782,18 @@ public class FileMoveCopyController {
         return result;
     }
 
-    private void dealStatus(PipeTaskStatus status,JSONObject obj){
+    private void dealStatus(PipeTaskStatus status,JsonObject obj) {
         if(status!=null){
-            obj.put("total", status.getTotal());
-            obj.put("success", status.getSuccess());
-            obj.put("waiting", status.getWaiting());
-            obj.put("processing", status.getProcessing());
-            obj.put("failed", status.getFailed());
-            obj.put("taskId", status.getTaskId());
-            obj.put("status", status.getStatus());
-            obj.put("subTasks", JsonUtil.getJSONArrayFromList(status.getSubTaskList()));
+            obj.addProperty("total", status.getTotal());
+            obj.addProperty("success", status.getSuccess());
+            obj.addProperty("waiting", status.getWaiting());
+            obj.addProperty("processing", status.getProcessing());
+            obj.addProperty("failed", status.getFailed());
+            obj.addProperty("taskId", status.getTaskId());
+            obj.addProperty("status", status.getStatus());
+            obj.add("subTasks", new Gson().toJsonTree(status.getSubTaskList()));
         }
     }
-
 
     private List<Resource> getOriginalResource(HttpServletRequest request){
         List<Resource> result = new ArrayList<Resource>();
@@ -817,14 +821,14 @@ public class FileMoveCopyController {
     private void dealPanList(HttpServletRequest request,String rid,String originalRid,HttpServletResponse response){
         if("0".equals(rid) || "/".equals(rid)){
             // 根文件夹需要特殊处理
-            JSONArray rootArray = new JSONArray();
-            JSONObject rootJsonObject = new JSONObject();
-            rootJsonObject.put("data", "全部文件");
-            JSONObject attr = new JSONObject();
-            attr.put("rid", "node_0");
-            rootJsonObject.put("attr", attr);
+            JsonArray rootArray = new JsonArray();
+            JsonObject rootJsonObject = new JsonObject();
+            rootJsonObject.addProperty("data", "全部文件");
+            JsonObject attr = new JsonObject();
+            attr.addProperty("rid", "node_0");
+            rootJsonObject.add("attr", attr);
             // 开始写root的子文件（夹）
-            JSONArray childrenJson = new JSONArray();
+            JsonArray childrenJson = new JsonArray();
             try {
                 MeePoMeta meta = panService.ls(PanAclUtil.getInstance(request), "/", true);
                 if(meta.contents!=null&&meta.contents.length>0){
@@ -840,14 +844,14 @@ public class FileMoveCopyController {
                         }
                         childrenJson.add(resourceToJSONObject(me, false));
                     }
-                    rootJsonObject.put("children", childrenJson);
-                    rootJsonObject.put("state", "open");
-                    attr.put("rel", "folder");
+                    rootJsonObject.add("children", childrenJson);
+                    rootJsonObject.addProperty("state", "open");
+                    attr.addProperty("rel", "folder");
                 }else{
-                    attr.put("rel", "default");
+                    attr.addProperty("rel", "default");
                 }
                 rootArray.add(rootJsonObject);
-                JsonUtil.writeJSONObject(response, rootArray);
+                JsonUtil.write(response, rootArray);
             } catch (MeePoException e) {
             }
         }else{
@@ -855,8 +859,8 @@ public class FileMoveCopyController {
             MeePoMeta children;
             try {
                 children = panService.ls(acl, decode(rid), true);
-                JSONArray childrenJson = getChildrenJSONArray(children.contents);
-                JsonUtil.writeJSONObject(response, childrenJson);
+                JsonArray childrenJson = getChildrenJSONArray(children.contents);
+                JsonUtil.write(response, childrenJson);
             } catch (MeePoException e) {
                 e.printStackTrace();
             }
@@ -873,15 +877,17 @@ public class FileMoveCopyController {
 
     }
 
-    private void addChildrenDir(JSONArray childrenJson,String rid,String originalRid,HttpServletRequest request) throws MeePoException{
+    private void addChildrenDir(JsonArray childrenJson, String rid,
+                                String originalRid,HttpServletRequest request)
+            throws MeePoException{
         PanAcl acl = PanAclUtil.getInstance(request);
         MeePoMeta children = panService.ls(acl, originalRid, true);
-        JSONArray lastJsonArray = getChildrenJSONArray(children.contents);
+        JsonArray lastJsonArray = getChildrenJSONArray(children.contents);
         List<String> path = getPanPath(originalRid);
         for (int index = path.size() - 2; index >= 0 ; index--) {
             MeePoMeta resource = panService.ls(acl, path.get(index), true);
-            JSONObject tmpObject = resourceToJSONObject(resource, true);
-            tmpObject.put("children", lastJsonArray);
+            JsonObject tmpObject = resourceToJSONObject(resource, true);
+            tmpObject.add("children", lastJsonArray);
             if (index == 0) {
                 childrenJson.add(tmpObject);
             } else {
@@ -890,7 +896,6 @@ public class FileMoveCopyController {
             }
         }
     }
-
 
     private List<String> getPanPath(String originalRid) {
         List<String> path = new ArrayList<String>();
@@ -904,8 +909,8 @@ public class FileMoveCopyController {
         return path;
     }
 
-    private JSONArray getChildrenJSONArray(MeePoMeta[] contents) {
-        JSONArray result = new JSONArray();
+    private JsonArray getChildrenJSONArray(MeePoMeta[] contents) {
+        JsonArray result = new JsonArray();
         if(contents!=null){
             for(MeePoMeta me : contents){
                 if(me.isDir)
@@ -916,20 +921,20 @@ public class FileMoveCopyController {
         return result;
     }
 
-    private JSONObject resourceToJSONObject(MeePoMeta me, boolean open) {
+    private JsonObject resourceToJSONObject(MeePoMeta me, boolean open) {
         PanResourceBean resource = MeePoMetaToPanBeanUtil.transfer(me, null);
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         String rid = resource.getRid();
         String title = resource.getTitle();
-        result.put("data", title);
-        JSONObject attr = new JSONObject();
-        attr.put("rid", "node_" + rid);
-        attr.put("rel", "folder");
-        result.put("attr", attr);
+        result.addProperty("data", title);
+        JsonObject attr = new JsonObject();
+        attr.addProperty("rid", "node_" + rid);
+        attr.addProperty("rel", "folder");
+        result.add("attr", attr);
         if (open) {
-            result.put("state", "open");
+            result.addProperty("state", "open");
         } else {
-            result.put("state", "closed");
+            result.addProperty("state", "closed");
         }
         return result;
     }

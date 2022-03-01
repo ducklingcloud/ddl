@@ -43,8 +43,8 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 import net.duckling.meepo.api.IPanService;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +70,7 @@ public class APIPanListController {
     @RequestMapping
     public void list(HttpServletRequest request,HttpServletResponse response){
         //如果不在支持meePo盘那么开启下面注销
-        //      JSONObject obj = new JSONObject();
+        //      JsonObject obj = new JsonObject();
         //      obj.put("success", false);
         //      obj.put("message", "此版本不再支持个人同步盘，请下载新的版本");
         //      JSONHelper.writeJSONObject(response, obj);return;
@@ -91,45 +91,45 @@ public class APIPanListController {
         String tokenKey = request.getParameter("tokenKey");
         PanResourceBeanSort.sort(result, request.getParameter("sortType"));
 
-        JSONObject j = null;
+        JsonObject j = null;
         if(RECORD_FORMAT_LITE.equals(recordFormat)){
             j = buildQueryResultLite(user, meta, result, ancestors);
         }else{
             j = buildQueryResult(user, meta, result, ancestors);
         }
-        j.put("tokenKey", tokenKey);
+        j.addProperty("tokenKey", tokenKey);
 
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject buildQueryResult(SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
+    private JsonObject buildQueryResult(SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
                                         List<PanResourceBean> ancestors) {
-        JSONObject j = buildQueryResultCommon(user, meta, resources, ancestors);
-        j.put("children", LynxResourceUtils.getPanResourceList(resources, user.getUid()));
+        JsonObject j = buildQueryResultCommon(user, meta, resources, ancestors);
+        j.add("children", LynxResourceUtils.getPanResourceList(resources, user.getUid()));
         return j;
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject buildQueryResultLite( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
+    private JsonObject buildQueryResultLite( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
                                              List<PanResourceBean> ancestors) {
-        JSONObject j = buildQueryResultCommon(user, meta, resources, ancestors);
-        j.put("children", LynxResourceUtils.getPanResourceListLite(resources, user.getUid()));
+        JsonObject j = buildQueryResultCommon(user, meta, resources, ancestors);
+        j.add("children", LynxResourceUtils.getPanResourceListLite(resources, user.getUid()));
         return j;
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject buildQueryResultCommon( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
+    private JsonObject buildQueryResultCommon( SimpleUser user, MeePoMeta meta, List<PanResourceBean> resources,
                                                List<PanResourceBean> ancestors) {
         if (resources == null) {
             resources = new ArrayList<PanResourceBean>();
         }
-        JSONObject j = new JSONObject();
-        j.put("total", resources.size());
-        j.put("currentResource", LynxResourceUtils.getPanResource(user.getUid(), MeePoMetaToPanBeanUtil.transfer(meta,user)));
-        j.put("nextBeginNum", "0");
-        j.put("path", LynxResourceUtils.getPanResourceList(ancestors, user.getUid()));
-        j.put("size", resources.size());
+        JsonObject j = new JsonObject();
+        j.addProperty("total", resources.size());
+        j.add("currentResource", LynxResourceUtils.getPanResource(user.getUid(), MeePoMetaToPanBeanUtil.transfer(meta,user)));
+        j.addProperty("nextBeginNum", "0");
+        j.add("path", LynxResourceUtils.getPanResourceList(ancestors, user.getUid()));
+        j.addProperty("size", resources.size());
         return j;
     }
 
@@ -227,11 +227,11 @@ public class APIPanListController {
         }
         List<PanResourceBean> childrenList = getChildren(meta, aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request)));
         SimpleUser user = aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request));
-        JSONArray result = LynxResourceUtils.getPanResourceList(childrenList,user.getUid());
-        JSONObject o = new JSONObject();
-        o.put("childrenFolder", result);
-        o.put("total", childrenList.size());
-        JsonUtil.writeJSONObject(response, o);
+        JsonArray result = LynxResourceUtils.getPanResourceList(childrenList,user.getUid());
+        JsonObject o = new JsonObject();
+        o.add("childrenFolder", result);
+        o.addProperty("total", childrenList.size());
+        JsonUtil.write(response, o);
     }
 
     private List<PanResourceBean> getChildren(MeePoMeta root ,SimpleUser user){

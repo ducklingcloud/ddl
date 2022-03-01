@@ -48,7 +48,7 @@ import net.duckling.ddl.util.SizeUtil;
 import net.duckling.ddl.web.controller.file.BaseAttachController;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -162,13 +162,13 @@ public class DirectDownloadController extends BaseAttachController {
         int tid = Integer.parseInt(tempArray[0]);
         VWBContext.setCurrentTid(tid);
         ShareFileAccess s = shareFileAccessService.parseShareAccess(url);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(StringUtils.equals(s.getFetchFileCode(), code)){
-            obj.put("status", true);
+            obj.addProperty("status", true);
         }else{
-            obj.put("status", false);
+            obj.addProperty("status", false);
         }
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping("/direct/{downloadURL}/download")

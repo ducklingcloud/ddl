@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 /**
  * Introduction Here.
@@ -157,12 +157,12 @@ public final class StringUtil {
             String s = req.getParameter(p);
             if(StringUtils.isNotEmpty(s)&&pattern.matcher(s).find()){
                 if(resp!=null){
-                    JSONObject obj = new JSONObject();
-                    obj.put("success", false);
-                    obj.put("result", false);
-                    obj.put("param", s);
-                    obj.put("message", "输入字符中不能包含：<>:\"|*?/\\");
-                    JsonUtil.writeJSONObject(resp, obj);
+                    JsonObject obj = new JsonObject();
+                    obj.addProperty("success", false);
+                    obj.addProperty("result", false);
+                    obj.addProperty("param", s);
+                    obj.addProperty("message", "输入字符中不能包含：<>:\"|*?/\\");
+                    JsonUtil.write(resp, obj);
                 }
                 return true;
             }
@@ -174,11 +174,11 @@ public final class StringUtil {
     public static boolean illTitle(HttpServletResponse resp,String title){
         if(StringUtils.isNotEmpty(title)&&pattern.matcher(title).find()){
             if(resp!=null){
-                JSONObject obj = new JSONObject();
-                obj.put("success", false);
-                obj.put("result", false);
-                obj.put("error", "输入字符中不能包含：<>:\"|*?/\\");
-                JsonUtil.writeJSONObject(resp, obj);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("success", false);
+                obj.addProperty("result", false);
+                obj.addProperty("error", "输入字符中不能包含：<>:\"|*?/\\");
+                JsonUtil.write(resp, obj);
             }
             return true;
         }

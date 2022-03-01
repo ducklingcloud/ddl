@@ -51,8 +51,8 @@ import net.duckling.ddl.util.CommonUtil;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,19 +104,19 @@ public class LynxCreateController extends BaseController{
         //      int[] actualAddRids = getBundleItemRids(bid, tid, bs, resourceService);
         //      resourceService.updateNewBundleTagAndStarmark(bid, tid, actualAddRids);
         //      Resource res = resourceService.getResource(bid, tid, LynxConstants.TYPE_BUNDLE);
-        //      JSONArray array = getTagCount(res, context);
-        //      JSONObject json = JSONHelper.getJSONObject(res);
+        //      JsonArray array = getTagCount(res, context);
+        //      JsonObject json = JSONHelper.getJSONObject(res);
         //      addMarkedCheckedField(uid, res, json);
         //      addResourceURLField(tid,res,json);
         //      json.put("tagCount", array);
-        //      JSONArray conflictItems = ConflictBundleItemHelper.getJSONArrayOfConflictItems(resourceService, context, rids, actualAddRids);
+        //      JsonArray conflictItems = ConflictBundleItemHelper.getJSONArrayOfConflictItems(resourceService, context, rids, actualAddRids);
         //      json.put("conflictItems", conflictItems);
         //      JSONHelper.writeJSONObject(response, json);
         throw new RuntimeException();
     }
 
     /*
-      private void addMarkedCheckedField(String uid, Resource res, JSONObject json) {
+      private void addMarkedCheckedField(String uid, Resource res, JsonObject json) {
       if(res.getMarkedUserSet().contains(uid)){
       json.put("isChecked", "checked");
       }else{
@@ -125,7 +125,7 @@ public class LynxCreateController extends BaseController{
       json.remove("markedUserSet");
       }
 
-      private void addResourceURLField(int tid,Resource res,JSONObject json){
+      private void addResourceURLField(int tid,Resource res,JsonObject json){
       if(res.isBundle()){
       json.put("url",urlGenerator.getURL(tid,UrlPatterns.T_BUNDLE, res.getRid()+"", null));
       }else if(res.isFile()){
@@ -152,8 +152,8 @@ public class LynxCreateController extends BaseController{
       }
     */
     @SuppressWarnings("unused")
-    private JSONArray getTagCount(Resource res, VWBContext context){
-        JSONArray array = new JSONArray();
+    private JsonArray getTagCount(Resource res, VWBContext context){
+        JsonArray array = new JsonArray();
         if(null == res || null == res.getTagMap() || res.getTagMap().isEmpty()){
             return array;
         }
@@ -162,9 +162,9 @@ public class LynxCreateController extends BaseController{
         for(Map.Entry<Integer, String> entry : tagMap.entrySet()){
             int tagid = entry.getKey();
             int count = tagService.getTagCount(tid, tagid);
-            JSONObject obj = new JSONObject();
-            obj.put("id",tagid);
-            obj.put("count", count);
+            JsonObject obj = new JsonObject();
+            obj.addProperty("id",tagid);
+            obj.addProperty("count", count);
             array.add(obj);
         }
         return array;
@@ -246,14 +246,14 @@ public class LynxCreateController extends BaseController{
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         List<Tag> tags = tagService.getTags(tagids);
         addUserNameTag(context, tags);
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for(Tag tag : tags){
-            JSONObject obj = new JSONObject();
-            obj.put("id", tag.getId());
-            obj.put("title", tag.getTitle());
+            JsonObject obj = new JsonObject();
+            obj.addProperty("id", tag.getId());
+            obj.addProperty("title", tag.getTitle());
             array.add(obj);
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
     private void addUserNameTag(VWBContext context, List<Tag> tags){
@@ -393,99 +393,99 @@ public class LynxCreateController extends BaseController{
       }else{
       return new ModelAndView(new RedirectView(urlGenerator.getURL(tid,UrlPatterns.T_TAG,null,null)));
       }
-      }
-    */
-    private void addSelectTag(VWBContext context, HttpServletRequest request,
-                              int tid, List<Integer> newRids) {
-        String useTagIds=request.getParameter("tagIds");
-        if(!CommonUtil.isNullStr(useTagIds)){
-            Integer[] tagIds=CommonUtil.stringArray2IntArray(useTagIds.split(","));
-            for(Integer rid:newRids){
-                tagService.addItems(tid, CommonUtil.array2List(tagIds), rid);
-                for(Integer tagId:tagIds){
-                    Tag tag=tagService.getTag(tagId);
-                    updateTagMap(context, rid, tag);
-                }
+}
+*/
+private void addSelectTag(VWBContext context, HttpServletRequest request,
+                          int tid, List<Integer> newRids) {
+    String useTagIds=request.getParameter("tagIds");
+    if(!CommonUtil.isNullStr(useTagIds)){
+        Integer[] tagIds=CommonUtil.stringArray2IntArray(useTagIds.split(","));
+        for(Integer rid:newRids){
+            tagService.addItems(tid, CommonUtil.array2List(tagIds), rid);
+            for(Integer tagId:tagIds){
+                Tag tag=tagService.getTag(tagId);
+                updateTagMap(context, rid, tag);
             }
         }
-
     }
 
-    private Tag createUserNameTagAndGroup(VWBContext context,int tid){
-        TagGroup nameTagGroup=tagService.getTagGroupLikeTitle(tid, "姓名");
-        Tag tag=null;
-        if(nameTagGroup==null){
-            nameTagGroup=new TagGroup();
-            nameTagGroup.setCreator(context.getCurrentUID());
-            nameTagGroup.setSequence(0);
-            nameTagGroup.setTid(tid);
-            nameTagGroup.setTitle("姓名标签");
-            int groupId=tagService.createTagGroup(nameTagGroup);
+}
+
+private Tag createUserNameTagAndGroup(VWBContext context,int tid){
+    TagGroup nameTagGroup=tagService.getTagGroupLikeTitle(tid, "姓名");
+    Tag tag=null;
+    if(nameTagGroup==null){
+        nameTagGroup=new TagGroup();
+        nameTagGroup.setCreator(context.getCurrentUID());
+        nameTagGroup.setSequence(0);
+        nameTagGroup.setTid(tid);
+        nameTagGroup.setTitle("姓名标签");
+        int groupId=tagService.createTagGroup(nameTagGroup);
+        tag=new Tag();
+        tag.setCount(0);
+        tag.setCreateTime(new Date());
+        tag.setCreator(context.getCurrentUID());
+        tag.setGroupId(groupId);
+        tag.setSequence(0);
+        tag.setTid(tid);
+        tag.setTitle(context.getCurrentUserName());
+        tag.setId(tagService.createTag(tag));
+    }else{
+        tag=tagService.getTag(tid,nameTagGroup.getId(), context.getCurrentUserName());
+        if(tag==null){
             tag=new Tag();
             tag.setCount(0);
             tag.setCreateTime(new Date());
             tag.setCreator(context.getCurrentUID());
-            tag.setGroupId(groupId);
+            tag.setGroupId(nameTagGroup.getId());
             tag.setSequence(0);
             tag.setTid(tid);
             tag.setTitle(context.getCurrentUserName());
             tag.setId(tagService.createTag(tag));
-        }else{
-            tag=tagService.getTag(tid,nameTagGroup.getId(), context.getCurrentUserName());
-            if(tag==null){
-                tag=new Tag();
-                tag.setCount(0);
-                tag.setCreateTime(new Date());
-                tag.setCreator(context.getCurrentUID());
-                tag.setGroupId(nameTagGroup.getId());
-                tag.setSequence(0);
-                tag.setTid(tid);
-                tag.setTitle(context.getCurrentUserName());
-                tag.setId(tagService.createTag(tag));
 
-            }
         }
-        return tag;
     }
-    private void updateTagMap(VWBContext context,Number newRid,Tag tag){
-        Resource resourceNew=resourceService.getResource((Integer)(newRid));
-        Map<Integer,String> tagMap=resourceNew.getTagMap();
-        if(CommonUtil.isNullArray(tagMap)){
-            tagMap=new HashMap<Integer,String>();
-            resourceNew.setTagMap(tagMap);
-        }
-        tagMap.put(tag.getId(), tag.getTitle());
-        List<Resource> resources=new ArrayList<Resource>();
-        resources.add(resourceNew);
-        resourceService.updateResourceTagMap(resources);
+    return tag;
+}
+private void updateTagMap(VWBContext context,Number newRid,Tag tag){
+    Resource resourceNew=resourceService.getResource((Integer)(newRid));
+    Map<Integer,String> tagMap=resourceNew.getTagMap();
+    if(CommonUtil.isNullArray(tagMap)){
+        tagMap=new HashMap<Integer,String>();
+        resourceNew.setTagMap(tagMap);
     }
-    /**
-     * 校验bundle name是否重复
-     * @param request
-     * @param response
-     */
-    /*
-      @RequestMapping(params="func=checkBundleName")
-      public void checkBundleName(HttpServletRequest request,HttpServletResponse response){
-      VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
-      int tid = VWBContext.getCurrentTid();
-      JSONObject o = new JSONObject();
-      String title = request.getParameter("groupName");
-      if(title==null||"".equals(title)){
-      o.put("success", "false");
-      o.put("error", "组名不能为空");
-      JSONHelper.writeJSONObject(response, o);
-      return;
-      }
-      int i=bundleService.getBundleCountByTitle(tid, title, true);
-      if(i==0){
-      o.put("success", "true");
-      }else{
-      o.put("success", "false");
-      o.put("error", "输入的bundle名称"+title+"重复！");
-      LOG.warn(context.getCurrentUID()+"输入的bundle名称"+title+"重复！");
-      }
-      JSONHelper.writeJSONObject(response, o);
-      }
-    */
+    tagMap.put(tag.getId(), tag.getTitle());
+    List<Resource> resources=new ArrayList<Resource>();
+    resources.add(resourceNew);
+    resourceService.updateResourceTagMap(resources);
+}
+/**
+ * 校验bundle name是否重复
+ * @param request
+ * @param response
+ */
+/*
+  @RequestMapping(params="func=checkBundleName")
+  public void checkBundleName(HttpServletRequest request,HttpServletResponse response){
+  VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
+  int tid = VWBContext.getCurrentTid();
+  JsonObject o = new JsonObject();
+  String title = request.getParameter("groupName");
+  if(title==null||"".equals(title)){
+  o.put("success", "false");
+  o.put("error", "组名不能为空");
+  JSONHelper.writeJSONObject(response, o);
+  return;
+  }
+  int i=bundleService.getBundleCountByTitle(tid, title, true);
+  if(i==0){
+  o.put("success", "true");
+  }else{
+  o.put("success", "false");
+  o.put("error", "输入的bundle名称"+title+"重复！");
+  LOG.warn(context.getCurrentUID()+"输入的bundle名称"+title+"重复！");
+  }
+  JSONHelper.writeJSONObject(response, o);
+  }
+*/
 }

@@ -92,7 +92,7 @@ public class TaskShareController extends TaskBaseController {
         TaskService service = taskService;
         service.setReadStatus(taskId, context.getCurrentUID());
         List<TaskItemShare> items = service.getShareItems(taskId);
-        JsonUtil.writeJSONObject(response,
+        JsonUtil.write(response,
                                  JsonUtil.getJSONArrayFromList(ItemWrapper.getView(items, context.getCurrentUID())));
 
     }
@@ -129,7 +129,7 @@ public class TaskShareController extends TaskBaseController {
                 service.updateTask(task);
             }
         }
-        JsonUtil.writeJSONObject(response, lockSuccess);
+        JsonUtil.write(response, lockSuccess);
     }
 
     /** 任务删除，更改状态 */

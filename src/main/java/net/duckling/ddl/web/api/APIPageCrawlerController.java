@@ -29,7 +29,7 @@ import net.duckling.ddl.service.resource.Resource;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,14 +79,14 @@ public class APIPageCrawlerController {
 
     @SuppressWarnings("unchecked")
     private void writePageRender(HttpServletResponse response, Resource render) {
-        JSONObject object = new JSONObject();
+        JsonObject object = new JsonObject();
         if(render==null){
-            object.put("error", "Can not find your target page, please check your request url.");
+            object.addProperty("error", "Can not find your target page, please check your request url.");
         }else{
-            object.put("rid", render.getRid());
-            object.put("title", render.getTitle());
+            object.addProperty("rid", render.getRid());
+            object.addProperty("title", render.getTitle());
         }
-        JsonUtil.writeJSONObject(response, object);
+        JsonUtil.write(response, object);
     }
 
 }

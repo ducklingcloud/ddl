@@ -26,7 +26,7 @@ import net.duckling.ddl.service.file.FileVersion;
 import net.duckling.ddl.service.file.FileVersionService;
 import net.duckling.ddl.util.JsonUtil;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,15 +45,15 @@ public class APIFileVersionController extends APIBaseController{
         int tid = site.getId();
         int fid = Integer.valueOf(request.getParameter("fid"));
         FileVersion v = fileVersionService.getLatestFileVersion(fid, tid);
-        JSONObject jsonObj = new JSONObject();
+        JsonObject jsonObj = new JsonObject();
         if(v==null){
-            jsonObj.put("result", false);
+            jsonObj.addProperty("result", false);
         }else{
-            jsonObj.put("result", true);
-            jsonObj.put("latestVesion", v.getVersion());
-            jsonObj.put("title", v.getTitle());
-            jsonObj.put("rid", v.getRid());
+            jsonObj.addProperty("result", true);
+            jsonObj.addProperty("latestVesion", v.getVersion());
+            jsonObj.addProperty("title", v.getTitle());
+            jsonObj.addProperty("rid", v.getRid());
         }
-        JsonUtil.writeJSONObject(response, jsonObj);
+        JsonUtil.write(response, jsonObj);
     }
 }

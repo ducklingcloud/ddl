@@ -45,8 +45,8 @@ import net.duckling.meepo.api.IPanService;
 import net.duckling.meepo.api.PanAcl;
 
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -123,7 +123,7 @@ public class PanApplicationSpaceController extends BaseController{
     @WebLog(method = "PanManualApply", params = "uid")
     @RequestMapping(params="func=manualApply")
     public void application(HttpServletRequest req,HttpServletResponse resp){
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         PanAcl acl = PanAclUtil.getInstance(req);
         MeePoUsage use = null;;
         try {
@@ -133,9 +133,9 @@ public class PanApplicationSpaceController extends BaseController{
         }
 
         if(!canApplicat(use.quota,use.used)){
-            obj.put("status", false);
-            obj.put("message", "您的空间还未到扩容条件，请核对后再申请！");
-            JsonUtil.writeJSONObject(resp, obj);
+            obj.addProperty("status", false);
+            obj.addProperty("message", "您的空间还未到扩容条件，请核对后再申请！");
+            JsonUtil.write(resp, obj);
             return;
         }
         //10G
@@ -151,51 +151,51 @@ public class PanApplicationSpaceController extends BaseController{
             if(newUsage.quota==newSize){
                 panSpaceApplicationService.add(newSize, use.quota, acl.getUid(), PanSpaceApplication.TYPE_MANUAL);
             }else{
-                obj.put("status", false);
-                obj.put("message", "扩容失败");
-                JsonUtil.writeJSONObject(resp, obj);
+                obj.addProperty("status", false);
+                obj.addProperty("message", "扩容失败");
+                JsonUtil.write(resp, obj);
                 return;
             }
         } catch (MeePoException e) {
             LOG.error("", e);
-            obj.put("status", false);
-            obj.put("message", "扩容处理失败");
-            JsonUtil.writeJSONObject(resp, obj);
+            obj.addProperty("status", false);
+            obj.addProperty("message", "扩容处理失败");
+            JsonUtil.write(resp, obj);
             return;
         }
-        obj.put("status", true);
+        obj.addProperty("status", true);
         List<PanSpaceApplication> records = panSpaceApplicationService.queryByUid(acl.getUid());
-        JSONArray arr = new JSONArray();
+        JsonArray arr = new JsonArray();
         long add = 0;
         for(PanSpaceApplication re : records){
-            JSONObject map = new JSONObject();
-            map.put("type", re.getTypeDisplay());
+            JsonObject map = new JsonObject();
+            map.addProperty("type", re.getTypeDisplay());
             long ss = re.getNewSize() - re.getOriginalSize();
-            map.put("size", FileSizeUtils.getFileSize(ss));
+            map.addProperty("size", FileSizeUtils.getFileSize(ss));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            map.put("time", sdf.format(re.getApproveTime()));
+            map.addProperty("time", sdf.format(re.getApproveTime()));
             add+=ss;
-            arr.put(map);
+            arr.add(map);
         }
         boolean canApp = false;
         if(canApplicat(newUsage.quota,newUsage.used)){
             canApp = true;
         }
         putNewSize(obj, newUsage);
-        obj.put("totalSize", FileSizeUtils.getFileSize(newSize));
-        obj.put("canApp", canApp);
-        obj.put("records", arr);
-        obj.put("totalAddSize", add);
-        JsonUtil.writeJSONObject(resp, obj);
+        obj.addProperty("totalSize", FileSizeUtils.getFileSize(newSize));
+        obj.addProperty("canApp", canApp);
+        obj.add("records", arr);
+        obj.addProperty("totalAddSize", add);
+        JsonUtil.write(resp, obj);
     }
 
-    private void putNewSize(JSONObject obj,MeePoUsage newUsage){
+    private void putNewSize(JsonObject obj,MeePoUsage newUsage){
         TeamSpaceSize nowSize = transfer(newUsage);
-        JSONObject size = new JSONObject();
-        size.put("percent", nowSize.getPercentDisplay());
-        size.put("total", nowSize.getTotalDisplay());
-        size.put("used", nowSize.getUsedDisplay());
-        obj.put("totalShow", size);
+        JsonObject size = new JsonObject();
+        size.addProperty("percent", nowSize.getPercentDisplay());
+        size.addProperty("total", nowSize.getTotalDisplay());
+        size.addProperty("used", nowSize.getUsedDisplay());
+        obj.add("totalShow", size);
     }
     //  @RequestMapping(params="func=resize")
     //  public void resize(HttpServletRequest req,HttpServletResponse resp) throws IOException{

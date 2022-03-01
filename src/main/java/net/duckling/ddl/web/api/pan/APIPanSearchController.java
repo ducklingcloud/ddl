@@ -34,7 +34,7 @@ import net.duckling.ddl.web.controller.pan.MeePoMetaToPanBeanUtil;
 import net.duckling.ddl.web.controller.pan.PanResourceBean;
 import net.duckling.meepo.api.IPanService;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,11 +56,11 @@ public class APIPanSearchController {
 
         try {
             PanQueryResult[] result = service.search(PanAclUtil.getInstance(request), "/", keyword, 100);
-            JSONObject obj = new JSONObject();
+            JsonObject obj = new JsonObject();
             SimpleUser user = aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request));
             List<PanResourceBean> pbs = adapterMeta(result,user);
-            obj.put("fileResult",LynxResourceUtils.getPanResourceList(pbs,user.getUid()) );
-            JsonUtil.writeJSONObject(response, obj);
+            obj.add("fileResult",LynxResourceUtils.getPanResourceList(pbs,user.getUid()) );
+            JsonUtil.write(response, obj);
         } catch (MeePoException e) {
             e.printStackTrace();
         }

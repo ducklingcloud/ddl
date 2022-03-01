@@ -26,7 +26,7 @@ import net.duckling.ddl.service.user.AuthorizationCodeService;
 import net.duckling.ddl.util.JsonUtil;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,28 +47,28 @@ public class APIAccessTokenUMTController {
     @WebLog(method = " APIAccessTokenUMT", params = "userName")
     @RequestMapping(method=RequestMethod.POST)
     public void service(HttpServletRequest request,HttpServletResponse response){
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         String uid = request.getParameter("userName");
         String password = request.getParameter("password");
         try {
             AccessToken token = authcodeService.umtPasswordAccessToken(uid, password);
-            obj.put("accessToken", token.getAccessToken());
-            obj.put("refreshToken", token.getRefreshToken());
-            obj.put("expiresIn", token.getExpiresIn());
-            obj.put("DisplayName", token.getUserInfo().getTrueName());
+            obj.addProperty("accessToken", token.getAccessToken());
+            obj.addProperty("refreshToken", token.getRefreshToken());
+            obj.addProperty("expiresIn", token.getExpiresIn());
+            obj.addProperty("DisplayName", token.getUserInfo().getTrueName());
             String cstnetId = token.getUserInfo().getCstnetId();
-            obj.put("uid", cstnetId);
+            obj.addProperty("uid", cstnetId);
 
             LOG.info("uid="+cstnetId+",accessToken="+token.getAccessToken()+",refreshToken="+token.getRefreshToken());
         } catch (OAuthProblemException e) {
             String s = e.getDescription();
             if("用户名或密码校验错误".equals(s)){
-                obj.put("message", "用户名或密码错误");
+                obj.addProperty("message", "用户名或密码错误");
             }else{
-                obj.put("message", e.getDescription());
+                obj.addProperty("message", e.getDescription());
             }
             LOG.error("", e);
         }
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 }

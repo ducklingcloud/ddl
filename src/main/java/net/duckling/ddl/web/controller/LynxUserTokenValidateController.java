@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.JsonObject;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.MessageDigest;
@@ -53,23 +54,23 @@ public class LynxUserTokenValidateController {
     public void validateUserToken(HttpServletRequest req,HttpServletResponse resp){
         String accessToken = req.getParameter("access_token");
         String clientId = req.getParameter("client_id");
-        org.json.simple.JSONObject json = new org.json.simple.JSONObject();
+        JsonObject json = new JsonObject();
         try {
             AccessToken token = authorizationCodeService.umtAccessTokenValidate(accessToken);
             if(token!=null){
                 AuthorizationCode code = getCode(token, clientId);
-                json.put("code", code.getCode());
+                json.addProperty("code", code.getCode());
             }
 
         } catch (OAuthProblemException e) {
             LOG.error("",e);
-            json.put("error", e.getMessage());
+            json.addProperty("error", e.getMessage());
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            json.put("errorMessage", sw.toString());
+            json.addProperty("errorMessage", sw.toString());
         }
-        JsonUtil.writeJSONObject(resp, json);
+        JsonUtil.write(resp, json);
     }
 
     private AuthorizationCode getCode(AccessToken token,String clientId) throws OAuthProblemException{

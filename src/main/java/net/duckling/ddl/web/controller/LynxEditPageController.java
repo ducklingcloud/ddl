@@ -72,7 +72,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jdom.JDOMException;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -296,10 +296,10 @@ public class LynxEditPageController extends BaseController {
         render.setDetail(v);
         draftService.updateAutoSaveDraft(getTeamId(context), render, context.getCurrentUID());
         boolean lockFlag = userHaveLock(context, rid);
-        JSONObject obj = new JSONObject();
-        obj.put("message", rb.getString("action.autosavepage.success"));
-        obj.put("pageLock", lockFlag);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("message", rb.getString("action.autosavepage.success"));
+        obj.addProperty("pageLock", lockFlag);
+        JsonUtil.write(response, obj);
     }
 
     private boolean userHaveLock(VWBContext context, int pid) {
@@ -437,12 +437,12 @@ public class LynxEditPageController extends BaseController {
     public void isLockTimeOut(HttpServletRequest request, HttpServletResponse response, @RequestParam("rid") Integer rid) {
         boolean flag = pageLockService.isLockTimeOut(VWBContext.getCurrentTid(), rid);
         PageLock lock = pageLockService.getCurrentLock(VWBContext.getCurrentTid(), rid);
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         if (lock != null && !flag) {
-            result.put("myLeftTime", pageLockService.getLeftTimeOfPageLock(VWBContext.getCurrentTid(), rid));
+            result.addProperty("myLeftTime", pageLockService.getLeftTimeOfPageLock(VWBContext.getCurrentTid(), rid));
         }
-        result.put("flag", flag);
-        JsonUtil.writeJSONObject(response, result);
+        result.addProperty("flag", flag);
+        JsonUtil.write(response, result);
     }
 
     @RequestMapping(params = "func=updateLockTime")
@@ -454,9 +454,9 @@ public class LynxEditPageController extends BaseController {
         if (lock != null) {
             updatePageLockTime(context, render.getMeta());
         }
-        JSONObject result = new JSONObject();
-        result.put("status", "success");
-        JsonUtil.writeJSONObject(response, result);
+        JsonObject result = new JsonObject();
+        result.addProperty("status", "success");
+        JsonUtil.write(response, result);
     }
 
     /**
@@ -644,22 +644,22 @@ public class LynxEditPageController extends BaseController {
     @RequestMapping(params="func=validateFileName")
     public void validateFileName(HttpServletRequest request,HttpServletResponse response){
         int rid = Integer.parseInt(StringUtils.defaultString(request.getParameter("rid"), "0"));
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(rid ==0){
-            o.put("result", false);
-            o.put("message", "参数错误！");
+            o.addProperty("result", false);
+            o.addProperty("message", "参数错误！");
         }else{
             String fileName = request.getParameter("fileName");
             Resource resource=resourceService.getResource(rid);
             int parentRid=resource.getBid();
             if(!resourceOperateService.canUseFileName(VWBContext.getCurrentTid(), parentRid, rid,resource.getItemType(), fileName)){
-                o.put("result", false);
-                o.put("message", "当前文件夹下存在重名文件！");
+                o.addProperty("result", false);
+                o.addProperty("message", "当前文件夹下存在重名文件！");
             }else{
-                o.put("result", true);
+                o.addProperty("result", true);
             }
         }
-        JsonUtil.writeJSONObject(response, o);
+        JsonUtil.write(response, o);
     }
 
 }

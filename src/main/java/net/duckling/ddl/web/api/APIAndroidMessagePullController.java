@@ -31,7 +31,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,33 +54,33 @@ public class APIAndroidMessagePullController extends APIBaseController{
         String uid = findUser(req);
         if(StringUtils.isEmpty(uid)||"Guest".equals(uid)){
             resp.sendError(401);
-            JSONObject obj = new JSONObject();
-            obj.put("error", "未登陆!");
-            JsonUtil.writeJSONObject(resp, obj);
+            JsonObject obj = new JsonObject();
+            obj.addProperty("error", "未登陆!");
+            JsonUtil.write(resp, obj);
             return;
         }
         String sessionId = req.getSession().getId();
         AndroidMessageBean bean = androidNoticeHandler.getUserMessage(uid, sessionId);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         addMessage(bean, obj);
         if(bean.getLatestMessageTeamId()>0){
             Team team = teamService.getTeamByID(bean.getLatestMessageTeamId());
             if(team!=null){
-                obj.put("latestMesageTeamCode", team.getName());
-                obj.put("latestMesageTeamName", team.getDisplayName());
+                obj.addProperty("latestMesageTeamCode", team.getName());
+                obj.addProperty("latestMesageTeamName", team.getDisplayName());
             }
         }
-        JsonUtil.writeJSONObject(resp, obj);
+        JsonUtil.write(resp, obj);
     }
 
-    private void addMessage(AndroidMessageBean bean,JSONObject obj){
-        obj.put("messageType", bean.getType());
+    private void addMessage(AndroidMessageBean bean,JsonObject obj){
+        obj.addProperty("messageType", bean.getType());
         if(bean.isNoMessage()){
             return;
         }
-        obj.put("allMessage", bean.getMessageCount());
-        obj.put("latestMessage", bean.getLatestCount());
-        obj.put("message", bean.getMessage());
-        obj.put("isMoreTeamMessage", bean.isMoreTeamMessage());
+        obj.addProperty("allMessage", bean.getMessageCount());
+        obj.addProperty("latestMessage", bean.getLatestCount());
+        obj.addProperty("message", bean.getMessage());
+        obj.addProperty("isMoreTeamMessage", bean.isMoreTeamMessage());
     }
 }

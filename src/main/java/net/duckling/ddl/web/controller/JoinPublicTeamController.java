@@ -45,8 +45,8 @@ import net.duckling.ddl.web.bean.PageNum;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -144,18 +144,18 @@ public class JoinPublicTeamController extends BaseController {
     @RequirePermission(authenticated = true)
     public void quit(HttpServletRequest request, HttpServletResponse response, @RequestParam("teamId") int tid){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.JOIN_PUBLIC_TEAM);
-        JSONObject obj = new JSONObject();
-        obj.put("tid", tid);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("tid", tid);
         String curUid = context.getCurrentUID();
         boolean isInTeam = teamMemberService.isUserInTeam(tid, curUid);
         if(!isInTeam){
-            obj.put("status", false);
-            JsonUtil.writeJSONObject(response, obj);
+            obj.addProperty("status", false);
+            JsonUtil.write(response, obj);
             return;
         }
         teamService.removeMembers(tid, new String[]{curUid},true);
-        obj.put("status", true);
-        JsonUtil.writeJSONObject(response, obj);
+        obj.addProperty("status", true);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping(params="func=cancelApply")
@@ -164,10 +164,10 @@ public class JoinPublicTeamController extends BaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.JOIN_PUBLIC_TEAM);
         String curUid = context.getCurrentUID();
         teamApplicantService.cancelApply(tid, curUid);
-        JSONObject obj = new JSONObject();
-        obj.put("tid", tid);
-        obj.put("status", true);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("tid", tid);
+        obj.addProperty("status", true);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping(params="func=iknow")
@@ -176,9 +176,9 @@ public class JoinPublicTeamController extends BaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.JOIN_PUBLIC_TEAM);
         String curUid = context.getCurrentUID();
         teamApplicantService.iknowAllTeamApplicantNotice(curUid);
-        JSONObject obj = new JSONObject();
-        obj.put("status", true);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", true);
+        JsonUtil.write(response, obj);
     }
 
     private boolean isAuthUser(HttpServletRequest request, VWBContext context){
@@ -213,20 +213,20 @@ public class JoinPublicTeamController extends BaseController {
      * @param myApplicant 我申请的团队集合
      * @return
      */
-    private JSONArray checkStatus(List<Team> all, List<Team> my, List<TeamApplicant> myApplicant){
+    private JsonArray checkStatus(List<Team> all, List<Team> my, List<TeamApplicant> myApplicant){
         if(isEmpty(all)){
             return null;
         }
         int size = all.size();
-        JSONArray status = initStatusMap(size);
+        JsonArray status = initStatusMap(size);
         if(isEmpty(my) && isEmpty(myApplicant)){
             return status;
         }
         for(int i=0; i<size; i++){
             int tid = all.get(i).getId();
-            JSONObject obj = (JSONObject)status.get(i);
+            JsonObject obj = (JsonObject)status.get(i);
             boolean isTeamMember = amITeamMemberOfThisTeam(my, tid);
-            obj.put("status", (isTeamMember)?TEAM_MEMBER:OUTSIDE);
+            obj.addProperty("status", (isTeamMember)?TEAM_MEMBER:OUTSIDE);
             if(!isTeamMember){
                 updateStatusIfIApplied(myApplicant, tid, obj);
             }
@@ -257,12 +257,12 @@ public class JoinPublicTeamController extends BaseController {
      * @param tid 目标团队
      * @param obj 返回给前台的信息
      */
-    private void updateStatusIfIApplied(List<TeamApplicant> ta, int tid, JSONObject obj){
+    private void updateStatusIfIApplied(List<TeamApplicant> ta, int tid, JsonObject obj){
         if(null != ta && ta.size()>0){
             for(TeamApplicant temp : ta){
                 if(tid==temp.getTid()){
-                    obj.put("status", temp.getStatus());
-                    obj.put("reason", temp.getReason());
+                    obj.addProperty("status", temp.getStatus());
+                    obj.addProperty("reason", temp.getReason());
                     return;
                 }
             }
@@ -274,12 +274,12 @@ public class JoinPublicTeamController extends BaseController {
      * @param size
      * @return
      */
-    private JSONArray initStatusMap(int size){
-        JSONArray maps = new JSONArray();
+    private JsonArray initStatusMap(int size){
+        JsonArray maps = new JsonArray();
         for(int i=0; i<size; i++){
-            JSONObject obj = new JSONObject();
-            obj.put("status", OUTSIDE);
-            obj.put("reason", "");
+            JsonObject obj = new JsonObject();
+            obj.addProperty("status", OUTSIDE);
+            obj.addProperty("reason", "");
             maps.add(obj);
         }
         return maps;

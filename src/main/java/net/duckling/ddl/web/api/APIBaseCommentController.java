@@ -28,7 +28,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.AbstactCommentContoller;
 import net.duckling.ddl.web.interceptor.access.OnDeny;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 
 /**
@@ -40,10 +40,10 @@ public class APIBaseCommentController extends AbstactCommentContoller {
     @SuppressWarnings("unchecked")
     @OnDeny("*")
     public void onDeny(String method, HttpServletRequest request, HttpServletResponse response){
-        JSONObject object = new JSONObject();
-        object.put("message", "Permission denied or session is time out.");
+        JsonObject object = new JsonObject();
+        object.addProperty("message", "Permission denied or session is time out.");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        JsonUtil.writeJSONObject(response, object);
+        JsonUtil.write(response, object);
     }
 
     protected VWBContext createVWBContext(HttpServletRequest pRequest,int itemId,String itemType) {

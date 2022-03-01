@@ -50,8 +50,8 @@ import net.duckling.ddl.util.TeamQuery;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
-import org.json.simple.JSONArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -124,15 +124,15 @@ public class LynxSearchController extends BaseController {
     private void doTeamSearch(HttpServletResponse response, VWBContext context,
                               TeamQuery query) {
         //Step 2: Search Page Content Data and Return Wrap JSONObject
-        JSONObject pcr = searchPageContent(context,query);
+        JsonObject pcr = searchPageContent(context,query);
         //Step 3: Search File Data In Resource and Return Wrap JSONObject
-        JSONObject fr = searchFileInResource(context,query);
+        JsonObject fr = searchFileInResource(context,query);
         //Step 4: Search Page Meta Data In Resource and Return Wrap JSONObject
-        JSONObject flr = searchFolderInResource(context,query);
+        JsonObject flr = searchFolderInResource(context,query);
         //Step 5: Wrap all result to one composite json object
-        JSONObject finalResult = wrapSearchResult(pcr, fr, flr);
+        JsonObject finalResult = wrapSearchResult(pcr, fr, flr);
         //Step 6: Write to response stream
-        JsonUtil.writeJSONObject(response, finalResult);
+        JsonUtil.write(response, finalResult);
     }
 
     @RequestMapping(params="func=searchResult")
@@ -158,10 +158,10 @@ public class LynxSearchController extends BaseController {
 
         String flag = request.getParameter("flag");
         String keyword = request.getParameter(KEYWORD);
-        JSONObject obj = new JSONObject();
-        obj.put("flag",flag);
-        obj.put(KEYWORD,keyword);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("flag",flag);
+        obj.addProperty(KEYWORD,keyword);
+        JsonUtil.write(response, obj);
     }
 
     private TeamQuery initQueryParam(HttpServletRequest request, VWBContext context) {
@@ -190,9 +190,9 @@ public class LynxSearchController extends BaseController {
         VWBContext context = getVWBContext(request);
         TeamQuery query = initQueryParam(request, context);
         String type = request.getParameter("type");
-        JSONObject page = null;
-        JSONObject file = null;
-        JSONObject bundle = null;
+        JsonObject page = null;
+        JsonObject file = null;
+        JsonObject bundle = null;
         if(null==type || "".equals(type)|| LynxConstants.TYPE_PAGE.equals(type)){
             page = searchPageContent(context,query);
         }else if(LynxConstants.TYPE_FILE.equals(type)){
@@ -200,62 +200,62 @@ public class LynxSearchController extends BaseController {
         }else{
             bundle = searchBundleInResource(context, query);
         }
-        JSONObject finalResult = wrapSearchResult(page,file,bundle);
-        JsonUtil.writeJSONObject(response, finalResult);
+        JsonObject finalResult = wrapSearchResult(page,file,bundle);
+        JsonUtil.write(response, finalResult);
 
         String keyword = request.getParameter(KEYWORD);
         String opername = request.getParameter("oper_name");
-        JSONObject obj = new JSONObject();
-        obj.put(KEYWORD,keyword);
-        obj.put("oper_name", opername);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty(KEYWORD,keyword);
+        obj.addProperty("oper_name", opername);
+        JsonUtil.write(response, obj);
     }
 
-    private JSONObject getPageJSONObject(VWBContext context, int i, String title,String digest,Resource page) {
-        JSONObject dpage = new JSONObject();
-        dpage.put("id", i);
-        dpage.put("author", page.getCreator());
-        dpage.put("title", title);
-        dpage.put("url", getURL( UrlPatterns.T_VIEW_R, page.getTid(), Integer.toString(page.getRid())));
-        dpage.put("modifyTime", AoneTimeUtils.formatToDateTime(page.getLastEditTime()));
-        dpage.put("digest", digest);
-        dpage.put("rid", page.getRid());
+    private JsonObject getPageJSONObject(VWBContext context, int i, String title,String digest,Resource page) {
+        JsonObject dpage = new JsonObject();
+        dpage.addProperty("id", i);
+        dpage.addProperty("author", page.getCreator());
+        dpage.addProperty("title", title);
+        dpage.addProperty("url", getURL( UrlPatterns.T_VIEW_R, page.getTid(), Integer.toString(page.getRid())));
+        dpage.addProperty("modifyTime", AoneTimeUtils.formatToDateTime(page.getLastEditTime()));
+        dpage.addProperty("digest", digest);
+        dpage.addProperty("rid", page.getRid());
         String tagUrl=getURL( UrlPatterns.T_TAG, page.getTid(), Integer.toString(page.getRid()));
         String tagBaseURL = getURL( UrlPatterns.T_LIST, page.getTid(), Integer.toString(page.getRid()));
-        dpage.put("tagurl", tagUrl);
-        dpage.put("tagListUrl", tagUrl);
-        dpage.put("starmarkurl", getURL( UrlPatterns.T_STARTMARK, page.getTid(), Integer.toString(page.getRid())));
-        dpage.put("tagMap", getJSONFromMap(tagBaseURL, page.getTagMap()));
-        dpage.put("starmark", (null!=page.getMarkedUserSet() && page.getMarkedUserSet().contains(context.getCurrentUID())?true:false));
-        dpage.put("teamName", context.getContainer().getSite(page.getTid()).getSiteName());
-        dpage.put("tid", page.getTid());
+        dpage.addProperty("tagurl", tagUrl);
+        dpage.addProperty("tagListUrl", tagUrl);
+        dpage.addProperty("starmarkurl", getURL( UrlPatterns.T_STARTMARK, page.getTid(), Integer.toString(page.getRid())));
+        dpage.addProperty("tagMap", getJSONFromMap(tagBaseURL, page.getTagMap()));
+        dpage.addProperty("starmark", (null!=page.getMarkedUserSet() && page.getMarkedUserSet().contains(context.getCurrentUID())?true:false));
+        dpage.addProperty("teamName", context.getContainer().getSite(page.getTid()).getSiteName());
+        dpage.addProperty("tid", page.getTid());
         return dpage;
     }
 
-    private JSONObject getResourceJSONObject(VWBContext context, int i, Resource resource,String keyword) {
+    private JsonObject getResourceJSONObject(VWBContext context, int i, Resource resource,String keyword) {
         if(null == resource){
-            return new JSONObject();
+            return new JsonObject();
         }
-        JSONObject obj = new JSONObject();
-        obj.put("sn", i);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("sn", i);
         String heightKeyword = filterScript(resource.getTitle()).replace(keyword, "<em>"+keyword+"</em>");
-        obj.put("title", heightKeyword);
-        obj.put("creator", resource.getCreator());
-        obj.put("createTime", AoneTimeUtils.formatToDateTime(resource.getCreateTime()));
-        obj.put("url", getURL( UrlPatterns.T_VIEW_R, resource.getTid(), Integer.toString(resource.getRid())));
+        obj.addProperty("title", heightKeyword);
+        obj.addProperty("creator", resource.getCreator());
+        obj.addProperty("createTime", AoneTimeUtils.formatToDateTime(resource.getCreateTime()));
+        obj.addProperty("url", getURL( UrlPatterns.T_VIEW_R, resource.getTid(), Integer.toString(resource.getRid())));
         if(resource.isFile()){
-            obj.put("downloadUrl", getURL( UrlPatterns.T_DOWNLOAD, resource.getTid(), Integer.toString(resource.getRid()))+"?type=doc");
+            obj.addProperty("downloadUrl", getURL( UrlPatterns.T_DOWNLOAD, resource.getTid(), Integer.toString(resource.getRid()))+"?type=doc");
         }
         String tagUrl=getURL( UrlPatterns.T_TAG, resource.getTid(), Integer.toString(resource.getRid()));
         String tagBaseURL = getURL( UrlPatterns.T_LIST, resource.getTid(), Integer.toString(resource.getRid()));
-        obj.put("tagurl", tagUrl);
-        obj.put("tagListUrl", tagBaseURL);
-        obj.put("starmarkurl", getURL( UrlPatterns.T_STARTMARK, resource.getTid(), Integer.toString(resource.getRid())));
-        obj.put("tagMap", getJSONFromMap(tagUrl, resource.getTagMap()));
-        obj.put("rid", resource.getRid());
-        obj.put("starmark", (null!=resource.getMarkedUserSet() && resource.getMarkedUserSet().contains(context.getCurrentUID())?true:false));
-        obj.put("teamName", context.getContainer().getSite(resource.getTid()).getSiteName());
-        obj.put("tid", resource.getTid());
+        obj.addProperty("tagurl", tagUrl);
+        obj.addProperty("tagListUrl", tagBaseURL);
+        obj.addProperty("starmarkurl", getURL( UrlPatterns.T_STARTMARK, resource.getTid(), Integer.toString(resource.getRid())));
+        obj.addProperty("tagMap", getJSONFromMap(tagUrl, resource.getTagMap()));
+        obj.addProperty("rid", resource.getRid());
+        obj.addProperty("starmark", (null!=resource.getMarkedUserSet() && resource.getMarkedUserSet().contains(context.getCurrentUID())?true:false));
+        obj.addProperty("teamName", context.getContainer().getSite(resource.getTid()).getSiteName());
+        obj.addProperty("tid", resource.getTid());
         return obj;
     }
     Pattern pattern = Pattern.compile("<script\\s*+>", Pattern.CASE_INSENSITIVE);
@@ -268,33 +268,33 @@ public class LynxSearchController extends BaseController {
     }
 
     private String getJSONFromMap(String baseTagURL, Map<Integer, String> map){
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         if(null!=map && !map.isEmpty()){
 
             for(Map.Entry<Integer, String> entry : map.entrySet()){
-                JSONObject obj = new JSONObject();
-                obj.put("id", entry.getKey());
-                obj.put("title", entry.getValue());
-                obj.put("tagurl", baseTagURL);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("id", entry.getKey());
+                obj.addProperty("title", entry.getValue());
+                obj.addProperty("tagurl", baseTagURL);
                 array.add(obj);
             }
         }
-        return array.toJSONString();
+        return array.toString();
     }
 
-    private JSONObject wrapSearchResult(JSONObject pcr, JSONObject fr, JSONObject flr) {
-        JSONObject result = new JSONObject();
-        result.put("pageResult", (pcr==null)?"":pcr.get(CONTENT));
-        result.put("fileResult", (fr==null)?"":fr.get(CONTENT));
-        result.put("floderResult", (flr==null)?"":flr.get(CONTENT));
-        result.put("count", getTotalCount(pcr, fr, flr));
-        result.put("pageCount", getPartCount(0,pcr));
-        result.put("fileCount", getPartCount(0,fr));
-        result.put("floderCount", getPartCount(0,flr));
+    private JsonObject wrapSearchResult(JsonObject pcr, JsonObject fr, JsonObject flr) {
+        JsonObject result = new JsonObject(), empty = new JsonObject();
+        result.add("pageResult", (pcr==null) ? empty : pcr.get(CONTENT));
+        result.add("fileResult", (fr==null) ? empty : fr.get(CONTENT));
+        result.add("floderResult", (flr==null) ? empty : flr.get(CONTENT));
+        result.addProperty("count", getTotalCount(pcr, fr, flr));
+        result.addProperty("pageCount", getPartCount(0,pcr));
+        result.addProperty("fileCount", getPartCount(0,fr));
+        result.addProperty("floderCount", getPartCount(0,flr));
         return result;
     }
 
-    private int getTotalCount(JSONObject pcr, JSONObject fr, JSONObject br) {
+    private int getTotalCount(JsonObject pcr, JsonObject fr, JsonObject br) {
         int count = getPartCount(0,pcr);
         count = getPartCount(count,fr);
         count = getPartCount(count,br);
@@ -310,36 +310,36 @@ public class LynxSearchController extends BaseController {
         String type = request.getParameter("type");
         String pid = request.getParameter("pid");
         String keyword = request.getParameter(KEYWORD);
-        JSONObject obj = new JSONObject();
-        obj.put("rank",rank);
-        obj.put("type",type);
-        obj.put("pid",pid);
-        obj.put(KEYWORD,keyword);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("rank",rank);
+        obj.addProperty("type",type);
+        obj.addProperty("pid",pid);
+        obj.addProperty(KEYWORD,keyword);
+        JsonUtil.write(response, obj);
     }
 
-    private int getPartCount(int count,JSONObject part) {
-        if(part!=null&&part.has(SIZE)){
-            return count+Integer.parseInt(part.getString(SIZE));
+    private int getPartCount(int count, JsonObject part) {
+        if (part != null && part.has(SIZE)) {
+            return count + Integer.parseInt(part.get(SIZE).getAsString());
         }
         return count;
     }
 
-    private JSONObject searchFileInResource(VWBContext context, TeamQuery query){
+    private JsonObject searchFileInResource(VWBContext context, TeamQuery query){
         int fileCount = searchService.getResourceCount(query.getTid(),
                                                        query.getKeyword(), LynxConstants.TYPE_FILE);
         query.setType(LynxConstants.TYPE_FILE);
         return getResourceJSONObject(context, query, fileCount);
     }
 
-    private JSONObject searchFolderInResource(VWBContext context, TeamQuery query){
+    private JsonObject searchFolderInResource(VWBContext context, TeamQuery query){
         int fileCount = searchService.getResourceCount(query.getTid(),
                                                        query.getKeyword(), LynxConstants.TYPE_FOLDER);
         query.setType(LynxConstants.TYPE_FOLDER);
         return getResourceJSONObject(context, query, fileCount);
     }
 
-    private JSONObject searchBundleInResource(VWBContext context, TeamQuery query){
+    private JsonObject searchBundleInResource(VWBContext context, TeamQuery query){
         int bundleCount = searchService.getResourceCount(query.getTid(),
                                                          query.getKeyword(), LynxConstants.TYPE_BUNDLE);
         query.setType(LynxConstants.TYPE_BUNDLE);
@@ -347,13 +347,13 @@ public class LynxSearchController extends BaseController {
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject searchPageContent(VWBContext context, TeamQuery query) {
+    private JsonObject searchPageContent(VWBContext context, TeamQuery query) {
         int totalCount = searchService.getTeamPageCount(query.getTid(), query.getKeyword());
         List<Long> pageIds = searchService.queryPageWithOptimize( query); //搜索优化
         if(pageIds!=null && pageIds.size() != 0){
-            JSONObject result = new JSONObject();
-            result.put(SIZE, totalCount);
-            JSONArray array = new JSONArray();
+            JsonObject result = new JsonObject();
+            result.addProperty(SIZE, totalCount);
+            JsonArray array = new JsonArray();
             //TODO
             List<Resource> pageList = resourceService.fetchDPageBasicListByPageIncrementId(pageIds);
             List<PageContentRender> contentList =resourceService.fetchDPageContentByIncrementId(pageIds);
@@ -376,10 +376,10 @@ public class LynxSearchController extends BaseController {
             Map<Integer,Map<Integer,Resource>> pagesMap = transferPageToMap(pageList);
             for (int i = 0; i < pageList.size(); i++){
                 Resource page =getResourceFromMap(pagesMap, pageList.get(i));
-                JSONObject dpage = getPageJSONObject(context, i,heightTitles[i],heightDigests[i],page);
+                JsonObject dpage = getPageJSONObject(context, i,heightTitles[i],heightDigests[i],page);
                 array.add(dpage);
             }
-            result.put(CONTENT, array);
+            result.add(CONTENT, array);
             return result;
         }
         return null;
@@ -466,20 +466,20 @@ public class LynxSearchController extends BaseController {
         }
     }
 
-    private JSONObject getResourceJSONObject(VWBContext context, TeamQuery query, int count){
+    private JsonObject getResourceJSONObject(VWBContext context, TeamQuery query, int count){
         List<Long> sphinxIds = searchService.query(query, TeamQuery.QUERY_FOR_RESOURCE);
         //      List<Long> sphinxIdstemp = site.getLynxSearchService().query(query, TeamQuery.QUERY_FOR_RESOURCE);
         //      List<Long> sphinxIds = site.getLynxSearchService().orderByInterest(sphinxIdstemp, query); //lizi
         if (sphinxIds != null && sphinxIds.size() > 0) {
-            JSONObject result = new JSONObject();
-            result.put(SIZE, count);
-            JSONArray array = new JSONArray();
+            JsonObject result = new JsonObject();
+            result.addProperty(SIZE, count);
+            JsonArray array = new JsonArray();
             for (int i = 0; i < sphinxIds.size(); i++) {
                 Resource resource = resourceService.getResource(sphinxIds.get(i).intValue());
-                JSONObject resObj = getResourceJSONObject(context, i, resource,query.getKeyword());
+                JsonObject resObj = getResourceJSONObject(context, i, resource,query.getKeyword());
                 array.add(resObj);
             }
-            result.put(CONTENT, array);
+            result.add(CONTENT, array);
             return result;
         }
         return null;

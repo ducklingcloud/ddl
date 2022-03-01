@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.web.controller.space;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,6 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -155,14 +156,19 @@ public class SpaceController extends AbstractSpaceController{
     }
 
     @SuppressWarnings("unchecked")
-    private static void writeResponse(HttpServletResponse response, int state, String message, Map<String,Object> params) {
-        JSONObject msg = new JSONObject();
-        msg.put("state", state);
-        msg.put("msg", message);
-        if(params!=null){
-            msg.putAll(params);
+    private static void writeResponse(HttpServletResponse response,
+                                      int state, String message,
+                                      Map<String,Object> params) {
+        JsonObject msg = new JsonObject();
+        msg.addProperty("state", state);
+        msg.addProperty("msg", message);
+        if (params != null) {
+            Gson gson = new Gson();
+            for (String key : params.keySet()) {
+                msg.add(key, gson.toJsonTree(params.get(key)));
+            }
         }
-        JsonUtil.writeJSONObject(response, msg);
+        JsonUtil.write(response, msg);
     }
 
     /**

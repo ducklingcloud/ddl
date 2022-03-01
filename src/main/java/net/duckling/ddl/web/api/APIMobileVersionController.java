@@ -18,8 +18,9 @@
  */
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,7 +37,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -59,29 +60,29 @@ public class APIMobileVersionController extends APIBaseController{
         if(toDupdate()){
             formatDupdate(resp,type);
         }else{
-            JSONObject jsonObj = new JSONObject();
+            JsonObject jsonObj = new JsonObject();
             if("android".equals(type)){
                 type = MobileVersion.TYPE_ANDROID;
             }else if("ios".equals(type)){
                 type = MobileVersion.TYPE_IOS;
             }else{
-                jsonObj.put("result", false);
-                jsonObj.put("message", "type="+type+";不符合规定类型\"android\"和\"ios\"");
-                JsonUtil.writeJSONObject(resp, jsonObj);
+                jsonObj.addProperty("result", false);
+                jsonObj.addProperty("message", "type="+type+";不符合规定类型\"android\"和\"ios\"");
+                JsonUtil.write(resp, jsonObj);
                 return;
             }
             MobileVersion m = mobileVersionService.getLatestVersionByType(type);
             if(m==null){
-                jsonObj.put("result", false);
-                jsonObj.put("message", "系统没有获取到最新版本号");
-                JsonUtil.writeJSONObject(resp, jsonObj);
+                jsonObj.addProperty("result", false);
+                jsonObj.addProperty("message", "系统没有获取到最新版本号");
+                JsonUtil.write(resp, jsonObj);
                 return;
             }
-            jsonObj.put("updateMessage", m.getDescription());
-            jsonObj.put("result", true);
-            jsonObj.put("version", m.getVersion());
-            jsonObj.put("downloadUrl", "http://www.escience.cn/apks/ddl-latest.apk");
-            JsonUtil.writeJSONObject(resp, jsonObj);
+            jsonObj.addProperty("updateMessage", m.getDescription());
+            jsonObj.addProperty("result", true);
+            jsonObj.addProperty("version", m.getVersion());
+            jsonObj.addProperty("downloadUrl", "http://www.escience.cn/apks/ddl-latest.apk");
+            JsonUtil.write(resp, jsonObj);
         }
     }
 
@@ -91,7 +92,7 @@ public class APIMobileVersionController extends APIBaseController{
     }
 
 
-    private void formatDupdate(HttpServletResponse resp,String type){
+    private void formatDupdate(HttpServletResponse resp, String type) {
         HttpClient dClient = new HttpClient();
         PostMethod method = new PostMethod(getDupdateUrl());
         method.setParameter("type", type);
@@ -99,45 +100,34 @@ public class APIMobileVersionController extends APIBaseController{
         try {
             dClient.executeMethod(method);
             String response = method.getResponseBodyAsString();
-            Map<String,Object> map = dealJsonResult(response);
-            JSONObject obj = new JSONObject();
-            obj.put("updateMessage", map.get("descreption"));
-            obj.put("result", map.get("success"));
-            obj.put("version", map.get("version"));
-            String url = (String)map.get("downloadUrl");
+            JsonObject map = new Gson().fromJson(response, JsonObject.class);
+            JsonObject obj = new JsonObject();
+            obj.add("updateMessage", map.get("descreption"));
+            obj.add("result", map.get("success"));
+            obj.add("version", map.get("version"));
+            String url = map.get("downloadUrl").getAsString();
             if(StringUtils.isEmpty(url)){
                 url = "http://www.escience.cn/apks/ddl-latest.apk";
             }
-            obj.put("downloadUrl", url);
-            obj.put("isForce", map.get("forcedUpdate"));
-            JsonUtil.writeJSONObject(resp, obj);
+            obj.addProperty("downloadUrl", url);
+            obj.add("isForce", map.get("forcedUpdate"));
+            JsonUtil.write(resp, obj);
         } catch (HttpException e) {
             LOG.error("", e);
         } catch (IOException e) {
             LOG.error("", e);
-        } catch (ParseException e) {
+        } catch (JsonParseException e) {
             LOG.error("", e);
         }
 
     }
-
 
     private String getProjectName() {
         return "ddl";
     }
 
-    private Map<String, Object> dealJsonResult(String response) throws ParseException {
-        Map<String,Object> result = new HashMap<String,Object>();
-        org.json.JSONObject obj =new org.json.JSONObject(response);
-        Iterator<String> keys = obj.keys();
-        String key = null;
-        while(keys.hasNext()){
-            key = keys.next();
-            result.put(key,obj.get(key));
-        }
-        return result;
-    }
     private String getDupdateUrl() {
         return config.getProperty("ddl.mobile.version.url");
     }
+
 }

@@ -60,7 +60,7 @@ import net.duckling.ddl.util.StatusUtil;
 import net.duckling.ddl.web.controller.BaseController;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -372,9 +372,9 @@ public class RegistController extends BaseController {
             VWBContext context = this.getVWBContext(request);
             flag = isExistedUser(context, email, password);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("status", flag);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", flag);
+        JsonUtil.write(response, obj);
     }
 
 

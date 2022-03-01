@@ -64,11 +64,11 @@ public class ClientCodeController {
         response.setCharacterEncoding("UTF-8");
 
         if (token == null) {
-            JsonUtil.writeJSONObject(response, getLoginFailed());
+            JsonUtil.write(response, getLoginFailed());
             return;
         }
 
-        JsonUtil.writeJSONObject(response, getLoginSuccess(token,needTeams));
+        JsonUtil.write(response, getLoginSuccess(token,needTeams));
     }
 
     private String getLoginSuccess(AccessToken token, boolean needTeams) {
@@ -99,7 +99,7 @@ public class ClientCodeController {
         try {
             LOG.info("refreshToken:"+refreshToken);
             AccessToken token = authorizationCodeService.umtRefreshToken(refreshToken);
-            JsonUtil.writeJSONObject(response, getLoginSuccess(token,needTeams));
+            JsonUtil.write(response, getLoginSuccess(token,needTeams));
         } catch (OAuthProblemException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             LOG.error("RefreshToken to AccessToken failed",e);

@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -479,14 +481,14 @@ public class AttachmentController extends BaseController{
             int status  = client.executeMethod(method);
             String responseString = null;
             if(status<400){
-                responseString =method.getResponseBodyAsString();
-                org.json.JSONObject j = new org.json.JSONObject(responseString);
-                Object st = j.get("status");
+                responseString = method.getResponseBodyAsString();
+                JsonObject j = new Gson().fromJson(responseString, JsonObject.class);
+                String st = j.getAsJsonPrimitive("status").getAsString();
                 if("failed".equals(st)){
                     LOG.error("获取clb token失败！");
                     return null;
                 }else{
-                    return j.get("pf").toString();
+                    return j.getAsJsonPrimitive("pf").getAsString();
                 }
             }else{
                 LOG.error("STAUTS:"+status+";MESSAGE:"+responseString);
@@ -494,8 +496,6 @@ public class AttachmentController extends BaseController{
         } catch (HttpException e) {
             LOG.error("", e);
         } catch (IOException e) {
-            LOG.error("", e);
-        } catch (ParseException e) {
             LOG.error("", e);
         }
         return null;

@@ -34,7 +34,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 import cn.vlabs.clb.api.CLBConnection;
 import cn.vlabs.clb.api.CLBPasswdInfo;
@@ -339,7 +339,7 @@ public class EmailAttachmentSenderImpl implements IEmailAttachmentSender {
      */
     private Map<String, Object> dealJsonResult(String response) throws ParseException {
         Map<String,Object> result = new HashMap<String,Object>();
-        JSONObject obj =new JSONObject(response);
+        JsonObject obj =new JsonObject(response);
         Iterator<String> keys = obj.keys();
         String key = null;
         while(keys.hasNext()){

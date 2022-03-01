@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,8 +37,6 @@ import net.duckling.ddl.service.user.AoneUserService;
 import net.duckling.ddl.util.FileSizeUtils;
 import net.duckling.ddl.web.controller.pan.PanResourceBean;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.util.StringUtils;
 
 import cn.vlabs.clb.api.io.impl.MimeType;
@@ -44,56 +44,56 @@ import cn.vlabs.clb.api.io.impl.MimeType;
 public class LynxResourceUtils {
 
     @SuppressWarnings("unchecked")
-    public static JSONArray getResourceJSON(List<Resource> rs,String uid){
-        JSONArray array = new JSONArray();
+    public static JsonArray getResourceJSON(List<Resource> rs,String uid){
+        JsonArray array = new JsonArray();
         for(Resource r:rs){
-            JSONObject o = getResourceJson(uid, r);
+            JsonObject o = getResourceJson(uid, r);
             array.add(o);
         }
         return array;
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONObject getResourceJson(String uid,Resource r) {
-        JSONObject o = new JSONObject();
-        o.put("rid", r.getRid());
-        o.put("fileName", r.getTitle());
-        o.put("itemType", r.getItemType());
-        o.put("parentRid", r.getBid());
-        o.put("createTime", formatTime(r.getCreateTime()));
-        o.put("modofyTime", formatTime(r.getLastEditTime()));
+    public static JsonObject getResourceJson(String uid,Resource r) {
+        JsonObject o = new JsonObject();
+        o.addProperty("rid", r.getRid());
+        o.addProperty("fileName", r.getTitle());
+        o.addProperty("itemType", r.getItemType());
+        o.addProperty("parentRid", r.getBid());
+        o.addProperty("createTime", formatTime(r.getCreateTime()));
+        o.addProperty("modofyTime", formatTime(r.getLastEditTime()));
         String userName = DDLFacade.getBean(AoneUserService.class).getUserNameByID(r.getLastEditor());
-        o.put("lastEditor",userName);
-        o.put("lastEditorUid", r.getLastEditor());
-        o.put("isOffice", "false");
+        o.addProperty("lastEditor",userName);
+        o.addProperty("lastEditorUid", r.getLastEditor());
+        o.addProperty("isOffice", "false");
         if(r.isFile()||r.isPage()){
-            o.put("fileType", r.getFileType());
+            o.addProperty("fileType", r.getFileType());
             URLGenerator urlGenerator = (URLGenerator)DDLFacade.getBean(URLGenerator.class);
             if(SupportedFileForOfficeViewer.isSupportedFile(r.getTitle())){
-                o.put("isOffice", "true");
+                o.addProperty("isOffice", "true");
                 String url = urlGenerator.getURL(r.getTid(), UrlPatterns.T_PREVIEW_OFFICE, r.getRid()+"", "redirect=redirect&from=web");
-                o.put("previewUrl", url);
+                o.addProperty("previewUrl", url);
             }else if(r.isPage()){
                 String url = urlGenerator.getURL(r.getTid(), UrlPatterns.T_VIEW_R, r.getRid()+"",null);
-                o.put("previewUrl", url);
+                o.addProperty("previewUrl", url);
             }else{
                 String url = urlGenerator.getURL(r.getTid(), UrlPatterns.T_PREVIEW_OFFICE, r.getRid()+"", "redirect=redirect&from=web");
-                o.put("previewUrl", url);
+                o.addProperty("previewUrl", url);
             }
         }else{
-            o.put("fileType", "");
+            o.addProperty("fileType", "");
         }
 
         //TODO
-        o.put("parentRid", r.getBid());
-        o.put("tags",getTags(r.getTagMap()));
-        o.put("star", isUserStar(uid, r.getMarkedUserSet()));
-        o.put("lastVersion",r.getLastVersion());
-        o.put("status", r.getStatus());
+        o.addProperty("parentRid", r.getBid());
+        o.add("tags",getTags(r.getTagMap()));
+        o.addProperty("star", isUserStar(uid, r.getMarkedUserSet()));
+        o.addProperty("lastVersion",r.getLastVersion());
+        o.addProperty("status", r.getStatus());
         String contentType = StringUtils.isEmpty(r.getFileType()) ? "" : MimeType.getContentType(r.getFileType());
-        o.put("contentType", contentType);
-        o.put("size", FileSizeUtils.getFileSize(r.getSize()));
-        o.put("shared", r.isShared());
+        o.addProperty("contentType", contentType);
+        o.addProperty("size", FileSizeUtils.getFileSize(r.getSize()));
+        o.addProperty("shared", r.isShared());
         return o;
     }
 
@@ -107,15 +107,15 @@ public class LynxResourceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static JSONArray getTags(Map<Integer,String> tags){
-        JSONArray a = new JSONArray();
+    private static JsonArray getTags(Map<Integer,String> tags){
+        JsonArray a = new JsonArray();
         if(tags==null){
             return a;
         }
         for(Entry<Integer,String> e : tags.entrySet()){
-            JSONObject o = new JSONObject();
-            o.put("tagId", e.getKey());
-            o.put("tagValue", e.getValue());
+            JsonObject o = new JsonObject();
+            o.addProperty("tagId", e.getKey());
+            o.addProperty("tagValue", e.getValue());
             a.add(o);
         }
         return a;
@@ -130,8 +130,8 @@ public class LynxResourceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONArray getPanResourceJSON(List<PanResourceBean> resources, String uid) {
-        JSONArray arr = new JSONArray();
+    public static JsonArray getPanResourceJSON(List<PanResourceBean> resources, String uid) {
+        JsonArray arr = new JsonArray();
         if(resources!=null)
             for(PanResourceBean b : resources){
                 arr.add(getPanResourceJson(b, uid));
@@ -140,41 +140,41 @@ public class LynxResourceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONObject getPanResourceJson(PanResourceBean r, String uid) {
-        JSONObject o = new JSONObject();
-        o.put("rid", r.getRid());
-        o.put("fileName", r.getTitle());
-        o.put("itemType", r.getItemType());
-        o.put("parentRid", r.getParentPath());
-        o.put("createTime", formatTime(r.getCreateTime()));
-        o.put("modofyTime", formatTime(r.getModifyTime()));
+    public static JsonObject getPanResourceJson(PanResourceBean r, String uid) {
+        JsonObject o = new JsonObject();
+        o.addProperty("rid", r.getRid());
+        o.addProperty("fileName", r.getTitle());
+        o.addProperty("itemType", r.getItemType());
+        o.addProperty("parentRid", r.getParentPath());
+        o.addProperty("createTime", formatTime(r.getCreateTime()));
+        o.addProperty("modofyTime", formatTime(r.getModifyTime()));
         if(!StringUtils.isEmpty(r.getLastEditor())){
             String userName = DDLFacade.getBean(AoneUserService.class).getUserNameByID(r.getLastEditor());
-            o.put("lastEditor",userName);
-            o.put("lastEditorUid", r.getLastEditor());
+            o.addProperty("lastEditor",userName);
+            o.addProperty("lastEditorUid", r.getLastEditor());
         }
         if(r.isFile()){
-            o.put("fileType", r.getFileType());
+            o.addProperty("fileType", r.getFileType());
         }else{
-            o.put("fileType", "");
+            o.addProperty("fileType", "");
         }
-        o.put("parentRid", r.getParentPath());
-        o.put("lastVersion",r.getVersion());
+        o.addProperty("parentRid", r.getParentPath());
+        o.addProperty("lastVersion",r.getVersion());
         String contentType = StringUtils.isEmpty(r.getFileType()) ? "" : MimeType.getContentType(r.getFileType());
-        o.put("contentType", contentType);
-        o.put("size", FileSizeUtils.getFileSize(r.getSize()));
+        o.addProperty("contentType", contentType);
+        o.addProperty("size", FileSizeUtils.getFileSize(r.getSize()));
         if(r.isSearchResult()){
             dealSearchResult(o,r);
         }else{
-            o.put("searchResult", false);
+            o.addProperty("searchResult", false);
         }
-        o.put("shared", r.getShared());
+        o.addProperty("shared", r.getShared());
         return o;
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONArray getPanResourceJsonList(List<PanResourceBean> resources, String uid) {
-        JSONArray arr = new JSONArray();
+    public static JsonArray getPanResourceJsonList(List<PanResourceBean> resources, String uid) {
+        JsonArray arr = new JsonArray();
         if(resources!=null)
             for(PanResourceBean b : resources){
                 arr.add(getPanResourceJson(b, uid));
@@ -183,14 +183,14 @@ public class LynxResourceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static void dealSearchResult(JSONObject o, PanResourceBean r) {
-        o.put("searchResult", true);
+    private static void dealSearchResult(JsonObject o, PanResourceBean r) {
+        o.addProperty("searchResult", true);
         try{
             String p = URLDecoder.decode(r.getParentPath(), "utf-8");
             if(StringUtils.isEmpty(p)||"/".equals(p)){
-                o.put("parentPathName", "所有文件");
+                o.addProperty("parentPathName", "所有文件");
             }else{
-                o.put("parentPathName", p);
+                o.addProperty("parentPathName", p);
             }
         }catch(Exception e){}
 
@@ -202,20 +202,20 @@ public class LynxResourceUtils {
             if(be!=-1){
                 String re = tmp.substring(be+1);
                 if("/".equals(re)){
-                    o.put("parentName", "所有文件");
+                    o.addProperty("parentName", "所有文件");
                 }else{
-                    o.put("parentName", re);
+                    o.addProperty("parentName", re);
                 }
                 return ;
             }
 
         }
-        o.put("parentName", "所有文件");
+        o.addProperty("parentName", "所有文件");
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONArray getPanResourceList(List<PanResourceBean> resources, String uid) {
-        JSONArray arr = new JSONArray();
+    public static JsonArray getPanResourceList(List<PanResourceBean> resources, String uid) {
+        JsonArray arr = new JsonArray();
         if(resources!=null)
             for(PanResourceBean b : resources){
                 arr.add(getPanResource(uid, b));
@@ -224,8 +224,8 @@ public class LynxResourceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONArray getPanResourceListLite(List<PanResourceBean> resources, String uid) {
-        JSONArray arr = new JSONArray();
+    public static JsonArray getPanResourceListLite(List<PanResourceBean> resources, String uid) {
+        JsonArray arr = new JsonArray();
         if(resources!=null)
             for(PanResourceBean b : resources){
                 arr.add(getPanResourceLite(uid, b));
@@ -234,42 +234,42 @@ public class LynxResourceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONObject getPanResource(String uid,PanResourceBean r) {
-        JSONObject o = new JSONObject();
-        o.put("rid", r.getRid());
-        o.put("title", r.getTitle());
-        o.put("itemType", r.getItemType());
-        o.put("bid", r.getParentPath());
-        o.put("createTime", formatTime(r.getCreateTime()));
-        o.put("lastEditTime", formatTime(r.getModifyTime()));
+    public static JsonObject getPanResource(String uid,PanResourceBean r) {
+        JsonObject o = new JsonObject();
+        o.addProperty("rid", r.getRid());
+        o.addProperty("title", r.getTitle());
+        o.addProperty("itemType", r.getItemType());
+        o.addProperty("bid", r.getParentPath());
+        o.addProperty("createTime", formatTime(r.getCreateTime()));
+        o.addProperty("lastEditTime", formatTime(r.getModifyTime()));
         if(!StringUtils.isEmpty(r.getLastEditor())){
             String userName = DDLFacade.getBean(AoneUserService.class).getUserNameByID(r.getLastEditor());
-            o.put("lastEditorName",userName);
-            o.put("creatorName",userName);
-            o.put("lastEditor", r.getLastEditor());
-            o.put("creator", r.getLastEditor());
+            o.addProperty("lastEditorName",userName);
+            o.addProperty("creatorName",userName);
+            o.addProperty("lastEditor", r.getLastEditor());
+            o.addProperty("creator", r.getLastEditor());
         }
         if(r.isFile()){
-            o.put("fileType", r.getFileType());
+            o.addProperty("fileType", r.getFileType());
         }else{
-            o.put("fileType", "");
+            o.addProperty("fileType", "");
         }
-        o.put("file", r.isFile());
-        o.put("bundle", r.isFolder());
-        o.put("folder", r.isFolder());
-        o.put("parentRid", r.getParentPath());
-        o.put("lastVersion",r.getVersion());
+        o.addProperty("file", r.isFile());
+        o.addProperty("bundle", r.isFolder());
+        o.addProperty("folder", r.isFolder());
+        o.addProperty("parentRid", r.getParentPath());
+        o.addProperty("lastVersion",r.getVersion());
         String contentType = StringUtils.isEmpty(r.getFileType()) ? "" : MimeType.getContentType(r.getFileType());
-        o.put("contentType", contentType);
-        o.put("size", r.getSize());
-        o.put("sizeStr", FileSizeUtils.getFileSize(r.getSize()));
+        o.addProperty("contentType", contentType);
+        o.addProperty("size", r.getSize());
+        o.addProperty("sizeStr", FileSizeUtils.getFileSize(r.getSize()));
         return o;
     }
 
     @SuppressWarnings("unchecked")
-    public static JSONObject getPanResourceLite(String uid,PanResourceBean r) {
-        JSONObject o = new JSONObject();
-        o.put("rid", r.getRid());
+    public static JsonObject getPanResourceLite(String uid,PanResourceBean r) {
+        JsonObject o = new JsonObject();
+        o.addProperty("rid", r.getRid());
         return o;
     }
 }

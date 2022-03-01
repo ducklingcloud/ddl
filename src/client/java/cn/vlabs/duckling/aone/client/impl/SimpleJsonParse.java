@@ -32,7 +32,7 @@ public class SimpleJsonParse {
     public Map<String,Object> parse() throws ParseException{
         Map<String,Object> result = new HashMap<String,Object>();
         if (nextClean() != '{') {
-            throw syntaxError("A JSONObject must begin with '{'");
+            throw syntaxError("A JsonObject must begin with '{'");
         }
         String key;
         char c;
@@ -40,7 +40,7 @@ public class SimpleJsonParse {
             c = nextClean();
             switch (c) {
                 case 0:
-                    throw syntaxError("A JSONObject must end with '}'");
+                    throw syntaxError("A JsonObject must end with '}'");
                 case '}':
                     return result;
                 default :

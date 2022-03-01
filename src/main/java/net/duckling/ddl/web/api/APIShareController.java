@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,11 +75,11 @@ public class APIShareController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(params="func=share")
-    public JSONObject share(@RequestParam("rid")int rid,
+    public JsonObject share(@RequestParam("rid")int rid,
                             @RequestParam(value="isCreateFetchCode", required=false) boolean isCreateFetchCode,
                             HttpServletRequest request){
         ShareResource sr = shareResourceService.get(rid);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(sr==null){
             Resource r = resourceService.getResource(rid, VWBContext.getCurrentTid());
             if(r!=null){
@@ -91,8 +92,8 @@ public class APIShareController {
             sr.setPassword(IdentifyingCode.getLowCaseRandomCode(6));
             shareResourceService.update(sr);
         }
-        obj.put("fetchCode", sr.getPassword());
-        obj.put("url", sr.generateShareUrl(urlGenerator));
+        obj.addProperty("fetchCode", sr.getPassword());
+        obj.addProperty("url", sr.generateShareUrl(urlGenerator));
         return obj;
     }
 
@@ -109,7 +110,7 @@ public class APIShareController {
         setShareExt(srList, tid);
         Map<String,Object> model = new HashMap<String, Object>();
         model.put("list", srList);
-        JsonUtil.writeJSONObject(response, JsonUtil.getJSONObject(model));
+        JsonUtil.write(response, new Gson().toJsonTree(model));
     }
 
     /**
@@ -120,7 +121,7 @@ public class APIShareController {
     @ResponseBody
     @RequestMapping(params="func=delete")
     @SuppressWarnings("unchecked")
-    public JSONObject deleteShareResource(HttpServletRequest request){
+    public JsonObject deleteShareResource(HttpServletRequest request){
         String[] rs = request.getParameterValues("rids[]");
         int[] rids = new int[rs.length];
         for(int i = 0;i<rs.length;i++){
@@ -129,23 +130,23 @@ public class APIShareController {
         for(int rid:rids){
             shareResourceService.delete(rid);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
         return obj;
     }
 
     @ResponseBody
     @RequestMapping(params="func=deleteFetchCode")
     @SuppressWarnings("unchecked")
-    public JSONObject deleteFetchCode(@RequestParam("rid")int rid,HttpServletRequest request){
+    public JsonObject deleteFetchCode(@RequestParam("rid")int rid,HttpServletRequest request){
         ShareResource sr = shareResourceService.get(rid);
         if(sr!=null){
             sr.setPassword(null);
             shareResourceService.update(sr);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", Boolean.TRUE);
-        obj.put("url", sr.generateShareUrl(urlGenerator));
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", Boolean.TRUE);
+        obj.addProperty("url", sr.generateShareUrl(urlGenerator));
         return obj;
     }
 

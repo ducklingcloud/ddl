@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,8 +82,8 @@ import net.duckling.ddl.web.controller.file.BaseAttachController;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -432,12 +433,12 @@ public class LynxEmailResourceController extends BaseAttachController {
 
     @SuppressWarnings("deprecation")
     private void writeError(HttpServletResponse response,int errorCode,String message,String attachmentURL,String fileName){
-        JSONObject o = new JSONObject();
-        o.put(STATUS_CODE, errorCode);
-        o.put(ERROR_MESSAGE, message);
-        o.put(ATTACHMENT_URL, attachmentURL);
-        o.put("fileName", fileName);
-        JsonUtil.writeJSONObject(response, o);
+        JsonObject o = new JsonObject();
+        o.addProperty(STATUS_CODE, errorCode);
+        o.addProperty(ERROR_MESSAGE, message);
+        o.addProperty(ATTACHMENT_URL, attachmentURL);
+        o.addProperty("fileName", fileName);
+        JsonUtil.write(response, o);
     }
 
     /**
@@ -488,17 +489,17 @@ public class LynxEmailResourceController extends BaseAttachController {
 
     @SuppressWarnings("deprecation")
     private void writeQueryJSON(int code,String message,HttpServletResponse response,String attachmentURL){
-        JSONObject o = new JSONObject();
-        o.put(STATUS_CODE, code);
-        o.put(ERROR_MESSAGE, message);
-        o.put("attachmentURL", attachmentURL);
-        JsonUtil.writeJSONObject(response, o);
+        JsonObject o = new JsonObject();
+        o.addProperty(STATUS_CODE, code);
+        o.addProperty(ERROR_MESSAGE, message);
+        o.addProperty("attachmentURL", attachmentURL);
+        JsonUtil.write(response, o);
     }
 
     @RequestMapping(params="func=findUserPersonTeamFiles")
     public void findUserPersonTeamFiles(HttpServletRequest request,HttpServletResponse response) throws IOException{
 
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         String uid = validateEmailAuth(request, obj);
         if(StringUtils.isEmpty(uid)){
             jsonCallBack(request, response, obj);
@@ -530,10 +531,10 @@ public class LynxEmailResourceController extends BaseAttachController {
         int count = emailAttachmentService.getTeamFileCount( tids);
         List<Resource> files = emailAttachmentService.getFileByTid(tids,currentPage*10,10);
         List<FileVersion> versions = getFileVersionsFromFile(files,tids);
-        obj.put("total", count%10==0?count/10:count/10+1);
-        obj.put("page",currentPage+1);
-        obj.put("currentTeam", tid);
-        obj.put("message", writeFileUrl(versions,request,context,teams,b));
+        obj.addProperty("total", count%10==0?count/10:count/10+1);
+        obj.addProperty("page",currentPage+1);
+        obj.addProperty("currentTeam", tid);
+        obj.add("message", writeFileUrl(versions,request,context,teams,b));
         addUserTeams(teams,obj);
 
         jsonCallBack(request, response, obj);
@@ -551,21 +552,21 @@ public class LynxEmailResourceController extends BaseAttachController {
         }
         return getFileVersions(bean,  tids);
     }
-    private void jsonCallBack(HttpServletRequest request, HttpServletResponse response, JSONObject o)
+    private void jsonCallBack(HttpServletRequest request, HttpServletResponse response, JsonObject o)
             throws IOException {
         String jsoncallback=request.getParameter("callback");
         response.getWriter().append(jsoncallback+"("+o.toString()+")");
     }
 
-    private void addUserTeams(List<Team> teams, JSONObject o) {
-        JSONArray array = new JSONArray();
+    private void addUserTeams(List<Team> teams, JsonObject o) {
+        JsonArray array = new JsonArray();
         for(Team team : teams){
-            JSONObject obj = new JSONObject();
-            obj.put("teamName", team.getDisplayName());
-            obj.put("teamId", team.getId());
-            array.put(obj);
+            JsonObject obj = new JsonObject();
+            obj.addProperty("teamName", team.getDisplayName());
+            obj.addProperty("teamId", team.getId());
+            array.add(obj);
         }
-        o.put("teams", array);
+        o.add("teams", array);
     }
 
     private List<FileVersion> getFileVersions(List<RidAndTidBean> files, int[] tids) {
@@ -621,7 +622,7 @@ public class LynxEmailResourceController extends BaseAttachController {
 
     @RequestMapping(params="func=searchReferableFiles")
     public void searchReferableFiles(HttpServletRequest request,HttpServletResponse response) throws IOException {
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         String uid = validateEmailAuth(request, obj);
         if(StringUtils.isEmpty(uid)){
             jsonCallBack(request, response, obj);
@@ -653,12 +654,12 @@ public class LynxEmailResourceController extends BaseAttachController {
         //由于Sphinx查询的时候的分词的问题，所以在这里使用数据库的模糊查询，可能存在性能上的问题，请注意
         List<Resource> resList =resourceService.queryReferableFiles(term, tids,currentPage,10);
         List<FileVersion> versions = getFileVersionFromResource(resList,tids);
-        JSONObject result = new JSONObject();
-        result.put("message", writeFileUrl(versions, request, context,teams,b));
-        result.put("total", count%10==0?count/10:count/10+1);
-        result.put("page",currentPage+1);
-        result.put("currentTeam", tid);
-        result.put("searchWord",request.getParameter("term"));
+        JsonObject result = new JsonObject();
+        result.add("message", writeFileUrl(versions, request, context,teams,b));
+        result.addProperty("total", count%10==0?count/10:count/10+1);
+        result.addProperty("page",currentPage+1);
+        result.addProperty("currentTeam", tid);
+        result.addProperty("searchWord",request.getParameter("term"));
         addUserTeams(teams,result);
         jsonCallBack(request, response, result);
     }
@@ -688,29 +689,29 @@ public class LynxEmailResourceController extends BaseAttachController {
     }
 
 
-    private JSONArray writeFileUrl(List<FileVersion> versions, HttpServletRequest request ,
+    private JsonArray writeFileUrl(List<FileVersion> versions, HttpServletRequest request ,
                                    VWBContext context,List<Team> teams,boolean haveTeamName) {
-        JSONArray a = new JSONArray();
+        JsonArray a = new JsonArray();
         Map<Integer,Team> teamMap = new HashMap<Integer,Team>();
         for(Team team : teams){
             teamMap.put(team.getId(), team);
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy/M/d HH:mm");
         for(FileVersion v : versions){
-            JSONObject obj = new JSONObject();
-            obj.put("fileName", v.getTitle());
-            obj.put("fileSize", getFileSize(v.getSize()));
-            obj.put("size", v.getSize());
-            obj.put("url", getDownloadUrl(v, context));
+            JsonObject obj = new JsonObject();
+            obj.addProperty("fileName", v.getTitle());
+            obj.addProperty("fileSize", getFileSize(v.getSize()));
+            obj.addProperty("size", v.getSize());
+            obj.addProperty("url", getDownloadUrl(v, context));
             String url = urlGenerator.getURL(v.getTid(),UrlPatterns.T_VIEW_R, v.getRid()+"",null);
-            obj.put("viewUrl",VWBContainerImpl.findContainer().getBaseURL()+url);
-            obj.put("createTime", format.format(v.getEditTime()));
+            obj.addProperty("viewUrl",VWBContainerImpl.findContainer().getBaseURL()+url);
+            obj.addProperty("createTime", format.format(v.getEditTime()));
             if(haveTeamName){
-                obj.put("teamName", teamMap.get(v.getTid()).getDisplayName());
+                obj.addProperty("teamName", teamMap.get(v.getTid()).getDisplayName());
             }else{
-                obj.put("teamName", "");
+                obj.addProperty("teamName", "");
             }
-            a.put(obj);
+            a.add(obj);
         }
         return a;
     }
@@ -760,7 +761,7 @@ public class LynxEmailResourceController extends BaseAttachController {
      */
     @RequestMapping(params="func=getUserAllTeam")
     public void getUserAllTeam(HttpServletRequest request,HttpServletResponse response) throws IOException{
-        JSONObject obj  = new JSONObject();
+        JsonObject obj  = new JsonObject();
         String uid = validateEmailAuth(request, obj);
         if(StringUtils.isEmpty(uid)){
             jsonCallBack(request, response, obj);
@@ -799,7 +800,7 @@ public class LynxEmailResourceController extends BaseAttachController {
 
     @RequestMapping(params="func=getFetchFileCode")
     public void getFetchFileCode(HttpServletRequest request,HttpServletResponse response) throws IOException{
-        JSONObject obj  = new JSONObject();
+        JsonObject obj  = new JsonObject();
         String uid = validateEmailAuth(request, obj);
         if(StringUtils.isEmpty(uid)){
             jsonCallBack(request, response, obj);
@@ -822,9 +823,9 @@ public class LynxEmailResourceController extends BaseAttachController {
         share.setFetchFileCode(IdentifyingCode.getRandomCode(6));
         String encodeURL = shareFileAccessService.getPublicFileURL(share);
         String fileURLs = urlGenerator.getAbsoluteURL(UrlPatterns.DIRECT,encodeURL, null);
-        obj.put("fileName", file.getTitle());
-        obj.put("fetchFileCode", share.getFetchFileCode());
-        obj.put("fileURL", fileURLs);
+        obj.addProperty("fileName", file.getTitle());
+        obj.addProperty("fetchFileCode", share.getFetchFileCode());
+        obj.addProperty("fileURL", fileURLs);
         jsonCallBack(request, response, obj);
     }
 
@@ -886,20 +887,20 @@ public class LynxEmailResourceController extends BaseAttachController {
      * @param response
      * @return
      */
-    private String validateEmailAuth(HttpServletRequest request,JSONObject obj){
+    private String validateEmailAuth(HttpServletRequest request,JsonObject obj){
         String email = null;
         String auth = request.getParameter("auth");
         try {
             email = getAuthEmail(auth);
         } catch (InvalidKeyException e) {
-            obj.put("errorMessage", "您的安全认证出现问题，请重试！");
+            obj.addProperty("errorMessage", "您的安全认证出现问题，请重试！");
         } catch (ParseException e) {
-            obj.put("errorMessage", "您的安全认证格式不对，请重试！");
+            obj.addProperty("errorMessage", "您的安全认证格式不对，请重试！");
         } catch (Exception e) {
-            obj.put("errorMessage", "您的安全认证出现问题，请重试！");
+            obj.addProperty("errorMessage", "您的安全认证出现问题，请重试！");
         }
         if (StringUtils.isEmpty(email)) {
-            obj.put("errorMessage", "您的安全认证过期，请重试！");
+            obj.addProperty("errorMessage", "您的安全认证过期，请重试！");
             return null;
         }
 
@@ -909,9 +910,9 @@ public class LynxEmailResourceController extends BaseAttachController {
     private String getAuthEmail(String auth) throws ParseException, InvalidKeyException{
         try {
             String decode = decodeAuth(auth);
-            JSONObject obj = new JSONObject(decode);
-            String email = obj.getString("email");
-            String date = obj.getString("data");
+            JsonObject obj = new Gson().fromJson(decode, JsonObject.class);
+            String email = obj.get("email").getAsString();
+            String date = obj.get("data").getAsString();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date d = sdf.parse(date);
             if(notExpired(d)){

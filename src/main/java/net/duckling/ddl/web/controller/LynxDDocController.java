@@ -78,7 +78,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -193,9 +193,9 @@ public class LynxDDocController extends BaseController{
         FileVersion currentVersion = fileVersionService.getLatestFileVersion(rid, tid);
         String pdfstatus = resourceOperateService.queryPdfStatus(currentVersion.getClbId(), "" + currentVersion.getClbVersion());
 
-        JSONObject j = new JSONObject();
-        j.put("pdfstatus", pdfstatus);
-        JsonUtil.writeJSONObject(response, j);
+        JsonObject j = new JsonObject();
+        j.addProperty("pdfstatus", pdfstatus);
+        JsonUtil.write(response, j);
     }
 
     /**

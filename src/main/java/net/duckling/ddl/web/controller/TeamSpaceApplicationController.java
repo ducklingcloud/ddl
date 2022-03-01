@@ -42,8 +42,8 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.AbstractSpaceController;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,20 +102,20 @@ public class TeamSpaceApplicationController extends AbstractSpaceController{
 
     @RequestMapping(params="func=manualApply")
     public void application(HttpServletRequest req,HttpServletResponse resp){
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         int tid = VWBContext.getCurrentTid();
         Team team = teamService.getTeamByID(tid);
         if(!team.isPersonalTeam()){
-            obj.put("status", false);
-            obj.put("message", "只有个人空间支持手动扩容!");
-            JsonUtil.writeJSONObject(resp, obj);
+            obj.addProperty("status", false);
+            obj.addProperty("message", "只有个人空间支持手动扩容!");
+            JsonUtil.write(resp, obj);
             return;
         }
         TeamSpaceSize size = teamSpaceSizeService.getTeamSpaceSize(tid);
         if(!canApplicat(size)){
-            obj.put("status", false);
-            obj.put("message", "您的空间还未到扩容条件，请核对后再申请！");
-            JsonUtil.writeJSONObject(resp, obj);
+            obj.addProperty("status", false);
+            obj.addProperty("message", "您的空间还未到扩容条件，请核对后再申请！");
+            JsonUtil.write(resp, obj);
             return;
         }
         //10G
@@ -124,19 +124,19 @@ public class TeamSpaceApplicationController extends AbstractSpaceController{
         long newSize = (t+1)*s;
         String uid = VWBSession.getCurrentUid(req);
         teamSpaceApplicationService.add(newSize, size.getTotal(), uid, tid, TeamSpaceApplication.TYPE_MANUAL);
-        obj.put("status", true);
+        obj.addProperty("status", true);
         List<TeamSpaceApplication> records = teamSpaceApplicationService.queryByTid(tid);
-        JSONArray arr = new JSONArray();
+        JsonArray arr = new JsonArray();
         long add = 0;
         for(TeamSpaceApplication re : records){
-            JSONObject map = new JSONObject();
-            map.put("type", re.getTypeDisplay());
+            JsonObject map = new JsonObject();
+            map.addProperty("type", re.getTypeDisplay());
             long ss = re.getNewSize() - re.getOriginalSize();
-            map.put("size", FileSizeUtils.getFileSize(ss));
+            map.addProperty("size", FileSizeUtils.getFileSize(ss));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            map.put("time", sdf.format(re.getApproveTime()));
+            map.addProperty("time", sdf.format(re.getApproveTime()));
             add+=ss;
-            arr.put(map);
+            arr.add(map);
         }
         size = teamSpaceSizeService.getTeamSpaceSize(tid);
         boolean canApp = false;
@@ -144,20 +144,20 @@ public class TeamSpaceApplicationController extends AbstractSpaceController{
             canApp = true;
         }
         putNewSize(obj, tid);
-        obj.put("totalSize", FileSizeUtils.getFileSize(newSize));
-        obj.put("canApp", canApp);
-        obj.put("records", arr);
-        obj.put("totalAddSize", add);
-        JsonUtil.writeJSONObject(resp, obj);
+        obj.addProperty("totalSize", FileSizeUtils.getFileSize(newSize));
+        obj.addProperty("canApp", canApp);
+        obj.add("records", arr);
+        obj.addProperty("totalAddSize", add);
+        JsonUtil.write(resp, obj);
     }
 
-    private void putNewSize(JSONObject obj,int tid){
+    private void putNewSize(JsonObject obj,int tid){
         TeamSpaceSize nowSize = teamSpaceSizeService.getTeamSpaceSize(tid);
-        JSONObject size = new JSONObject();
-        size.put("percent", nowSize.getPercentDisplay());
-        size.put("total", nowSize.getTotalDisplay());
-        size.put("used", nowSize.getUsedDisplay());
-        obj.put("totalShow", size);
+        JsonObject size = new JsonObject();
+        size.addProperty("percent", nowSize.getPercentDisplay());
+        size.addProperty("total", nowSize.getTotalDisplay());
+        size.addProperty("used", nowSize.getUsedDisplay());
+        obj.add("totalShow", size);
     }
 
 }

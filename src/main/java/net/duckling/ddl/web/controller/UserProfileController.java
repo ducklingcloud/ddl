@@ -42,7 +42,7 @@ import net.duckling.ddl.util.StringUtil;
 import net.duckling.ddl.web.bean.NoAuthToViewException;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -146,9 +146,9 @@ public class UserProfileController extends BaseController {
         principals.add(up);
         context.getVWBSession().setPrincipals(principals);
         updatePersonalTeamName(request, context);
-        JSONObject json = new JSONObject();
-        json.put("result", "success");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("result", "success");
+        JsonUtil.write(response, json);
     }
 
     private void updatePersonalTeamName(HttpServletRequest request, VWBContext context) {

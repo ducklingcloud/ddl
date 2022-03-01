@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -52,8 +53,8 @@ import net.duckling.ddl.web.interceptor.access.OnDeny;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -135,21 +136,21 @@ public class LynxFileUploadController extends BaseController {
         //FIXME:由于Sphinx查询的时候的分词的问题，所以在这里使用数据库的模糊查询，可能存在性能上的问题，请注意
         List<Resource> resList = resourceService.queryReferableFiles(term, tid);
         Collection<Resource> results = filterExistIds(resList,filters);
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         if(results!=null&&results.size()!=0){
             for(Resource res : results){
-                JSONObject json = new JSONObject();
-                json.put("title", res.getTitle());
-                json.put("rid", res.getRid());
+                JsonObject json = new JsonObject();
+                json.addProperty("title", res.getTitle());
+                json.addProperty("rid", res.getRid());
                 array.add(json);
             }
         }else{
-            JSONObject json = new JSONObject();
-            json.put("title", "没有找到含\""+term+"\"的文件");
-            json.put("fid", 0);
+            JsonObject json = new JsonObject();
+            json.addProperty("title", "没有找到含\""+term+"\"的文件");
+            json.addProperty("fid", 0);
             array.add(json);
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
     private Collection<Resource> filterExistIds(List<Resource> resList ,String[] filters){//去重复
@@ -177,11 +178,11 @@ public class LynxFileUploadController extends BaseController {
         int tid = context.getSite().getId();
         Resource page = resourceService.getResource(rid);
         page.setTitle(title);
-        JSONObject json = new JSONObject();
+        JsonObject json = new JsonObject();
 
         fileVersionService.referTo(rid,tid,fids);
-        json.put("bid", bid);
-        JsonUtil.writeJSONObject(response, json);
+        json.addProperty("bid", bid);
+        JsonUtil.write(response, json);
     }
 
     @SuppressWarnings("unchecked")
@@ -192,16 +193,16 @@ public class LynxFileUploadController extends BaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_ATTACH);
         int tid = context.getSite().getId();
         fileVersionService.referTo(pid,tid,fids);
-        JSONObject json = new JSONObject();
+        JsonObject json = new JsonObject();
         List<FileVersion> verList = fileVersionService.getLatestFileVersions(fids, tid);
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         if(null!=verList && verList.size()>0){
             for(FileVersion ver : verList){
                 array.add(wrapJSON(tid, ver));
             }
         }
-        json.put("referFiles", array);
-        JsonUtil.writeJSONObject(response, json);
+        json.add("referFiles", array);
+        JsonUtil.write(response, json);
     }
 
     private void updateDocument(String fileName,InputStream in, long fileSize,int rid, int parentRid, VWBContext vwbcontext, HttpServletResponse response) throws IOException {
@@ -251,11 +252,11 @@ public class LynxFileUploadController extends BaseController {
     @SuppressWarnings("unchecked")
     private void writeNoEnoughSpaceError(String uid,int tid, String fileName, String operate, HttpServletResponse response){
         LOG.warn("user "+uid+" update file "+fileName+" to team(tid="+tid+") no enough space");
-        JSONObject j = new JSONObject();
-        j.put("result", false);
-        j.put("error", operate + "文件失败，您的空间已满。如需扩容，请联系管理员vlab@cnic.cn");
+        JsonObject j = new JsonObject();
+        j.addProperty("result", false);
+        j.addProperty("error", operate + "文件失败，您的空间已满。如需扩容，请联系管理员vlab@cnic.cn");
         response.setStatus(HttpServletResponse.SC_OK);
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
     //  private boolean checkSizeLimit(long fileSize){
@@ -267,41 +268,41 @@ public class LynxFileUploadController extends BaseController {
 
     //  @SuppressWarnings("unchecked")
     //  private void writeTooLargeFileError(HttpServletResponse response){
-    //      JSONObject j = new JSONObject();
+    //      JsonObject j = new JsonObject();
     //      j.put("result", false);
     //      j.put("isItemError", true);
     //      j.put("error", "超过"+SizeUtil.getFormatSize(sizeLimit)+"限制");
     //      response.setStatus(HttpServletResponse.SC_OK);
-    //      JsonUtil.writeJSONObject(response, j);
+    //      JsonUtil.write(response, j);
     //  }
 
     @SuppressWarnings("deprecation")
     private void writeNoPermissionError(HttpServletResponse response){
-        JSONObject j = new JSONObject();
-        j.put("result", false);
-        j.put("error", "您没有上传权限.");
+        JsonObject j = new JsonObject();
+        j.addProperty("result", false);
+        j.addProperty("error", "您没有上传权限.");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
 
     @SuppressWarnings("deprecation")
     private void writeUploadJSONResult(int tid, String uid,HttpServletResponse response, FileVersion item,Resource resource) {
-        JSONObject result = wrapJSON(tid, item);
+        JsonObject result = wrapJSON(tid, item);
         response.setStatus(HttpServletResponse.SC_OK);
-        JSONObject jsonResource=LynxResourceUtils.getResourceJson(uid,resource);
-        result.put("resource", jsonResource);
-        JsonUtil.writeJSONObject(response, result);
+        JsonObject jsonResource=LynxResourceUtils.getResourceJson(uid,resource);
+        result.add("resource", jsonResource);
+        JsonUtil.write(response, result);
     }
 
     @SuppressWarnings("deprecation")
-    private JSONObject wrapJSON(int tid, FileVersion item) {
+    private JsonObject wrapJSON(int tid, FileVersion item) {
         AttachmentItem attachItem = AttachmentItem.convertFromAttachment(item);
-        JSONObject result = JsonUtil.getJSONObject(attachItem);
-        result.put("success", true);
-        result.put("fileExtend", FileUtil.getFileExt(attachItem.getTitle()));
-        result.put("infoURL", urlGenerator.getURL(tid,UrlPatterns.T_VIEW_R, Integer.toString(item.getRid()),null));
-        result.put("previewURL", urlGenerator.getURL(tid,"download", Integer.toString(item.getRid()), null));
+        JsonObject result = new Gson().toJsonTree(attachItem).getAsJsonObject();
+        result.addProperty("success", true);
+        result.addProperty("fileExtend", FileUtil.getFileExt(attachItem.getTitle()));
+        result.addProperty("infoURL", urlGenerator.getURL(tid,UrlPatterns.T_VIEW_R, Integer.toString(item.getRid()),null));
+        result.addProperty("previewURL", urlGenerator.getURL(tid,"download", Integer.toString(item.getRid()), null));
         return result;
     }
 

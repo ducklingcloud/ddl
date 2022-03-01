@@ -27,8 +27,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,10 +83,10 @@ public class TeamSpaceConfigController extends AbstractSpaceController{
     @RequestMapping(params="func=queryTeam")
     public void queryTeam(HttpServletRequest request,HttpServletResponse response){
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            JSONObject obj = new JSONObject();
-            obj.put("result", false);
-            obj.put("message", "没有权限");
-            JsonUtil.writeJSONObject(response, obj);
+            JsonObject obj = new JsonObject();
+            obj.addProperty("result", false);
+            obj.addProperty("message", "没有权限");
+            JsonUtil.write(response, obj);
         }
         String queryType = request.getParameter("queryType");
         String queryWord = request.getParameter("queryWord");
@@ -96,27 +96,27 @@ public class TeamSpaceConfigController extends AbstractSpaceController{
         }else if("teamName".equals(queryType)){
             teams = teamService.queryByTeamName(queryWord);
         }
-        JSONArray config = new JSONArray();
+        JsonArray config = new JsonArray();
         if(teams!=null){
             for(Team t : teams){
-                JSONObject o = new JSONObject();
-                o.put("tid", t.getId());
-                o.put("teamCode", t.getName());
-                o.put("teamName", t.getDisplayName());
+                JsonObject o = new JsonObject();
+                o.addProperty("tid", t.getId());
+                o.addProperty("teamCode", t.getName());
+                o.addProperty("teamName", t.getDisplayName());
                 TeamSpaceConfig c = teamSpaceConfigService.getTeamSpaceConfig(t.getId());
-                o.put("size", FileSizeUtils.getFileSize(c.getSize()));
+                o.addProperty("size", FileSizeUtils.getFileSize(c.getSize()));
                 if(c.getId()==0){
-                    o.put("type", "default");
+                    o.addProperty("type", "default");
                 }else{
-                    o.put("type", c.getUpdateUid()+"在"+getTime(c.getUpdateTime())+"设置");
+                    o.addProperty("type", c.getUpdateUid()+"在"+getTime(c.getUpdateTime())+"设置");
                 }
                 config.add(o);
             }
         }
-        JSONObject o = new JSONObject();
-        o.put("config", config);
-        o.put("result", true);
-        JsonUtil.writeJSONObject(response, o);
+        JsonObject o = new JsonObject();
+        o.add("config", config);
+        o.addProperty("result", true);
+        JsonUtil.write(response, o);
     }
 
     private String getTime(Date d){
@@ -130,11 +130,11 @@ public class TeamSpaceConfigController extends AbstractSpaceController{
 
     @RequestMapping(params="func=configTeamSize")
     public void configTeamSize(HttpServletRequest request,HttpServletResponse response){
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "没有权限");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "没有权限");
+            JsonUtil.write(response, o);
         }
         String uid = VWBSession.getCurrentUid(request);
         int tid = Integer.parseInt(request.getParameter("tid"));
@@ -160,8 +160,8 @@ public class TeamSpaceConfigController extends AbstractSpaceController{
             teamSpaceConfigService.insert(config);
         }
         addUpdateRecord(tid, uid, orginalSize, size);
-        o.put("result", true);
-        JsonUtil.writeJSONObject(response, o);
+        o.addProperty("result", true);
+        JsonUtil.write(response, o);
     }
 
     private void addUpdateRecord(int tid,String uid,long originalSize,long newSize){
@@ -170,35 +170,35 @@ public class TeamSpaceConfigController extends AbstractSpaceController{
 
     @RequestMapping(params="func=queryTeamConfig")
     public void queryTeamConfig(HttpServletRequest request,HttpServletResponse response){
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "没有权限");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "没有权限");
+            JsonUtil.write(response, o);
         }
         int tid = Integer.parseInt(request.getParameter("tid"));
         TeamSpaceConfig config = teamSpaceConfigService.getTeamSpaceConfig(tid);
         Team t = teamService.getTeamByID(tid);
-        o.put("result", true);
-        o.put("tid", tid);
-        o.put("teamCode", t.getName());
-        o.put("teamName", t.getDisplayName());
-        o.put("size", config.getSize()/FileSizeUtils.ONE_GB);
-        o.put("description", config.getDescription());
-        JsonUtil.writeJSONObject(response, o);
+        o.addProperty("result", true);
+        o.addProperty("tid", tid);
+        o.addProperty("teamCode", t.getName());
+        o.addProperty("teamName", t.getDisplayName());
+        o.addProperty("size", config.getSize()/FileSizeUtils.ONE_GB);
+        o.addProperty("description", config.getDescription());
+        JsonUtil.write(response, o);
     }
     @RequestMapping(params="func=deleteConfig")
     public void deleteConfig(HttpServletRequest request,HttpServletResponse response){
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "没有权限");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "没有权限");
+            JsonUtil.write(response, o);
         }
         int id = Integer.parseInt(request.getParameter("id"));
         teamSpaceConfigService.delete(id);
-        o.put("result", true);
-        JsonUtil.writeJSONObject(response, o);
+        o.addProperty("result", true);
+        JsonUtil.write(response, o);
     }
 
 }

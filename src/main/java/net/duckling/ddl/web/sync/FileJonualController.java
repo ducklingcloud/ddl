@@ -61,7 +61,7 @@ public class FileJonualController {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("teamSize", size);
         result.put("jounals", list);
-        JsonUtil.writeJSONObject(resp, new Result<Map<String, Object>>(result));
+        JsonUtil.write(resp, new Result<Map<String, Object>>(result));
     }
 
     /*
@@ -72,7 +72,7 @@ public class FileJonualController {
     public void getLatestJid(HttpServletRequest request, HttpServletResponse resp) {
         Context ctx = ContextUtil.retrieveContext(request);
         Integer jid = jounalService.getLatestJid(ctx.getTid());
-        JsonUtil.writeJSONObject(resp, new Result<Integer>(jid));
+        JsonUtil.write(resp, new Result<Integer>(jid));
     }
 
     @Autowired

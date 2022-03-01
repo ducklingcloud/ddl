@@ -52,7 +52,7 @@ import net.duckling.ddl.web.bean.AttachmentItem;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -114,10 +114,10 @@ public class LynxPageController extends BaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.DELETE);
         Site site = context.getSite();
         int tid = site.getId();
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(!validateDeleteAuth(context, rid, LynxConstants.TYPE_PAGE)){
-            obj.put("status", false);
-            JsonUtil.writeJSONObject(response, obj);
+            obj.addProperty("status", false);
+            JsonUtil.write(response, obj);
             return ;
         }
         PageLock lock = pageLockService.getCurrentLock(VWBContext.getCurrentTid(),rid);
@@ -132,9 +132,9 @@ public class LynxPageController extends BaseController {
         resourceService.delete(rid, tid, LynxConstants.TYPE_PAGE);
         subscriptionService.removePageSubscribe(tid,rid);
         commentService.removePageComment(tid,rid,LynxConstants.TYPE_PAGE);
-        obj.put("status", true);
-        obj.put("redirectUrl", urlGenerator.getURL(tid, UrlPatterns.T_TEAM_HOME, "", null));
-        JsonUtil.writeJSONObject(response, obj);
+        obj.addProperty("status", true);
+        obj.addProperty("redirectUrl", urlGenerator.getURL(tid, UrlPatterns.T_TEAM_HOME, "", null));
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping

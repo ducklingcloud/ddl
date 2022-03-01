@@ -33,7 +33,7 @@ import net.duckling.ddl.web.AbstractRecommendContrller;
 import net.duckling.ddl.web.interceptor.access.OnDeny;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,10 +55,10 @@ public class APIPageRecommendController extends AbstractRecommendContrller {
     @SuppressWarnings({ "unchecked"})
     @OnDeny("*")
     public void onDeny(String method, HttpServletRequest request, HttpServletResponse response){
-        JSONObject object = new JSONObject();
-        object.put("message", "Permission denied or session is time out.");
+        JsonObject object = new JsonObject();
+        object.addProperty("message", "Permission denied or session is time out.");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        JsonUtil.writeJSONObject(response, object);
+        JsonUtil.write(response, object);
     }
     /**
      * 发送推荐，必选参数还有users,内容是逗号分割的字符串,格式如users=user1@cstet.cn,user2@cstnet.cn
@@ -109,10 +109,10 @@ public class APIPageRecommendController extends AbstractRecommendContrller {
                                                      remark, combineRecipients(userIds),null);
         }
 
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        object.put("itemType", itemType);
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
+        object.addProperty("itemType", itemType);
+        JsonUtil.write(response, object);
     }
 
     private static String combineRecipients(String[] userIds) {

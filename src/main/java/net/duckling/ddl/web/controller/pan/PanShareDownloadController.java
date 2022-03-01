@@ -54,7 +54,7 @@ import net.duckling.meepo.api.IPanService;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -302,8 +302,8 @@ public class PanShareDownloadController {
         int id = ShareRidCodeUtil.decode(idCode);
         PanShareResource shareRes = panShareResourceService.get(id);
 
-        JSONObject json = new JSONObject();
-        json.put("result", "");
+        JsonObject json = new JsonObject();
+        json.addProperty("result", "");
         if(shareRes!=null && shareRes.getPassword().equalsIgnoreCase(code.trim())){
             Set<Integer> fetchCodes = (Set<Integer>)request.getSession().getAttribute(PAN_SHARE_SESSION_KEY);
             if(fetchCodes==null){
@@ -311,10 +311,10 @@ public class PanShareDownloadController {
                 request.getSession().setAttribute(PAN_SHARE_SESSION_KEY, fetchCodes);
             }
             fetchCodes.add(id);
-            json.put("result", "ok");
+            json.addProperty("result", "ok");
         }
 
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
     @RequestMapping(params="func=doError")
     public ModelAndView doError(HttpServletRequest request,HttpServletResponse response,@PathVariable("id")String idCode){

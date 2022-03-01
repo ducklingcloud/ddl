@@ -31,7 +31,7 @@ import net.duckling.ddl.common.VWBContainerImpl;
 import net.duckling.ddl.util.JsonUtil;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -53,18 +53,18 @@ public class APIUpdateController extends APIBaseController {
     public void service(HttpServletRequest request, HttpServletResponse response){
         VWBContainer container =VWBContainerImpl.findContainer();
         AppUpdate updateInfo = getUpdateInfo(request);
-        JSONObject object = new JSONObject();
+        JsonObject object = new JsonObject();
         if (updateInfo!=null){
-            object.put("found", true);
-            object.put("appName", updateInfo.getAppName());
-            object.put("version", updateInfo.getVersion());
-            object.put("changeNotes", updateInfo.getChangeNotes());
-            object.put("updateTime", updateInfo.getUpdateTime());
-            object.put("url",container.getBaseURL()+"/apks/"+updateInfo.getFileName());
+            object.addProperty("found", true);
+            object.addProperty("appName", updateInfo.getAppName());
+            object.addProperty("version", updateInfo.getVersion());
+            object.addProperty("changeNotes", updateInfo.getChangeNotes());
+            object.addProperty("updateTime", updateInfo.getUpdateTime());
+            object.addProperty("url",container.getBaseURL()+"/apks/"+updateInfo.getFileName());
         }else{
-            object.put("found", false);
+            object.addProperty("found", false);
         }
-        JsonUtil.writeJSONObject(response, object);
+        JsonUtil.write(response, object);
     }
     private synchronized AppUpdate getUpdateInfo(HttpServletRequest request){
         if (!loaded){

@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,8 @@ import net.duckling.ddl.service.resource.TagGroupRender;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,11 +65,12 @@ public class APITagsController extends APIBaseController {
     @RequestMapping
     public void service(HttpServletRequest request, HttpServletResponse response){
         Site site = findSite(request);
-        JSONArray arrayResult = new JSONArray();
+        JsonArray arrayResult = new JsonArray();
+        Gson gson = new Gson();
 
         List<Tag> allno = new ArrayList<Tag>();
         // 添加所有文档tag和无标签文档tag
-        JSONObject allNo = new JSONObject();
+        JsonObject allNo = new JsonObject();
         Tag all = new Tag();
         all.setId(ALL_DOC_ID);
         all.setTitle(ALL_DOC_NAME);
@@ -82,34 +84,34 @@ public class APITagsController extends APIBaseController {
         allno.add(all);
         //      allno.add(no);
 
-        allNo.put("groupTag", "common");
-        allNo.put("common", JsonUtil.getJSONArrayFromList(allno));
+        allNo.addProperty("groupTag", "common");
+        allNo.add("common", gson.toJsonTree(allno));
         arrayResult.add(allNo);
 
         // 分组添加Tag
         List<TagGroupRender> tagGroupRenderList = tagService.getTagGroupsForTeam(site.getId());
         if (tagGroupRenderList!=null){
             for (TagGroupRender tagGroupRender : tagGroupRenderList){
-                JSONObject jcol = new JSONObject();
+                JsonObject jcol = new JsonObject();
                 TagGroup tagGroup = tagGroupRender.getGroup();
                 List<Tag> tagList = tagGroupRender.getTags();
-                JSONArray arrayTag = JsonUtil.getJSONArrayFromList(tagList);
+                JsonArray arrayTag = gson.toJsonTree(tagList).getAsJsonArray();
                 String groupTag = tagGroup.getTitle();
-                jcol.put("groupTag", groupTag);
-                jcol.put(groupTag, arrayTag);
+                jcol.addProperty("groupTag", groupTag);
+                jcol.add(groupTag, arrayTag);
                 arrayResult.add(jcol);
             }
         }
         List<Tag> noGroupTag = tagService.getTagsNotInGroupForTeam(site.getId());
         if(noGroupTag!=null&&!noGroupTag.isEmpty()){
-            JSONObject jcol = new JSONObject();
-            JSONArray arrayTag = JsonUtil.getJSONArrayFromList(noGroupTag);
+            JsonObject jcol = new JsonObject();
+            JsonArray arrayTag = gson.toJsonTree(noGroupTag).getAsJsonArray();
             String groupTag = "未分类标签";
-            jcol.put("groupTag", groupTag);
-            jcol.put(groupTag, arrayTag);
+            jcol.addProperty("groupTag", groupTag);
+            jcol.add(groupTag, arrayTag);
             arrayResult.add(jcol);
         }
-        JsonUtil.writeJSONObject(response, arrayResult);
+        JsonUtil.write(response, arrayResult);
     }
 
     //1.0版本时的接口实现
@@ -117,16 +119,16 @@ public class APITagsController extends APIBaseController {
           public void service(HttpServletRequest request, HttpServletResponse response){
           Site site = VWBSite.findSite(request);
           List<Tag> tagList = tagService.getTagsForTeam(site.getId());
-          JSONArray array = new JSONArray();
+          JsonArray array = new JsonArray();
           if (tagList!=null){
           for (Tag tag:tagList){
-          JSONObject jcol = new JSONObject();
+          JsonObject jcol = new JsonObject();
           jcol.put("id", tag.getId());
           jcol.put("name", tag.getTitle());
           jcol.put("desc", tag.getCount()+"");
           array.add(jcol);
           }
           }
-          JsonUtil.writeJSONObject(response, array);
+          JsonUtil.write(response, array);
           }*/
 }

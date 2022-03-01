@@ -51,8 +51,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-
-import com.mysql.jdbc.Statement;
+import java.sql.Statement;
 
 /**
  * @author lvly

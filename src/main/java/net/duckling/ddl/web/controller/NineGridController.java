@@ -51,7 +51,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.util.WebParamUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -165,9 +165,9 @@ public class NineGridController extends BaseController {
         String itemType = request.getParameter("itemType");
         int level = WebParamUtil.getIntegerValue(request, "level");
         gridService.pin(uid, tid, rid, itemType, level);
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params="func=unpin")
@@ -180,9 +180,9 @@ public class NineGridController extends BaseController {
         String itemType = request.getParameter("itemType");
         int level = WebParamUtil.getIntegerValue(request, "level");
         gridService.unpin(uid, tid, rid, itemType, level);
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params="func=kickout")
@@ -194,38 +194,38 @@ public class NineGridController extends BaseController {
         int rid = WebParamUtil.getIntegerValue(request, "rid");
         String itemType = request.getParameter("itemType");
         boolean flag = gridService.kickout(uid, tid, rid, itemType);
-        JSONObject json = new JSONObject();
-        json.put("status", flag);
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", flag);
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params="func=validateParent")
     public void validateParent(HttpServletRequest request,HttpServletResponse response){
         int rid = Integer.parseInt(request.getParameter("rid"));
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         Resource r = resourceService.getResource(rid);
-        obj.put("status", true);
-        obj.put("parentRid", r.getBid());
+        obj.addProperty("status", true);
+        obj.addProperty("parentRid", r.getBid());
         if(r.isFolder()){
             ResourceDirectoryTrash t = resourceDirectoryTrashService.getResoourceTrash(rid);
             if(t==null){
-                obj.put("status", false);
-                obj.put("message", "文件目录信息已经不存在");
+                obj.addProperty("status", false);
+                obj.addProperty("message", "文件目录信息已经不存在");
             }else{
                 if(validateParentStaus(r)){
-                    obj.put("haveParent", true);
+                    obj.addProperty("haveParent", true);
                 }else{
-                    obj.put("haveParent", false);
+                    obj.addProperty("haveParent", false);
                 }
             }
         }else{
             if(validateParentStaus(r)){
-                obj.put("haveParent", true);
+                obj.addProperty("haveParent", true);
             }else{
-                obj.put("haveParent", false);
+                obj.addProperty("haveParent", false);
             }
         }
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
     private boolean validateParentStaus(Resource r){
         if(r.getBid()==0){
@@ -240,7 +240,7 @@ public class NineGridController extends BaseController {
     @WebLog(method = "recoverResource", params = "rid")
     public void recoverResource(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
-        JSONObject json = new JSONObject();
+        JsonObject json = new JsonObject();
         Site site = context.getSite();
         int tid = site.getId();
         int rid = Integer.parseInt(request.getParameter("rid"));
@@ -251,8 +251,8 @@ public class NineGridController extends BaseController {
             parentRid = Integer.parseInt(request.getParameter("parentRid"));
         }catch(Exception e){}
         if(r!=null&&!r.getCreator().equals(context.getCurrentUID())&&!isAdmin(context, tid)){
-            json.put("status", false);
-            json.put("message", "您无权限恢复此资源！");
+            json.addProperty("status", false);
+            json.addProperty("message", "您无权限恢复此资源！");
         }else {
             try{
                 if(LynxConstants.TYPE_FILE.equals(itemType)){
@@ -260,18 +260,18 @@ public class NineGridController extends BaseController {
                 }else if(LynxConstants.TYPE_PAGE.equals(itemType)) {
                     resourceOperateService.recoverDDoc(tid,r.getRid(),parentRid,VWBSession.getCurrentUid(request));
                 }else if(LynxConstants.TYPE_FOLDER.equals(itemType)){
-                    json.put("status", false);
-                    json.put("message", "不支持文件恢复");
+                    json.addProperty("status", false);
+                    json.addProperty("message", "不支持文件恢复");
                     //                  resourceOperateService.recoverFolder(tid, r.getRid(), parentRid,VWBSession.getCurrentUid(request));
                 }
             }catch(NoEnoughSpaceException e){
-                json.put("status", false);
-                json.put("message", e.getMessage());
-                JsonUtil.writeJSONObject(response, json);
+                json.addProperty("status", false);
+                json.addProperty("message", e.getMessage());
+                JsonUtil.write(response, json);
                 return ;
             }
-            json.put("status", true);
-            json.put("redirectURL", site.getURL(UrlPatterns.T_VIEW_R, rid+"", null));
+            json.addProperty("status", true);
+            json.addProperty("redirectURL", site.getURL(UrlPatterns.T_VIEW_R, rid+"", null));
             if(r.isFile()){
                 eventDispatcher.sendFileRecoverEvent(tid, r,context.getCurrentUID());
             }else if(r.isPage()){
@@ -280,7 +280,7 @@ public class NineGridController extends BaseController {
                 eventDispatcher.sendFolderRecoverEvent(tid, r,context.getCurrentUID());
             }
         }
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
 
     private boolean isAdmin(VWBContext context,int tid){

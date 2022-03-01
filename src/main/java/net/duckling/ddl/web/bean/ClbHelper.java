@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.web.bean;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
@@ -54,13 +56,13 @@ public class ClbHelper {
             String responseString = null;
             if (status < 400) {
                 responseString = method.getResponseBodyAsString();
-                org.json.JSONObject j = new org.json.JSONObject(responseString);
+                JsonObject j = new Gson().fromJson(responseString, JsonObject.class);
                 Object st = j.get("status");
                 if ("failed".equals(st)) {
                     LOGGER.error("获取clb token失败！");
                     return null;
                 } else {
-                    return j.get("pf").toString();
+                    return j.get("pf").getAsString();
                 }
             } else {
                 LOGGER.error("STAUTS:" + status + ";MESSAGE:" + responseString);
@@ -68,8 +70,6 @@ public class ClbHelper {
         } catch (HttpException e) {
             LOGGER.error("", e);
         } catch (IOException e) {
-            LOGGER.error("", e);
-        } catch (ParseException e) {
             LOGGER.error("", e);
         }
         return null;

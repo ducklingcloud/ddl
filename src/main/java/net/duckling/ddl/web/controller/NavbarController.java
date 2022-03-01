@@ -29,7 +29,7 @@ import net.duckling.ddl.service.navbar.NavbarItem;
 import net.duckling.ddl.service.url.UrlPatterns;
 import net.duckling.ddl.util.JsonUtil;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +50,7 @@ public class NavbarController {
         String uid = context.getCurrentUID();
         int tid = VWBContext.getCurrentTid();
         List<NavbarItem> items = navbarService.getNavbarItems(uid, tid);
-        JsonUtil.writeJSONObject(response, items);
+        JsonUtil.write(response, items);
     }
 
     @RequestMapping(params="func=addItem")
@@ -62,18 +62,18 @@ public class NavbarController {
         String title = request.getParameter("title");
         String url = request.getParameter("url");
         if(null == title || null == url || "".equals(title) || "".equals(url)){
-            JSONObject obj = new JSONObject();
-            obj.put("status", false);
-            JsonUtil.writeJSONObject(response, obj);
+            JsonObject obj = new JsonObject();
+            obj.addProperty("status", false);
+            JsonUtil.write(response, obj);
             return ;
         }
         NavbarItem item = NavbarItem.build(uid, tid, title, url);
         int navBarItemId = navbarService.create(item);
-        JSONObject obj = new JSONObject();
-        obj.put("id", navBarItemId);
-        obj.put("url", item.getUrl());
-        obj.put("title", item.getTitle());
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", navBarItemId);
+        obj.addProperty("url", item.getUrl());
+        obj.addProperty("title", item.getTitle());
+        JsonUtil.write(response, obj);
     }
 
     @SuppressWarnings("unused")
@@ -81,7 +81,7 @@ public class NavbarController {
     @WebLog(method="deleteNavbarItem",params="id")
     public void deleteNavbar(HttpServletRequest request, HttpServletResponse response,@RequestParam("id") int id){
         navbarService.delete(id);
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        JsonUtil.write(response, new JsonObject());
     }
 
 }

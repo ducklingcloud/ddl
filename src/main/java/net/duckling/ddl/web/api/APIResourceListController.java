@@ -42,8 +42,8 @@ import net.duckling.ddl.web.controller.LynxResourceUtils;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,13 +90,13 @@ public class APIResourceListController extends AbstractRecommendContrller{
 
         PaginationBean<Resource> resources = getResources(request,queryType, uid,rid);
 
-        JSONObject j = null;
+        JsonObject j = null;
         if(RECORD_FORMAT_LITE.equals(recordFormat)){
             j = buildQueryResultLite(uid, rid, resources,queryType);
         }else{
             j = buildQueryResult(uid, rid, resources,queryType);
         }
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
     /**
@@ -111,7 +111,7 @@ public class APIResourceListController extends AbstractRecommendContrller{
         int rid = getRequestRid(request);
         Resource resource = resourceService.getTree(tid, rid);
 
-        JsonUtil.writeJSONObject(response, JsonUtil.toJson(resource));
+        JsonUtil.write(response, JsonUtil.getJSONString(resource));
     }
 
     private  PaginationBean<Resource> getResources(HttpServletRequest request, String queryType, String uid, int rid){
@@ -129,39 +129,39 @@ public class APIResourceListController extends AbstractRecommendContrller{
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject buildQueryResult(String uid, int rid,PaginationBean<Resource> resources,String queryType) {
-        JSONObject j = buildQueryResultCommon(uid, rid, resources, queryType);
-        j.put("children", JsonUtil.getJSONArrayFromListResource(resources.getData()));
+    private JsonObject buildQueryResult(String uid, int rid,PaginationBean<Resource> resources,String queryType) {
+        JsonObject j = buildQueryResultCommon(uid, rid, resources, queryType);
+        j.add("children", JsonUtil.getJSONArrayFromListResource(resources.getData()));
         return j;
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject buildQueryResultLite(String uid, int rid,PaginationBean<Resource> resources,String queryType) {
-        JSONObject j = buildQueryResultCommon(uid, rid, resources, queryType);
-        j.put("children", JsonUtil.getJSONArrayLite(resources.getData()));
+    private JsonObject buildQueryResultLite(String uid, int rid,PaginationBean<Resource> resources,String queryType) {
+        JsonObject j = buildQueryResultCommon(uid, rid, resources, queryType);
+        j.add("children", JsonUtil.getJSONArrayLite(resources.getData()));
         return j;
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject buildQueryResultCommon(String uid, int rid,PaginationBean<Resource> resources,String queryType) {
+    private JsonObject buildQueryResultCommon(String uid, int rid,PaginationBean<Resource> resources,String queryType) {
         if(resources==null){
             resources=new PaginationBean<Resource>();
         }
-        JSONObject j = new JSONObject();
-        j.put("total", resources.getTotal());
+        JsonObject j = new JsonObject();
+        j.addProperty("total", resources.getTotal());
         if(rid>0){
-            j.put("currentResource", LynxResourceUtils.getResourceJson(uid, resourceService.getResource(rid)));
-            j.put("path", LynxResourceUtils.getResourceJSON(folderPathService.getResourcePath(rid), uid));
+            j.add("currentResource", LynxResourceUtils.getResourceJson(uid, resourceService.getResource(rid)));
+            j.add("path", LynxResourceUtils.getResourceJSON(folderPathService.getResourcePath(rid), uid));
         }
-        j.put("nextBeginNum", resources.getNextStartNum());
-        j.put("loadedNum",resources.getLoadedNum());
-        j.put("size", resources.getSize());
+        j.addProperty("nextBeginNum", resources.getNextStartNum());
+        j.addProperty("loadedNum",resources.getLoadedNum());
+        j.addProperty("size", resources.getSize());
         if(StringUtils.equals(queryType, QUERY_TYPE_MYRECENTFILES)){
-            j.put("showSort",false);
-            j.put("showSearch",false);
+            j.addProperty("showSort",false);
+            j.addProperty("showSearch",false);
         }else{
-            j.put("showSort",true);
-            j.put("showSearch",true);
+            j.addProperty("showSort",true);
+            j.addProperty("showSearch",true);
         }
         return j;
     }
@@ -268,11 +268,11 @@ public class APIResourceListController extends AbstractRecommendContrller{
         List<Resource> ddoc = folderPathService.getResourceByName(tid, parentRid, LynxConstants.TYPE_PAGE, name);
         folders.addAll(files);
         folders.addAll(ddoc);
-        JSONObject object = new JSONObject();
-        object.put("total", folders.size());
-        JSONArray array = JsonUtil.getJSONArrayFromListResource(folders);
-        object.put("children", array);
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("total", folders.size());
+        JsonArray array = JsonUtil.getJSONArrayFromListResource(folders);
+        object.add("children", array);
+        JsonUtil.write(response, object);
     }
 
     @SuppressWarnings("unchecked")
@@ -282,10 +282,10 @@ public class APIResourceListController extends AbstractRecommendContrller{
         int tid =site.getId();
         int rid = getInteger(request.getParameter("rid"), 0);
         List<Resource> p = folderPathService.getChildrenFolder(tid, rid);
-        JSONArray result = JsonUtil.getJSONArrayFromListResource(p);
-        JSONObject o = new JSONObject();
-        o.put("childrenFolder", result);
-        o.put("total", p.size());
-        JsonUtil.writeJSONObject(response, o);
+        JsonArray result = JsonUtil.getJSONArrayFromListResource(p);
+        JsonObject o = new JsonObject();
+        o.add("childrenFolder", result);
+        o.addProperty("total", p.size());
+        JsonUtil.write(response, o);
     }
 }

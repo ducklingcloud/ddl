@@ -35,8 +35,8 @@ import net.duckling.ddl.util.ArrayAndListConverter;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.bean.PageLockDisplay;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 
 /**
@@ -61,20 +61,20 @@ public final class PageLockValidateUtils {
         }
         List<Resource> pages = resourceOperateService.getDDoc(locks.get(0).getTid(),pids);
 
-        JSONArray arrays = new JSONArray();
+        JsonArray arrays = new JsonArray();
         for(Resource p : pages){
             PageLock lock = map.get(p.getRid());
             if(lock!=null){
-                JSONObject o = new JSONObject();
-                o.put("pageTitle", p.getTitle());
-                o.put("editor", lock.getUid());
+                JsonObject o = new JsonObject();
+                o.addProperty("pageTitle", p.getTitle());
+                o.addProperty("editor", lock.getUid());
                 arrays.add(o);
             }
         }
-        JSONObject obj = new JSONObject();
-        obj.put("lockStatus", "error");
-        obj.put("lockError", arrays);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("lockStatus", "error");
+        obj.add("lockError", arrays);
+        JsonUtil.write(response, obj);
     }
     /**
      * 将页面锁转换成为页面显示用的pagelock并加入page信息

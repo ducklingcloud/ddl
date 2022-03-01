@@ -32,7 +32,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 public class EmailNameEncoding {
     private byte[] key =  null;
@@ -62,7 +62,7 @@ public class EmailNameEncoding {
     }
 
     private String getContext(String email){
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         obj.put("email", email);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         obj.put("data", format.format(new Date()));

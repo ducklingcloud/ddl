@@ -37,8 +37,8 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.util.TeamQuery;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,7 +64,7 @@ public class APITagItemsController extends APIBaseResourceController {
     @SuppressWarnings("unchecked")
     @RequestMapping
     public void service(HttpServletRequest request, HttpServletResponse response){
-        JSONObject object= new JSONObject();
+        JsonObject object= new JsonObject();
         Site site =  findSite(request);
 
         TeamQuery teamQuery = TeamQuery.buildForQuery(request);
@@ -83,13 +83,13 @@ public class APITagItemsController extends APIBaseResourceController {
             resultList.addAll(tempList);
         }
 
-        JSONArray array = JsonUtil.getJSONArrayFromResourceList(resultList);
-        object.put("records", array);
+        JsonArray array = JsonUtil.getJSONArrayFromResourceList(resultList);
+        object.add("records", array);
         int offset = teamQuery.getOffset();
         int count = elementList.size();
         offset += count;
-        object.put("offset", offset);
-        JsonUtil.writeJSONObject(response, object);
+        object.addProperty("offset", offset);
+        JsonUtil.write(response, object);
     }
 
     private List<Resource> filterDocInBundle(List<Resource> elementList,Site site,Set<Integer> bundleIds) {
@@ -122,7 +122,7 @@ public class APITagItemsController extends APIBaseResourceController {
     /*@SuppressWarnings("unchecked")
       @RequestMapping
       public void service(@RequestParam("cid") int cid, HttpServletRequest request, HttpServletResponse response){
-      JSONObject object= new JSONObject();
+      JsonObject object= new JsonObject();
       Site s =  VWBSite.findSite(request);
       ITagService ts = VWBSite.findSite(request).getLynxTagService();
       List<TagItem> tagItemList = ts.getTagItems(cid);
@@ -132,11 +132,11 @@ public class APITagItemsController extends APIBaseResourceController {
       rids.add(new Long(item.getRid()));
       }
       List<Resource> elementList = s.getLynxResourceService().getResourcesBySphinxID(rids);
-      JSONArray array = new JSONArray();
+      JsonArray array = new JsonArray();
       if (elementList!=null){
       for (Resource element:elementList){
       if(element.isPage()){
-      JSONObject jsonEle = new JSONObject();
+      JsonObject jsonEle = new JsonObject();
       jsonEle.put("id", element.getItemId());
       jsonEle.put("title", element.getTitle());
       jsonEle.put("lastUpdate", AoneTimeUtils.formatToDateTime(element.getLastEditTime()));

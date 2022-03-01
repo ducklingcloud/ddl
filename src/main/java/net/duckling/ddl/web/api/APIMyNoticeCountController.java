@@ -30,7 +30,7 @@ import net.duckling.ddl.service.mobile.IphoneDeviceToken;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,10 +62,10 @@ public class APIMyNoticeCountController extends APIBaseNoticeController {
             deviceTokenService.insertOrUpdateDeviceToken(idt);
         }
 
-        JSONObject jsonObj = new JSONObject();
-        jsonObj.put("api", api);
-        jsonObj.put("totalCount", totalCount);
-        JsonUtil.writeJSONObject(response, jsonObj);
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("api", api);
+        jsonObj.addProperty("totalCount", totalCount);
+        JsonUtil.write(response, jsonObj);
     }
 
     private String validDeviceToken(String deviceToken) {

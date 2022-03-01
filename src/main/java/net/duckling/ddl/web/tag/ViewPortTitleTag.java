@@ -20,13 +20,12 @@
 package net.duckling.ddl.web.tag;
 
 import java.io.IOException;
+import net.duckling.common.util.CommonUtils;
 
 import javax.servlet.jsp.JspException;
 
 import net.duckling.ddl.constant.LynxConstants;
 
-
-import com.mysql.jdbc.StringUtils;
 
 /**
  * Introduction Here.
@@ -42,7 +41,8 @@ public class ViewPortTitleTag extends VWBBaseTag {
 
         try {
             String pageTitle = (String)vwbcontext.getHttpRequest().getAttribute(LynxConstants.PAGE_TITLE);
-            title=(StringUtils.isEmptyOrWhitespaceOnly(pageTitle))?null:(pageTitle+" : ");
+            title = CommonUtils.isNullOrEmptyOrBlankOrLiteralNull(pageTitle) ?
+                    null : (pageTitle+" : ");
             if (title==null){
                 if (vwbcontext.getResource()!=null)
                 {

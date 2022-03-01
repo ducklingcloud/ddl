@@ -34,8 +34,8 @@ import net.duckling.ddl.service.resource.Resource;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,7 +60,7 @@ public class APIMyCommonsController extends APIBaseResourceController {
     @SuppressWarnings("unchecked")
     @RequestMapping
     public void service(HttpServletRequest request, HttpServletResponse response){
-        JSONObject object= new JSONObject();
+        JsonObject object= new JsonObject();
         Site site =  findSite(request);
         String uid = findUser(request);
         int tid = site.getId();
@@ -76,11 +76,11 @@ public class APIMyCommonsController extends APIBaseResourceController {
             }
         }
 
-        JSONArray array = JsonUtil.getJSONArrayFromList(resourceList);
-        object.put("records", array);
+        JsonArray array = JsonUtil.getJSONArrayFromList(resourceList);
+        object.add("records", array);
         String api = request.getParameter("api");
-        object.put("api", api);
-        JsonUtil.writeJSONObject(response, object);
+        object.addProperty("api", api);
+        JsonUtil.write(response, object);
     }
 
 }

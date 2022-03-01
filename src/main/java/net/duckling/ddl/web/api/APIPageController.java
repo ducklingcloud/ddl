@@ -42,7 +42,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,9 +82,9 @@ public class APIPageController extends APIBaseController {
         if(StringUtils.isEmpty(itemType)){
             Resource r = resourceService.getResource(rid);
             if(r==null||VWBContext.getCurrentTid()!=r.getTid()||!r.isAvailable()){
-                JSONObject object= new JSONObject();
-                object.put("错误", "您浏览的文件没有找到！");
-                JsonUtil.writeJSONObject(response, object);
+                JsonObject object= new JsonObject();
+                object.addProperty("错误", "您浏览的文件没有找到！");
+                JsonUtil.write(response, object);
                 return null;
             }
             itemType = r.getItemType();
@@ -102,14 +102,14 @@ public class APIPageController extends APIBaseController {
                 FileVersion f = getFileVersion(dfile, request.getParameter("version"));
                 downloadFileContentFromCLB(request, response, f, resourceOperateService);
             } catch(ResourceNotFound notFound) {
-                JSONObject object= new JSONObject();
-                object.put("错误", "您浏览的文件没有找到！");
-                JsonUtil.writeJSONObject(response, object);
+                JsonObject object= new JsonObject();
+                object.addProperty("错误", "您浏览的文件没有找到！");
+                JsonUtil.write(response, object);
                 return null;
             } catch(AccessForbidden forbidden) {
-                JSONObject object= new JSONObject();
-                object.put("错误", "您没有权限查看此文件！");
-                JsonUtil.writeJSONObject(response, object);
+                JsonObject object= new JsonObject();
+                object.addProperty("错误", "您没有权限查看此文件！");
+                JsonUtil.write(response, object);
                 return null;
             }
             gridService.clickItem(uid,dfile.getTid(), dfile.getRid(), LynxConstants.TYPE_FILE);
@@ -139,17 +139,17 @@ public class APIPageController extends APIBaseController {
         if(StringUtils.isEmpty(itemType)){
             Resource r = resourceService.getResource(rid);
             if(r==null||VWBContext.getCurrentTid()!=r.getTid()||!r.isAvailable()){
-                JSONObject object= new JSONObject();
-                object.put("错误", "您浏览的文件没有找到！");
-                JsonUtil.writeJSONObject(response, object);
+                JsonObject object= new JsonObject();
+                object.addProperty("错误", "您浏览的文件没有找到！");
+                JsonUtil.write(response, object);
                 return ;
             }
             itemType = r.getItemType();
         }
         Resource r = resourceService.getResource(rid);
-        JSONObject object= new JSONObject();
-        object.put("title", r.getTitle());
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object= new JsonObject();
+        object.addProperty("title", r.getTitle());
+        JsonUtil.write(response, object);
     }
 
     private void downloadFileContentFromCLB(HttpServletRequest req, HttpServletResponse res,

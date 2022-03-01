@@ -51,7 +51,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -135,7 +135,7 @@ public class LynxDirectionController extends BaseController{
     public void queryFileItem(HttpServletRequest request,HttpServletResponse response){
         String queryType =request.getParameter("queryType");
         queryType=StringUtils.isEmpty(queryType)?"":queryType;
-        JSONObject j;
+        JsonObject j;
         int tid = VWBContext.getCurrentTid();
         String path = request.getParameter("needPath");
         String uid = VWBSession.getCurrentUid(request);
@@ -145,9 +145,9 @@ public class LynxDirectionController extends BaseController{
         resources = getResourceListByParam( request,queryType, tid, uid,order);
         j = buildQueryResultJson(path, uid, rid, resources,queryType);
         String tokenKey=request.getParameter("tokenKey");
-        j.put("tokenKey", tokenKey);
-        j.put("order", order);
-        JsonUtil.writeJSONObject(response, j);
+        j.addProperty("tokenKey", tokenKey);
+        j.addProperty("order", order);
+        JsonUtil.write(response, j);
     }
 
     private String getOrder(HttpServletRequest request,String queryType){
@@ -223,27 +223,27 @@ public class LynxDirectionController extends BaseController{
         return resources;
     }
 
-    private JSONObject buildQueryResultJson(String path, String uid, int rid,PaginationBean<Resource> resources,String queryType) {
+    private JsonObject buildQueryResultJson(String path, String uid, int rid,PaginationBean<Resource> resources,String queryType) {
         if(resources==null){
             resources=new PaginationBean<Resource>();
         }
 
-        JSONObject j = new JSONObject();
-        j.put("total", resources.getTotal());
+        JsonObject j = new JsonObject();
+        j.addProperty("total", resources.getTotal());
         if(rid>0){
-            j.put("currentResource", LynxResourceUtils.getResourceJson(uid, resourceService.getResource(rid)));
-            j.put("path", LynxResourceUtils.getResourceJSON(folderPathService.getResourcePath(rid), uid));
+            j.add("currentResource", LynxResourceUtils.getResourceJson(uid, resourceService.getResource(rid)));
+            j.add("path", LynxResourceUtils.getResourceJSON(folderPathService.getResourcePath(rid), uid));
         }
-        j.put("nextBeginNum", resources.getNextStartNum());
-        j.put("children", LynxResourceUtils.getResourceJSON(resources.getData(), uid));
-        j.put("loadedNum",resources.getLoadedNum());
-        j.put("size", resources.getSize());
+        j.addProperty("nextBeginNum", resources.getNextStartNum());
+        j.add("children", LynxResourceUtils.getResourceJSON(resources.getData(), uid));
+        j.addProperty("loadedNum",resources.getLoadedNum());
+        j.addProperty("size", resources.getSize());
         if(StringUtils.equals(queryType, QUERY_TYPE_MYRECENTFILES)){
-            j.put("showSort",false);
-            j.put("showSearch",false);
+            j.addProperty("showSort",false);
+            j.addProperty("showSearch",false);
         }else{
-            j.put("showSort",true);
-            j.put("showSearch",true);
+            j.addProperty("showSort",true);
+            j.addProperty("showSearch",true);
         }
         return j;
     }
@@ -284,11 +284,11 @@ public class LynxDirectionController extends BaseController{
             tid = Integer.valueOf(tidStr);
         }
 
-        JSONObject j = new JSONObject();
+        JsonObject j = new JsonObject();
         if(!authorityService.haveTeamEditeAuth(tid,uid)){
-            j.put("result", false);
-            j.put("message", "您没有权限创建文件夹");
-            JsonUtil.writeJSONObject(response, j);
+            j.addProperty("result", false);
+            j.addProperty("message", "您没有权限创建文件夹");
+            JsonUtil.write(response, j);
             return;
         }
         int parentRid = 0;
@@ -312,24 +312,24 @@ public class LynxDirectionController extends BaseController{
         r.setStatus(LynxConstants.STATUS_AVAILABLE);
         resourceOperateService.createFolder(r);
 
-        j.put("resource", LynxResourceUtils.getResourceJson(uid,r));
-        j.put("result", true);
-        JsonUtil.writeJSONObject(response, j);
+        j.add("resource", LynxResourceUtils.getResourceJson(uid,r));
+        j.addProperty("result", true);
+        JsonUtil.write(response, j);
     }
     @RequestMapping(params="func=editFileName")
     @WebLog(method = "editFileName")
     public void editeFileName(HttpServletRequest request,HttpServletResponse response){
         int rid = getInteger(request.getParameter("rid"), 0);
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!authorityService.haveTeamEditeAuth(VWBContext.getCurrentTid(),VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "您没有权限修改文件名");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "您没有权限修改文件名");
+            JsonUtil.write(response, o);
             return;
         }
 
         if(rid ==0){
-            o.put("result", false);
+            o.addProperty("result", false);
         }else{
             VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
             if(StringUtil.illCharCheck(request, response, "fileName")){
@@ -337,9 +337,9 @@ public class LynxDirectionController extends BaseController{
             }
             String fileName = request.getParameter("fileName");
             if(StringUtils.isEmpty(fileName)){
-                o.put("result", false);
-                o.put("message", "文件名不能为空");
-                JsonUtil.writeJSONObject(response, o);
+                o.addProperty("result", false);
+                o.addProperty("message", "文件名不能为空");
+                JsonUtil.write(response, o);
                 return;
             }
             fileName = fileName.trim();
@@ -358,15 +358,15 @@ public class LynxDirectionController extends BaseController{
                     message="重命名失败";
                 }
             }
-            o.put("result", result);
+            o.addProperty("result", result);
             if(!result){
-                o.put("message", message);
+                o.addProperty("message", message);
             }
 
             Resource resource = resourceService.getResource(rid);
-            o.put("resource", LynxResourceUtils.getResourceJson(context.getCurrentUID(),resource));
+            o.add("resource", LynxResourceUtils.getResourceJson(context.getCurrentUID(),resource));
         }
-        JsonUtil.writeJSONObject(response, o);
+        JsonUtil.write(response, o);
     }
     private int getInteger(String s,int def){
         int result = def;
@@ -383,36 +383,36 @@ public class LynxDirectionController extends BaseController{
             rid = Integer.parseInt(request.getParameter("rid"));
         }catch(Exception e){}
         List<Resource> rs = folderPathService.getResourcePath(rid);
-        JSONObject j = new JSONObject();
+        JsonObject j = new JsonObject();
         StringBuilder sb = new StringBuilder();
         for(Resource r : rs){
             sb.append("/"+r.getRid());
         }
-        j.put("ridPath", sb.toString());
-        JsonUtil.writeJSONObject(response, j);
+        j.addProperty("ridPath", sb.toString());
+        JsonUtil.write(response, j);
     }
     @RequestMapping(params="func=deleteResource")
     @WebLog(method = "deleteResource",params="rid")
     public void deleteResource(HttpServletRequest request,HttpServletResponse response){
         int rid = getInteger(request.getParameter("rid"), 0);
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(rid==0){
-            o.put("result", false);
-            o.put("message", "文档不存在！");
+            o.addProperty("result", false);
+            o.addProperty("message", "文档不存在！");
         }else{
             VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
             boolean b = resourceOperateService.deleteAuthValidate(VWBContext.getCurrentTid(), rid, context.getCurrentUID());
             if(!b){
-                o.put("result", false);
-                o.put("message", "没有权限删除该文件！");
+                o.addProperty("result", false);
+                o.addProperty("message", "没有权限删除该文件！");
             }else{
                 Resource r =resourceService.getResource(rid);
                 String uid = VWBSession.getCurrentUid(request);
                 resourceOperateService.deleteResource(VWBContext.getCurrentTid(), rid,uid);
-                o.put("result", true);
+                o.addProperty("result", true);
             }
         }
-        JsonUtil.writeJSONObject(response, o);
+        JsonUtil.write(response, o);
     }
 
     @RequestMapping(params="func=deleteResources")
@@ -420,10 +420,10 @@ public class LynxDirectionController extends BaseController{
     public void deleteResources(HttpServletRequest request,HttpServletResponse response){
         String[] ridStrs = request.getParameterValues("rids[]");
         List<Integer> rids = new ArrayList<Integer>();
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(ridStrs==null){
-            o.put("result", false);
-            o.put("message", "文档不存在！");
+            o.addProperty("result", false);
+            o.addProperty("message", "文档不存在！");
         }else{
             for(String r: ridStrs){
                 try{
@@ -440,17 +440,17 @@ public class LynxDirectionController extends BaseController{
                     }
                 }
                 if(!b){
-                    o.put("result", false);
-                    o.put("message", "没有权限删除该文件！");
+                    o.addProperty("result", false);
+                    o.addProperty("message", "没有权限删除该文件！");
                 }else{
                     String uid = VWBSession.getCurrentUid(request);
                     resourceOperateService.deleteResource(VWBContext.getCurrentTid(), rids,uid);
-                    o.put("result", true);
-                    o.put("message", "没有权限删除该文件！");
+                    o.addProperty("result", true);
+                    o.addProperty("message", "没有权限删除该文件！");
                 }
             }
         }
-        JsonUtil.writeJSONObject(response, o);
+        JsonUtil.write(response, o);
     }
 
     private ModelAndView addMyTeam(HttpServletRequest request, ModelAndView mv){

@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.api.pan;
 
+import com.google.gson.JsonObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -31,7 +32,6 @@ import net.duckling.meepo.api.IPanService;
 import net.duckling.meepo.api.PanAcl;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +57,7 @@ public class APIPanDeleteController {
     @WebLog(method = "apiPanDelete", params = "rid,itemId,itemType")
     @RequestMapping
     public void delete(HttpServletRequest request, HttpServletResponse response){
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         int delete = 1;
         String rid = decode(request.getParameter("rid"));
         boolean result = false;
@@ -73,8 +73,8 @@ public class APIPanDeleteController {
         if(result){
             delete = 1;
         }
-        obj.put("succ", delete);
-        JsonUtil.writeJSONObject(response, obj);
+        obj.addProperty("succ", delete);
+        JsonUtil.write(response, obj);
     }
 
 

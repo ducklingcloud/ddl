@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,8 +49,8 @@ import net.duckling.ddl.web.interceptor.access.OnDeny;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -136,15 +137,15 @@ public class ContactsController {
     }
 
     private void sendToClient(Contact contact, HttpServletResponse response) {
-        JSONObject object = JsonUtil.getJSONObject(contact);
-        object.put("type", "person");
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new Gson().toJsonTree(contact).getAsJsonObject();
+        object.addProperty("type", "person");
+        JsonUtil.write(response, object);
     }
 
     private void sendToClient(UserExt user, HttpServletResponse response) {
-        JSONObject object = JsonUtil.getJSONObject(user);
-        object.put("type", "team");
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new Gson().toJsonTree(user).getAsJsonObject();
+        object.addProperty("type", "team");
+        JsonUtil.write(response, object);
     }
 
     @RequestMapping(params = "func=addToPersonContacts")
@@ -155,15 +156,15 @@ public class ContactsController {
         String uid = context.getCurrentUID();
         int addResult = contactsService.add2PersonContacts(id, uid);
         if (addResult < 0) {
-            JSONObject object = new JSONObject();
-            object.put("result", "failed");
-            object.put("detail", "个人通讯录中已有此人");
-            JsonUtil.writeJSONObject(response, object);
+            JsonObject object = new JsonObject();
+            object.addProperty("result", "failed");
+            object.addProperty("detail", "个人通讯录中已有此人");
+            JsonUtil.write(response, object);
             return;
         }
-        JSONObject object = new JSONObject();
-        object.put("result", "success");
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("result", "success");
+        JsonUtil.write(response, object);
     }
 
     @RequestMapping(params = "func=addItem")
@@ -173,24 +174,25 @@ public class ContactsController {
         contact.setPinyin(PinyinUtil.getPinyin(contact.getName()));
         int insertResult = contactsService.insertOneContact(contact);
         if (insertResult < 0) {
-            JSONObject object = new JSONObject();
-            object.put("result", "failed");
-            object.put("detail", "个人通讯录中已有此人");
-            JsonUtil.writeJSONObject(response, object);
+            JsonObject object = new JsonObject();
+            object.addProperty("result", "failed");
+            object.addProperty("detail", "个人通讯录中已有此人");
+            JsonUtil.write(response, object);
             return;
         }
-        JSONObject object = new JSONObject();
-        object.put("result", "success");
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("result", "success");
+        JsonUtil.write(response, object);
     }
 
     @RequestMapping(params = "func=deleteItem")
     public void deleteItem(HttpServletRequest request) {
         contactsService.deleteContactById(Integer.parseInt(request
                                                            .getParameter("itemId")));
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        JsonUtil.getJSONObject(object);
+        /* No return/response, why this? */
+        // JsonObject object = new JsonObject();
+        // object.addProperty("status", "success");
+        // JsonUtil.getJSONObject(object);
     }
 
     @RequestMapping(params = "func=exportPersonalContacts")
@@ -264,7 +266,7 @@ public class ContactsController {
         if (type.equals("teamItem")) {
             UserExt user = aoneUserService.getUserExtByAutoID(Integer
                                                               .parseInt(id));
-            // convert to JSONObject, and send to the client
+            // convert to JsonObject, and send to the client
             sendToClient(user, response);
         } else if (type.equals("personItem")) {
             Contact contact = contactsService.getUserContactById(Integer
@@ -298,12 +300,12 @@ public class ContactsController {
         String user = context.getCurrentUID();
         List<Contact> contacts = contactsService.getUserContactsByName(user,
                                                                        name);
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for (Contact _contact : contacts) {
-            JSONObject object = JsonUtil.getJSONObject(_contact);
+            JsonObject object = new Gson().toJsonTree(_contact).getAsJsonObject();
             array.add(object);
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
     @OnDeny("*")
@@ -320,18 +322,18 @@ public class ContactsController {
         Contact contact = getContactFromRequest(request, context);
         contact.setPinyin(PinyinUtil.getPinyin(contact.getName()));
         contactsService.updateContactById(contact);
-        JSONObject object = new JSONObject();
-        object.put("result", "success");
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("result", "success");
+        JsonUtil.write(response, object);
     }
 
     @RequestMapping(params = "func=searchUser")
     public void searchUser(HttpServletRequest request,
                            HttpServletResponse response) {
         String searchParam = request.getParameter("searchParam");
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         if (null == searchParam || "".equals(searchParam.trim())) {
-            JsonUtil.writeJSONObject(response, array);
+            JsonUtil.write(response, array);
             return;
         }
         VWBContext context = getVWBContext(request);
@@ -346,23 +348,23 @@ public class ContactsController {
         }
         if (contacts != null) {
             for (ContactExt _contact : contacts) {
-                JSONObject object = new JSONObject();
+                JsonObject object = new JsonObject();
                 // 目前只返回名字和邮箱字段，如果需要的话，在此处添加相应字段即可
-                object.put("name", _contact.getName());
-                object.put("id", _contact.getMainEmail());
+                object.addProperty("name", _contact.getName());
+                object.addProperty("id", _contact.getMainEmail());
                 array.add(object);
             }
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
     @RequestMapping(params = "func=searchUserInCurTeam")
     public void searchUserInCurrentTeam(HttpServletRequest request,
                                         HttpServletResponse response) {
         String searchParam = request.getParameter("searchParam");
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         if (null == searchParam || "".equals(searchParam.trim())) {
-            JsonUtil.writeJSONObject(response, array);
+            JsonUtil.write(response, array);
             return;
         }
         VWBContext context = getVWBContext(request);
@@ -372,13 +374,13 @@ public class ContactsController {
                 .searchContactsInCurrentTeam(searchParam, tid);
         if (contacts != null) {
             for (ContactExt _contact : contacts) {
-                JSONObject object = new JSONObject();
+                JsonObject object = new JsonObject();
                 // 目前只返回名字和邮箱字段，如果需要的话，在此处添加相应字段即可
-                object.put("name", _contact.getName());
-                object.put("id", _contact.getMainEmail());
+                object.addProperty("name", _contact.getName());
+                object.addProperty("id", _contact.getMainEmail());
                 array.add(object);
             }
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 }

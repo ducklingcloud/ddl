@@ -31,7 +31,7 @@ import net.duckling.ddl.service.user.AoneUserService;
 import net.duckling.ddl.util.JsonUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +46,7 @@ public class LynxHomeController extends BaseController {
     private AoneUserService aoneUserService;
     @RequestMapping
     public void init(HttpServletResponse response){
-        JsonUtil.writeJSONObject(response, teamUserTotal(response));
+        JsonUtil.write(response, teamUserTotal(response));
     }
 
     @RequestMapping(params="func=total")
@@ -56,7 +56,7 @@ public class LynxHomeController extends BaseController {
 
     @RequestMapping(params="func=getStatus")
     public void getStatus(HttpServletRequest request, HttpServletResponse response){
-        JsonUtil.writeJSONObject(response, userStatus(request));
+        JsonUtil.write(response, userStatus(request));
     }
 
     /**
@@ -86,40 +86,40 @@ public class LynxHomeController extends BaseController {
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject teamUserTotal(HttpServletResponse response){
+    private JsonObject teamUserTotal(HttpServletResponse response){
         int totalTeamNum = teamService.getTotalTeamNumber();
         int totalUserNum =aoneUserService.getTotalAoneUserNumber();
-        JSONObject obj = new JSONObject();
-        obj.put("totalTeamNum", totalTeamNum);
-        obj.put("totalUserNum", totalUserNum);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("totalTeamNum", totalTeamNum);
+        obj.addProperty("totalUserNum", totalUserNum);
         return obj;
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject userStatus(HttpServletRequest request){
+    private JsonObject userStatus(HttpServletRequest request){
         VWBSession session = VWBSession.findSession(request);
-        JSONObject obj = new JSONObject();
-        obj.put("haveUmtId", false);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("haveUmtId", false);
         if(session != null&&session.isAuthenticated()){
-            obj.put("status", true);
-            obj.put("userEmail", ((UserPrincipal)session.getCurrentUser()).getFullName());
+            obj.addProperty("status", true);
+            obj.addProperty("userEmail", ((UserPrincipal)session.getCurrentUser()).getFullName());
         }else{
             Cookie[] cookies = request.getCookies();
             if(cookies!=null&&cookies.length>0){
-                obj.put("status", false);
+                obj.addProperty("status", false);
                 Integer i = (Integer)request.getSession().getAttribute("redirect_uri_count");
                 if(i!=null&&i>2){
                     request.getSession().setAttribute("redirect_uri_count",0);
                 }else{
                     for(Cookie cookie : cookies){
                         if("UMTID".equals(cookie.getName())){
-                            obj.put("haveUmtId", true);
+                            obj.addProperty("haveUmtId", true);
                             break;
                         }
                     }
                 }
             }else{
-                obj.put("status", false);
+                obj.addProperty("status", false);
             }
         }
         return obj;

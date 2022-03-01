@@ -35,47 +35,47 @@ import org.apache.commons.collections.CollectionUtils;
 class JsonResponse {
     public static void notFound(HttpServletResponse response) {
         //TODO: fix the deprecated method.
-        JsonUtil.writeJSONObject(response, new Result<String>(Result.CODE_FILE_NOT_FOUND, Result.MESSAGE_FILE_NOT_FOUND));
+        JsonUtil.write(response, new Result<String>(Result.CODE_FILE_NOT_FOUND, Result.MESSAGE_FILE_NOT_FOUND));
     }
 
     public static void error(HttpServletResponse response) {
-        JsonUtil.writeJSONObject(response, new Result<String>(Result.CODE_ERROR, Result.MESSAGE_ERROR));
+        JsonUtil.write(response, new Result<String>(Result.CODE_ERROR, Result.MESSAGE_ERROR));
     }
 
     public static void paraError(HttpServletResponse response) {
-        JsonUtil.writeJSONObject(response, new Result<String>(Result.CODE_PARAM_ERROR, Result.MESSAGE_PARAM_ERROR));
+        JsonUtil.write(response, new Result<String>(Result.CODE_PARAM_ERROR, Result.MESSAGE_PARAM_ERROR));
     }
 
     public static void forbidden(HttpServletResponse response) {
-        JsonUtil.writeJSONObject(response, new Result<Object>(Result.CODE_NO_PERMISSION, Result.MESSAGE_NO_PERMISSION));
+        JsonUtil.write(response, new Result<Object>(Result.CODE_NO_PERMISSION, Result.MESSAGE_NO_PERMISSION));
     }
 
     public static void locked(HttpServletResponse response) {
-        JsonUtil.writeJSONObject(response, new Result<String>(Result.CODE_FILE_LOCKED, Result.MESSAGE_FILE_LOCKED));
+        JsonUtil.write(response, new Result<String>(Result.CODE_FILE_LOCKED, Result.MESSAGE_FILE_LOCKED));
     }
 
     public static void sameFileExisted(HttpServletResponse response) {
-        JsonUtil.writeJSONObject(response, new Result<String>(Result.CODE_FILE_EXISTED, Result.MESSAGE_FILE_EXISTED));
+        JsonUtil.write(response, new Result<String>(Result.CODE_FILE_EXISTED, Result.MESSAGE_FILE_EXISTED));
     }
 
     public static void fileVersionConflict(HttpServletResponse response, FileMeta fileMeta) {
         Map<String, Object> wrap = new HashMap<String, Object>();
         wrap.put("fileMeta", fileMeta);
-        JsonUtil.writeJSONObject(response, new Result<FileMeta>(Result.CODE_FILE_VERSION_CONFLICT, Result.MESSAGE_FILE_VERSION_CONFLICT, fileMeta));
+        JsonUtil.write(response, new Result<FileMeta>(Result.CODE_FILE_VERSION_CONFLICT, Result.MESSAGE_FILE_VERSION_CONFLICT, fileMeta));
     }
 
     public static void fileNameConflict(HttpServletResponse response) {
-        JsonUtil.writeJSONObject(response, new Result<String>(Result.CODE_FILE_NAME_CONFLICT, Result.MESSAGE_FILE_NAME_CONFLICT));
+        JsonUtil.write(response, new Result<String>(Result.CODE_FILE_NAME_CONFLICT, Result.MESSAGE_FILE_NAME_CONFLICT));
     }
 
     public static void fileMeta(HttpServletResponse response, FileMeta meta) {
         Map<String, Object> wrap = new HashMap<String, Object>();
         wrap.put("fileMeta", meta);
-        JsonUtil.writeJSONObject(response, new Result<Map<String, Object>>(wrap));
+        JsonUtil.write(response, new Result<Map<String, Object>>(wrap));
     }
 
     public static void noEnoughSapce(HttpServletResponse response) {
-        JsonUtil.writeJSONObject(response, new Result<String>(Result.CODE_NO_ENOUGH_SPACE, Result.MESSAGE_NO_ENOUGH_SPACE));
+        JsonUtil.write(response, new Result<String>(Result.CODE_NO_ENOUGH_SPACE, Result.MESSAGE_NO_ENOUGH_SPACE));
     }
 
     public static void startSession(HttpServletResponse response, String sessionId, Set<Integer> chunkMap, int chunkSize) {
@@ -88,7 +88,7 @@ class JsonResponse {
         if (chunkSize != 0) {
             map.put("chunk_size", String.valueOf(chunkSize));
         }
-        JsonUtil.writeJSONObject(response, new Result<Map<String, Object>>(map));
+        JsonUtil.write(response, new Result<Map<String, Object>>(map));
     }
 
     public static void ackChunk(HttpServletResponse response, String sessionId, String ack, Set<Integer> chunkSet) {
@@ -98,7 +98,7 @@ class JsonResponse {
             map.put("chunk_map", chunkSet);
         }
 
-        JsonUtil.writeJSONObject(response, new Result<Map<String, Object>>(map));
+        JsonUtil.write(response, new Result<Map<String, Object>>(map));
     }
 
     public static void chunkUploadSessionNotFound(HttpServletResponse response, String sessionId) {
@@ -106,6 +106,6 @@ class JsonResponse {
         map.put("sessionId", sessionId);
         map.put("status", "session_not_found");
         Result<Map<String, Object>> result = new Result<Map<String, Object>>(Result.CODE_PARAM_ERROR, Result.MESSAGE_PARAM_ERROR, map);
-        JsonUtil.writeJSONObject(response, result);
+        JsonUtil.write(response, result);
     }
 }

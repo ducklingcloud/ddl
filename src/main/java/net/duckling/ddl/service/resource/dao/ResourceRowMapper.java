@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.service.resource.dao;
 
+import com.google.gson.reflect.TypeToken;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -30,19 +31,19 @@ import net.duckling.ddl.util.SQLObjectMapper;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 public class ResourceRowMapper implements RowMapper<Resource>{
     private String prefix;
+
     public ResourceRowMapper(String s){
         this.prefix = s;
     }
-    private TypeReference<HashMap<Integer,String>> typeRef = new TypeReference<HashMap<Integer,String>>(){};
+
     private Map<Integer,String> parseSerialize(String src){
         if(src==null || src.length()==0){
             return null;
         }
-        return JsonUtil.readValue(src, typeRef);
+        return JsonUtil.readValue(
+            src, new TypeToken<Map<Integer, String>>(){}.getType());
     }
 
     @SuppressWarnings("unchecked")
@@ -70,4 +71,4 @@ public class ResourceRowMapper implements RowMapper<Resource>{
         return r;
     }
 
-};
+}

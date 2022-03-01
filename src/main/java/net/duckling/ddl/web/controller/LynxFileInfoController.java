@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -54,7 +55,6 @@ import net.duckling.ddl.util.WebParamUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -93,141 +93,42 @@ public class LynxFileInfoController extends BaseController {
     @Autowired
     private ItemTypeMappingService itemTypeMappingService;
 
-    private static final Logger LOG = Logger.getLogger(LynxFileInfoController.class);
-    private boolean validateDeleteAuth(VWBContext context, int rid,String resourceType){
+    private static final Logger LOG =
+            Logger.getLogger(LynxFileInfoController.class);
+    private boolean validateDeleteAuth(VWBContext context, int rid,
+                                       String resourceType) {
         String u = context.getCurrentUID();
-        if(authorityService.teamAccessability(VWBContext.getCurrentTid(),
-                                              VWBSession.findSession(context.getHttpRequest()), AuthorityService.ADMIN)){
+        if (authorityService.teamAccessability(
+                VWBContext.getCurrentTid(),
+                VWBSession.findSession(context.getHttpRequest()),
+                AuthorityService.ADMIN)) {
             return true;
-        }else{
-            Resource r = resourceService.getResource(rid, VWBContext.getCurrentTid());
-            if(r!=null&&u.equals(r.getCreator())){
+        } else {
+            Resource r = resourceService.getResource(
+                rid, VWBContext.getCurrentTid());
+            if (r != null && u.equals(r.getCreator())) {
                 return true;
             }
         }
         return false;
     }
+
     @RequestMapping
     @WebLog(method = "showFileInfo", params = "fid")
-    public ModelAndView viewFile(HttpServletRequest request,HttpServletResponse response, @PathVariable("fid") int fid) {
+    public ModelAndView viewFile(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 @PathVariable("fid") int fid) {
         int tid = VWBContext.getCurrentTid();
-        ItemTypemapping i = itemTypeMappingService.getItemTypeMapping(tid, fid, LynxConstants.TYPE_FILE);
+        ItemTypemapping i = itemTypeMappingService
+                .getItemTypeMapping(tid, fid, LynxConstants.TYPE_FILE);
         if (i == null) {
             notFound(request, response, true);
         }
-        ModelAndView mv = new ModelAndView(new RedirectView(urlGenerator.getURL(tid, UrlPatterns.T_VIEW_R, i.getRid() + "",null)));
+        ModelAndView mv = new ModelAndView(
+            new RedirectView(
+                urlGenerator.getURL(
+                    tid, UrlPatterns.T_VIEW_R, i.getRid() + "",null)));
         return mv;
-        /*
-          int fid = getFileId(request, fidStr);
-          VWBContext context = VWBContext.createContext(request, UrlPatterns.FILE, fid, LynxConstants.TYPE_FILE);
-          String uid = context.getCurrentUID();
-          int tid = context.getSite().getId();
-          Resource resource = context.getResource();
-          // add by lvly@2012-07-20
-          if (resource != null && !StringUtils.isNullOrEmpty(resource.getStatus())
-          && LynxConstants.STATUS_DELETE.equals(resource.getStatus())) {
-          ModelAndView mv = BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-          if (resource.getCreator().equals(context.getCurrentUID()) || isAdmin(context, tid)) {
-          mv.addObject("recoverFlag", true);
-          mv.addObject("rid", resource.getRid());
-          }
-          return mv;
-          }
-          if (resource != null && resource.getBid() != 0) {
-          return new ModelAndView(new RedirectView(urlGenerator.getURL(tid,UrlPatterns.LYNX_BUNDLE,
-          resource.getBid() + "", "rid=" + resource.getRid())));
-          }
-          ModelAndView mv = BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/tag/fileView.jsp");
-          mv.addObject("deleteFileURL",urlGenerator.getURL(tid,UrlPatterns.FILE, fid + "", "func=moveToTrash&bid=0"));
-          mv.addObject("validateURL", urlGenerator.getURL(tid,UrlPatterns.FILE, fid + "", "func=removeValidate"));
-          File dfile = fileService.getFile(fid, tid);
-          if (null == dfile) {
-          return BaseController.layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
-          }
-          int version = getCurrentVersion(request);
-          FileVersion currentVersion;
-          if (version > 0) {
-          currentVersion = fileVersionService.getFileVersion(fid, tid, version);
-          } else {
-          currentVersion = fileVersionService.getLatestFileVersion(fid, tid);
-          }
-          mv.addObject("resource", resource);
-          Set<String> starmark = resource.getMarkedUserSet();
-          if (null != starmark && starmark.contains(context.getCurrentUID())) {
-          mv.addObject("starmark", true);
-          } else {
-          mv.addObject("starmark", false);
-          }
-          currentVersion.setEditor(context.getContainer().getAoneUserService()
-          .getUserNameByID(currentVersion.getEditor()));
-          int cid = dfile.getClbId();
-          mv.addObject("cid", cid);
-          mv.addObject("copyLog", copyService.getCopyedDisplay(resource.getRid(), currentVersion.getVersion()));
-          mv.addObject("curVersion", currentVersion);
-          mv.addObject("latestVersion", dfile.getLastVersion());
-          mv.addObject("sizeShort", NumberFormatUtil.getSizeShort(currentVersion.getSize()));
-          mv.addObject("fileExtend", getFileExtend(currentVersion.getTitle(), currentVersion.getSize()));
-          if (version > 0) {
-          mv.addObject("downloadURL",
-          urlGenerator.getURL(tid,"download", Integer.toString(fid), "type=doc&version=" + version));
-          } else {
-          mv.addObject("downloadURL", urlGenerator.getURL(tid,"download", Integer.toString(fid), "type=doc"));
-          }
-          // Load Version List
-          List<FileVersion> versionList = fileVersionService.getFileVersions(fid, tid);
-          mv.addObject("versionList", versionList);
-
-          // Load Reference List
-          List<DFileRef> refList = fileService.getDFileReferences(fid, tid);
-          List<DFileRefView> refViewList = new ArrayList<DFileRefView>();
-          if (refList != null && refList.size() > 0) {
-          for (DFileRef ref : refList) {
-          DFileRefView refview = new DFileRefView();
-          if (ref.getPid() > 0) {
-          Resource page = resourceService.getResource(ref.getRid());
-          if (page != null) {
-          refview.setPageName(page.getTitle());
-          } else {
-          LOG.error("page出现不一致情况记录：文件fid=" + fid + "tid=" + tid + "被page ：pid=" + ref.getPid() + "Tid="
-          + ref.getTid() + "引用，但此文件为空");
-          }
-          }
-          refview.setDfileRef(ref);
-          refview.setFileName(currentVersion.getTitle());
-          refViewList.add(refview);
-          }
-          }
-          mv.addObject("refView", refViewList);
-          gridService.clickItem(uid, tid, fid, LynxConstants.TYPE_FILE);
-          String strFilename = currentVersion.getTitle();
-          int index = strFilename.lastIndexOf('.');
-          String strFileType = null;
-          if (index != -1 && strFilename.length() > (index + 1)) {
-          strFileType = strFilename.substring(index + 1);
-          }
-          if (null != strFileType) {
-          String pdfstatus = PdfStatus.SOURCE_NOT_FOUND.toString();// 表示该类型文档的PDF不存在
-          boolean supported = SupportedFileFormatForOnLineViewer.isSupported(strFileType);
-          if ("pdf".equals(strFileType)) {
-          pdfstatus = PDF_ORIGINAL;
-          } else if (supported) {
-          pdfstatus = fileService.queryPdfStatus(dfile.getClbId(), "" + currentVersion.getVersion());
-          } else {
-          pdfstatus = PDF_UNSUPPORTED;// 表示不支持该类型文档的在线显示
-          }
-          if (pdfstatus == PDF_UNSUPPORTED && isSupportedFileType(strFileType)) { // 剔除图片的无法转换信息
-          strFileType = "img";
-          }
-          mv.addObject("strFileType", PlainTextHelper.convert2BrushClassFileType(strFileType));
-
-          mv.addObject("pdfstatus", pdfstatus);
-          mv.addObject("supported", supported);
-          }
-          String enableDConvert = context.getContainer().getProperty(KeyConstants.DCONVERT_SERVICE_ENABLE);
-          mv.addObject("enableDConvert", Boolean.valueOf(enableDConvert));
-          mv.addObject("uid", context.getCurrentUID());
-          return mv;
-        */
     }
 
     private boolean isAdmin(VWBContext context, int tid) {
@@ -235,14 +136,16 @@ public class LynxFileInfoController extends BaseController {
         if (user == null || user.length() == 0) {
             return false;
         }
-        return Team.AUTH_ADMIN.equals(authorityService.getTeamAuthority(tid, user));
+        return Team.AUTH_ADMIN.equals(
+            authorityService.getTeamAuthority(tid, user));
     }
 
     private String getFileExtend(String filename, long size) {
         if (MimeType.isImage(filename)) {
             return "IMAGE";
         } else if (PlainTextHelper.isSupported(MimeType.getSuffix(filename))
-                   && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {// 文件超过给定大小时不直接显示
+                   && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {
+            // 文件超过给定大小时不直接显示
             return "TEXT";
         }
         return "FILE";
@@ -254,9 +157,12 @@ public class LynxFileInfoController extends BaseController {
             result = Integer.parseInt(fidStr);
         } catch (Exception e) {
             LOG.error("非法的文件请求URL:" + request.getRequestURI(), e);
-            VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
-            String teamHomeURL = urlGenerator.getURL(tid,UrlPatterns.T_TEAM_HOME, null,null);
-            throw new FileNotFoundException(0, context.getSite().getSiteName(), teamHomeURL);
+            VWBContext context =
+                    VWBContext.createContext(request, UrlPatterns.T_FILE);
+            String teamHomeURL =
+                    urlGenerator.getURL(tid,UrlPatterns.T_TEAM_HOME, null,null);
+            throw new FileNotFoundException(
+                0, context.getSite().getSiteName(), teamHomeURL);
         }
         return result;
     }
@@ -277,24 +183,30 @@ public class LynxFileInfoController extends BaseController {
     @SuppressWarnings("unchecked")
     @RequestMapping(params = "func=deleteFileRef")
     @RequirePermission(target = "team", operation = "edit")
-    public void deleteFileRef(HttpServletRequest request, HttpServletResponse response, @PathVariable("rid") int rid) {
+    public void deleteFileRef(HttpServletRequest request,
+                              HttpServletResponse response,
+                              @PathVariable("rid") int rid) {
         int pid = Integer.parseInt(request.getParameter("pid"));
-        fileVersionService.deleteFileAndPageRefer(rid, pid, VWBContext.getCurrentTid());
-        JSONObject object = new JSONObject();
-        object.put("docid", rid);
-        JsonUtil.writeJSONObject(response, object);
+        fileVersionService.deleteFileAndPageRefer(
+            rid, pid, VWBContext.getCurrentTid());
+        JsonObject object = new JsonObject();
+        object.addProperty("docid", rid);
+        JsonUtil.write(response, object);
     }
 
     @RequestMapping(params = "func=removeValidate")
-    public void removeValidate(HttpServletRequest request, HttpServletResponse response, @PathVariable("fid") int fid) {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
-        JSONObject obj = new JSONObject();
+    public void removeValidate(HttpServletRequest request,
+                               HttpServletResponse response,
+                               @PathVariable("fid") int fid) {
+        VWBContext context = VWBContext.createContext(request,
+                                                      UrlPatterns.T_FILE);
+        JsonObject obj = new JsonObject();
         if (!validateDeleteAuth(context, fid, LynxConstants.TYPE_FILE)) {
-            obj.put("status", false);
+            obj.addProperty("status", false);
         } else {
-            obj.put("status", true);
+            obj.addProperty("status", true);
         }
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     /**
@@ -305,31 +217,42 @@ public class LynxFileInfoController extends BaseController {
      * @throws IOException
      */
     @RequestMapping(params = "func=recoverFileVersion")
-    public void recoverFileVersion(HttpServletRequest request, HttpServletResponse response,
-                                   @PathVariable("fid") int fid) throws IOException {
+    public void recoverFileVersion(HttpServletRequest request,
+                                   HttpServletResponse response,
+                                   @PathVariable("fid") int fid)
+            throws IOException {
         int version = Integer.parseInt(request.getParameter("version"));
         int tid = Integer.parseInt(request.getParameter("tid"));
-        resourceOperateService.recoverFileVersion(tid, fid, version,VWBSession.getCurrentUid(request));
-        response.sendRedirect(urlGenerator.getURL(tid,UrlPatterns.T_FILE, fid + "", null));
+        resourceOperateService.recoverFileVersion(
+            tid, fid, version,VWBSession.getCurrentUid(request));
+        response.sendRedirect(urlGenerator.getURL(
+            tid,UrlPatterns.T_FILE, fid + "", null));
     }
 
     @RequestMapping(params = "func=moveToTrash")
     @RequirePermission(target = "team", operation = "edit")
-    public ModelAndView moveToTrash(HttpServletRequest request, @PathVariable("rid") int rid)
+    public ModelAndView moveToTrash(HttpServletRequest request,
+                                    @PathVariable("rid") int rid)
             throws UnsupportedEncodingException {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
+        VWBContext context = VWBContext.createContext(request,
+                                                      UrlPatterns.T_FILE);
         int tid = context.getTid();
-        FileVersion dfileVersion = fileVersionService.getLatestFileVersion(rid, tid);
+        FileVersion dfileVersion =
+                fileVersionService.getLatestFileVersion(rid, tid);
         fileVersionService.deleteRefer(rid, tid);
-        resourceOperateService.deleteResource(tid, dfileVersion.getRid(),context.getCurrentUID());
+        resourceOperateService.deleteResource(
+            tid, dfileVersion.getRid(),context.getCurrentUID());
         int bid = WebParamUtil.getIntegerValue(request, "bid");
         ModelAndView mv = null;
         if (bid == 0) {
-            String url = urlGenerator.getURL(tid, UrlPatterns.T_FILE, rid + "", "func=removedSuccess");
+            String url = urlGenerator.getURL(
+                tid, UrlPatterns.T_FILE, rid + "", "func=removedSuccess");
             mv = new ModelAndView(new RedirectView(url));
-            mv.addObject("fileName", URLEncoder.encode(dfileVersion.getTitle(), "UTF-8"));
+            mv.addObject("fileName",
+                         URLEncoder.encode(dfileVersion.getTitle(), "UTF-8"));
         } else {
-            String url = urlGenerator.getURL(tid,UrlPatterns.T_BUNDLE, bid+"",null);
+            String url = urlGenerator.getURL(
+                tid, UrlPatterns.T_BUNDLE, bid +"", null);
             mv = new ModelAndView(new RedirectView(url));
         }
         return mv;
@@ -337,22 +260,31 @@ public class LynxFileInfoController extends BaseController {
 
     @RequestMapping(params = "func=removedSuccess")
     @RequirePermission(target = "team", operation = "edit")
-    public ModelAndView removedSuccess(HttpServletRequest request) throws UnsupportedEncodingException {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
-        String fileName = URLDecoder.decode(request.getParameter("fileName"), "UTF-8");
-        ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/removeFileSuccess.jsp");
+    public ModelAndView removedSuccess(HttpServletRequest request)
+            throws UnsupportedEncodingException {
+        VWBContext context =
+                VWBContext.createContext(request, UrlPatterns.T_FILE);
+        String fileName =
+                URLDecoder.decode(request.getParameter("fileName"), "UTF-8");
+        ModelAndView mv =
+                layout(ELayout.LYNX_MAIN, context,
+                       "/jsp/aone/file/removeFileSuccess.jsp");
         mv.addObject("fileName", fileName);
         return mv;
     }
 
     @RequestMapping(params = "func=shareExistFile")
-    public ModelAndView shareExistFile(HttpServletRequest request, @PathVariable("rid") int rid) {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
+    public ModelAndView shareExistFile(HttpServletRequest request,
+                                       @PathVariable("rid") int rid) {
+        VWBContext context =
+                VWBContext.createContext(request, UrlPatterns.T_FILE);
         String uid = context.getCurrentUID();
         int tid = context.getSite().getId();
-        FileVersion dfileVersion = fileVersionService.getLatestFileVersion(rid, tid);
+        FileVersion dfileVersion =
+                fileVersionService.getLatestFileVersion(rid, tid);
         Resource r = resourceService.getResource(rid);
-        ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/shareExistFile.jsp");
+        ModelAndView mv = layout(ELayout.LYNX_MAIN, context,
+                                 "/jsp/aone/file/shareExistFile.jsp");
         mv.addObject("uid", uid);
         mv.addObject("name", context.getCurrentUserName());
         mv.addObject("fileVersion", dfileVersion);
@@ -361,9 +293,11 @@ public class LynxFileInfoController extends BaseController {
     }
 
     @RequestMapping(params = "func=submitShareExistFile")
-    public ModelAndView submitShareFile(HttpServletRequest request) throws UnsupportedEncodingException {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
-        //        Site site = context.getSite();
+    public ModelAndView submitShareFile(HttpServletRequest request)
+            throws UnsupportedEncodingException {
+        VWBContext context =
+                VWBContext.createContext(request, UrlPatterns.T_FILE);
+        // Site site = context.getSite();
         int tid = context.getTid();
         String uid = context.getCurrentUID();
         String userName = context.getCurrentUserName();
@@ -372,44 +306,61 @@ public class LynxFileInfoController extends BaseController {
         String fileNames = request.getParameter("fileName");
         int fid = Integer.parseInt(request.getParameter("fid"));
         String message = request.getParameter("message");
-        String encodeURL = shareFileAccessService.getPublicFileURL(VWBContext.getCurrentTid(),
-                                                                   Integer.parseInt(clbIds), fid, validOfDays, uid);
-        String fileURLs = urlGenerator.getAbsoluteURL(tid, UrlPatterns.DIRECT, encodeURL, null);
+        String encodeURL = shareFileAccessService.getPublicFileURL(
+            VWBContext.getCurrentTid(), Integer.parseInt(clbIds),
+            fid, validOfDays, uid);
+        String fileURLs = urlGenerator.getAbsoluteURL(
+            tid, UrlPatterns.DIRECT, encodeURL, null);
         String friendEmails = request.getParameter("targetEmails");
         String[] shareMails = friendEmails.split(",");
         for (int i = 0; i < shareMails.length; i++) {
-            aonemailService.sendAccessFileMail(new String[] { fileNames }, new String[] { fileURLs }, userName, shareMails[i],
-                                               message);
+            aonemailService.sendAccessFileMail(
+                new String[] { fileNames }, new String[] { fileURLs },
+                userName, shareMails[i], message);
         }
-        aonemailService.sendShareSuccessMailWithoutActivation(uid, userName, new String[] { fileURLs }, new String[] { fileNames },shareMails);
-        String url = urlGenerator.getURL(tid,UrlPatterns.T_FILE, fid + "", "");
+        aonemailService.sendShareSuccessMailWithoutActivation(
+            uid, userName, new String[] { fileURLs },
+            new String[] { fileNames }, shareMails);
+        String url = urlGenerator.getURL(
+            tid,UrlPatterns.T_FILE, fid + "", "");
         ModelAndView mv = new ModelAndView(new RedirectView(url));
         mv.addObject("fid", fid);
-        mv.addObject("fileName", java.net.URLEncoder.encode(fileNames, "UTF-8"));
+        mv.addObject("fileName",
+                     java.net.URLEncoder.encode(fileNames, "UTF-8"));
         mv.addObject("fileURL", fileURLs);
         mv.addObject("func", "shareExistFileSuccess");
         return mv;
     }
 
     @RequestMapping(params = "func=shareExistFileSuccess")
-    public ModelAndView shareExistFileSuccess(HttpServletRequest request) throws UnsupportedEncodingException {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
-        ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/shareExistFileSuccess.jsp");
-        mv.addObject("fileName", java.net.URLDecoder.decode(request.getParameter("fileName"), "UTF-8"));
+    public ModelAndView shareExistFileSuccess(HttpServletRequest request)
+            throws UnsupportedEncodingException {
+        VWBContext context =
+                VWBContext.createContext(request, UrlPatterns.T_FILE);
+        ModelAndView mv = layout(ELayout.LYNX_MAIN,
+                                 context,
+                                 "/jsp/aone/file/shareExistFileSuccess.jsp");
+        mv.addObject("fileName",
+                     java.net.URLDecoder.decode(
+                         request.getParameter("fileName"), "UTF-8"));
         mv.addObject("fid", request.getParameter("fid"));
         mv.addObject("fileURL", request.getParameter("fileURL"));
         return mv;
     }
 
     @RequestMapping(params = "func=onlineViewer")
-    public ModelAndView onlineViewer(HttpServletRequest request, @PathVariable("rid") int rid) {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
-        ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/onlineViewer.jsp");
+    public ModelAndView onlineViewer(HttpServletRequest request,
+                                     @PathVariable("rid") int rid) {
+        VWBContext context =
+                VWBContext.createContext(request, UrlPatterns.T_FILE);
+        ModelAndView mv = layout(ELayout.LYNX_MAIN,
+                                 context, "/jsp/aone/file/onlineViewer.jsp");
         int tid = context.getSite().getId();
 
         Resource dfile = resourceService.getResource(rid);
         if (dfile==null) {
-            return layout(ELayout.LYNX_MAIN, context, "/jsp/aone/file/fileRemoved.jsp");
+            return layout(ELayout.LYNX_MAIN,
+                          context, "/jsp/aone/file/fileRemoved.jsp");
         }
         int version = getCurrentVersion(request);
         FileVersion currentVersion;
@@ -420,9 +371,11 @@ public class LynxFileInfoController extends BaseController {
         }
         if (version > 0) {
             mv.addObject("downloadURL",
-                         urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc&version=" + version));
+                         urlGenerator.getURL(tid, "download", Integer.toString(rid),
+                                             "type=doc&version=" + version));
         } else {
-            mv.addObject("downloadURL", urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc"));
+            mv.addObject("downloadURL", urlGenerator.getURL(
+                tid, "download", Integer.toString(rid), "type=doc"));
         }
 
         String strFilename = currentVersion.getTitle();
@@ -433,29 +386,32 @@ public class LynxFileInfoController extends BaseController {
                 // String str=(context.getSite().getURL("download",
                 // Integer.toString(fid),
                 // "type=doc&version="+currentVersion.getVersion()));
-                mv.addObject(
-                    "pdfviewerURL",
-                    urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=doc&version="
-                                        + currentVersion.getVersion()));
+                mv.addObject("pdfviewerURL", urlGenerator.getURL(
+                    tid, "download", Integer.toString(rid),
+                    "type=doc&version="+ currentVersion.getVersion()));
             } else {
-                mv.addObject(
-                    "pdfviewerURL",
-                    urlGenerator.getURL(tid, "download", Integer.toString(rid), "type=pdf&version="
-                                        + currentVersion.getVersion()));
+                mv.addObject("pdfviewerURL", urlGenerator.getURL(
+                    tid, "download", Integer.toString(rid),
+                    "type=pdf&version="+ currentVersion.getVersion()));
             }
             mv.addObject("strFileType", "pdf");
         }
         mv.addObject("pageTitle", dfile.getTitle());
-        mv.addObject("backURL", urlGenerator.getURL(tid, "file", Integer.toString(rid), ""));
+        mv.addObject("backURL",
+                     urlGenerator.getURL(tid, "file", Integer.toString(rid), ""));
         // add by lvly@2012-07-23 记下载次数
-        browseLogService.resourceVisited(tid, rid, context.getCurrentUID(), context.getCurrentUserName(), LynxConstants.TYPE_FILE);
+        browseLogService.resourceVisited(
+            tid, rid, context.getCurrentUID(), context.getCurrentUserName(),
+            LynxConstants.TYPE_FILE);
         return mv;
     }
 
     @RequestMapping(params = "func=pdfTransform")
-    public void sendPdfTransformEvent(HttpServletRequest request, HttpServletResponse response,
+    public void sendPdfTransformEvent(HttpServletRequest request,
+                                      HttpServletResponse response,
                                       @PathVariable("fid") int rid) {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
+        VWBContext context =
+                VWBContext.createContext(request, UrlPatterns.T_FILE);
         int tid = context.getSite().getId();
         int version = getCurrentVersion(request);
         FileVersion currentVersion;
@@ -464,8 +420,9 @@ public class LynxFileInfoController extends BaseController {
         } else {
             currentVersion = fileVersionService.getLatestFileVersion(rid, tid);
         }
-        resourceOperateService.sendPdfTransformEvent(currentVersion.getClbId(), "" + currentVersion.getClbVersion());
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        resourceOperateService.sendPdfTransformEvent(
+            currentVersion.getClbId(), "" + currentVersion.getClbVersion());
+        JsonUtil.write(response, new JsonObject());
     }
 
     private boolean isSupportedFileType(String fileType) {
@@ -483,36 +440,43 @@ public class LynxFileInfoController extends BaseController {
 
 
     @RequestMapping(params = "func=shareFileToOthers")
-    public void shareFileToOthers(HttpServletRequest request,HttpServletResponse response){
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE);
+    public void shareFileToOthers(HttpServletRequest request,
+                                  HttpServletResponse response) {
+        VWBContext context =
+                VWBContext.createContext(request, UrlPatterns.T_FILE);
         int tid = context.getTid();
         String uid = context.getCurrentUID();
         String userName = context.getCurrentUserName();
         int validOfDays = Integer.parseInt(request.getParameter("validOfDays"));
         int rid=Integer.parseInt(request.getParameter("rid"));
-        Resource resource=resourceService.getResource(rid);
-        String fileNames=resource.getTitle();
-        FileVersion fileVersion=fileVersionService.getFileVersion(rid, tid, resource.getLastVersion());
+        Resource resource = resourceService.getResource(rid);
+        String fileNames = resource.getTitle();
+        FileVersion fileVersion = fileVersionService.getFileVersion(
+            rid, tid, resource.getLastVersion());
         int clbIds=fileVersion.getClbId();
         String message = request.getParameter("message");
-        String encodeURL = shareFileAccessService.getPublicFileURL(VWBContext.getCurrentTid(),clbIds, rid, validOfDays, uid);
-        String fileURLs = urlGenerator.getAbsoluteURL(tid, UrlPatterns.DIRECT, encodeURL, null);
+        String encodeURL = shareFileAccessService.getPublicFileURL(
+            VWBContext.getCurrentTid(),clbIds, rid, validOfDays, uid);
+        String fileURLs = urlGenerator.getAbsoluteURL(
+            tid, UrlPatterns.DIRECT, encodeURL, null);
         String friendEmails = request.getParameter("targetEmails");
         String[] shareMails = friendEmails.split(",");
         for (int i = 0; i < shareMails.length; i++) {
-            aonemailService.sendAccessFileMail(new String[] { fileNames }, new String[] { fileURLs }, userName, shareMails[i],
-                                               message);
+            aonemailService.sendAccessFileMail(
+                new String[] { fileNames }, new String[] { fileURLs },
+                userName, shareMails[i], message);
         }
-        aonemailService.sendShareSuccessMailWithoutActivation(uid, userName, new String[] { fileURLs }, new String[] { fileNames },shareMails);
+        aonemailService.sendShareSuccessMailWithoutActivation(
+            uid, userName, new String[] { fileURLs },
+            new String[] { fileNames },shareMails);
 
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        object.put("itemType", resource.getItemType());
-        object.put("fileURL", fileURLs);
-        object.put("friendEmails", friendEmails);
-        object.put("fileName", fileNames);
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
+        object.addProperty("itemType", resource.getItemType());
+        object.addProperty("fileURL", fileURLs);
+        object.addProperty("friendEmails", friendEmails);
+        object.addProperty("fileName", fileNames);
+        JsonUtil.write(response, object);
     }
-
 
 }

@@ -26,8 +26,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,70 +77,70 @@ public class UserConfigController extends AbstractSpaceController{
 
     @RequestMapping(params="func=searchUser")
     public void searchUser(HttpServletRequest request,HttpServletResponse response){
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "用户没有权限");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "用户没有权限");
+            JsonUtil.write(response, o);
             return;
         }
         String keyWord = request.getParameter("keyWord");
         List<UserExt> users = aoneUserService.searchUserByMail(keyWord);
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         if(users!=null){
             for(UserExt u : users){
-                JSONObject user = new JSONObject();
-                user.put("uid", u.getUid());
+                JsonObject user = new JsonObject();
+                user.addProperty("uid", u.getUid());
                 List<Team> ts = teamService.getTeamByCreator(u.getUid());
-                user.put("teamSize", ts.size());
+                user.addProperty("teamSize", ts.size());
                 UserConfig conf = userConfigService.getByUid(u.getUid());
                 if(conf!=null){
-                    user.put("maxSize", conf.getMaxCreateTeam());
-                    user.put("description", conf.getDescription());
-                    user.put("configUid", conf.getConfigUid());
-                    user.put("configTime", conf.getConfigDate().toString());
+                    user.addProperty("maxSize", conf.getMaxCreateTeam());
+                    user.addProperty("description", conf.getDescription());
+                    user.addProperty("configUid", conf.getConfigUid());
+                    user.addProperty("configTime", conf.getConfigDate().toString());
                 }else{
-                    user.put("maxSize", 0);
-                    user.put("description", "");
-                    user.put("configUid", "-");
-                    user.put("configTime", "-");
+                    user.addProperty("maxSize", 0);
+                    user.addProperty("description", "");
+                    user.addProperty("configUid", "-");
+                    user.addProperty("configTime", "-");
                 }
                 array.add(user);
             }
         }
-        o.put("result", true);
-        o.put("configs", array);
-        JsonUtil.writeJSONObject(response, o);
+        o.addProperty("result", true);
+        o.add("configs", array);
+        JsonUtil.write(response, o);
     }
 
 
     @RequestMapping(params="func=queryUser")
     public void queryUser(HttpServletRequest request,HttpServletResponse response){
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "用户没有权限");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "用户没有权限");
+            JsonUtil.write(response, o);
             return;
         }
         String uid = request.getParameter("uid");
         UserConfig u = userConfigService.getByUid(uid);
-        o.put("uid", uid);
+        o.addProperty("uid", uid);
         if(u!=null){
-            o.put("maxSize", u.getMaxCreateTeam());
-            o.put("description", u.getDescription());
+            o.addProperty("maxSize", u.getMaxCreateTeam());
+            o.addProperty("description", u.getDescription());
         }
-        o.put("result", true);
-        JsonUtil.writeJSONObject(response, o);
+        o.addProperty("result", true);
+        JsonUtil.write(response, o);
     }
 
     @RequestMapping(params="func=updateUserConfig")
     public void updateUserConfig(HttpServletRequest request,HttpServletResponse response){
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "用户没有权限");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "用户没有权限");
+            JsonUtil.write(response, o);
             return;
         }
         String uid = request.getParameter("uid");
@@ -162,23 +162,23 @@ public class UserConfigController extends AbstractSpaceController{
             u.setMaxCreateTeam(size);
             userConfigService.update(u);
         }
-        o.put("result", true);
-        JsonUtil.writeJSONObject(response, o);
+        o.addProperty("result", true);
+        JsonUtil.write(response, o);
     }
 
     @RequestMapping(params="func=deleteUserConfig")
     public void deleteUserConfig(HttpServletRequest request,HttpServletResponse response){
-        JSONObject o = new JSONObject();
+        JsonObject o = new JsonObject();
         if(!AdminHelper.validateUser(VWBSession.getCurrentUid(request))){
-            o.put("result", false);
-            o.put("message", "用户没有权限");
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", false);
+            o.addProperty("message", "用户没有权限");
+            JsonUtil.write(response, o);
             return;
         }
         int id = Integer.parseInt(request.getParameter("id"));
         userConfigService.delete(id);
-        o.put("result", true);
-        JsonUtil.writeJSONObject(response, o);
+        o.addProperty("result", true);
+        JsonUtil.write(response, o);
     }
 
 }

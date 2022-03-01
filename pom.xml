@@ -62,21 +62,22 @@
     </dependency>
 
     <!-- TODO: choose one json -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.13.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>1.1.1</version>
-    </dependency>
+    <!-- <dependency> -->
+    <!--   <groupId>com.fasterxml.jackson.core</groupId> -->
+    <!--   <artifactId>jackson-databind</artifactId> -->
+    <!--   <version>2.13.1</version> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!--   <groupId>com.googlecode.json-simple</groupId> -->
+    <!--   <artifactId>json-simple</artifactId> -->
+    <!--   <version>1.1.1</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.2.4</version>
+      <!-- <version>2.2.4</version> -->
     </dependency>
+    <!-- jettison used by cn.vlabs.umt.oauth.Oauth ? -->
     <dependency>
       <groupId>org.codehaus.jettison</groupId>
       <artifactId>jettison</artifactId>
@@ -418,14 +419,6 @@
     <finalName>ddl</finalName>
 
     <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-	  <source>1.7</source>
-	  <target>1.7</target>
-        </configuration>
-      </plugin>
 
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
@@ -441,6 +434,8 @@
           </container>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
+
 </project>

@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.duckling.ddl.util.JsonUtil;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,8 +46,8 @@ public class LogBrowseTimeController {
                           HttpServletResponse response,
                           @RequestParam("stayTime") String stayTime,
                           @RequestParam("currentUrl") String currentUrl) {
-        JSONObject retVal = new JSONObject();
-        JsonUtil.writeJSONObject(response, retVal);
+        JsonObject retVal = new JsonObject();
+        JsonUtil.write(response, retVal);
         //System.out.println(stayTime);
     }
 }

@@ -67,8 +67,8 @@ import net.duckling.falcon.api.cache.ICacheService;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -259,16 +259,16 @@ public class ConfigTeamController extends BaseController {
         // 过滤已存在的成员
         Team team = teamService.getTeamByName(teamName);
         Set<String> filterSet = getFilterSet(teamMemberService.getTeamMembersOrderByName(team.getId()));
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for (UMTUser user : results) {
             if (!filterSet.contains(user.getUsername())) {
-                JSONObject object = new JSONObject();
-                object.put("uid", user.getUsername());
-                object.put("name", user.getTruename());
+                JsonObject object = new JsonObject();
+                object.addProperty("uid", user.getUsername());
+                object.addProperty("name", user.getTruename());
                 array.add(object);
             }
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
     @RequestMapping(params = "func=removeMember")
@@ -277,10 +277,10 @@ public class ConfigTeamController extends BaseController {
         Team team = teamService.getTeamByName(teamCode);
         boolean status = teamService.removeMembers(team.getId(), new String[]{uid}, true);
         LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" remove member:"+uid+" from team"+team);
-        JSONObject object = new JSONObject();
-        object.put("status", status);
-        object.put("uid", uid);
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", status);
+        object.addProperty("uid", uid);
+        JsonUtil.write(response, object);
     }
 
     @RequestMapping(params = "func=updateAllAuthority")
@@ -290,9 +290,9 @@ public class ConfigTeamController extends BaseController {
         Team team = teamService.getTeamByName(teamName);
         teamService.updateMembersAuthority(team.getId(), uids, auths,false);
         LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" update user :"+getUIDString(uids)+"Authority:"+getUIDString(auths)+" from team"+team);
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
+        JsonUtil.write(response, object);
     }
 
     @RequestMapping(params = "func=updateOneAuthority")
@@ -304,9 +304,9 @@ public class ConfigTeamController extends BaseController {
         Team team = teamService.getTeamByName(teamName);
         teamService.updateMembersAuthority(team.getId(), new String[]{ uid}, new String[]{auth}, false);
         LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" update user :"+uid+"Authority:"+auth+" from team"+team);
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        JsonUtil.writeJSONObject(response, object);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
+        JsonUtil.write(response, object);
     }
 
     private Set<String> getFilterSet(List<SimpleUser> teamMembers) {
@@ -324,23 +324,23 @@ public class ConfigTeamController extends BaseController {
                            @RequestParam("user-info") String[] userInfoArray, @RequestParam("teamCode") String teamName,
                            @RequestParam("defaultAuth") String defaultAuth) {
         if (userInfoArray != null) {
-            JSONArray array = new JSONArray();
+            JsonArray array = new JsonArray();
             String[] uids = new String[userInfoArray.length];
             String[] usernames = new String[userInfoArray.length];
             for (int i = 0; i < userInfoArray.length; i++) {
                 String[] temp = userInfoArray[i].split("#");
                 uids[i] = temp[0];
                 usernames[i] = temp[1];
-                JSONObject object = new JSONObject();
-                object.put("uid", uids[i]);
-                object.put("auth", defaultAuth);
-                object.put("name", usernames[i]);
+                JsonObject object = new JsonObject();
+                object.addProperty("uid", uids[i]);
+                object.addProperty("auth", defaultAuth);
+                object.addProperty("name", usernames[i]);
                 array.add(object);
             }
             Team team = teamService.getTeamByName(teamName);
             teamService.addTeamMembers(team.getId(), uids, usernames, defaultAuth);
             LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" add  user :"+getUIDString(uids)+"Authority:"+defaultAuth+" to team"+team);
-            JsonUtil.writeJSONObject(response, array);
+            JsonUtil.write(response, array);
         }
     }
 
@@ -369,7 +369,7 @@ public class ConfigTeamController extends BaseController {
         teamService.updateBasicInfo(teamCode, title, description, accessType, defaultMemberAuth,defaultView);
         LOGGER.info("user:"+VWBSession.getCurrentUid(request)+" update team basic info title:"+title+";access type:"+accessType+"; defaultMemberAuth"+defaultMemberAuth);
         context.getSite().changeTitle(title);
-        JsonUtil.writeJSONObject(response, new JSONObject());
+        JsonUtil.write(response, new JsonObject());
     }
 
     @RequestMapping(params = "func=sendTeamInvite")
@@ -404,23 +404,23 @@ public class ConfigTeamController extends BaseController {
         }
 
         if(!inviterMailCount(inviter, validInvitees.size(), getVWBContext(request))){
-            JSONObject obj = new JSONObject();
-            obj.put("success", false);
-            obj.put("message", "发送邀请的邮件超过500封，请0.5小时后重新发送");
+            JsonObject obj = new JsonObject();
+            obj.addProperty("success", false);
+            obj.addProperty("message", "发送邀请的邮件超过500封，请0.5小时后重新发送");
             LOGGER.warn("Amount of send mail exceed. " + "(inviter:"+ inviter + ")");
-            JsonUtil.writeJSONObject(response, obj);
+            JsonUtil.write(response, obj);
             return;
         }
 
         aoneMailService.sendInvitationMail(teamName, team.getId(), inviter, validInvitees, message,
                                            team.getDisplayName());
 
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
-        obj.put("invalidInvitees", transferJSONArray(invalidInvitees));
-        obj.put("restrictInvitees", transferJSONArray(restrictInvitees));
-        obj.put("validCount", validInvitees.size());
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
+        obj.add("invalidInvitees", transferJSONArray(invalidInvitees));
+        obj.add("restrictInvitees", transferJSONArray(restrictInvitees));
+        obj.addProperty("validCount", validInvitees.size());
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping(params = "func=cancelInvite")
@@ -429,13 +429,13 @@ public class ConfigTeamController extends BaseController {
         int tid = VWBContext.getCurrentTid();
         Invitation inv =  invitationService.getExistValidInvitation(recipient, tid);
         invitationService.updateInviteStatus(inv.getEncode(), inv.getId()+"", StatusUtil.INVALID);
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
+        JsonUtil.write(response, obj);
     }
 
-    private JSONArray transferJSONArray(List<String> list){
-        JSONArray arr = new JSONArray();
+    private JsonArray transferJSONArray(List<String> list){
+        JsonArray arr = new JsonArray();
         for(String s : list){
             arr.add(s);
         }
@@ -492,25 +492,27 @@ public class ConfigTeamController extends BaseController {
     private void uploadMailListCommon(String fileName, InputStream in, HttpServletResponse response) throws IOException{
         String fileType = fileName.substring(fileName.indexOf('.') + 1);
         List<Map<String, String>> list = EmailAddressFileAnalysisUtil.getContactsFromStream(in, fileType.toUpperCase());
-        JSONArray jsonList = new JSONArray();
-        JSONObject result = new JSONObject();
+        JsonArray jsonList = new JsonArray();
+        JsonObject result = new JsonObject();
         if (null == list) {
-            result.put("success", false);
+            result.addProperty("success", false);
         } else {
             for (int i = 0; i < list.size(); i++) {
                 Map<String, String> map = list.get(i);
                 map.put("index", String.valueOf(i));
-                JSONObject jsonMap = new JSONObject();
-                jsonMap.putAll(map);
+                JsonObject jsonMap = new JsonObject();
+                for (String key : map.keySet()) {
+                    jsonMap.addProperty(key, map.get(key));
+                }
                 jsonList.add(jsonMap);
             }
-            result.put("success", true);
-            result.put("list", jsonList);
+            result.addProperty("success", true);
+            result.add("list", jsonList);
         }
 
         in.close();
         response.setStatus(HttpServletResponse.SC_OK);
-        JsonUtil.writeJSONObject(response, result);
+        JsonUtil.write(response, result);
     }
 
     private void addDefaultGroup(List<TagGroupRender> render, List<Tag> tags) {
@@ -574,7 +576,7 @@ public class ConfigTeamController extends BaseController {
                                @RequestParam("uids[]") String[] uids, @RequestParam("unames[]") String[] unames,
                                @RequestParam("auths[]") String[] auths, @RequestParam("status") String status) {
         if (uids.length <= 0) {
-            JsonUtil.writeJSONObject(response, getJSONResponse(false, "参数错误"));
+            JsonUtil.write(response, getJSONResponse(false, "参数错误"));
             return;
         }
         VWBContext context = getVWBContext(request);
@@ -582,14 +584,14 @@ public class ConfigTeamController extends BaseController {
 
         //验证uids
         if(!checkApplicant(uids, teamId)){
-            JsonUtil.writeJSONObject(response, getJSONResponse(false, "参数错误"));
+            JsonUtil.write(response, getJSONResponse(false, "参数错误"));
             return;
         }
 
         updateTeamApplicant(context, teamId, uids, status);
         boolean isSuccess = updateTeamMember(teamId, uids, unames, auths, status);
         if (!isSuccess) {
-            JsonUtil.writeJSONObject(response, getJSONResponse(false, "团队成员调整失败!"));
+            JsonUtil.write(response, getJSONResponse(false, "团队成员调整失败!"));
             return;
         }
         Team team = teamService.getTeamByID(teamId);
@@ -601,10 +603,10 @@ public class ConfigTeamController extends BaseController {
                 aoneMailService.sendApplyResultToUser(uid, team.getDisplayName(), teamUrl, false);
             }
         }
-        JSONObject obj = getJSONResponse(true, "");
-        obj.put("uids", getUIDString(uids));
-        obj.put("status", status);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonObject obj = getJSONResponse(true, "");
+        obj.addProperty("uids", getUIDString(uids));
+        obj.addProperty("status", status);
+        JsonUtil.write(response, obj);
     }
 
     private void updateTeamApplicant(VWBContext context, int teamId, String[] uids, String status) {
@@ -638,10 +640,10 @@ public class ConfigTeamController extends BaseController {
         return true;
     }
 
-    private JSONObject getJSONResponse(boolean status, String message) {
-        JSONObject obj = new JSONObject();
-        obj.put("status", status);
-        obj.put("message", message);
+    private JsonObject getJSONResponse(boolean status, String message) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", status);
+        obj.addProperty("message", message);
         return obj;
     }
 

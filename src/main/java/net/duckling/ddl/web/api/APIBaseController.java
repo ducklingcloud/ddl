@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,9 +28,6 @@ import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.common.VWBSession;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.OnDeny;
-
-import org.json.simple.JSONObject;
-
 
 /**
  * 基础的Controller
@@ -41,10 +39,10 @@ public class APIBaseController {
     @SuppressWarnings({ "unchecked"})
     @OnDeny("*")
     public void onDeny(String method, HttpServletRequest request, HttpServletResponse response){
-        JSONObject object = new JSONObject();
-        object.put("message", "Permission denied or session is time out.");
+        JsonObject object = new JsonObject();
+        object.addProperty("message", "Permission denied or session is time out.");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        JsonUtil.writeJSONObject(response, object);
+        JsonUtil.write(response, object);
     }
 
     public Site findSite(HttpServletRequest request) {

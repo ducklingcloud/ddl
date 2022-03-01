@@ -26,7 +26,7 @@ import net.duckling.ddl.service.team.TeamPreferenceService;
 import net.duckling.ddl.service.url.UrlPatterns;
 import net.duckling.ddl.util.JsonUtil;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,9 +49,9 @@ public class APIUpdateTeamNoticeController extends APIBaseController{
         VWBContext context = VWBContext.createContext(request, UrlPatterns.SWITCH_TEAM);
         String uid = context.getCurrentUID();
         teamPreferenceService.updateNoticeAccessTime(uid, tid, type);
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        json.put("tid", tid);
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        json.addProperty("tid", tid);
+        JsonUtil.write(response, json);
     }
 }

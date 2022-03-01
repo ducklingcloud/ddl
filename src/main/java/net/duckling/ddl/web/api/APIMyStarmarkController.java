@@ -19,6 +19,8 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,8 +35,6 @@ import net.duckling.ddl.service.resource.Resource;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,17 +56,17 @@ public class APIMyStarmarkController extends APIBaseResourceController {
     @SuppressWarnings("unchecked")
     @RequestMapping
     public void service(HttpServletRequest request, HttpServletResponse response){
-        JSONObject object= new JSONObject();
+        JsonObject object = new JsonObject();
         Site site =  findSite(request);
         String uid = findUser(request);
         int tid = site.getId();
         List<Resource> reslist = resourceService.getStarmarkResource(uid, tid);
         reslist = filterResult(reslist);
-        JSONArray array = JsonUtil.getJSONArrayFromResourceList(reslist);
-        object.put("records", array);
+        JsonArray array = JsonUtil.getJSONArrayFromResourceList(reslist);
+        object.add("records", array);
         String api = request.getParameter("api");
-        object.put("api", api);
-        JsonUtil.writeJSONObject(response, object);
+        object.addProperty("api", api);
+        JsonUtil.write(response, object);
     }
 
     private List<Resource> filterResult(List<Resource> resList) {

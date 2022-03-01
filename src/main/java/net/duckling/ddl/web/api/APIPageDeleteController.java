@@ -42,7 +42,7 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,16 +96,16 @@ public class APIPageDeleteController extends APIBaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.DELETE);
         Site site = context.getSite();
         int tid = site.getId();
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         int delete = 1;
         Resource resource = getResoure(request, site);
         if(resource==null){
-            obj.put("succ", -2);
-            JsonUtil.writeJSONObject(response, obj);
+            obj.addProperty("succ", -2);
+            JsonUtil.write(response, obj);
             return;
         }else if(resource.isDelete()){
-            obj.put("succ", -3);
-            JsonUtil.writeJSONObject(response, obj);
+            obj.addProperty("succ", -3);
+            JsonUtil.write(response, obj);
             return;
         }
         if(!validateDeleteAuth(context,resource)){
@@ -137,8 +137,8 @@ public class APIPageDeleteController extends APIBaseController {
                 }
             }
         }
-        obj.put("succ", delete);
-        JsonUtil.writeJSONObject(response, obj);
+        obj.addProperty("succ", delete);
+        JsonUtil.write(response, obj);
     }
 
     private Resource getResoure(HttpServletRequest request,Site site){

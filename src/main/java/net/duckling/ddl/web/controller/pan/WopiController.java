@@ -36,7 +36,7 @@ import net.duckling.meepo.api.PanAcl;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -168,18 +168,18 @@ public class WopiController {
     @WebLog(method = "PancheckFile", params = "rid,skey")
     @ResponseBody
     @RequestMapping("/files/{skey}")
-    public JSONObject checkFile(@PathVariable("skey") String skey) {
-        JSONObject obj = new JSONObject();
+    public JsonObject checkFile(@PathVariable("skey") String skey) {
+        JsonObject obj = new JsonObject();
         FileInfo info = (FileInfo)cacheService.get(skey);
         if (info == null) {
-            obj.put("error", "Null Object");
+            obj.addProperty("error", "Null Object");
             return obj;
         }
-        obj.put("BaseFileName", info.getFileName());
-        obj.put("OwnerId", "clive");
-        obj.put("Size", info.getSize());
-        obj.put("SHA256", "");
-        obj.put("Version", "GIYDCMRNGEYC2MJREAZDCORQGA5DKNZOGIZTQMBQGAVTAMB2GAYA====");
+        obj.addProperty("BaseFileName", info.getFileName());
+        obj.addProperty("OwnerId", "clive");
+        obj.addProperty("Size", info.getSize());
+        obj.addProperty("SHA256", "");
+        obj.addProperty("Version", "GIYDCMRNGEYC2MJREAZDCORQGA5DKNZOGIZTQMBQGAVTAMB2GAYA====");
         return obj;
     }
     @WebLog(method = "PanFileContent", params = "rid,skey")

@@ -42,8 +42,8 @@ import net.duckling.meepo.api.PanAcl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -221,10 +221,10 @@ public class PanFileMoveController {
     }
 
     private static void writeResponse(HttpServletResponse response, int state, String message) {
-        JSONObject msg = new JSONObject();
-        msg.put("state", state);
-        msg.put("msg", message);
-        JsonUtil.writeJSONObject(response, msg);
+        JsonObject msg = new JsonObject();
+        msg.addProperty("state", state);
+        msg.addProperty("msg", message);
+        JsonUtil.write(response, msg);
     }
     @WebLog(method = "moveList", params = "rid,originalRid")
     @RequestMapping(params="func=list")
@@ -234,20 +234,20 @@ public class PanFileMoveController {
         originalRid = decode(originalRid);
         if("/".equals(rid)){
             // 根文件夹需要特殊处理
-            JSONArray rootArray = new JSONArray();
-            JSONObject rootJsonObject = new JSONObject();
-            rootJsonObject.put("data", "全部文件");
-            JSONObject attr = new JSONObject();
-            attr.put("rid", "node_/");
-            rootJsonObject.put("attr", attr);
+            JsonArray rootArray = new JsonArray();
+            JsonObject rootJsonObject = new JsonObject();
+            rootJsonObject.addProperty("data", "全部文件");
+            JsonObject attr = new JsonObject();
+            attr.addProperty("rid", "node_/");
+            rootJsonObject.add("attr", attr);
             // 开始写root的子文件（夹）
-            JSONArray childrenJson = new JSONArray();
+            JsonArray childrenJson = new JsonArray();
             try {
                 PanAcl panAcl = PanAclUtil.getInstance(request);
                 MeePoMeta root = service.ls(panAcl, rid, true);
                 List<PanResourceBean> childrenList = getChildren(root, aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request)));
                 if(childrenList.isEmpty()){
-                    attr.put("rel", "default");
+                    attr.addProperty("rel", "default");
                 }else{
                     String ridToDeal = null;
                     if (StringUtils.isNotEmpty(originalRid)) {
@@ -255,11 +255,11 @@ public class PanFileMoveController {
                         if(parentResources.size() > 1) {
                             ridToDeal = parentResources.get(0).getRid();
                             PanResourceBean lastResource = parentResources.get(parentResources.size() - 2);
-                            JSONArray lastJsonArray = getChildrenJSONArray(lastResource.getRid(),panAcl);
+                            JsonArray lastJsonArray = getChildrenJSONArray(lastResource.getRid(),panAcl);
                             for (int index = parentResources.size() - 2; index >= 0 ; index--) {
                                 PanResourceBean resource = parentResources.get(index);
-                                JSONObject tmpObject = resourceToJSONObject(resource.getRid(), true);
-                                tmpObject.put("children", lastJsonArray);
+                                JsonObject tmpObject = resourceToJSONObject(resource.getRid(), true);
+                                tmpObject.add("children", lastJsonArray);
                                 if (index == 0) {
                                     childrenJson.add(tmpObject);
                                 } else {
@@ -277,20 +277,20 @@ public class PanFileMoveController {
                         childrenJson.add(resourceToJSONObject(child.getRid(), false));
                     }
 
-                    rootJsonObject.put("children", childrenJson);
-                    rootJsonObject.put("state", "open");
-                    attr.put("rel", "folder");
+                    rootJsonObject.add("children", childrenJson);
+                    rootJsonObject.addProperty("state", "open");
+                    attr.addProperty("rel", "folder");
 
                 }
             } catch (MeePoException e) {
                 LOG.error("",e);
             }
             rootArray.add(rootJsonObject);
-            JsonUtil.writeJSONObject(response, rootArray);
+            JsonUtil.write(response, rootArray);
         }else{
             rid = decode(rid);
-            JSONArray childrenJson = getChildrenJSONArray(rid,PanAclUtil.getInstance(request));
-            JsonUtil.writeJSONObject(response, childrenJson);
+            JsonArray childrenJson = getChildrenJSONArray(rid,PanAclUtil.getInstance(request));
+            JsonUtil.write(response, childrenJson);
         }
     }
 
@@ -316,8 +316,8 @@ public class PanFileMoveController {
         return result;
     }
 
-    private JSONArray getChildrenJSONArray(String rid,PanAcl panAcl) {
-        JSONArray childrenJson = new JSONArray();
+    private JsonArray getChildrenJSONArray(String rid,PanAcl panAcl) {
+        JsonArray childrenJson = new JsonArray();
         MeePoMeta root;
         try {
             root = service.ls(panAcl, decode(rid), true);
@@ -331,8 +331,8 @@ public class PanFileMoveController {
         return childrenJson;
     }
 
-    private JSONArray getChildrenJSONArray(String rid, String ignoreRid,PanAcl panAcl) {
-        JSONArray childrenJson = new JSONArray();
+    private JsonArray getChildrenJSONArray(String rid, String ignoreRid,PanAcl panAcl) {
+        JsonArray childrenJson = new JsonArray();
         MeePoMeta root;
         try {
             root = service.ls(panAcl, decode(rid), true);
@@ -349,20 +349,20 @@ public class PanFileMoveController {
         return childrenJson;
     }
 
-    private JSONObject resourceToJSONObject(String rid, boolean open) {
+    private JsonObject resourceToJSONObject(String rid, boolean open) {
         rid = decode(rid);
-        JSONObject result = new JSONObject();
+        JsonObject result = new JsonObject();
         int index = rid.lastIndexOf("/");
         String title = rid.substring(index+1);
-        result.put("data", title);
-        JSONObject attr = new JSONObject();
-        attr.put("rid", "node_" + encode(rid));
-        attr.put("rel", "folder");
-        result.put("attr", attr);
+        result.addProperty("data", title);
+        JsonObject attr = new JsonObject();
+        attr.addProperty("rid", "node_" + encode(rid));
+        attr.addProperty("rel", "folder");
+        result.add("attr", attr);
         if (open) {
-            result.put("state", "open");
+            result.addProperty("state", "open");
         } else {
-            result.put("state", "closed");
+            result.addProperty("state", "closed");
         }
         return result;
     }

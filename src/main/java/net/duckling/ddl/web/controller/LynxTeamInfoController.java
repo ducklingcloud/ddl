@@ -35,8 +35,8 @@ import net.duckling.ddl.service.user.SimpleUser;
 import net.duckling.ddl.util.JsonUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,14 +69,14 @@ public class LynxTeamInfoController {
             return;
         }
         List<Team> teams = teamService.getAllTeams();
-        JSONArray teamArray = new JSONArray();
+        JsonArray teamArray = new JsonArray();
         for(Team team : teams){
             if(Team.PESONAL_TEAM.equals(team.getType())){
                 continue;
             }
             teamArray.add(team.getName());
         }
-        JsonUtil.writeJSONObject(resp, teamArray);
+        JsonUtil.write(resp, teamArray);
     }
     /**
      * 获得所有我能看到的团队teamCode
@@ -95,14 +95,14 @@ public class LynxTeamInfoController {
             return;
         }
         List<Team> myTeams=teamService.getAllUserTeams(uid);
-        JSONArray teamArray = new JSONArray();
+        JsonArray teamArray = new JsonArray();
         for(Team team : myTeams){
             if(Team.PESONAL_TEAM.equals(team.getType())){
                 continue;
             }
             teamArray.add(team.getName());
         }
-        JsonUtil.writeJSONObject(resp, teamArray);
+        JsonUtil.write(resp, teamArray);
 
     }
 
@@ -120,25 +120,25 @@ public class LynxTeamInfoController {
         }
         Site site = container.getSiteByName(teamCode);
         List<SimpleUser>  users= teamMemberService.getTeamMembersOrderByName(site.getId());
-        JSONArray userArray = new JSONArray();
+        JsonArray userArray = new JsonArray();
         for(SimpleUser user : users){
             userArray.add( user.getUid());
         }
-        JSONObject result = new JSONObject();
-        result.put("userInfo", userArray);
+        JsonObject result = new JsonObject();
+        result.add("userInfo", userArray);
         Team team=teamService.getTeamByID(site.getId());
-        JSONObject obj = new JSONObject();
-        obj.put("teamCode", team.getName());
-        obj.put("teamName", team.getDisplayName());
+        JsonObject obj = new JsonObject();
+        obj.addProperty("teamCode", team.getName());
+        obj.addProperty("teamName", team.getDisplayName());
         List<TeamAcl> teamAcls = authorityService.getTeamAdminByTid(team.getId());
-        JSONArray adminArrays = new JSONArray();
+        JsonArray adminArrays = new JsonArray();
         for(TeamAcl teamAcl : teamAcls){
             adminArrays.add(teamAcl.getUid());
         }
-        obj.put("admin", adminArrays);
-        obj.put("accessType", team.getAccessType());
-        result.put("teamInfo",obj);
-        JsonUtil.writeJSONObject(resp, result);
+        obj.add("admin", adminArrays);
+        obj.addProperty("accessType", team.getAccessType());
+        result.add("teamInfo",obj);
+        JsonUtil.write(resp, result);
     }
 
     private boolean validateRequest(HttpServletRequest request,VWBContainer container){

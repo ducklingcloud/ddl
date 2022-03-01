@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.agent.util;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,7 @@ import net.duckling.ddl.web.controller.LynxEmailResourceController;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 public class AuthUtil {
     private final static Logger LOG = Logger.getLogger(AuthUtil.class);
@@ -49,9 +50,9 @@ public class AuthUtil {
     public static String getAuthEmail(String auth){
         try {
             String decode = decodeAuth(auth);
-            JSONObject obj = new JSONObject(decode);
-            String email = obj.getString("email");
-            String date = obj.getString("date");
+            JsonObject obj = new Gson().fromJson(decode, JsonObject.class);
+            String email = obj.get("email").getAsString();
+            String date = obj.get("date").getAsString();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date d = sdf.parse(date);
             if(notExpired(d)){

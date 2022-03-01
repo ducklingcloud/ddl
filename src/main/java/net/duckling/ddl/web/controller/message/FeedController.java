@@ -33,8 +33,8 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.controller.BaseController;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,18 +107,18 @@ public class FeedController extends BaseController {
         String uid = context.getCurrentUID();
         int tid = context.getTid();
         List<Subscription> existSub = subscriptionService.getPageSubscribers(tid,pageId);
-        JSONObject object = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
+        JsonObject object = new JsonObject();
+        JsonArray jsonArray = new JsonArray();
         if (existSub != null) {
             for (Subscription temp : existSub) {
                 if(uid.equals(temp.getUserId())){
                     jsonArray.add(temp.getPublisher().getType());
                 }
             }
-            object.put("pageId", pageId);
-            object.put("exist", jsonArray);
+            object.addProperty("pageId", pageId);
+            object.add("exist", jsonArray);
         }
-        JsonUtil.writeJSONObject(response,object);
+        JsonUtil.write(response,object);
     }
 
     @RequestMapping(params = "func=removeFeedByID")

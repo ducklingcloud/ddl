@@ -38,7 +38,7 @@ import net.duckling.ddl.web.controller.BaseController;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -81,15 +81,17 @@ public class APIUploadController extends BaseController {
             in = uplFile.getInputStream();
             FileVersion fileVersion = operateService.updateCLBFile(rid, tid,
                                                                    uid, filename, size, in, null);
-            JSONObject obj = new JSONObject();
-            obj.put("result", true);
-            obj.put("error", "NoError");
-            obj.put("rid", fileVersion.getRid());
-            obj.put("version", fileVersion.getVersion());
-            JsonUtil.writeJSONObject(response, obj);
+            JsonObject obj = new JsonObject();
+            obj.addProperty("result", true);
+            obj.addProperty("error", "NoError");
+            obj.addProperty("rid", fileVersion.getRid());
+            obj.addProperty("version", fileVersion.getVersion());
+            JsonUtil.write(response, obj);
             response.flushBuffer();
         } catch (IOException e) {
-            JsonUtil.writeResult(response, "result", false);
+            JsonObject err = new JsonObject();
+            err.addProperty("result", false);
+            JsonUtil.write(response, err);
             LOGGER.error("upload picture from mobile failed.", e);
         } catch (NoEnoughSpaceException e) {
             printFailResponse(response, e);
@@ -130,7 +132,7 @@ public class APIUploadController extends BaseController {
                           HttpServletResponse response, String htmlTemplate, boolean serialName, String folderName)
             throws NoEnoughSpaceException {
 
-        JSONObject j = new JSONObject();
+        JsonObject j = new JsonObject();
 
         String folder = StringUtils.isEmpty(folderName)? null : UrlCoder.decode(folderName);
         try {
@@ -143,17 +145,18 @@ public class APIUploadController extends BaseController {
             // 创建图片
             String uid = vwbcontext.getCurrentUID();
             int tid = VWBContext.getCurrentTid();
-            FileVersion item = operateService.upload(uid, tid, p, uplFile.getOriginalFilename(), uplFile.getSize(),
-                                                     uplFile.getInputStream(), true, true, serialName, folder);
+            FileVersion item = operateService.upload(
+                uid, tid, p, uplFile.getOriginalFilename(), uplFile.getSize(),
+                uplFile.getInputStream(), true, true, serialName, folder);
 
             if (item != null) {
-                j.put("rid", item.getRid());
-                j.put("success", true);
+                j.addProperty("rid", item.getRid());
+                j.addProperty("success", true);
             } else {
-                j.put("success", false);
+                j.addProperty("success", false);
             }
         } catch (IOException e) {
-            j.put("success", false);
+            j.addProperty("success", false);
             LOGGER.error("upload picture from mobile failed.", e);
         } finally {
             try {
@@ -161,26 +164,26 @@ public class APIUploadController extends BaseController {
             } catch (IOException ignored) {
             }
         }
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
     @SuppressWarnings("unchecked")
     private void printFailResponse(HttpServletResponse response,
                                    NoEnoughSpaceException e) {
-        JSONObject j = new JSONObject();
-        j.put("result", false);
-        j.put("message", e.getMessage());
-        j.put("error", "noEnoughSpace");
-        JsonUtil.writeJSONObject(response, j);
+        JsonObject j = new JsonObject();
+        j.addProperty("result", false);
+        j.addProperty("message", e.getMessage());
+        j.addProperty("error", "noEnoughSpace");
+        JsonUtil.write(response, j);
     }
 
     @SuppressWarnings("unchecked")
     private void printFailResponse(HttpServletResponse response,
                                    HasDeletedException e) {
-        JSONObject j = new JSONObject();
-        j.put("result", false);
-        j.put("message", e.getMessage());
-        j.put("error", "deleted");
-        JsonUtil.writeJSONObject(response, j);
+        JsonObject j = new JsonObject();
+        j.addProperty("result", false);
+        j.addProperty("message", e.getMessage());
+        j.addProperty("error", "deleted");
+        JsonUtil.write(response, j);
     }
 }

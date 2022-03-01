@@ -29,7 +29,7 @@ import net.duckling.ddl.util.IdentifyingCode;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.util.PictureCheckCodeUtil;
 
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -78,13 +78,13 @@ public class PictureCheckCodeController {
         String checkCode = request.getParameter("checkCode");
         String type = request.getParameter("type");
         boolean result = PictureCheckCodeUtil.checkCode(request, checkCode, type,false);
-        JSONObject re = new JSONObject();
+        JsonObject re = new JsonObject();
         if(result){
-            re.put("status", "success");
+            re.addProperty("status", "success");
         }else{
-            re.put("status", "false");
+            re.addProperty("status", "false");
         }
-        JsonUtil.writeJSONObject(response, re);
+        JsonUtil.write(response, re);
     }
 
 }

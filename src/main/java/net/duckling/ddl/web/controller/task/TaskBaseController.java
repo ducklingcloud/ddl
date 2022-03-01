@@ -57,8 +57,8 @@ import net.duckling.ddl.web.interceptor.access.OnDeny;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,10 +88,10 @@ public class TaskBaseController extends BaseController {
     @Autowired
     protected TaskService taskService;
 
-    private void add2Array(JSONArray parent, JSONArray child, char alphabet) {
-        JSONObject obj = new JSONObject();
-        obj.put("id", "" + alphabet);
-        obj.put("value", child);
+    private void add2Array(JsonArray parent, JsonArray child, char alphabet) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", "" + alphabet);
+        obj.add("value", child);
         parent.add(obj);
     }
 
@@ -131,13 +131,13 @@ public class TaskBaseController extends BaseController {
      *            SimpleUser列表
      * @return
      */
-    private JSONObject getAlphabetJSONFromSortedPinyin(List<SimpleUser> list) {
-        JSONArray array = new JSONArray();
+    private JsonObject getAlphabetJSONFromSortedPinyin(List<SimpleUser> list) {
+        JsonArray array = new JsonArray();
         if (null == list || list.isEmpty()) {
-            return new JSONObject();
+            return new JsonObject();
         }
 
-        Map<Character, JSONArray> map = new TreeMap<Character, JSONArray>();
+        Map<Character, JsonArray> map = new TreeMap<Character, JsonArray>();
         for (SimpleUser user : list) {
             Character c = null;
             if (StringUtils.isEmpty(user.getPinyin())) {
@@ -146,30 +146,30 @@ public class TaskBaseController extends BaseController {
                 c = user.getPinyin().charAt(0);
             }
             c = Character.toUpperCase(c);
-            JSONArray child = map.get(c);
+            JsonArray child = map.get(c);
             if (child == null) {
-                child = new JSONArray();
+                child = new JsonArray();
                 map.put(c, child);
             }
             child.add(getJSONFromSimpleUser(user));
         }
 
-        for (Entry<Character, JSONArray> entry : map.entrySet()) {
+        for (Entry<Character, JsonArray> entry : map.entrySet()) {
             add2Array(array, entry.getValue(), entry.getKey());
         }
-        JSONObject obj = new JSONObject();
-        obj.put("users", array);
+        JsonObject obj = new JsonObject();
+        obj.add("users", array);
         return obj;
     }
 
-    private JSONObject getJSONFromSimpleUser(SimpleUser su) {
-        JSONObject obj = new JSONObject();
-        obj.put("id", su.getUid());
-        obj.put("email", su.getEmail());
+    private JsonObject getJSONFromSimpleUser(SimpleUser su) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", su.getUid());
+        obj.addProperty("email", su.getEmail());
         if (StringUtils.isNotEmpty(su.getName())) {
-            obj.put("name", su.getName());
+            obj.addProperty("name", su.getName());
         } else {
-            obj.put("name", su.getUid());
+            obj.addProperty("name", su.getUid());
         }
         return obj;
     }
@@ -181,14 +181,14 @@ public class TaskBaseController extends BaseController {
      * @param list
      * @return
      */
-    private JSONArray getRegularJSONFromSortedPinyin(List<SimpleUser> list) {
-        JSONArray array = new JSONArray();
+    private JsonArray getRegularJSONFromSortedPinyin(List<SimpleUser> list) {
+        JsonArray array = new JsonArray();
         if (null != list && !list.isEmpty()) {
             for (SimpleUser su : list) {
-                JSONObject temp = new JSONObject();
-                temp.put("name", su.getName());
-                temp.put("id", su.getUid());
-                temp.put("email", su.getEmail());
+                JsonObject temp = new JsonObject();
+                temp.addProperty("name", su.getName());
+                temp.addProperty("id", su.getUid());
+                temp.addProperty("email", su.getEmail());
                 array.add(temp);
             }
         }
@@ -315,8 +315,8 @@ public class TaskBaseController extends BaseController {
         if (null == type || "".equals(type) || !"map".equals(type)) {
             List<SimpleUser> members = teamMemberService
                     .getTeamMembersOrderByName(tid);
-            JSONObject obj = getAlphabetJSONFromSortedPinyin(members);
-            JsonUtil.writeJSONObject(response, obj);
+            JsonObject obj = getAlphabetJSONFromSortedPinyin(members);
+            JsonUtil.write(response, obj);
         } else {
             String keyword = request.getParameter("searchParam");
             List<SimpleUser> members = new ArrayList<SimpleUser>();
@@ -329,8 +329,8 @@ public class TaskBaseController extends BaseController {
                                                                        keyword);
                 }
             }
-            JSONArray array = getRegularJSONFromSortedPinyin(members);
-            JsonUtil.writeJSONObject(response, array);
+            JsonArray array = getRegularJSONFromSortedPinyin(members);
+            JsonUtil.write(response, array);
         }
 
     }
@@ -479,11 +479,11 @@ public class TaskBaseController extends BaseController {
     @OnDeny({ "getTeamMembers" })
     public void onDeny(String methodName, HttpServletRequest request,
                        HttpServletResponse response) {
-        JSONObject obj = new JSONObject();
-        obj.put("status", false);
-        obj.put("result", "无权进行此操作！");
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", false);
+        obj.addProperty("result", "无权进行此操作！");
         response.setStatus(HttpStatus.AUTH_FAILED);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     // tool end
@@ -497,12 +497,12 @@ public class TaskBaseController extends BaseController {
         String taskId = request.getParameter("taskId");
 
         if (TaskService.TYPE_INDEPENDENT.equals(type)) {
-            JsonUtil.writeJSONObject(response, JsonUtil
-                                     .getJSONArrayFromList(service.getAllUserProcess(taskId)));
+            JsonUtil.write(response, JsonUtil
+                           .getJSONArrayFromList(service.getAllUserProcess(taskId)));
         } else if (TaskService.TYPE_SHARE.equals(type)) {
-            JsonUtil.writeJSONObject(response, JsonUtil
-                                     .getJSONObject(TaskWrapper.getShareProcess(service
-                                                                                .getShareItems(taskId))));
+            JsonUtil.write(response, JsonUtil
+                           .getJSONObject(TaskWrapper.getShareProcess(service
+                                                                      .getShareItems(taskId))));
         }
     }
 

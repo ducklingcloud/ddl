@@ -33,7 +33,7 @@ import net.duckling.ddl.service.team.TeamPreferences;
 import net.duckling.ddl.service.team.TeamService;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,15 +49,15 @@ public class UserNoticeCountController {
     private InvitationService invitationService;
     @RequestMapping
     public void userNoticeCount(HttpServletRequest req,HttpServletResponse resp){
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(!validateIp(req)){
-            obj.put("message", "请求ip没有权限");
+            obj.addProperty("message", "请求ip没有权限");
             JSONHelper.writeJSONObject(resp, obj);
             return ;
         }
         String uid =req.getParameter("uid");
         if(StringUtils.isEmpty(uid)){
-            obj.put("message", "uid不能为空");
+            obj.addProperty("message", "uid不能为空");
             JSONHelper.writeJSONObject(resp, obj);
             return ;
         }
@@ -70,7 +70,7 @@ public class UserNoticeCountController {
         int personCount = getTotalCount(personMap);
         int monitorCount = getTotalCount(monitorMap);
         int count = teamInvites + personCount + monitorCount;
-        obj.put("count", count);
+        obj.addProperty("count", count);
         JSONHelper.writeJSONObject(resp, obj);
     }
 

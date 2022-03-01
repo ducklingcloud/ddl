@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.controller.regist;
 
+import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -85,7 +86,7 @@ public class InvitationValidateController extends BaseController{
             teamService.addTeamMembers(instance.getTeamId(),
                                        new String[]{ext.getUid()}, new String[] {ext.getName()}, auth);
         }
-        JsonUtil.writeJSONObject(response, JsonUtil.getJSONObject(instance));
+        JsonUtil.write(response, new Gson().toJsonTree(instance));
     }
     private VWBContext getVWBContext(HttpServletRequest request) {
         return VWBContext.createContext(request, UrlPatterns.INVITE);
@@ -163,7 +164,7 @@ public class InvitationValidateController extends BaseController{
             boolean flag = updateInvitationStatus(instance, context,StatusUtil.IGNORE);
             if(flag)
             {
-                JsonUtil.writeJSONObject(response, JsonUtil.getJSONObject(instance));
+                JsonUtil.write(response, new Gson().toJsonTree(instance));
             }
         }
     }

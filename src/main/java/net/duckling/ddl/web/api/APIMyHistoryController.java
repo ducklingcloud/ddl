@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.Gson;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +35,8 @@ import net.duckling.ddl.service.mail.notice.DailyNotice;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,17 +66,17 @@ public class APIMyHistoryController extends APIBaseNoticeController {
         List<Notice> noticeList = noticeService.readNotification(param,uid);
         DailyNotice[] dailyGroup = getDailyNoticeArray(noticeList);
         List<DailyCompositeNotice> results = getDailyCompositeList(dailyGroup);
-        JSONArray jsonArray = JsonUtil.getJSONArrayFromList(results);
+        JsonArray jsonArray = new Gson().toJsonTree(results).getAsJsonArray();
 
         String api = request.getParameter("api");
         if(api == null || "".equals(api)) {
             // 提交审核的1.1.1版本中没有api参数，兼容性处理
-            JsonUtil.writeJSONObject(response, jsonArray);
+            JsonUtil.write(response, jsonArray);
         } else {
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("records", jsonArray);
-            jsonObj.put("api", api);
-            JsonUtil.writeJSONObject(response, jsonObj);
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.add("records", jsonArray);
+            jsonObj.addProperty("api", api);
+            JsonUtil.write(response, jsonObj);
         }
     }
 

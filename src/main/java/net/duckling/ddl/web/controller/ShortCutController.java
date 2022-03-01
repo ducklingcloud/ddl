@@ -47,8 +47,8 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -260,12 +260,12 @@ public class ShortCutController extends BaseController {
         ds.setColor(request.getParameter("color"));
         ds.setCreator(context.getCurrentUID());
         shortcutService.addShortcut(ds);
-        JSONObject json = new JSONObject();
-        json.put("sid", ds.getId());
+        JsonObject json = new JsonObject();
+        json.addProperty("sid", ds.getId());
         Resource r = resourceService.getResource(ds.getRid());
-        json.put("resourceType", r.getItemType());
-        json.put("resourceFileType", r.getFileType());
-        JsonUtil.writeJSONObject(response, json);
+        json.addProperty("resourceType", r.getItemType());
+        json.addProperty("resourceFileType", r.getFileType());
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params = "func=delShortcut")
@@ -273,9 +273,9 @@ public class ShortCutController extends BaseController {
                             HttpServletResponse response) {
         int sid = Integer.valueOf(request.getParameter("sid"));
         boolean result = shortcutService.deleteShortCut(sid);
-        JSONObject json = new JSONObject();
-        json.put("result", result);
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("result", result);
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params = "func=sortShortcut")
@@ -291,11 +291,11 @@ public class ShortCutController extends BaseController {
             }
         }
         boolean result = shortcutService.updateShortSequece(ids);
-        JSONObject json = new JSONObject();
+        JsonObject json = new JsonObject();
         if (!result) {
-            json.put("error", "排序错误");
+            json.addProperty("error", "排序错误");
         }
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params = "func=changeColor")
@@ -303,14 +303,14 @@ public class ShortCutController extends BaseController {
                             HttpServletResponse response) {
         int sid = Integer.valueOf(request.getParameter("sid"));
         DShortcut d = shortcutService.getDSortcutById(sid);
-        JSONObject json = new JSONObject();
+        JsonObject json = new JsonObject();
         if (d != null) {
             d.setColor(request.getParameter("color"));
-            json.put("result", shortcutService.updateShortcuts(d));
+            json.addProperty("result", shortcutService.updateShortcuts(d));
         } else {
-            json.put("result", false);
+            json.addProperty("result", false);
         }
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params = "func=searchResult")
@@ -363,20 +363,20 @@ public class ShortCutController extends BaseController {
 
     private void writeVoToJson(List<ShortcutDisplay> result,
                                HttpServletResponse response) {
-        JSONObject json = new JSONObject();
-        JSONArray re = new JSONArray();
+        JsonObject json = new JsonObject();
+        JsonArray re = new JsonArray();
         for (ShortcutDisplay vo : result) {
-            JSONObject j = new JSONObject();
-            j.put("sid", vo.getSid());
-            j.put("rid", vo.getRid());
-            j.put("resourceTitle", vo.getResourceTitle());
-            j.put("resourceType", vo.getResourceType());
-            j.put("choice", vo.isChoice());
-            j.put("resourceUrl", vo.getResourceURL());
-            j.put("resourceFileType", vo.getResourceFileType());
-            re.put(j);
+            JsonObject j = new JsonObject();
+            j.addProperty("sid", vo.getSid());
+            j.addProperty("rid", vo.getRid());
+            j.addProperty("resourceTitle", vo.getResourceTitle());
+            j.addProperty("resourceType", vo.getResourceType());
+            j.addProperty("choice", vo.isChoice());
+            j.addProperty("resourceUrl", vo.getResourceURL());
+            j.addProperty("resourceFileType", vo.getResourceFileType());
+            re.add(j);
         }
-        json.put("results", re);
-        JsonUtil.writeJSONObject(response, json);
+        json.add("results", re);
+        JsonUtil.write(response, json);
     }
 }

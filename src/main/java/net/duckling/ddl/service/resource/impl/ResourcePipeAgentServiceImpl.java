@@ -18,13 +18,14 @@
  */
 package net.duckling.ddl.service.resource.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -59,8 +60,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,15 +96,15 @@ public class ResourcePipeAgentServiceImpl implements ResourcePipeAgentService{
         acl.setUid(uid);
         acl.setUmtToken(accessToken);
 
-        JSONObject obj = new JSONObject();
-        obj.put("taskType", "m2d");
-        obj.put("sourceTeam", "meepo");
-        obj.put("targetTeam", teamCode);
-        obj.put("uploadTargetFolder", targetRid+"");
-        obj.put("umtToken", accessToken);
-        obj.put("username", uid);
-        JSONArray arr = new JSONArray();
-        obj.put("metas", arr);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("taskType", "m2d");
+        obj.addProperty("sourceTeam", "meepo");
+        obj.addProperty("targetTeam", teamCode);
+        obj.addProperty("uploadTargetFolder", targetRid+"");
+        obj.addProperty("umtToken", accessToken);
+        obj.addProperty("username", uid);
+        JsonArray arr = new JsonArray();
+        obj.add("metas", arr);
         int tid = teamService.getTeamByName(teamCode).getId();
 
         for(PanResourceBean bean :beans){
@@ -116,11 +117,11 @@ public class ResourcePipeAgentServiceImpl implements ResourcePipeAgentService{
                         if(item.isDir){
                             Boolean isSelected = bean.getPath().equals(key) ? true : false;
                             Resource folder = folderMap.get(item.restorePath);
-                            arr.put(getMeta(item.restorePath,item.name,item.size, String.valueOf(folder.getRid()), true, isSelected));
+                            arr.add(getMeta(item.restorePath,item.name,item.size, String.valueOf(folder.getRid()), true, isSelected));
                         }else{
                             PathNamePair pair = parsePathName(item.restorePath);
                             Resource folder = folderMap.get(pair.getPath());
-                            arr.put(getMeta(item.restorePath,item.name,item.size, String.valueOf(folder.getRid()), false, false));
+                            arr.add(getMeta(item.restorePath,item.name,item.size, String.valueOf(folder.getRid()), false, false));
                         }
                     }
                 } catch (Exception e) {
@@ -128,42 +129,42 @@ public class ResourcePipeAgentServiceImpl implements ResourcePipeAgentService{
                     return null;
                 }
             }else{
-                arr.put(getMeta(decode(bean.getRid()),bean.getTitle(),bean.getSize(), "", false, true));
+                arr.add(getMeta(decode(bean.getRid()),bean.getTitle(),bean.getSize(), "", false, true));
             }
         }
 
         //验证团队空间是容量是否足够
         List<Resource> resList = new ArrayList<Resource>();
-        for(int i=0; i < arr.length(); i++){
-            JSONObject item = arr.getJSONObject(i);
+        for(int i=0; i < arr.size(); i++){
+            JsonObject item = arr.get(i).getAsJsonObject();
             Resource r = new Resource();
-            r.setSize(Long.parseLong(item.getString("fileSize")));
+            r.setSize(Long.parseLong(item.get("fileSize").getAsString()));
             resList.add(r);
         }
         if(!teamSpaceSizeService.validateTeamSize(tid, resList)){
             throw new MessageException("团队空间已满不能进行复制");
         }
 
-        JSONObject result = writeJson(obj);
-        return result.getString("pid");
+        JsonObject result = writeJson(obj);
+        return result.get("pid").getAsString();
     }
 
     @Override
     public String team2Meepo(List<Resource> beans,String sourceTeamCode, String targetRid, String uid, String accessToken) throws IOException{
-        JSONObject obj = new JSONObject();
-        obj.put("taskType", "d2m");
-        obj.put("sourceTeam", sourceTeamCode);
-        obj.put("targetTeam", "meepo");
-        obj.put("uploadTargetFolder", targetRid+"");
-        obj.put("umtToken", accessToken);
-        obj.put("username", uid);
-        JSONArray arr = new JSONArray();
-        obj.put("metas", arr);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("taskType", "d2m");
+        obj.addProperty("sourceTeam", sourceTeamCode);
+        obj.addProperty("targetTeam", "meepo");
+        obj.addProperty("uploadTargetFolder", targetRid+"");
+        obj.addProperty("umtToken", accessToken);
+        obj.addProperty("username", uid);
+        JsonArray arr = new JsonArray();
+        obj.add("metas", arr);
         for(Resource bean :beans){
-            arr.put(getMeta(bean.getRid()+"",bean.getTitle(),bean.getSize(),null,null,true));
+            arr.add(getMeta(bean.getRid()+"",bean.getTitle(),bean.getSize(),null,null,true));
         }
-        JSONObject result = writeJson(obj);
-        return result.getString("pid");
+        JsonObject result = writeJson(obj);
+        return result.get("pid").getAsString();
     }
 
     @Override
@@ -265,19 +266,19 @@ public class ResourcePipeAgentServiceImpl implements ResourcePipeAgentService{
     }
 
 
-    private JSONObject getMeta(String path,String title, long size, String uploadTargetFolder, Boolean isFolder, Boolean isSelected) {
-        JSONObject obj = new JSONObject();
-        obj.put("filePath", path);
-        obj.put("fileName", title);
-        obj.put("fileSize", size+"");
+    private JsonObject getMeta(String path,String title, long size, String uploadTargetFolder, Boolean isFolder, Boolean isSelected) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("filePath", path);
+        obj.addProperty("fileName", title);
+        obj.addProperty("fileSize", size+"");
         if(uploadTargetFolder!=null){
-            obj.put("uploadTargetFolder", uploadTargetFolder);
+            obj.addProperty("uploadTargetFolder", uploadTargetFolder);
         }
         if(isFolder!=null){
-            obj.put("isFolder", isFolder);
+            obj.addProperty("isFolder", isFolder);
         }
         if(isSelected!=null){
-            obj.put("isSelected", isSelected);
+            obj.addProperty("isSelected", isSelected);
         }
         return obj;
     }
@@ -293,53 +294,51 @@ public class ResourcePipeAgentServiceImpl implements ResourcePipeAgentService{
     private PipeTaskStatus parseResult(String result,String taskId) {
         PipeTaskStatus r = null;
         try {
-            JSONObject obj = new JSONObject(result);
-            JSONObject status = obj.getJSONObject("subTasksStats");
+            JsonObject obj = new Gson().fromJson(result, JsonObject.class);
+            JsonObject status = obj.get("subTasksStats").getAsJsonObject();
             r = new PipeTaskStatus();
-            r.setStatus(obj.getString("pipeStatus"));
+            r.setStatus(obj.get("pipeStatus").getAsString());
             r.setTaskId(taskId);
-            r.setFailed(status.getInt("failed"));
-            r.setProcessing(status.getInt("processing")+status.getInt("waiting"));
-            r.setSuccess(status.getInt("success"));
-            r.setTotal(status.getInt("total"));
+            r.setFailed(status.get("failed").getAsInt());
+            r.setProcessing(status.get("processing").getAsInt() +
+                            status.get("waiting").getAsInt());
+            r.setSuccess(status.get("success").getAsInt());
+            r.setTotal(status.get("total").getAsInt());
 
-            JSONObject subTaskStatMap = obj.getJSONObject("subTaskStatMap");
-
-            JSONArray nameArr = subTaskStatMap.names();
-            Map<String, JSONObject> map = new HashMap<String, JSONObject>();
-            if(nameArr!=null){
-                for(int i=0; i<nameArr.length(); i++){
-                    JSONObject item = subTaskStatMap.getJSONObject(nameArr.getString(i));
-                    map.put(nameArr.getString(i), item);
-                }
+            JsonObject subTaskStatMap = obj.get("subTaskStatMap").getAsJsonObject();
+            Map<String, JsonObject> map = new HashMap<String, JsonObject>();
+            for (String key : subTaskStatMap.keySet()) {
+                map.put(key, subTaskStatMap.get(key).getAsJsonObject());
             }
 
             SubTask st = null;
-            JSONArray arr = obj.getJSONArray("subTasks");
+            JsonArray arr = obj.get("subTasks").getAsJsonArray();
             List<SubTask> subTaskList = new ArrayList<SubTask>();
-            for(int i=0; i<arr.length(); i++){
-                JSONObject item = new JSONObject(arr.getString(i));
+            Gson gson = new Gson();
+            for (int i=0; i<arr.size(); i++) {
+                JsonObject item = gson.fromJson(arr.get(i).getAsString(),
+                                                JsonObject.class);
                 st = new SubTask();
                 String fileName = "";
-                if("yes".equals(item.getString("selectFlag"))){
-                    st.setId(item.getString("id"));
-                    st.setPath(item.getString("path"));
-                    if("folder".equals(item.getString("type"))){
-                        fileName = getPath(item.getString("filename"));
+                if ("yes".equals(item.get("selectFlag").getAsString())) {
+                    st.setId(item.get("id").getAsString());
+                    st.setPath(item.get("path").getAsString());
+                    if ("folder".equals(item.get("type").getAsString())) {
+                        fileName = getPath(item.get("filename").getAsString());
                         st.setFileType("Folder");
                         st.setItemType("");
                     }else{
-                        fileName = item.getString("filename");
+                        fileName = item.get("filename").getAsString();
                         st.setItemType("DFile");
                         st.setFileType(FileTypeHelper.getFileExt(fileName));
                     }
                     st.setFilename(fileName);
-                    st.setSize(FileSizeUtils.getFileSize(Long.valueOf(item.getString("size"))));
-                    JSONObject selected = map.get(st.getPath());
+                    st.setSize(FileSizeUtils.getFileSize(Long.valueOf(item.get("size").getAsString())));
+                    JsonObject selected = map.get(st.getPath());
 
-                    st.setSubTotal(selected.getInt("total"));
-                    st.setSubSuccess(selected.getInt("success"));
-                    st.setSubFailed(selected.getInt("failed"));
+                    st.setSubTotal(selected.get("total").getAsInt());
+                    st.setSubSuccess(selected.get("success").getAsInt());
+                    st.setSubFailed(selected.get("failed").getAsInt());
                     if(st.getSubTotal()==st.getSubSuccess()){
                         st.setStatus("success");
                     }else if(st.getSubTotal()==(st.getSubSuccess()+st.getSubFailed())){
@@ -349,13 +348,13 @@ public class ResourcePipeAgentServiceImpl implements ResourcePipeAgentService{
                 }
             }
             r.setSubTaskList(subTaskList);
-        } catch (ParseException e) {
+        } catch (JsonParseException e) {
             e.printStackTrace();
         }
         return r;
     }
 
-    private JSONObject writeJson(JSONObject json) throws IOException{
+    private JsonObject writeJson(JsonObject json) throws IOException{
         PostMethod method = new PostMethod(getQueryDomain()+"/pipe");
         method.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"utf-8");
         Header h = new Header();
@@ -368,15 +367,13 @@ public class ResourcePipeAgentServiceImpl implements ResourcePipeAgentService{
             int status = getHttpClient().executeMethod(method);
             if (status >= 200 && status < 300){
                 String result = getResponseBody(method.getResponseBodyAsStream());
-                return new JSONObject(result);
+                return new Gson().fromJson(result, JsonObject.class);
             }else{
                 return null;
             }
         } catch (HttpException e) {
             new IOException(e);
-        } catch (IOException e) {
-            throw e;
-        } catch (ParseException e) {
+        } catch (JsonParseException e) {
             new IOException(e);
         }finally{
             method.releaseConnection();

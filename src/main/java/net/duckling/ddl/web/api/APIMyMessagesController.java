@@ -34,8 +34,8 @@ import net.duckling.ddl.service.mail.notice.DailyNotice;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,24 +65,24 @@ public class APIMyMessagesController extends APIBaseNoticeController {
         List<Notice> noticeList = noticeService.readNotification(queryParam, uid);
         DailyNotice[] dailyGroup = getDailyNoticeArray(noticeList);
         List<DailyCompositeNotice> results = getDailyCompositeList(dailyGroup);
-        JSONArray jsonArray = JsonUtil.getJSONArrayFromList(results);
+        JsonArray jsonArray = JsonUtil.getJSONArrayFromList(results);
         //      log.info("jsonArray-->" + jsonArray);
 
         String api = request.getParameter("api");
         if(api == null || "".equals(api.trim())) {
             // 提交审核的1.1.2版本中没有api参数，兼容性处理
-            JsonUtil.writeJSONObject(response, jsonArray);
+            JsonUtil.write(response, jsonArray);
             return;
         }
 
         String messageType = request.getParameter("messageType");
         int teamCount = totalCount(site, messageType, uid);
 
-        JSONObject jsonObj = new JSONObject();
-        jsonObj.put("api", api);
-        jsonObj.put("records", jsonArray);
-        jsonObj.put("totalCount", teamCount);
-        JsonUtil.writeJSONObject(response, jsonObj);
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("api", api);
+        jsonObj.add("records", jsonArray);
+        jsonObj.addProperty("totalCount", teamCount);
+        JsonUtil.write(response, jsonObj);
     }
 
 }

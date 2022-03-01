@@ -51,7 +51,7 @@ import net.duckling.ddl.web.bean.RecommendUpdater;
 import net.duckling.ddl.web.bean.SubscriptionUpdater;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -298,8 +298,8 @@ public class PageBarController extends BaseController {
         messageService.updateMessageStatus(VWBContext.getCurrentTid(), pid,
                                            currUser, messageType);
         updateMessageSize(pRequest);
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
         String targetUrl;
         if ("person".equals(messageType)) {
             targetUrl = pRequest.getParameter("url");
@@ -307,7 +307,7 @@ public class PageBarController extends BaseController {
             targetUrl = urlGenerator.getURL(tid, UrlPatterns.T_PAGE, pid + "",
                                             null);
         }
-        object.put("url", targetUrl);
+        object.addProperty("url", targetUrl);
         PrintWriter writer = pResponse.getWriter();
         writer.write(object.toString());
         writer.flush();
@@ -322,8 +322,8 @@ public class PageBarController extends BaseController {
         String uid = ctx.getCurrentUID();
         Team team = teamService.getTeamByName(ctx.getSite().getTeamContext());
         messageService.updateRecommendTypeMessages(uid, team.getId());
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
         PrintWriter writer = response.getWriter();
         writer.write(object.toString());
         writer.flush();
@@ -338,8 +338,8 @@ public class PageBarController extends BaseController {
         String user = ctx.getCurrentUID();
         Team team = teamService.getTeamByName(ctx.getSite().getTeamContext());
         messageService.updateFeedTypeMessages(user, team.getId());
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
         PrintWriter writer = response.getWriter();
         writer.write(object.toString());
         writer.flush();

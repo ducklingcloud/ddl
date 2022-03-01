@@ -58,10 +58,10 @@ public class SyncClientController {
             throws MessageException {
         AccessToken token = (AccessToken) request.getAttribute("accessToken");
         if (token == null) {
-            JsonUtil.writeJSONObject(response,new Result<String>(Result.CODE_ERROR,Result.MESSAGE_PARAM_ERROR + " [accessToken]"));
+            JsonUtil.write(response,new Result<String>(Result.CODE_ERROR,Result.MESSAGE_PARAM_ERROR + " [accessToken]"));
             return;
         }
-        JsonUtil.writeJSONObject(response, loginResult(token));
+        JsonUtil.write(response, loginResult(token));
     }
 
     @RequestMapping(params = "func=refreshToken")
@@ -70,9 +70,9 @@ public class SyncClientController {
         try {
             LOG.info("refreshToken:"+refreshToken);
             AccessToken token = authorizationCodeService.umtRefreshToken(refreshToken);
-            JsonUtil.writeJSONObject(response, loginResult(token));
+            JsonUtil.write(response, loginResult(token));
         } catch (OAuthProblemException e) {
-            JsonUtil.writeJSONObject(response,new Result<String>(Result.CODE_UNAUTHORIZED,Result.MESSAGE_UNAUTHORIZED));
+            JsonUtil.write(response,new Result<String>(Result.CODE_UNAUTHORIZED,Result.MESSAGE_UNAUTHORIZED));
             LOG.warn("RefreshToken to AccessToken failed.");
         }
     }
@@ -88,10 +88,10 @@ public class SyncClientController {
             throws MessageException {
         Version version = versionService.get(IVersionService.PROJECT_DDL_DRIVE, os);
         if(version==null || !version.isSuccess()){
-            JsonUtil.writeJSONObject(resp, new Result<String>(Result.CODE_FILE_NOT_FOUND, Result.MESSAGE_FILE_NOT_FOUND));
+            JsonUtil.write(resp, new Result<String>(Result.CODE_FILE_NOT_FOUND, Result.MESSAGE_FILE_NOT_FOUND));
             return;
         }
-        JsonUtil.writeJSONObject(resp, new Result<Version>(version));
+        JsonUtil.write(resp, new Result<Version>(version));
     }
 
     private Result<Map<String, Object>> loginResult(AccessToken token) {

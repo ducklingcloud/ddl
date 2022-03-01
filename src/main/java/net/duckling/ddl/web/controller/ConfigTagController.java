@@ -38,8 +38,8 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,10 +100,10 @@ public class ConfigTagController extends BaseController{
         tagGroup.setTid(tid);
         tagGroup.setCreator(creator);
         int id =tagService.createTagGroup(tagGroup);
-        JSONObject json = new JSONObject();
-        json.put("id",id);
-        json.put("title", tagGroup.getTitle());
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("id",id);
+        json.addProperty("title", tagGroup.getTitle());
+        JsonUtil.write(response, json);
     }
     /**
      * 获取tid的所有tagGroup信息
@@ -113,7 +113,7 @@ public class ConfigTagController extends BaseController{
     @RequestMapping(params="func=loadGroup")
     public void loadTagGroup(HttpServletRequest request,HttpServletResponse response){
         List<TagGroupRender> groups = tagService.getTagGroupsForTeam(VWBContext.getCurrentTid());
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for(TagGroupRender renders : groups){
             TagGroup group = renders.getGroup();
             if(group!=null){
@@ -121,7 +121,7 @@ public class ConfigTagController extends BaseController{
             }
         }
 
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
     /**
      * 更新tag的所有信息
@@ -267,9 +267,9 @@ public class ConfigTagController extends BaseController{
         if(tgids!=null && tgids.length!=0){
             tagService.updateTagGroupsOrder(tgids);
         }
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        JsonUtil.write(response, json);
     }
     /**
      * 改变一个Tag的groupId
@@ -390,17 +390,17 @@ public class ConfigTagController extends BaseController{
     }
 
     private void getTagAddResponse(HttpServletResponse response, Tag tag,Boolean isNewTag) {
-        JSONObject json = new JSONObject();
-        json.put("status", "success");
-        json.put("isNewTag", isNewTag);
-        json.put("currTag", JsonUtil.getJSONObject(tag));
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("status", "success");
+        json.addProperty("isNewTag", isNewTag);
+        json.add("currTag", JsonUtil.getJSONObject(tag));
+        JsonUtil.write(response, json);
     }
 
     private void errorHandler(HttpServletResponse response,String message){
-        JSONObject json = new JSONObject();
-        json.put("error", message);
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.addProperty("error", message);
+        JsonUtil.write(response, json);
     }
 
 }

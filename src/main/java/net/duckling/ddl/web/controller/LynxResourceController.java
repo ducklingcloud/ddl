@@ -18,6 +18,8 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,8 +47,8 @@ import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.util.TeamQuery;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,13 +79,13 @@ public class LynxResourceController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         Site site = context.getSite();
         q.setTid(new int[]{site.getId()});
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         boolean needBold = checkBoldStyle(q);
         List<Resource> resList = queryResource(site, q);
 
         obj = generateJSON(context.getCurrentUID(), site, resList, needBold);
         generateShortCutJson(obj, getShortCutResouce(site, q));
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     /**
@@ -124,20 +126,20 @@ public class LynxResourceController {
     }
 
     @SuppressWarnings("unchecked")
-    private void generateShortCutJson(JSONObject obj,List<ShortcutDisplay> vos){
-        JSONArray as = new JSONArray();
+    private void generateShortCutJson(JsonObject obj,List<ShortcutDisplay> vos){
+        JsonArray as = new JsonArray();
         for(ShortcutDisplay vo: vos){
-            JSONObject j = new JSONObject();
-            j.put("sid", vo.getSid());
-            j.put("rid", vo.getRid());
-            j.put("resourceTitle", vo.getResourceTitle());
-            j.put("choice", vo.isChoice());
-            j.put("resourceType",vo.getResourceType());
-            j.put("resourceUrl", vo.getResourceURL());
-            j.put("color", vo.getColor());
+            JsonObject j = new JsonObject();
+            j.addProperty("sid", vo.getSid());
+            j.addProperty("rid", vo.getRid());
+            j.addProperty("resourceTitle", vo.getResourceTitle());
+            j.addProperty("choice", vo.isChoice());
+            j.addProperty("resourceType",vo.getResourceType());
+            j.addProperty("resourceUrl", vo.getResourceURL());
+            j.addProperty("color", vo.getColor());
             as.add(j);
         }
-        obj.put("shortResouce", as);
+        obj.add("shortResouce", as);
     }
     /**
      * 当查询条件选中日期、资源类型、或者包含查询关键词时，组合内结果需要加粗显示
@@ -201,40 +203,41 @@ public class LynxResourceController {
      * @param needBold 是否加粗显示
      * @return JSON对象
      */
-    private JSONObject generateJSON(String uid, Site site, List<Resource> reslist, boolean needBold){
-        JSONArray array = new JSONArray();
+    private JsonObject generateJSON(String uid, Site site, List<Resource> reslist, boolean needBold){
+        JsonArray array = new JsonArray();
         //合并属于Bundle的Resource
         Map<Integer, List<Resource>> bundleItemList = new HashMap<Integer, List<Resource>>();
         List<Resource> filterResList = filterResult(site, reslist, bundleItemList);
         if(filterResList!=null){
             for(Resource res:filterResList){
-                JSONObject json = JsonUtil.getJSONObject(res);
+                JsonObject json = new Gson().toJsonTree(res).getAsJsonObject();
                 addMarkedCheckedField(uid, res, json);
                 addResourceURLField(res,json);
                 //加载Bundle的itemList
                 if(res.isBundle()){
-                    json.put("children", getBundleItemList(site, res.getRid(), bundleItemList.get(res.getRid()),needBold));
+                    json.add("children", getBundleItemList(
+                        site, res.getRid(), bundleItemList.get(res.getRid()),needBold));
                 }else{
-                    json.put("children", null);
+                    json.add("children", JsonNull.INSTANCE);
                 }
                 array.add(json);
             }
         }
-        JSONObject obj = new JSONObject();
-        obj.put("count", reslist.size());
-        obj.put("array", array);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("count", reslist.size());
+        obj.add("array", array);
         return obj;
     }
 
-    private void addMarkedCheckedField(String uid, Resource res, JSONObject json) {
+    private void addMarkedCheckedField(String uid, Resource res, JsonObject json) {
         if(res==null)
         {
-            json.put("isChecked", "unchecked");
+            json.addProperty("isChecked", "unchecked");
         }else{
             if(res.getMarkedUserSet().contains(uid)){
-                json.put("isChecked", "checked");
+                json.addProperty("isChecked", "checked");
             }else{
-                json.put("isChecked", "unchecked");
+                json.addProperty("isChecked", "unchecked");
             }
         }
         json.remove("markedUserSet");
@@ -245,13 +248,13 @@ public class LynxResourceController {
      * @param res 资源对象
      * @param json 保存URL的json对象
      */
-    private void addResourceURLField(Resource res,JSONObject json){
+    private void addResourceURLField(Resource res,JsonObject json){
         if(res.isBundle()){
-            json.put("url",urlGenerator.getURL(res.getTid(),UrlPatterns.T_BUNDLE, res.getRid()+"", null));
+            json.addProperty("url",urlGenerator.getURL(res.getTid(),UrlPatterns.T_BUNDLE, res.getRid()+"", null));
         }else if(res.isFile()){
-            json.put("url", urlGenerator.getURL(res.getTid(),UrlPatterns.T_FILE, res.getRid()+"", null));
+            json.addProperty("url", urlGenerator.getURL(res.getTid(),UrlPatterns.T_FILE, res.getRid()+"", null));
         }else if(res.isPage()){
-            json.put("url", urlGenerator.getURL(res.getTid(),UrlPatterns.T_PAGE, res.getRid()+"", null));
+            json.addProperty("url", urlGenerator.getURL(res.getTid(),UrlPatterns.T_PAGE, res.getRid()+"", null));
         }
     }
 
@@ -306,8 +309,8 @@ public class LynxResourceController {
      * @param resList Bundle内的Resource集合
      * @return JSON数组
      */
-    private JSONArray getBundleItemList(Site site, int bid, List<Resource> resList, boolean needBold){
-        JSONArray result = new JSONArray();
+    private JsonArray getBundleItemList(Site site, int bid, List<Resource> resList, boolean needBold){
+        JsonArray result = new JsonArray();
         int orgSize = 0;
         if(null == resList){
             resList = new ArrayList<Resource>();
@@ -318,13 +321,13 @@ public class LynxResourceController {
         // 减少数据传输量，只传输必要的字段
         for (int i = 0; i < fiveResList.size(); i++) {
             Resource res = fiveResList.get(i);
-            JSONObject obj = new JSONObject();
-            obj.put("rid", res.getRid());
-            obj.put("bid", bid);
-            obj.put("itemType", res.getItemType());
-            obj.put("fileType", res.getFileType());
-            obj.put("title", res.getTitle());
-            obj.put("titleStyle", (i < orgSize && needBold) ? "titleStyle" : "");
+            JsonObject obj = new JsonObject();
+            obj.addProperty("rid", res.getRid());
+            obj.addProperty("bid", bid);
+            obj.addProperty("itemType", res.getItemType());
+            obj.addProperty("fileType", res.getFileType());
+            obj.addProperty("title", res.getTitle());
+            obj.addProperty("titleStyle", (i < orgSize && needBold) ? "titleStyle" : "");
             result.add(obj);
         }
         return result;

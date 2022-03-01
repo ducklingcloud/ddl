@@ -29,8 +29,8 @@ import net.duckling.ddl.service.url.URLGenerator;
 import net.duckling.ddl.service.url.UrlPatterns;
 import net.duckling.ddl.util.ArrayAndListConverter;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 
 /**
@@ -70,9 +70,9 @@ public class ConflictBundleItemHelper {
      * @param actualAddRids 实际添加进去的资源rid集合
      * @return
      */
-    public static JSONArray getJSONArrayOfConflictItems(IResourceService resourceService,
+    public static JsonArray getJSONArrayOfConflictItems(IResourceService resourceService,
                                                         URLGenerator urlGenerator,int[] wantToAddRids, int[] actualAddRids){
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         if(null != wantToAddRids && wantToAddRids.length>0){
             List<Integer> want = ArrayAndListConverter.convertInt2Integer(wantToAddRids);
             List<Integer> actual = ArrayAndListConverter.convertInt2Integer(actualAddRids);
@@ -83,11 +83,11 @@ public class ConflictBundleItemHelper {
             for(Resource res : conflictItems){
                 Resource bundle = rs.getResource(res.getBid(), res.getTid());
                 if(bundle!=null){
-                    JSONObject bundleObj = new JSONObject();
-                    bundleObj.put("title", bundle.getTitle());
-                    bundleObj.put("url", urlGenerator.getURL(res.getTid(),UrlPatterns.T_BUNDLE, res.getBid()+"",null));
-                    JSONObject obj = getJSONResourceForBundleItem(urlGenerator, res);
-                    obj.put("bundle", bundleObj);
+                    JsonObject bundleObj = new JsonObject();
+                    bundleObj.addProperty("title", bundle.getTitle());
+                    bundleObj.addProperty("url", urlGenerator.getURL(res.getTid(),UrlPatterns.T_BUNDLE, res.getBid()+"",null));
+                    JsonObject obj = getJSONResourceForBundleItem(urlGenerator, res);
+                    obj.add("bundle", bundleObj);
                     array.add(obj);
                 }
             }
@@ -101,13 +101,13 @@ public class ConflictBundleItemHelper {
      * @return JSON对象 , 形如{"rid":"1","itemType":"DFile","fileType":"pdf",
      * "url":"/ddl/cnic/bundle/2?rid=1","title":"haha"}
      */
-    public static JSONObject getJSONResourceForBundleItem(URLGenerator urlGenerator,  Resource resource){
-        JSONObject obj = new JSONObject();
-        obj.put("rid", resource.getRid());
-        obj.put("itemType", resource.getItemType());
-        obj.put("fileType", (null!=resource.getFileType())?resource.getFileType().toLowerCase():"");
-        obj.put("url", urlGenerator.getURL(resource.getTid(), UrlPatterns.T_BUNDLE, resource.getBid()+"","rid="+resource.getRid()));
-        obj.put("title", resource.getTitle());
+    public static JsonObject getJSONResourceForBundleItem(URLGenerator urlGenerator,  Resource resource){
+        JsonObject obj = new JsonObject();
+        obj.addProperty("rid", resource.getRid());
+        obj.addProperty("itemType", resource.getItemType());
+        obj.addProperty("fileType", (null!=resource.getFileType())?resource.getFileType().toLowerCase():"");
+        obj.addProperty("url", urlGenerator.getURL(resource.getTid(), UrlPatterns.T_BUNDLE, resource.getBid()+"","rid="+resource.getRid()));
+        obj.addProperty("title", resource.getTitle());
         return obj;
     }
 

@@ -19,6 +19,8 @@
 
 package net.duckling.ddl.web.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +43,6 @@ import net.duckling.ddl.util.NumberFormatUtil;
 import net.duckling.ddl.util.TeamQuery;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,23 +93,23 @@ public class APISearchController extends APIBaseController {
 
     private void doTeamSearch(HttpServletResponse response, VWBContext context,
                               TeamQuery query, Site site) {
-        JSONObject pcr = searchPageContent(context,query, site);
-        JSONObject fr = searchFileInResource(query);
-        JSONObject br = searchBundleInResource(context,query, site);
+        JsonObject pcr = searchPageContent(context,query, site);
+        JsonObject fr = searchFileInResource(query);
+        JsonObject br = searchBundleInResource(context,query, site);
 
-        JSONObject finalResult = wrapSearchResult(pcr, fr, br);
-        JsonUtil.writeJSONObject(response, finalResult);
+        JsonObject finalResult = wrapSearchResult(pcr, fr, br);
+        JsonUtil.write(response, finalResult);
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject searchFileInResource(TeamQuery query){
+    private JsonObject searchFileInResource(TeamQuery query){
         query.setType(LynxConstants.TYPE_FILE);
-        JSONObject fileResult = new JSONObject();
-        fileResult.put(CONTENT, getResourceJSONObject(query));
+        JsonObject fileResult = new JsonObject();
+        fileResult.add(CONTENT, getResourceJSONObject(query));
         return fileResult;
     }
 
-    private JSONArray getResourceJSONObject(TeamQuery query){
+    private JsonArray getResourceJSONObject(TeamQuery query){
         List<Long> sphinxIds = searchService.query(query, TeamQuery.QUERY_FOR_RESOURCE);
         List<Resource> resourceList = resourceService.getResourcesBySphinxID(sphinxIds);
         if (resourceList != null && resourceList.size() > 0) {
@@ -118,7 +118,7 @@ public class APISearchController extends APIBaseController {
         return null;
     }
 
-    private JSONArray getPageResourceJSONObject(TeamQuery query){
+    private JsonArray getPageResourceJSONObject(TeamQuery query){
         List<Long> sphinxIds = searchService.queryPageWithOptimize(query);
         List<Resource> pageList = resourceService.fetchDPageBasicListByPageIncrementId(sphinxIds);
         Map<Integer,Map<Integer,Resource>> pagesMap = transferPageToMap(pageList);
@@ -172,26 +172,26 @@ public class APISearchController extends APIBaseController {
     }
 
     @SuppressWarnings({ "unchecked"})
-    private JSONObject searchBundleInResource(VWBContext context, TeamQuery query, Site site){
+    private JsonObject searchBundleInResource(VWBContext context, TeamQuery query, Site site){
         query.setType(LynxConstants.TYPE_BUNDLE);
-        JSONObject bundleResult = new JSONObject();
-        bundleResult.put(CONTENT, getResourceJSONObject(query));
+        JsonObject bundleResult = new JsonObject();
+        bundleResult.add(CONTENT, getResourceJSONObject(query));
         return bundleResult;
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject wrapSearchResult(JSONObject pcr, JSONObject fr, JSONObject br) {
-        JSONObject result = new JSONObject();
-        result.put("pageResult", (pcr==null)?"":pcr.get(CONTENT));
-        result.put("fileResult", (fr==null)?"":fr.get(CONTENT));
-        result.put("bundleResult", (br==null)?"":br.get(CONTENT));
+    private JsonObject wrapSearchResult(JsonObject pcr, JsonObject fr, JsonObject br) {
+        JsonObject result = new JsonObject(), empty = new JsonObject();
+        result.add("pageResult", (pcr==null) ? empty : pcr.get(CONTENT));
+        result.add("fileResult", (fr==null) ? empty : fr.get(CONTENT));
+        result.add("bundleResult", (br==null) ? empty : br.get(CONTENT));
         return result;
     }
 
     @SuppressWarnings({ "unchecked"})
-    private JSONObject searchPageContent(VWBContext context, TeamQuery query, Site site) {
-        JSONObject bundleResult = new JSONObject();
-        bundleResult.put(CONTENT, getPageResourceJSONObject(query));
+    private JsonObject searchPageContent(VWBContext context, TeamQuery query, Site site) {
+        JsonObject bundleResult = new JsonObject();
+        bundleResult.add(CONTENT, getPageResourceJSONObject(query));
         return bundleResult;
     }
 
@@ -203,14 +203,14 @@ public class APISearchController extends APIBaseController {
       int offset = NumberFormatUtil.parseInt(
       request.getParameter("offset"), 0);
       int limit = NumberFormatUtil.parseInt(request.getParameter("size"), 10);
-      JSONObject object = searchPages(site, query, offset, limit);
-      JsonUtil.writeJSONObject(response, object);
+      JsonObject object = searchPages(site, query, offset, limit);
+      JsonUtil.write(response, object);
       }
 
       @SuppressWarnings("unchecked")
-      private JSONObject searchPages(Site site, String query, int offset,int limit) {
+      private JsonObject searchPages(Site site, String query, int offset,int limit) {
       SearchService searchService = site.getSearchService();
-      JSONObject result = new JSONObject();
+      JsonObject result = new JsonObject();
 
       // 第一次查询时提供匹配的页面数
       if (offset == 0) {
@@ -219,7 +219,7 @@ public class APISearchController extends APIBaseController {
       }
       List<Long> pids = searchService.searchTeamPages(site.getId(), query,offset, limit);
       if (pids != null && pids.size() != 0) {
-      JSONArray array = new JSONArray();
+      JsonArray array = new JsonArray();
       List<PageMeta> pageList = site.getDpageService().fetchDPageBasicListBySphinxId(pids);
       List<String> contentList = site.getDpageService().fetchPageContentListBySphinxId(pids);
       String[] titles = new String[pageList.size()];
@@ -232,7 +232,7 @@ public class APISearchController extends APIBaseController {
       String[] heightDigests = searchService.highLightDigest(digests,
       query);
       for (int i = 0; i < pageList.size(); i++) {
-      JSONObject dpage = getPageJSONObject(heightTitles[i],
+      JsonObject dpage = getPageJSONObject(heightTitles[i],
       heightDigests[i], pageList.get(i),
       site.getCollectionService().getCollection(pageList.get(i)
       .getCid()));
@@ -243,9 +243,9 @@ public class APISearchController extends APIBaseController {
       return result;
       }
 
-      private JSONObject getPageJSONObject(String title, String digest,
+      private JsonObject getPageJSONObject(String title, String digest,
       PageMeta temp, DCollection dc) {
-      JSONObject dpage = new JSONObject();
+      JsonObject dpage = new JsonObject();
       dpage.put("id", temp.getId());
       if (dc.getTitle() != null)
       {

@@ -38,7 +38,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,11 +84,11 @@ public class UploadImgController extends BaseController{
         try {
             attachItem = uploadImg(getMethod, request);
         } catch (NoEnoughSpaceException e) {
-            JSONObject j = new JSONObject();
-            j.put("result", false);
-            j.put("message", e.getMessage());
-            j.put("error", e.getMessage());
-            JsonUtil.writeJSONObject(response, j);
+            JsonObject j = new JsonObject();
+            j.addProperty("result", false);
+            j.addProperty("message", e.getMessage());
+            j.addProperty("error", e.getMessage());
+            JsonUtil.write(response, j);
             return;
         }
         //返回结果

@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.api.pan;
 
+import com.google.gson.Gson;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -43,8 +44,8 @@ import net.duckling.meepo.api.IPanService;
 import net.duckling.meepo.api.PanAcl;
 
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,10 +121,10 @@ public class APIPanOperateLogController {
     }
 
     private static void writeResponse(HttpServletResponse response, boolean result, String message) {
-        JSONObject msg = new JSONObject();
-        msg.put("result", result);
-        msg.put("message", message);
-        JsonUtil.writeJSONObject(response, msg);
+        JsonObject msg = new JsonObject();
+        msg.addProperty("result", result);
+        msg.addProperty("message", message);
+        JsonUtil.write(response, msg);
     }
 
     /**
@@ -244,21 +245,23 @@ public class APIPanOperateLogController {
      */
     private SubTasksStats parseSubTasksStats(String desc) throws ParseException {
         SubTasksStats stats = new SubTasksStats();
-        JSONObject obj = new JSONObject(desc);
-        JSONObject statsObj = obj.getJSONObject("subTasksStats");
-        stats.setTotal(statsObj.getInt("total"));
-        stats.setFailed(statsObj.getInt("failed"));
-        stats.setPipeId(obj.getInt("pipeId"));
-        stats.setType(obj.getString("type"));
-        stats.setUser(obj.getString("user"));
-        stats.setSourceTeam(obj.getString("sourceTeam"));
-        stats.setTargetTeam(obj.getString("targetTeam"));
-        stats.setTargetFolder(obj.getString("targetFolder"));
+        Gson gson = new Gson();
+        JsonObject obj = gson.fromJson(desc, JsonObject.class);
+        JsonObject statsObj = obj.getAsJsonObject("subTasksStats");
+        stats.setTotal(statsObj.get("total").getAsInt());
+        stats.setFailed(statsObj.get("failed").getAsInt());
+        stats.setPipeId(obj.get("pipeId").getAsInt());
+        stats.setType(obj.get("type").getAsString());
+        stats.setUser(obj.get("user").getAsString());
+        stats.setSourceTeam(obj.get("sourceTeam").getAsString());
+        stats.setTargetTeam(obj.get("targetTeam").getAsString());
+        stats.setTargetFolder(obj.get("targetFolder").getAsString());
         if(stats.getFailed()>0){
-            JSONArray subTasks = obj.getJSONArray("subTasks");
-            for(int i=0; i < subTasks.length(); i++){
-                JSONObject item = new JSONObject(subTasks.getString(i));
-                if("failed".equals(item.getString("status"))){
+            JsonArray subTasks = obj.getAsJsonArray("subTasks");
+            for(int i=0; i < subTasks.size(); i++){
+                JsonObject item = gson.fromJson(subTasks.get(i).getAsString(),
+                                                JsonObject.class);
+                if("failed".equals(item.get("status").getAsString())){
                     stats.getSubTaskList().add(assembleSubTask(item));
                 }
             }
@@ -267,13 +270,13 @@ public class APIPanOperateLogController {
         return stats;
     }
 
-    private SubTask assembleSubTask(JSONObject obj){
+    private SubTask assembleSubTask(JsonObject obj){
         SubTask result = new SubTask();
-        result.setId(obj.getInt("id"));
-        result.setPath(obj.getString("path"));
-        result.setFilename(obj.getString("filename"));
-        result.setSize(obj.getString("size"));
-        result.setStatus(obj.getString("status"));
+        result.setId(obj.get("id").getAsInt());
+        result.setPath(obj.get("path").getAsString());
+        result.setFilename(obj.get("filename").getAsString());
+        result.setSize(obj.get("size").getAsString());
+        result.setStatus(obj.get("status").getAsString());
         return result;
     }
 

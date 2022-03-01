@@ -41,7 +41,7 @@ import net.duckling.ddl.util.FileSizeUtils;
 import net.duckling.ddl.util.ShareRidCodeUtil;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,7 +133,7 @@ public class TeamShareManageController extends BaseController{
 
     @ResponseBody
     @RequestMapping(params="func=delete")
-    public JSONObject deleteShareResource(HttpServletRequest request){
+    public JsonObject deleteShareResource(HttpServletRequest request){
         String[] rs = request.getParameterValues("rids[]");
         int[] rids = new int[rs.length];
         for(int i = 0;i<rs.length;i++){
@@ -142,8 +142,8 @@ public class TeamShareManageController extends BaseController{
         for(int rid:rids){
             shareResourceService.delete(rid);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
         return obj;
     }
 

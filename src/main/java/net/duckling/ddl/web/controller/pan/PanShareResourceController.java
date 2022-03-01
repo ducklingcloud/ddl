@@ -40,7 +40,7 @@ import net.duckling.ddl.web.interceptor.access.RequirePermission;
 import net.duckling.meepo.api.IPanService;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,24 +70,24 @@ public class PanShareResourceController {
 
     @ResponseBody
     @RequestMapping(params="func=getFetchCode")
-    public JSONObject getResourceShareCode(@RequestParam("rid")String rid,HttpServletRequest request){
+    public JsonObject getResourceShareCode(@RequestParam("rid")String rid,HttpServletRequest request){
         rid = decode(rid);
         String uid = VWBSession.getCurrentUid(request);
         PanShareResource sr = panShareResourceService.getByPath(uid, rid);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(sr==null){
             sr = createShareResource(rid, request);
         }else if(sr!=null&&StringUtils.isEmpty(sr.getPassword())){
             sr.setPassword(IdentifyingCode.getLowCaseRandomCode(6));
             panShareResourceService.update(sr);
         }
-        obj.put("fetchCode", sr.getPassword());
-        obj.put("url", getShareURL(sr.getId()));
+        obj.addProperty("fetchCode", sr.getPassword());
+        obj.addProperty("url", getShareURL(sr.getId()));
         return obj;
     }
     @ResponseBody
     @RequestMapping(params="func=deleteFetchCode")
-    public JSONObject deleteFetchCode(@RequestParam("rid")String rid,HttpServletRequest request){
+    public JsonObject deleteFetchCode(@RequestParam("rid")String rid,HttpServletRequest request){
         String uid = VWBSession.getCurrentUid(request);
         rid = decode(rid);
         PanShareResource sr = panShareResourceService.getByPath(uid, rid);
@@ -95,27 +95,27 @@ public class PanShareResourceController {
             sr.setPassword(null);
             panShareResourceService.update(sr);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
-        obj.put("url", getShareURL(sr.getId()));
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
+        obj.addProperty("url", getShareURL(sr.getId()));
         return obj;
     }
 
     @ResponseBody
     @RequestMapping(params="func=getUserStatus")
-    public JSONObject getUserStatus(HttpServletRequest request){
+    public JsonObject getUserStatus(HttpServletRequest request){
         UserExt ext = aoneUserService.getUserExtInfo(VWBSession.getCurrentUid(request));
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(StringUtils.isEmpty(ext.getConfirmStatus())){
-            obj.put("status", "false");
+            obj.addProperty("status", "false");
         }else if(ext.isConfStatusAvailable()){
-            obj.put("status", "true");
+            obj.addProperty("status", "true");
             String rid = request.getParameter("rid");
             setShareUrl(request, rid, obj);
         }else{
-            obj.put("status", "forbidden");
+            obj.addProperty("status", "forbidden");
         }
-        obj.put("userName", VWBSession.getCurrentUidName(request));
+        obj.addProperty("userName", VWBSession.getCurrentUidName(request));
         return obj;
     }
 
@@ -150,39 +150,39 @@ public class PanShareResourceController {
 
     @ResponseBody
     @RequestMapping(params="func=updateUserStatus")
-    public JSONObject updateUserStatus(HttpServletRequest request){
+    public JsonObject updateUserStatus(HttpServletRequest request){
         UserExt ext = aoneUserService.getUserExtInfo(VWBSession.getCurrentUid(request));
         ext.setConfirmStatus(UserExt.CONF_STATUS_AVA);
         aoneUserService.modifyUserProfile(ext);
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
-        obj.put("status", "true");
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
+        obj.addProperty("status", "true");
         String rid = request.getParameter("rid");
         setShareUrl(request, rid, obj);
         return obj;
     }
     @ResponseBody
     @RequestMapping(params="func=getShareUrl")
-    public JSONObject getShareUrl(HttpServletRequest request,@RequestParam("rid")String rid){
-        JSONObject obj = new JSONObject();
+    public JsonObject getShareUrl(HttpServletRequest request,@RequestParam("rid")String rid){
+        JsonObject obj = new JsonObject();
         setShareUrl(request, rid, obj);
         return obj;
     }
 
-    private void setShareUrl(HttpServletRequest request,String rids,JSONObject obj){
+    private void setShareUrl(HttpServletRequest request,String rids,JsonObject obj){
         String uid = VWBSession.getCurrentUid(request);
         String rid = decode(rids);
         PanShareResource sr = panShareResourceService.getByPath(uid, rid);
         if(sr==null){
             sr =createShareResource(rid, request);
         }
-        obj.put("url", getShareURL(sr.getId()));
-        obj.put("fetchCode", sr.getPassword());
+        obj.addProperty("url", getShareURL(sr.getId()));
+        obj.addProperty("fetchCode", sr.getPassword());
     }
 
     @ResponseBody
     @RequestMapping(params="func=sendShareResourceEmail")
-    public JSONObject sendShareResourceEmail(HttpServletRequest request,@RequestParam("rid")String rid){
+    public JsonObject sendShareResourceEmail(HttpServletRequest request,@RequestParam("rid")String rid){
         String message = request.getParameter("message");
         String uid = VWBSession.getCurrentUid(request);
         String userName = VWBSession.getCurrentUidName(request);
@@ -203,12 +203,12 @@ public class PanShareResourceController {
             aonemailService.sendAccessFileMail(new String[] { fileNames }, new String[] { fileURLs }, userName, shareMails[i],
                                                message);
         }
-        JSONObject object = new JSONObject();
-        object.put("status", "success");
-        object.put("itemType", getMeepMetaType(meta));
-        object.put("fileURL", fileURLs);
-        object.put("friendEmails", friendEmails);
-        object.put("fileName", fileNames);
+        JsonObject object = new JsonObject();
+        object.addProperty("status", "success");
+        object.addProperty("itemType", getMeepMetaType(meta));
+        object.addProperty("fileURL", fileURLs);
+        object.addProperty("friendEmails", friendEmails);
+        object.addProperty("fileName", fileNames);
         return object;
     }
 

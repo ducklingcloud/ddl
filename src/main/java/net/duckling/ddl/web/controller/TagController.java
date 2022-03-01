@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.controller;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -53,8 +54,8 @@ import net.duckling.ddl.util.PinyinUtil;
 import net.duckling.ddl.web.interceptor.access.OnDeny;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,17 +89,16 @@ public class TagController extends BaseController {
     @Autowired
     private URLGenerator generator;
 
-    private void AddJsonPut(JSONArray j, Resource r){
+    private void AddJsonPut(JsonArray j, Resource r){
         JSONMap map = new JSONMap();
         map.put("rid", r.getRid());
         map.put("itemType", r.getItemType());
         map.put("title", r.getTitle());
         map.put("fileType", r.getFileType());
-        j.add(map);
+        j.add(new Gson().toJsonTree(map));
     }
 
-
-    /*private JSONArray addTagItemAndUpdateResourceTagMap(Tag tag, int[] rids){
+    /*private JsonArray addTagItemAndUpdateResourceTagMap(Tag tag, int[] rids){
       return ;
       }*/
 
@@ -118,37 +118,37 @@ public class TagController extends BaseController {
         tag.setId(tgid);
         return tag;
     }
-    private JSONArray getJSONArrayFromTagList(List<Tag> list){
+    private JsonArray getJSONArrayFromTagList(List<Tag> list){
         if(null==list || list.isEmpty()){
-            return new JSONArray();
+            return new JsonArray();
         }
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for(Tag tag : list){
-            JSONObject obj = new JSONObject();
-            obj.put("id", tag.getId());
-            obj.put("name", tag.getTitle());
+            JsonObject obj = new JsonObject();
+            obj.addProperty("id", tag.getId());
+            obj.addProperty("name", tag.getTitle());
             array.add(obj);
         }
         return array;
     }
 
-    private JSONArray getTagAddResponse(Tag tag,int[] rids,Boolean isNewTag) {
-        JSONArray array = new JSONArray();
+    private JsonArray getTagAddResponse(Tag tag,int[] rids,Boolean isNewTag) {
+        JsonArray array = new JsonArray();
         int size = rids.length;
         for(int i=0; i<size; i++){
-            JSONObject json = new JSONObject();
-            json.put("isNewTag", isNewTag);
-            json.put("id", tag.getId());
-            json.put("title", tag.getTitle());
-            json.put("count", tag.getCount());
-            json.put("item_key", rids[i]);
+            JsonObject json = new JsonObject();
+            json.addProperty("isNewTag", isNewTag);
+            json.addProperty("id", tag.getId());
+            json.addProperty("title", tag.getTitle());
+            json.addProperty("count", tag.getCount());
+            json.addProperty("item_key", rids[i]);
             array.add(json);
         }
         return array;
     }
 
-    private JSONArray getTagCount(List<Resource> resList, int tid){
-        JSONArray array = new JSONArray();
+    private JsonArray getTagCount(List<Resource> resList, int tid){
+        JsonArray array = new JsonArray();
         if(null==resList || resList.isEmpty()){
             return array;
         }
@@ -166,9 +166,9 @@ public class TagController extends BaseController {
         Iterator<Integer> itr = tagIds.iterator();
         while(itr.hasNext()){
             int tagid = itr.next();
-            JSONObject obj = new JSONObject();
-            obj.put("id",tagid);
-            obj.put("value", tagService.getTagCount(tid, tagid));
+            JsonObject obj = new JsonObject();
+            obj.addProperty("id",tagid);
+            obj.addProperty("value", tagService.getTagCount(tid, tagid));
             array.add(obj);
         }
         return array;
@@ -182,7 +182,7 @@ public class TagController extends BaseController {
         return (ch >= PinyinUtil.CH_START && ch <= PinyinUtil.CH_END);
     }
 
-    private JSONArray putItemIntoExistTag(int[] rids,int existTagId) {
+    private JsonArray putItemIntoExistTag(int[] rids,int existTagId) {
         Tag tag = tagService.getTag(existTagId);
         List<Integer> tempRids = new ArrayList<Integer>();
         int size = rids.length;
@@ -203,12 +203,12 @@ public class TagController extends BaseController {
     }
 
 
-    private JSONObject putItemIntoNewTag(int rid,String newTagTitle,String uid,int tid) {
+    private JsonObject putItemIntoNewTag(int rid,String newTagTitle,String uid,int tid) {
         Tag tag = creatTag(newTagTitle, uid, tid);
         bundleService.addItems(tag.getTid(), tag.getId(), new int[]{rid});
         updateResourceTagField(tag, new int[]{rid});
-        JSONArray array = getTagAddResponse(tag, new int[]{rid}, true);
-        return (JSONObject)array.get(0);
+        JsonArray array = getTagAddResponse(tag, new int[]{rid}, true);
+        return (JsonObject)array.get(0);
     }
 
     private void removeResource(Resource res, int tid, String uid,
@@ -307,18 +307,18 @@ public class TagController extends BaseController {
      * @param resList
      * @param obj
      */
-    private void validateDeleteAuth(VWBContext context,List<Resource> resList,JSONObject obj) {
+    private void validateDeleteAuth(VWBContext context,List<Resource> resList,JsonObject obj) {
         String u = context.getCurrentUID();
         boolean result = true;
-        JSONArray haveAuth = new JSONArray();
-        JSONArray noAuth = new JSONArray();
+        JsonArray haveAuth = new JsonArray();
+        JsonArray noAuth = new JsonArray();
         if(authorityService.teamAccessability(VWBContext.getCurrentTid(),
                                               VWBSession.findSession(context.getHttpRequest()), AuthorityService.ADMIN)){
             for(Resource r : resList){
                 AddJsonPut(haveAuth, r);
             }
-            obj.put("auth", haveAuth);
-            obj.put("authValidate", true);
+            obj.add("auth", haveAuth);
+            obj.addProperty("authValidate", true);
             return ;
         }else{
             for( Iterator<Resource> its = resList.iterator() ; its.hasNext();){
@@ -348,13 +348,13 @@ public class TagController extends BaseController {
             }
         }
         if(result){
-            obj.put("auth", haveAuth);
-            obj.put("authValidate", true);
+            obj.add("auth", haveAuth);
+            obj.addProperty("authValidate", true);
         }else{
-            obj.put("status", false);
-            obj.put("authValidate", false);
-            obj.put("auth", haveAuth);
-            obj.put("noAuth", noAuth);
+            obj.addProperty("status", false);
+            obj.addProperty("authValidate", false);
+            obj.add("auth", haveAuth);
+            obj.add("noAuth", noAuth);
         }
     }
 
@@ -364,16 +364,16 @@ public class TagController extends BaseController {
                        @RequestParam("isNewTag")boolean isNewTag,@RequestParam("rid")Integer rid){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         int tid = VWBContext.getCurrentTid();
-        JSONObject json = null;
+        JsonObject json = null;
         if(isNewTag){
             String newTagTitle = request.getParameter("newTagTitle");
             json = putItemIntoNewTag(rid,newTagTitle,context.getCurrentUID(),tid);
         }else{
             int existTagId = Integer.parseInt(request.getParameter("existTagId"));
-            JSONArray array = putItemIntoExistTag(new int[]{rid},existTagId);
-            json = (JSONObject)array.get(0);
+            JsonArray array = putItemIntoExistTag(new int[]{rid},existTagId);
+            json = (JsonObject)array.get(0);
         }
-        JsonUtil.writeJSONObject(response, json);
+        JsonUtil.write(response, json);
     }
 
     @RequestMapping(params="func=batchAdd")
@@ -386,7 +386,7 @@ public class TagController extends BaseController {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         int tid = VWBContext.getCurrentTid();
         String uid = context.getCurrentUID();
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         List<Long> ridsList=new ArrayList<Long>();
         for(long rid:rids){
             ridsList.add(rid);
@@ -410,7 +410,7 @@ public class TagController extends BaseController {
                 array.addAll(getTagAddResponse(tag, rids,false));
             }
         }
-        JsonUtil.writeJSONObject(response, array);
+        JsonUtil.write(response, array);
     }
 
 
@@ -448,7 +448,7 @@ public class TagController extends BaseController {
             ridsList.add((long)rids[i]);
         }
         List<Resource> resList = resourceService.getResourcesBySphinxID(ridsList);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         validateDeleteAuth(context,resList,obj);
         int tid = VWBContext.getCurrentTid();
         String uid = context.getCurrentUID();
@@ -456,11 +456,11 @@ public class TagController extends BaseController {
             for(Resource res : resList){
                 removeResource(res,tid, uid, resourceOperateService, bundleService, tagService, resourceService,context);
             }
-            JSONArray tagCount = getTagCount(resList, tid);
-            obj.put("tagCount", tagCount);
+            JsonArray tagCount = getTagCount(resList, tid);
+            obj.add("tagCount", tagCount);
         }
-        obj.put("status", true);
-        JsonUtil.writeJSONObject(response, obj);
+        obj.addProperty("status", true);
+        JsonUtil.write(response, obj);
     }
 
     @RequestMapping
@@ -489,12 +489,12 @@ public class TagController extends BaseController {
         int tid = VWBContext.getCurrentTid();
         String type = request.getParameter("type");
         if(null==type || "".equals(type) || !"nogroup".equals(type)){
-            JSONObject json = getTeamGroupedTagJSON(tid);
-            JsonUtil.writeJSONObject(response, json);
+            JsonObject json = getTeamGroupedTagJSON(tid);
+            JsonUtil.write(response, json);
         }else{
             String searchParam = request.getParameter("searchParam");
             if(null == searchParam || "".equals(searchParam)){
-                JsonUtil.writeJSONObject(response, new JSONObject[]{});
+                JsonUtil.write(response, new JsonObject[]{});
                 return;
             }
             List<Tag> allTags = new ArrayList<Tag>();
@@ -503,35 +503,36 @@ public class TagController extends BaseController {
             }else{
                 allTags = tagService.getTagsByPinyin(tid, searchParam);
             }
-            JSONArray array = getJSONArrayFromTagList(allTags);
-            JsonUtil.writeJSONObject(response, array);
+            JsonArray array = getJSONArrayFromTagList(allTags);
+            JsonUtil.write(response, array);
         }
     }
 
 
-    private JSONObject getTeamGroupedTagJSON(int tid) {
-        JSONObject json = new JSONObject();
+    private JsonObject getTeamGroupedTagJSON(int tid) {
+        JsonObject json = new JsonObject();
+        Gson gson = new Gson();
         List<Tag> freeTags = tagService.getTagsNotInGroupForTeam(tid);
         Map<String,List<Tag>> tagGroupMap = tagService.getTagGroupMap(tid);
-        json.put("freeTags",JsonUtil.getJSONArrayFromList(freeTags));
-        JSONArray groupArray = new JSONArray();
+        json.add("freeTags", gson.toJsonTree(freeTags).getAsJsonArray());
+        JsonArray groupArray = new JsonArray();
         for(Map.Entry<String, List<Tag>> entry : tagGroupMap.entrySet()){
-            JSONObject groupJson = new JSONObject();
-            groupJson.put("name", entry.getKey());
-            groupJson.put("tags", JsonUtil.getJSONArrayFromList(entry.getValue()));
+            JsonObject groupJson = new JsonObject();
+            groupJson.addProperty("name", entry.getKey());
+            groupJson.add("tags", gson.toJsonTree(entry.getValue()).getAsJsonArray());
             groupArray.add(groupJson);
         }
-        json.put("groupMap",groupArray);
+        json.add("groupMap",groupArray);
         return json;
     }
 
     @OnDeny({"batchAdd","addTag","remove"})
     public void onDeny(String methodName, HttpServletRequest request, HttpServletResponse response){
-        JSONObject obj = new JSONObject();
-        obj.put("status", "error");
-        obj.put("result", "无权进行此操作！");
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", "error");
+        obj.addProperty("result", "无权进行此操作！");
         response.setStatus(HttpStatus.AUTH_FAILED);
-        JsonUtil.writeJSONObject(response, obj);
+        JsonUtil.write(response, obj);
     }
 
     @SuppressWarnings("unused")
@@ -540,18 +541,18 @@ public class TagController extends BaseController {
     @WebLog(method="removeTagFromItem")
     public void remove(HttpServletRequest request,HttpServletResponse response,
                        @RequestParam("rid[]")int[] rids,@RequestParam("tagId")Integer tagId){
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         for(int i=0; i<rids.length; i++){
-            JSONObject obj = new JSONObject();
-            obj.put("rid", rids[i]);
+            JsonObject obj = new JsonObject();
+            obj.addProperty("rid", rids[i]);
             bundleService.removeItem(rids[i],tagId);
             array.add(obj);
         }
-        JSONObject json = new JSONObject();
-        json.put("rids", array);
-        json.put("tagId", tagId);
-        json.put("status", "success");
-        JsonUtil.writeJSONObject(response, json);
+        JsonObject json = new JsonObject();
+        json.add("rids", array);
+        json.addProperty("tagId", tagId);
+        json.addProperty("status", "success");
+        JsonUtil.write(response, json);
     }
 
 
@@ -561,16 +562,16 @@ public class TagController extends BaseController {
 
         tagService.getTagsNotInGroupForTeam(tid);
         List<Tag> tags=tagService.getTagsForTeam(tid);
-        JSONArray j =new JSONArray();
+        JsonArray j =new JsonArray();
         if(tags!=null&&!tags.isEmpty()){
             for(Tag tag:tags){
-                JSONObject tagInfo=new JSONObject();
-                tagInfo.put("tag_id", tag.getId());
-                tagInfo.put("count",tag.getCount());
+                JsonObject tagInfo=new JsonObject();
+                tagInfo.addProperty("tag_id", tag.getId());
+                tagInfo.addProperty("count",tag.getCount());
                 j.add(tagInfo);
             }
         }
-        JsonUtil.writeJSONObject(response, j);
+        JsonUtil.write(response, j);
     }
 
 }

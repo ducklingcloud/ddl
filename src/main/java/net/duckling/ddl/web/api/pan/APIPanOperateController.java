@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.api.pan;
 
+import com.google.gson.Gson;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -38,7 +39,7 @@ import net.duckling.meepo.api.PanAcl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -101,15 +102,15 @@ public class APIPanOperateController {
     @RequestMapping(params="func=rename")
     public void rename(HttpServletRequest request,HttpServletResponse response,@RequestParam("rid")String rid,@RequestParam("fileName")String fileName){
         if(StringUtils.isEmpty(fileName)){
-            JSONObject result = new JSONObject();
-            result.put("result", false);
-            result.put("message", "文件名不能为空");
-            JsonUtil.writeJSONObject(response, result);
+            JsonObject result = new JsonObject();
+            result.addProperty("result", false);
+            result.addProperty("message", "文件名不能为空");
+            JsonUtil.write(response, result);
         }else{
             rid = decode(rid);
             String newRid = getNewPath(rid, fileName);
             String uid = VWBSession.getCurrentUid(request);
-            JSONObject o = new JSONObject();
+            JsonObject o = new JsonObject();
             boolean result = false;
             String message = null;
             PanAcl acl = PanAclUtil.getInstance(request);
@@ -126,14 +127,14 @@ public class APIPanOperateController {
                 try {
                     MeePoMeta meta = service.ls(acl, newRid, false);
                     SimpleUser user = aoneUserService.getSimpleUserByUid(VWBSession.getCurrentUid(request));
-                    o.put("resource", LynxResourceUtils.getPanResource(uid, MeePoMetaToPanBeanUtil.transfer(meta,user)));
+                    o.add("resource", LynxResourceUtils.getPanResource(uid, MeePoMetaToPanBeanUtil.transfer(meta,user)));
                 } catch (MeePoException e) {
                 }
                 LOG.info(uid +" rename " +rid+ " to "+ fileName);
             }
-            o.put("result", result);
-            o.put("message", message);
-            JsonUtil.writeJSONObject(response, o);
+            o.addProperty("result", result);
+            o.addProperty("message", message);
+            JsonUtil.write(response, o);
         }
     }
 
@@ -202,11 +203,11 @@ public class APIPanOperateController {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     private static void writeResponse(HttpServletResponse response, int state, String message) {
-        JSONObject msg = new JSONObject();
+        JsonObject msg = new JsonObject();
         boolean r = state==0?true:false;
-        msg.put("result", r);
-        msg.put("message", message);
-        JsonUtil.writeJSONObject(response, msg);
+        msg.addProperty("result", r);
+        msg.addProperty("message", message);
+        JsonUtil.write(response, msg);
     }
 
     private boolean isMovingToParent(String originalRid, String targetRid) {
@@ -246,13 +247,13 @@ public class APIPanOperateController {
     }
 
     private void printResult(boolean result, String message, String optKey, Object optVal,  HttpServletResponse response){
-        JSONObject o = new JSONObject();
-        o.put("result", result);
-        o.put("message", message);
+        JsonObject o = new JsonObject();
+        o.addProperty("result", result);
+        o.addProperty("message", message);
         if(optKey!=null){
-            o.put(optKey, optVal);
+            o.add(optKey, new Gson().toJsonTree(optVal));
         }
-        JsonUtil.writeJSONObject(response, o);
+        JsonUtil.write(response, o);
     }
 
 }

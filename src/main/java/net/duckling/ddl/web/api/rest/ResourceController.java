@@ -82,9 +82,13 @@ public class ResourceController extends AbstractController {
         }
         PaginationBean<Resource> resources = resourceService.query(rq);
         //设置path属性
-        folderPathService.setResourceListPath(resources.getData(), folderPathService.getPathString(res.getRid()));
+        folderPathService.setResourceListPath(
+            resources.getData(), folderPathService.getPathString(res.getRid()));
 
-        JsonUtil.write(response, resources, Resource.class, ResourceView.class);
+        /* TODO: skips jackson mixin; to be checked
+         * ResourceView.class is empty? */
+        // JsonUtil.write(response, resources, Resource.class, ResourceView.class);
+        JsonUtil.write(response, resources);
     }
 
     @RequestMapping(value="/resource/search",method = RequestMethod.GET)
@@ -114,11 +118,14 @@ public class ResourceController extends AbstractController {
             orderStr = LynxConstants.ASC.equals(order) ? "time" : "timeDesc";
         }
 
-        PaginationBean<Resource> resources = folderPathService.getChildren(tid, rootRid, type, orderStr, begin, limit, q);
+        PaginationBean<Resource> resources = folderPathService
+                .getChildren(tid, rootRid, type, orderStr, begin, limit, q);
         //设置path属性
         folderPathService.setResourceListPath(resources.getData());
 
-        JsonUtil.write(response, resources, Resource.class, ResourceView.class);
+        /* to be checked */
+        // JsonUtil.write(response, resources, Resource.class, ResourceView.class);
+        JsonUtil.write(response, resources);
     }
 
     @Autowired

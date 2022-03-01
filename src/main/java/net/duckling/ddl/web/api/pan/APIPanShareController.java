@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.web.api.pan;
 
+import com.google.gson.Gson;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ import net.duckling.meepo.api.IPanService;
 import net.duckling.meepo.api.PanAcl;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,13 +75,13 @@ public class APIPanShareController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(params="func=share")
-    public JSONObject share(@RequestParam("rid")String rid,
+    public JsonObject share(@RequestParam("rid")String rid,
                             @RequestParam(value="isCreateFetchCode", required=false) boolean isCreateFetchCode,
                             HttpServletRequest request){
         rid = decode(rid);
         String uid = VWBSession.getCurrentUid(request);
         PanShareResource sr = panShareResourceService.getByPath(uid, rid);
-        JSONObject obj = new JSONObject();
+        JsonObject obj = new JsonObject();
         if(sr==null){
             sr = createShareResource(rid, request);
         }
@@ -89,8 +90,8 @@ public class APIPanShareController {
             sr.setPassword(IdentifyingCode.getLowCaseRandomCode(6));
             panShareResourceService.update(sr);
         }
-        obj.put("fetchCode", sr.getPassword());
-        obj.put("url", generateShareUrl(sr.getId()));
+        obj.addProperty("fetchCode", sr.getPassword());
+        obj.addProperty("url", generateShareUrl(sr.getId()));
         return obj;
     }
 
@@ -106,7 +107,7 @@ public class APIPanShareController {
 
         Map<String,Object> model = new HashMap<String, Object>();
         model.put("list", transferList(list, PanAclUtil.getInstance(request)));
-        JsonUtil.writeJSONObject(response, JsonUtil.getJSONObject(model));
+        JsonUtil.write(response, new Gson().toJsonTree(model));
     }
 
     /**
@@ -117,7 +118,7 @@ public class APIPanShareController {
     @ResponseBody
     @RequestMapping(params="func=delete")
     @SuppressWarnings("unchecked")
-    public JSONObject deleteShareResource(HttpServletRequest request){
+    public JsonObject deleteShareResource(HttpServletRequest request){
         String[] rs = request.getParameterValues("ids[]");
         int[] ids = new int[rs.length];
         for(int i = 0;i<rs.length;i++){
@@ -126,15 +127,15 @@ public class APIPanShareController {
         for(int id:ids){
             panShareResourceService.delete(id);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", true);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", true);
         return obj;
     }
 
     @ResponseBody
     @RequestMapping(params="func=deleteFetchCode")
     @SuppressWarnings("unchecked")
-    public JSONObject deleteFetchCode(@RequestParam("rid")String rid,HttpServletRequest request){
+    public JsonObject deleteFetchCode(@RequestParam("rid")String rid,HttpServletRequest request){
         String uid = VWBSession.getCurrentUid(request);
         rid = decode(rid);
         PanShareResource sr = panShareResourceService.getByPath(uid, rid);
@@ -142,9 +143,9 @@ public class APIPanShareController {
             sr.setPassword(null);
             panShareResourceService.update(sr);
         }
-        JSONObject obj = new JSONObject();
-        obj.put("success", Boolean.TRUE);
-        obj.put("url", generateShareUrl(sr.getId()));
+        JsonObject obj = new JsonObject();
+        obj.addProperty("success", Boolean.TRUE);
+        obj.addProperty("url", generateShareUrl(sr.getId()));
         return obj;
     }
 

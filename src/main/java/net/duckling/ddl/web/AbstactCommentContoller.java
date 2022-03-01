@@ -19,6 +19,7 @@
 
 package net.duckling.ddl.web;
 
+import com.google.gson.Gson;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -41,8 +42,8 @@ import net.duckling.ddl.service.user.SimpleUser;
 import net.duckling.ddl.service.user.UserExt;
 import net.duckling.ddl.util.JsonUtil;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -141,31 +142,31 @@ public abstract class AbstactCommentContoller {
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject buildCommentJSONObject(Comment instance) {
-        JSONObject tempObject;
-        tempObject = JsonUtil.getJSONObject(instance);
-        JSONObject jsonSender = JsonUtil.getJSONObject(instance.getSender());
-        tempObject.put("sender", jsonSender);
+    private JsonObject buildCommentJSONObject(Comment instance) {
+        Gson gson = new Gson();
+        JsonObject tempObject = gson.toJsonTree(instance).getAsJsonObject();
+        JsonObject jsonSender = gson.toJsonTree(instance.getSender()).getAsJsonObject();
+        tempObject.add("sender", jsonSender);
         if (instance.getReceiver().getId() != 0) {
-            JSONObject jsonReceiver = JsonUtil.getJSONObject(instance
-                                                             .getReceiver());
-            tempObject.put("receiver", jsonReceiver);
+            JsonObject jsonReceiver = gson.toJsonTree(
+                instance.getReceiver()).getAsJsonObject();
+            tempObject.add("receiver", jsonReceiver);
         }
         return tempObject;
     }
 
     @SuppressWarnings("unchecked")
-    private JSONObject getCommentDisplayObject(List<Comment> commentList,
+    private JsonObject getCommentDisplayObject(List<Comment> commentList,
                                                int size) {
-        JSONArray result = new JSONArray();
+        JsonArray result = new JsonArray();
         if (commentList != null && commentList.size() != 0) {
             for (Comment instance : commentList) {
                 result.add(buildCommentJSONObject(instance));
             }
         }
-        JSONObject resultObject = new JSONObject();
-        resultObject.put("commentSize", size);
-        resultObject.put("commentList", result);
+        JsonObject resultObject = new JsonObject();
+        resultObject.addProperty("commentSize", size);
+        resultObject.add("commentList", result);
         return resultObject;
     }
 
@@ -259,8 +260,8 @@ public abstract class AbstactCommentContoller {
         int count = commentService.getPageCommentCount(tid, pageId, itemType);
         List<Comment> commentList = commentService.getLatestComments(tid,
                                                                      pageId, itemType, 3);
-        JSONObject resultObject = getCommentDisplayObject(commentList, count);
-        JsonUtil.writeJSONObject(response, resultObject);
+        JsonObject resultObject = getCommentDisplayObject(commentList, count);
+        JsonUtil.write(response, resultObject);
     }
 
     @SuppressWarnings("unchecked")
@@ -269,10 +270,10 @@ public abstract class AbstactCommentContoller {
         int commentId = Integer.parseInt(request.getParameter("commentId"));
         int tid = context.getTid();
         commentService.deleteComment(tid, commentId);
-        JSONObject result = new JSONObject();
-        result.put("commentId", commentId);
-        result.put("status", "success");
-        JsonUtil.writeJSONObject(response, result);
+        JsonObject result = new JsonObject();
+        result.addProperty("commentId", commentId);
+        result.addProperty("status", "success");
+        JsonUtil.write(response, result);
     }
 
     protected void showAllComments(VWBContext context,
@@ -281,9 +282,9 @@ public abstract class AbstactCommentContoller {
         String itemType = context.getItemType();
         List<Comment> commentList = commentService.getPageComments(
             context.getTid(), rid, itemType);
-        JSONObject resultObject = getCommentDisplayObject(commentList,
+        JsonObject resultObject = getCommentDisplayObject(commentList,
                                                           commentList.size());
-        JsonUtil.writeJSONObject(response, resultObject);
+        JsonUtil.write(response, resultObject);
     }
 
     protected void submitComment(VWBContext context,
@@ -311,7 +312,7 @@ public abstract class AbstactCommentContoller {
                                                    comment.getContent(), comment.getReceiver().getUid());
         }
         sendMentionUserEvent(context, request, comment);
-        JSONObject result = buildCommentJSONObject(comment);
-        JsonUtil.writeJSONObject(response, result);
+        JsonObject result = buildCommentJSONObject(comment);
+        JsonUtil.write(response, result);
     }
 }

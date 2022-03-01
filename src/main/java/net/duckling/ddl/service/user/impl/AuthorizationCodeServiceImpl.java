@@ -18,13 +18,17 @@
  */
 package net.duckling.ddl.service.user.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import net.duckling.common.DucklingProperties;
 import net.duckling.ddl.service.user.AuthorizationCodeService;
 import net.duckling.ddl.web.bean.AuthorizationCode;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+// import org.codehaus.jettison.json.JsonArray;
+// import org.codehaus.jettison.json.JSONException;
+// import org.codehaus.jettison.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -188,10 +192,10 @@ public class AuthorizationCodeServiceImpl implements AuthorizationCodeService {
         if (param == null || param.length() == 0) {
             return null;
         }
-        JSONObject obj;
+        JsonObject obj;
         try {
             UserInfo user = new UserInfo();
-            obj = new JSONObject(param);
+            obj = new Gson().fromJson(param, JsonObject.class);
             user.setType(getFromJSON(obj, "type"));
             user.setTrueName(getFromJSON(obj, "truename"));
             user.setCstnetId(getFromJSON(obj, "cstnetId"));
@@ -200,26 +204,26 @@ public class AuthorizationCodeServiceImpl implements AuthorizationCodeService {
             user.setCstnetIdStatus(getFromJSON(obj, "cstnetIdStatus"));
             user.setSecurityEmail(getFromJSON(obj, "securityEmail"));
             try {
-                JSONArray emails = obj.getJSONArray("secondaryEmails");
-                if (emails != null && emails.length() > 0) {
-                    String[] r = new String[emails.length()];
-                    for (int i = 0; i < emails.length(); i++) {
-                        r[i] = emails.getString(i);
+                JsonArray emails = obj.getAsJsonArray("secondaryEmails");
+                if (emails != null && emails.size() > 0) {
+                    String[] r = new String[emails.size()];
+                    for (int i = 0; i < emails.size(); i++) {
+                        r[i] = emails.get(i).getAsString();
                     }
                     user.setSecondaryEmails(r);
                 }
-            } catch (JSONException e) {
+            } catch (JsonParseException e) {
             }
             return user;
-        } catch (JSONException e) {
+        } catch (JsonParseException e) {
             return null;
         }
     }
 
-    private String getFromJSON(JSONObject obj, String key) {
+    private String getFromJSON(JsonObject obj, String key) {
         try {
-            return obj.getString(key);
-        } catch (JSONException e) {
+            return obj.get(key).getAsString();
+        } catch (JsonParseException e) {
             return null;
         }
     }
