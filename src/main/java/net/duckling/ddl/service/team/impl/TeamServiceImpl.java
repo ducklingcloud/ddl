@@ -160,7 +160,7 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
 
     private void updateTeam(Team team) {
         if (Team.COMMON_TEAM.equals(team.getType())) {
-            vmtTeamManager.updateTeam(team);
+            if (vmtReady) vmtTeamManager.updateTeam(team);
         }
     }
 
@@ -177,8 +177,12 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
         if(!validateTeam(team)){
             return false;
         }
-        initTeamVmtdn(team);
-        return vmtTeamManager.addAdminToTeam(team.getVmtdn(), uid);
+        if (vmtReady) {
+            initTeamVmtdn(team);
+            return vmtTeamManager.addAdminToTeam(team.getVmtdn(), uid);
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -254,18 +258,24 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
             handle.dealVmtUserMessage(tid);
         }
     }
+    
     @Override
     public boolean addUserToVmt(int tid, String uid) {
         Team team = getTeamByID(tid);
         if(!validateTeam(team)){
             return false;
         }
-        initTeamVmtdn(team);
-        return vmtTeamManager.addUserToTeam(team.getVmtdn(), uid);
+        if (vmtReady) {
+            initTeamVmtdn(team);
+            return vmtTeamManager.addUserToTeam(team.getVmtdn(), uid);
+        } else {
+            return false;
+        }
     }
 
     private boolean bundlingTeamVmtdn(Team team) {
-        if (StringUtils.isNotEmpty(team.getVmtdn())
+        if (vmtReady
+            || StringUtils.isNotEmpty(team.getVmtdn())
             || Team.PESONAL_TEAM.equals(team.getType())) {
             return true;
         } else {
@@ -276,8 +286,8 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
                 LOG.error("team '" + team.getDisplayName()
                           + "' query vmtdn result is null;team info:" + team);
             }
+            return false;
         }
-        return false;
     }
 
     private void updateTeamVmtDn(Team team,String dn){
@@ -326,7 +336,8 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
             team.setId(tid);
             setTeamCache(tid, team);
             LOG.info("Create team " + team);
-            if (!fromVmt && !Team.PESONAL_TEAM.equals(team.getType())) {
+            if (vmtReady && !fromVmt
+                && !Team.PESONAL_TEAM.equals(team.getType())) {
                 String dn = vmtTeamManager.addTeam(team);
                 if(dn!=null){
                     updateTeamVmtDn(team, dn);
@@ -443,7 +454,7 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
         if (getTeamByName(teamCode) != null) {
             return false;
         }
-        if(vmtTeamManager.teamCodeExistInVmt(teamCode)){
+        if(vmtReady && vmtTeamManager.teamCodeExistInVmt(teamCode)){
             return false;
         }
         return true;
@@ -455,9 +466,14 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
         if(!validateTeam(team)){
             return false;
         }
-        initTeamVmtdn(team);
-        return vmtTeamManager.removeAdminToTeam(team.getVmtdn(), uid);
+        if (vmtReady) {
+            initTeamVmtdn(team);
+            return vmtTeamManager.removeAdminToTeam(team.getVmtdn(), uid);
+        } else {
+            return false;
+        }
     }
+    
     @Override
     public boolean removeMembers(int tid, String[] uids, boolean noticeVMT) {
         try {
@@ -489,8 +505,12 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
         if(!validateTeam(team)){
             return false;
         }
-        initTeamVmtdn(team);
-        return vmtTeamManager.removeUserToTeam(team.getVmtdn(), uid);
+        if (vmtReady) {
+            initTeamVmtdn(team);
+            return vmtTeamManager.removeUserToTeam(team.getVmtdn(), uid);
+        } else {
+            return false;
+        }
     }
 
     public void setAoneUserService(AoneUserService aoneUserService) {
@@ -599,7 +619,7 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
         //团队名称追加删除标记
         teamDao.updateTeamName(tid, createHangupName(team.getName()));
 
-        vmtTeamManager.deleteTeam(team.getVmtdn());
+        if (vmtReady) vmtTeamManager.deleteTeam(team.getVmtdn());
     }
 
     @Override
