@@ -56,8 +56,32 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 @Service
 public class VMTMessageHandlerImpl {
+    private static final Logger LOG =
+            Logger.getLogger(VMTMessageHandlerImpl.class);
+    @Value("${duckling.mq.exchange}")
+    private String mqExchange;
+    @Value("${duckling.mq.host}")
+    private String mqHost;
+    @Value("${duckling.mq.username}")
+    private String username;
+    @Value("${duckling.mq.password}")
+    private String password;
+    @Value("${duckling.mq.queuename}")
+    private String queueName;
+
+    private static IDFSubscriber subscriber;
+    @Autowired
+    private AuthorityService authorityService;
+    @Autowired
+    private TeamMemberService teamMemberService;
+    @Autowired
+    private TeamService teamService;
+    @Autowired
+    private VMTTeamManager vmtTeamManager;
+    
     private class ReceiveThread implements Runnable {
         IDFSubscriber subscriber;
 
@@ -75,12 +99,10 @@ public class VMTMessageHandlerImpl {
         }
 
     }
-    abstract class VmtMessageHandle implements IDFMessageHandler {
 
+    abstract class VmtMessageHandle implements IDFMessageHandler {
         /**
          * 处理消息
-         *
-         * @param message
          */
         public abstract void dealMessage(MQBaseMessage message);
 
@@ -98,6 +120,7 @@ public class VMTMessageHandlerImpl {
             }
         }
     }
+
     class VmtTeamMessageHandle extends VmtMessageHandle {
 
         @Override
@@ -160,6 +183,7 @@ public class VMTMessageHandlerImpl {
         }
 
     }
+
     class VmtUserMessageHandle extends VmtMessageHandle {
 
         @Override
@@ -182,34 +206,14 @@ public class VMTMessageHandlerImpl {
                          + (message).toJsonString());
             }
         }
+
     }
-    private static final Logger LOG = Logger
-            .getLogger(VMTMessageHandlerImpl.class);
-    private static IDFSubscriber subscriber;
-    @Autowired
-    private AuthorityService authorityService;
-    @Value("${duckling.mq.exchange}")
-    private String mqExchange;
-    @Value("${duckling.mq.host}")
-    private String mqHost;
-    @Value("${duckling.mq.password}")
-    private String password;
-    @Value("${duckling.mq.queuename}")
-    private String queueName;
-    @Autowired
-    private TeamMemberService teamMemberService;
 
-    @Autowired
-    private TeamService teamService;
-    @Value("${duckling.mq.username}")
-    private String username;
-
-    @Autowired
-    private VMTTeamManager vmtTeamManager;
 
     private void addTeamAdmin(int tid, String uid, String name) {
-        teamService.addTeamMembers(tid, new String[] { uid },
-                                   new String[] { name },new String[]{Team.AUTH_ADMIN},false);
+        teamService.addTeamMembers(
+            tid, new String[]{uid}, new String[]{name},
+            new String[]{Team.AUTH_ADMIN}, false);
     }
 
     private void addUserToTeam(String teamCode, List<VmtUser> vUser) {
@@ -228,10 +232,11 @@ public class VMTMessageHandlerImpl {
         }
         String [] userArr = users.toArray(new String[0]);
         if(userArr.length>0){
-            teamService.addTeamMembers(team.getId(), userArr, usernames.toArray(new String[0]),
-                                       auths.toArray(new String[0]),false);
-            LOG.info("vmt MQ sync add user " + arraryToString(userArr)
-                     + ";team name :" + team.getDisplayName() + ";team info:" + team);
+            teamService.addTeamMembers(
+                team.getId(), userArr, usernames.toArray(new String[0]),
+                auths.toArray(new String[0]), false);
+            LOG.info("vmt MQ sync add user "+ arraryToString(userArr)
+                     +";team name :"+ team.getDisplayName() +";team info:"+ team);
         }
     }
 
@@ -317,13 +322,12 @@ public class VMTMessageHandlerImpl {
             for (int i = 0; i < uids.size(); i++) {
                 auth[i] = auths;
             }
-            teamService.updateMembersAuthority(tid,
-                                               uids.toArray(new String[uids.size()]), auth, true);
+            teamService.updateMembersAuthority(
+                tid, uids.toArray(new String[uids.size()]), auth, true);
             if (Team.AUTH_ADMIN.equals(auths)) {
                 LOG.info("VMT MQ add admin" + uids + " to team " + tid);
             } else {
                 LOG.info("VMT MQ remove admin" + uids + " from team " + tid);
-
             }
         }
     }
@@ -341,9 +345,14 @@ public class VMTMessageHandlerImpl {
 
     @PostConstruct
     public void init() {
+        // Skip this service, when VMT is not used according to config
+        if (! vmtTeamManager.ready()) {
+            return;
+        }
         if (subscriber == null) {
-            subscriber = DFMQFactory.buildSubscriber(username, password,
-                                                     mqHost, mqExchange, queueName + "-group", DFMQMode.TOPIC);
+            subscriber = DFMQFactory.buildSubscriber(
+                username, password, mqHost, mqExchange,
+                queueName + "-group", DFMQMode.TOPIC);
             subscriber.registHandler("#.group", new VmtTeamMessageHandle());
             subscriber.registHandler("#.user", new VmtUserMessageHandle());
             Runnable groupThream = new ReceiveThread(subscriber);

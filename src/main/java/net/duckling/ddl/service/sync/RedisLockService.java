@@ -20,6 +20,8 @@ package net.duckling.ddl.service.sync;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.redisson.Config;
 import org.redisson.Redisson;
@@ -31,11 +33,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RedisLockService implements IRedisLockService {
-
-    private RedissonClient redisson;
-
     private static final String APP_PREFIX = "DDL";
-
+    private Logger log = LoggerFactory.getLogger(RedisLockService.class);
+    private RedissonClient redisson;
     @Value("${duckling.redis.server}")
     private String host;
     @Value("${duckling.redis.port}")
@@ -43,15 +43,21 @@ public class RedisLockService implements IRedisLockService {
 
     @PostConstruct
     public void init() {
-        Config config = new Config();
-        config.useSingleServer().setAddress(host + ":" + port);
-        config.setThreads(10);
-        redisson = Redisson.create(config);
+        if (host != null && !"null".equals(host)) {
+            Config config = new Config();
+            config.useSingleServer().setAddress(host + ":" + port);
+            config.setThreads(10);
+            redisson = Redisson.create(config);
+        } else {
+            log.warn("Can't init RedisLockService due to null config.");
+        }
     }
 
     @PreDestroy
     public void destroy() {
-        redisson.shutdown();
+        if (redisson != null) {
+            redisson.shutdown();
+        }
     }
 
     public RLock getRemoteLock(int tid, int fid) {

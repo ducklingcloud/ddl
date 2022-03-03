@@ -250,25 +250,27 @@
     <property name="memcachedService" ref="memcachedService" />
   </bean>
 
-  <bean id="drawResultDao" class="net.duckling.ddl.service.lottery.dao.DrawResultDaoImpl"
-	parent="baseDAO" />
-  <bean id="deliveryDao" class="net.duckling.ddl.service.lottery.dao.DeliveryDaoImpl"
-	parent="baseDAO" />
+  <!-- lottery-related beans are obsoleted (temporary service) -->
 
-  <bean id="lotteryService" class="net.duckling.ddl.service.lottery.LotteryService"
-	init-method="doInit" destroy-method="doDestroy">
-    <constructor-arg index="0" value="WEB-INF/conf/lottery.yml" />
-    <constructor-arg index="1" value="${duckling.redis.server}" />
-    <constructor-arg index="2" value="${duckling.redis.port}" />
-    <property name="drawResultDao" ref="drawResultDao"></property>
-    <property name="deliveryDao" ref="deliveryDao"></property>
-    <property name="timerService" ref="timerService"></property>
-  </bean>
-  
-  <bean id="gerneratorService" class="net.duckling.falcon.api.idg.impl.IDGeneratorService" >
-    <constructor-arg index="0" value="${duckling.redis.server}" />
-    <constructor-arg index="1" value="${duckling.redis.port}" />
-  </bean>
+  <!-- <bean id="drawResultDao" class="net.duckling.ddl.service.lottery.dao.DrawResultDaoImpl" -->
+  <!--       parent="baseDAO" /> -->
+  <!-- <bean id="deliveryDao" class="net.duckling.ddl.service.lottery.dao.DeliveryDaoImpl" -->
+  <!--       parent="baseDAO" /> -->
+  <!-- <bean id="lotteryService" class="net.duckling.ddl.service.lottery.LotteryService" -->
+  <!--       init-method="doInit" destroy-method="doDestroy"> -->
+  <!--   <constructor-arg index="0" value="WEB-INF/conf/lottery.yml" /> -->
+  <!--   <constructor-arg index="1" value="${duckling.redis.server}" /> -->
+  <!--   <constructor-arg index="2" value="${duckling.redis.port}" /> -->
+  <!--   <property name="drawResultDao" ref="drawResultDao"></property> -->
+  <!--   <property name="deliveryDao" ref="deliveryDao"></property> -->
+  <!--   <property name="timerService" ref="timerService"></property> -->
+  <!-- </bean> -->
+
+  <!-- Configured by BeanConfig.java -->
+  <!-- <bean id="gerneratorService" class="net.duckling.falcon.api.idg.impl.IDGeneratorService" > -->
+  <!--   <constructor-arg index="0" value="${duckling.redis.server}" /> -->
+  <!--   <constructor-arg index="1" value="${duckling.redis.port}" /> -->
+  <!-- </bean> -->
   
   <!-- dataSourceSub, for auth tokens, jobs, etc. -->
   <bean id="dataSourceSub" class="com.mchange.v2.c3p0.ComboPooledDataSource"

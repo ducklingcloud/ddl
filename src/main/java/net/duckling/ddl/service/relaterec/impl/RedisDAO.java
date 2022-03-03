@@ -154,11 +154,13 @@ public class RedisDAO extends AbstractBaseDAO {
         return isConnect;
     }
 
+    // Without port config, this may not work.
     @Value("${duckling.redis.server}")
     public void setRedisServer(String url) {
-        this.pool = new JedisPool(new JedisPoolConfig(), url);
-        this.isConnect = true;
-
+        if (url != null && !"null".equals(url)) {
+            this.pool = new JedisPool(new JedisPoolConfig(), url);
+            this.isConnect = true;
+        }
     }
 
 }

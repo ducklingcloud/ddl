@@ -22,6 +22,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -35,29 +37,35 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChunkUploadSessionService implements IChunkUploadSessionService {
-    private static final int EXPIRE_DAYS = 30;
-
-    private RedissonClient redisson;
-
+public class ChunkUploadSessionService
+        implements IChunkUploadSessionService {
     private static final String APP_PREFIX = "DDL";
-
+    private static final int EXPIRE_DAYS = 30;
+    private Logger log =
+            LoggerFactory.getLogger(ChunkUploadSessionService.class);
+    private RedissonClient redisson;
     @Value("${duckling.redis.server}")
     private String host;
     @Value("${duckling.redis.port}")
     private String port;
 
     @PostConstruct
-    public void init(){
-        Config config = new Config();
-        config.useSingleServer().setAddress(host+":"+port);
-        config.setThreads(10);
-        redisson = Redisson.create(config);
+    public void init() {
+        if (host != null && !"null".equals(host)) {
+            Config config = new Config();
+            config.useSingleServer().setAddress(host+":"+port);
+            config.setThreads(10);
+            redisson = Redisson.create(config);
+        } else {
+            log.warn("Can't init ChunkUploadSessionService because redis config is null");
+        }
     }
 
     @PreDestroy
     public void destroy() {
-        redisson.shutdown();
+        if (redisson != null) {
+            redisson.shutdown();
+        }
     }
 
     @Override

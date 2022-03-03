@@ -48,7 +48,7 @@ import net.duckling.ddl.service.user.UserExt;
 import net.duckling.ddl.util.FileSizeUtils;
 import net.duckling.ddl.util.JsonUtil;
 import net.duckling.ddl.web.AbstractSpaceController;
-import net.duckling.ddl.web.controller.activity.ActivitySpaceConfig;
+// import net.duckling.ddl.web.controller.activity.ActivitySpaceConfig;
 import net.duckling.ddl.web.interceptor.access.RequirePermission;
 
 import org.apache.commons.httpclient.util.DateUtil;
@@ -75,7 +75,7 @@ public class SpaceController extends AbstractSpaceController{
     public ModelAndView display(HttpServletRequest request){
         String uid = VWBSession.getCurrentUid(request);
         UserExt ext = aoneUserService.getUserExtInfo(uid);
-        Activity spaceActivity = activityService.get(ActivitySpaceConfig.ACTIVITY_TITLE);
+        // Activity spaceActivity = activityService.get(ActivitySpaceConfig.ACTIVITY_TITLE);
 
         List<UserTeamAclBean> adminAclList = authorityService.getTeamAclByUidAndAuth(uid, AuthorityService.ADMIN);
 
@@ -100,7 +100,8 @@ public class SpaceController extends AbstractSpaceController{
         mv.addObject("allocatedSpace", FileSizeUtils.getFileSize(spaceGainedCount-ext.getUnallocatedSpace()));
         mv.addObject("unallocatedSpace", FileSizeUtils.getFileSize(ext.getUnallocatedSpace()));
 
-        mv.addObject("endTime",DateUtil.formatDate(spaceActivity.getEndTime(), "yyyy.MM.dd"));
+        // mv.addObject("endTime",DateUtil.formatDate(spaceActivity.getEndTime(), "yyyy.MM.dd"));
+        mv.addObject("endTime", "yyyy.MM.dd");
         mv.addObject("teamSpaceSizeList", teamSpaceSizeList);
         mv.addObject("personalSpaceSize", personalSpaceSize);
 
