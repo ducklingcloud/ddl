@@ -31,7 +31,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.sql.rowset.serial.SerialBlob;
 
+import net.duckling.common.util.CommonUtils;
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.service.resource.Resource;
 import net.duckling.ddl.service.resource.SimpleResource;
@@ -43,11 +45,11 @@ import net.duckling.ddl.util.PaginationBean;
 import net.duckling.ddl.util.ResourceQuery;
 import net.duckling.ddl.util.ResourceQuery.QueryString;
 import net.duckling.ddl.util.ResourceQueryKeywordUtil;
+import net.duckling.ddl.util.SQLObjectMapper;
 import net.duckling.ddl.util.StringUtil;
 import net.duckling.ddl.util.TeamQuery;
 import net.duckling.ddl.util.TeamQueryUtil;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -55,16 +57,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
-
-    private static final Logger LOG = Logger.getLogger(ResourceDAOImpl.class);
-
-    private static final String SQL_CREATE = "insert into a1_resource(tid,item_type,title,creator," +
-            "create_time,last_editor,last_editor_name,last_edit_time,last_version,tags,file_type," +
-            "marked_users,bid,order_type,status,size,shared)" +
-            " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_CREATE =
+            "INSERT INTO a1_resource (tid,item_type,title,creator,"+
+            "create_time,last_editor,last_editor_name,last_edit_time,"+
+            "last_version,tags,file_type,marked_users,bid,order_type,"+
+            "status,size,shared)"+
+            " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     //modify by lvly@2012-07-20
     private static final String SQL_DELETE = "update a1_resource set tags='',marked_users='',status='"+LynxConstants.STATUS_DELETE+"'";
     private static final String SQL_UPDATE = "update a1_resource set title=?,last_editor=?,last_editor_name=?, last_edit_time=?," +
@@ -74,10 +74,14 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
     private static final String BY_TYPE_TID = " where tid=? and item_type=?";
     private static final String BY_SPHINX_ID = " where rid = ?";
 
+    private static final Logger LOG = Logger.getLogger(ResourceDAOImpl.class);
+    private RowMapper<Resource> resourceRowMapper = new ResourceRowMapper("");
+
     @Override
     public List<Resource> query(TeamQuery q){
         return getJdbcTemplate().query(TeamQueryUtil.buildDynamicSQL(q),resourceRowMapper);
     }
+
     @Override
     public PaginationBean<Resource> query(ResourceQuery q){
         QueryString qs =q.toQueryString();
@@ -90,35 +94,42 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
         result.setSize(q.getSize());
         result.setTotal(count==null?0:count);
         return result;
-
-
     }
-    private RowMapper<Resource> resourceRowMapper = new ResourceRowMapper("");
 
     @Override
     public synchronized int create(final Resource res) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        this.getJdbcTemplate().update(new PreparedStatementCreator(){
+        this.getJdbcTemplate().update(new PreparedStatementCreator() {
                 @Override
-                public PreparedStatement createPreparedStatement(Connection conn)
-                        throws SQLException {
+                public PreparedStatement createPreparedStatement(
+                    Connection conn) throws SQLException {
                     PreparedStatement ps = null;
-                    ps = conn.prepareStatement(SQL_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
+                    ps = conn.prepareStatement(
+                        SQL_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
                     int i = 0;
-                    //tid,item_type,title,creator,creator_name,create_time,last_editor,last_editor_name,last_edit_time,last_version,tags,marked_users,bid
+                    // tid, item_type, title, creator, create_time, 
                     ps.setInt(++i, res.getTid());
                     ps.setString(++i, res.getItemType());
                     ps.setString(++i, res.getTitle());
                     ps.setString(++i, res.getCreator());
-                    ps.setTimestamp(++i, new Timestamp(res.getCreateTime().getTime()));
+                    ps.setTimestamp(++i, new Timestamp(
+                        res.getCreateTime().getTime()));
+                    // last_editor, last_editor_name, last_edit_time, 
                     ps.setString(++i, res.getLastEditor());
                     ps.setString(++i, res.getLastEditorName());
-                    ps.setTimestamp(++i, new Timestamp(res.getLastEditTime().getTime()));
+                    ps.setTimestamp(++i, new Timestamp(
+                        res.getLastEditTime().getTime()));
+                    // last_version, tags, file_type, marked_users,
                     ps.setInt(++i, res.getLastVersion());
-                    ps.setString(++i, JsonUtil.getJSONString(res.getTagMap()));
-                    String fileType = (res.getFileType()!=null)?res.getFileType().toLowerCase():res.getFileType();
+                    ps.setString(++i,
+                                 JsonUtil.getJSONString(res.getTagMap()));
+                    String fileType = (res.getFileType()!=null) ?
+                            res.getFileType().toLowerCase() : null;
                     ps.setString(++i, fileType);
-                    ps.setObject(++i, res.getMarkedUserSet());
+                    SerialBlob blobdata = new SerialBlob(
+                        SQLObjectMapper.getBytes(res.getMarkedUserSet()));
+                    ps.setBlob(++i, blobdata);
+                    // bid, order_type, status, size, shared
                     ps.setInt(++i, res.getBid());
                     ps.setInt(++i, res.getOrderType());
                     ps.setString(++i, res.getStatus());
@@ -126,10 +137,9 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
                     ps.setBoolean(++i,res.isShared());
                     return ps;
                 }
-
-            },keyHolder);
+            }, keyHolder);
         Number key = keyHolder.getKey();
-        return (key==null)?-1:key.intValue();
+        return (key==null) ? -1 : key.intValue();
     }
 
     @Override
@@ -492,7 +502,7 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
 
         String sql ="select * from a1_resource where tid=:tid and creator=:uid and item_type!=:item_type and (status = '" + LynxConstants.STATUS_AVAILABLE+ "' or status='"+LynxConstants.STATUS_UNPUBLISH+"') ";
 
-        if(!StringUtils.isBlank(keyWord)){
+        if (! CommonUtils.isBlank(keyWord)) {
             String s = ResourceQueryKeywordUtil.getKeyWordString(keyWord, paramMap,"");
             countSql+=s;
             sql+=s;
@@ -520,7 +530,7 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
 
         String sql ="SELECT * FROM a1_resource r WHERE r.tid=:tid AND (r.item_type='DFile' OR r.item_type='DPage') and  r.status = '" + LynxConstants.STATUS_AVAILABLE+ "' ";
 
-        if(!StringUtils.isBlank(keyWord)){
+        if (! CommonUtils.isBlank(keyWord)) {
             String s = ResourceQueryKeywordUtil.getKeyWordString(keyWord, paramMap,"r.");
             countSql+=s;
             sql+=s;
@@ -628,7 +638,7 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
         Map<String,Object> queryParam = new HashMap<String,Object>();
         queryParam.put("tid", tid);
         queryParam.put("itemType", types[0]);
-        if(StringUtils.isNotEmpty(keyWord)){
+        if (! CommonUtils.isEmpty(keyWord)) {
             String s = ResourceQueryKeywordUtil.getKeyWordString(keyWord, queryParam,"");
             where = where +s;
         }

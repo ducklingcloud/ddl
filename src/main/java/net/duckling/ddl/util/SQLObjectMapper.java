@@ -18,9 +18,11 @@
  */
 package net.duckling.ddl.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -30,6 +32,19 @@ public final class SQLObjectMapper {
     private SQLObjectMapper(){}
     private static final Logger LOG = Logger.getLogger(SQLObjectMapper.class);
 
+    public static byte[] getBytes(Object obj) {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream out = new ObjectOutputStream(bos)) {
+            out.writeObject(obj);
+            out.flush();
+            return bos.toByteArray();
+        } catch (IOException e) {
+            LOG.error("Failed to serialize an object to byte[]\n"+
+                      e.toString());
+            return null;
+        }
+    }
+  
     public static Object writeObject( ResultSet rs,String key){
         ObjectInputStream ois = null;
         try {

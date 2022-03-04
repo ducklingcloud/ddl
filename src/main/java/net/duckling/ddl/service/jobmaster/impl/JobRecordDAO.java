@@ -21,16 +21,19 @@ package net.duckling.ddl.service.jobmaster.impl;
 import net.duckling.ddl.util.AbstractBaseDAO;
 
 public class JobRecordDAO extends AbstractBaseDAO {
-    private static final String EXIST = "select count(*) from jobs where job_name=?";
-    private static final String INSERT = "insert into jobs(job_name) value(?)";
+    private static final String EXIST =
+            "SELECT count(*) FROM jobs WHERE job_name=?";
+    private static final String INSERT =
+            "INSERT INTO jobs (job_name) VALUES (?)";
 
     public void saveJob(String jobName) {
         getJdbcTemplate().update(INSERT, jobName);
     }
 
     public boolean exist(String jobName) {
-        Integer count = getJdbcTemplate().queryForObject(EXIST,
-                                                         new Object[] { jobName }, Integer.class);
+        Integer count = getJdbcTemplate().queryForObject(
+            EXIST, new Object[] { jobName }, Integer.class);
         return count > 0;
     }
+
 }
