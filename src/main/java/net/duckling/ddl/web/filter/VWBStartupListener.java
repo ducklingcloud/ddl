@@ -23,7 +23,9 @@ package net.duckling.ddl.web.filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import net.duckling.common.DucklingProperties;
 
+import net.duckling.ddl.common.CreateTables;
 import net.duckling.ddl.common.VWBContainerImpl;
 
 import org.springframework.web.context.WebApplicationContext;
@@ -47,6 +49,10 @@ public class VWBStartupListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         WebApplicationContext factory = getWebApplicationContext(event);
         VWBContainerImpl.setBeanFactory(factory);
+
+        // Init database tables if needed
+        DucklingProperties config = factory.getBean(DucklingProperties.class);
+        new CreateTables(config).createTablesIfNeeded();
     }
 
     private WebApplicationContext getWebApplicationContext(ServletContextEvent event) {

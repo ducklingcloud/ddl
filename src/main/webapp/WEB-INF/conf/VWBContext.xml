@@ -31,8 +31,10 @@
     <property name="minPoolSize" value="${c3p0.minPoolSize}" />
     <property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
     <property name="maxStatements" value="${c3p0.maxStatements}" />
-    <property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
     <property name="maxConnectionAge" value="${c3p0.maxConnectionAge}" />
+    <property name="acquireRetryAttempts" value="${c3p0.acquireRetryAttempts}" />
+    <property name="acquireRetryDelay" value="${c3p0.acquireRetryDelay}" />
+    <property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
     <property name="testConnectionOnCheckout" value="${c3p0.testConnectionOnCheckout}" />
   </bean>
 
@@ -284,8 +286,10 @@
     <property name="minPoolSize" value="${c3p0.minPoolSize}" />
     <property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
     <property name="maxStatements" value="${c3p0.maxStatements}" />
-    <property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
     <property name="maxConnectionAge" value="${c3p0.maxConnectionAge}" />
+    <property name="acquireRetryAttempts" value="${c3p0.acquireRetryAttempts}" />
+    <property name="acquireRetryDelay" value="${c3p0.acquireRetryDelay}" />
+    <property name="preferredTestQuery" value="${c3p0.preferredTestQuery}" />
     <property name="testConnectionOnCheckout" value="${c3p0.testConnectionOnCheckout}" />
   </bean>
 
