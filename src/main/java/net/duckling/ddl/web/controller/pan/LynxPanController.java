@@ -62,7 +62,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoException.AccessDenied;
@@ -110,7 +110,7 @@ public class LynxPanController extends BaseController {
         return m;
     }
 
-    @WebLog(method = "PanQueryList", params = "path,keyWord")
+    //@WebLog(method = "PanQueryList", params = "path,keyWord")
     @RequestMapping(params = "func=query")
     public void queryResource(HttpServletRequest request, HttpServletResponse response) {
         String keyword = request.getParameter("keyWord");
@@ -352,7 +352,7 @@ public class LynxPanController extends BaseController {
             return "";
         }
     }
-    @WebLog(method = "PanEditFileName", params = "rid,fileName")
+    //@WebLog(method = "PanEditFileName", params = "rid,fileName")
     @RequestMapping(params = "func=editFileName")
     public void editeFileName(HttpServletRequest request, HttpServletResponse response) {
         String rid = decode(request.getParameter("rid"));
@@ -410,7 +410,7 @@ public class LynxPanController extends BaseController {
         }
     }
 
-    @WebLog(method = "PanCreateFolder", params = "parentRid,fileName")
+    //@WebLog(method = "PanCreateFolder", params = "parentRid,fileName")
     @RequestMapping(params = "func=createFolder")
     public void createFolder(HttpServletRequest request, HttpServletResponse response) {
         String uid = VWBSession.getCurrentUid(request);
@@ -469,7 +469,7 @@ public class LynxPanController extends BaseController {
         JsonUtil.write(response, o);
     }
 
-    @WebLog(method = "PandeleteResource", params = "rid")
+    //@WebLog(method = "PandeleteResource", params = "rid")
     @RequestMapping(params = "func=deleteResource")
     public void deleteResource(HttpServletRequest request, HttpServletResponse response) {
         String rid = decode(request.getParameter("rid"));
@@ -494,7 +494,7 @@ public class LynxPanController extends BaseController {
         JsonUtil.write(response, o);
     }
 
-    @WebLog(method = "PandeleteResources", params = "rids[]")
+    //@WebLog(method = "PandeleteResources", params = "rids[]")
     @RequestMapping(params="func=deleteResources")
     public void deleteResources(HttpServletRequest request,HttpServletResponse response){
         String[] ridStrs = request.getParameterValues("rids[]");

@@ -29,7 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * 查询系统更新
@@ -42,7 +42,7 @@ import cn.cnic.cerc.dlog.client.WebLog;
 @RequirePermission(target = "team", operation = "view")
 public class APICommentSubmitController extends APIBaseCommentController {
     @RequestMapping
-    @WebLog(method = "apiSubmitComment", params = "itemId,itemType")
+    //@WebLog(method = "apiSubmitComment", params = "itemId,itemType")
     public void service(HttpServletRequest request,
                         HttpServletResponse response,
                         @RequestParam("itemId") Integer itemId,
@@ -52,7 +52,7 @@ public class APICommentSubmitController extends APIBaseCommentController {
     }
 
     @RequestMapping(params = "func=removeComment")
-    @WebLog(method = "apiRemoveComment", params = "itemId,itemType")
+    //@WebLog(method = "apiRemoveComment", params = "itemId,itemType")
     public void deleteComment(HttpServletRequest request,
                               HttpServletResponse response,
                               @RequestParam("itemId") Integer itemId,

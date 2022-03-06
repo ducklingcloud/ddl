@@ -50,7 +50,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * @date 2011-8-12
@@ -91,7 +91,7 @@ public class LynxFileDownloadController extends BaseAttachController {
     }
 
     @RequestMapping(params = { "type=pdf", "version" })
-    @WebLog(method = "downloadPdf", params = "fid")
+    //@WebLog(method = "downloadPdf", params = "fid")
     public ModelAndView downloadPdf(HttpServletRequest req, HttpServletResponse res, @PathVariable("fid") int fid)
             throws IOException {
         Site site = VWBContext.findSite(req);
@@ -118,7 +118,7 @@ public class LynxFileDownloadController extends BaseAttachController {
     }
 
     @RequestMapping(params = "type=doc")
-    @WebLog(method = "downloadDoc", params = "rid")
+    //@WebLog(method = "downloadDoc", params = "rid")
     public ModelAndView previewDoc(HttpServletRequest req, HttpServletResponse res, @PathVariable("fid") int fid)
             throws IOException {
         Site site = VWBContext.findSite(req);

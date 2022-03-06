@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 @Controller
@@ -84,7 +84,7 @@ public class ConfigTagController extends BaseController{
      * @return
      */
     @RequestMapping(params="func=addTagGroup")
-    @WebLog(method="addTagGroup",params="newTagGroupTitle")
+    //@WebLog(method="addTagGroup",params="newTagGroupTitle")
     public void addTagGroup(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         int tid = VWBContext.getCurrentTid();
@@ -129,7 +129,7 @@ public class ConfigTagController extends BaseController{
      * @param response
      */
     @RequestMapping(params="func=updateTag")
-    @WebLog(method="updateTag",params="existTagId,existGroupId,tagTitle")
+    //@WebLog(method="updateTag",params="existTagId,existGroupId,tagTitle")
     public void updateTag(HttpServletRequest request,HttpServletResponse response){
         String tagId = request.getParameter("existTagId");
         String title = request.getParameter("tagTitle");
@@ -171,7 +171,7 @@ public class ConfigTagController extends BaseController{
      * @param response
      */
     @RequestMapping(params="func=updateTagGroup")
-    @WebLog(method="updateTagGroup",params="existGroupId,groupTitle")
+    //@WebLog(method="updateTagGroup",params="existGroupId,groupTitle")
     public void updateTagGroup(HttpServletRequest request,HttpServletResponse response){
         String groupId = request.getParameter("existGroupId");
         String title = request.getParameter("groupTile");

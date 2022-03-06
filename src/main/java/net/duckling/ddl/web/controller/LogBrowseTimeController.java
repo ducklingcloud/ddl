@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequestMapping("/logBrowseTime")
@@ -41,7 +41,7 @@ public class LogBrowseTimeController {
      */
     @RequestMapping(value = "/ajax", method = RequestMethod.POST)
     @ResponseBody
-    @WebLog(method = "st.pv-timing", params = "stayTime,currentUrl")
+    //@WebLog(method = "st.pv-timing", params = "stayTime,currentUrl")
     public void ajaxDatas(HttpServletRequest request,
                           HttpServletResponse response,
                           @RequestParam("stayTime") String stayTime,

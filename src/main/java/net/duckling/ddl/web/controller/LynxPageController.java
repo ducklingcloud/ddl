@@ -60,7 +60,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * @date 2011-5-6
@@ -109,7 +109,7 @@ public class LynxPageController extends BaseController {
     }
     @RequestMapping(params = "func=del")
     @RequirePermission(target="team", operation="edit")
-    @WebLog(method="pageDelete",params="rid")
+    //@WebLog(method="pageDelete",params="rid")
     public void del(HttpServletRequest request, HttpServletResponse response,@PathVariable("rid")Integer rid){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.DELETE);
         Site site = context.getSite();
@@ -138,7 +138,7 @@ public class LynxPageController extends BaseController {
     }
 
     @RequestMapping
-    @WebLog(method="pageView",params="pid")
+    //@WebLog(method="pageView",params="pid")
     public ModelAndView display(HttpServletRequest request,HttpServletResponse response, @PathVariable("pid")Integer pid) {
         int tid = VWBContext.getCurrentTid();
         ItemTypemapping i = itemTypeMappingService.getItemTypeMapping(tid,pid, LynxConstants.TYPE_PAGE);

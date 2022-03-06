@@ -83,10 +83,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.DLogClient;
-import cn.cnic.cerc.dlog.client.WebLog;
-import cn.cnic.cerc.dlog.client.WebLogResolver;
-import cn.cnic.cerc.dlog.domain.LogBean;
+// import cn.cnic.cerc.dlog.client.DLogClient;
+// import cn.cnic.cerc.dlog.client.WebLog;
+// import cn.cnic.cerc.dlog.client.WebLogResolver;
+// import cn.cnic.cerc.dlog.domain.LogBean;
 import cn.vlabs.commons.principal.UserPrincipal;
 import cn.vlabs.umt.oauth.AccessToken;
 import cn.vlabs.umt.oauth.UserInfo;
@@ -126,10 +126,10 @@ public class AttachmentController extends BaseController{
     private AuthenticationService authenticationService;
     @Autowired
     private DucklingProperties properties;
-    @Autowired
-    private WebLogResolver webLogResolver;
-    private DLogClient  dLogClient ;
 
+    // @Autowired
+    // private WebLogResolver webLogResolver;
+    // private DLogClient  dLogClient ;
 
     protected static final Logger LOG = Logger.getLogger(AttachmentController.class);
 
@@ -297,7 +297,7 @@ public class AttachmentController extends BaseController{
      * @param resource
      * @return
      */
-    @WebLog(method = "preview", params = "rid,from")
+    //@WebLog(method = "preview", params = "rid,from")
     public ModelAndView dealFile(HttpServletRequest request, HttpServletResponse response, Resource resource) {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE, resource.getRid(), LynxConstants.TYPE_FILE);
         String uid = context.getCurrentUID();
@@ -341,23 +341,23 @@ public class AttachmentController extends BaseController{
     }
 
     private void addPreviewLog(HttpServletRequest request){
-        try{
-            DLogClient client = getDLogClient();
-            LogBean aLog = new LogBean();
-            aLog.setHost(request.getLocalAddr());
-            aLog.setMethod("preview");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String time = format.format(new Date());
-            aLog.setTime(time);
-            Map<String,String> params = webLogResolver.buildFixedParameters(request);
-            params.put("from", request.getParameter("from"));
-            aLog.setOption(params);
-            LinkedList<LogBean> ls = new LinkedList<LogBean>();
-            ls.add(aLog);
-            client.sendLogData(client.prepareData(ls));
-        }catch(Exception e){
-            LOG.error("", e);
-        }
+        // try{
+        //     DLogClient client = getDLogClient();
+        //     LogBean aLog = new LogBean();
+        //     aLog.setHost(request.getLocalAddr());
+        //     aLog.setMethod("preview");
+        //     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //     String time = format.format(new Date());
+        //     aLog.setTime(time);
+        //     Map<String,String> params = webLogResolver.buildFixedParameters(request);
+        //     params.put("from", request.getParameter("from"));
+        //     aLog.setOption(params);
+        //     LinkedList<LogBean> ls = new LinkedList<LogBean>();
+        //     ls.add(aLog);
+        //     client.sendLogData(client.prepareData(ls));
+        // }catch(Exception e){
+        //     LOG.error("", e);
+        // }
     }
 
     private boolean isPreview(FileVersion fv){
@@ -517,15 +517,15 @@ public class AttachmentController extends BaseController{
         return httpClient;
     }
 
-    private DLogClient getDLogClient(){
-        if(dLogClient==null){
-            synchronized (LOGGER) {
-                if(dLogClient==null){
-                    dLogClient = new DLogClient(properties.getProperty("duckling.dlog.application.name"), properties.getProperty("duckling.dlog.server"));
-                }
-            }
-        }
-        return dLogClient;
-    }
+    // private DLogClient getDLogClient(){
+    //     if(dLogClient==null){
+    //         synchronized (LOGGER) {
+    //             if(dLogClient==null){
+    //                 dLogClient = new DLogClient(properties.getProperty("duckling.dlog.application.name"), properties.getProperty("duckling.dlog.server"));
+    //             }
+    //         }
+    //     }
+    //     return dLogClient;
+    // }
 
 }

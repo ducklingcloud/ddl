@@ -51,7 +51,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoMeta;
@@ -74,7 +74,7 @@ public class PanPreviewController extends BaseController {
 
     protected static final Logger LOG = Logger.getLogger(PanPreviewController.class);
 
-    @WebLog(method = "panpreview", params = "rid,path")
+    //@WebLog(method = "panpreview", params = "rid,path")
     @RequestMapping("/pan/preview")
     public ModelAndView dealFile(@RequestParam("path") String path, HttpServletRequest request) throws MeePoException,
             UnsupportedEncodingException {
@@ -188,7 +188,7 @@ public class PanPreviewController extends BaseController {
         return "FILE";
     }
 
-    @WebLog(method = "PanPdfpreview", params = "rid,path")
+    //@WebLog(method = "PanPdfpreview", params = "rid,path")
     @RequestMapping("/pan/pdfpreview")
     public ModelAndView onlineViewer(@RequestParam("path") String path, HttpServletRequest request)
             throws MeePoException, UnsupportedEncodingException {

@@ -58,7 +58,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequestMapping("/{teamCode}")
@@ -156,7 +156,7 @@ public class NineGridController extends BaseController {
     }
 
     @RequestMapping(params="func=pin")
-    @WebLog(method="pin",params="rid,itemType,level")
+    //@WebLog(method="pin",params="rid,itemType,level")
     public void pin(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         int tid = VWBContext.getCurrentTid();
@@ -171,7 +171,7 @@ public class NineGridController extends BaseController {
     }
 
     @RequestMapping(params="func=unpin")
-    @WebLog(method="unpin",params="rid,itemType,level")
+    //@WebLog(method="unpin",params="rid,itemType,level")
     public void unpin(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         int tid = VWBContext.getCurrentTid();
@@ -186,7 +186,7 @@ public class NineGridController extends BaseController {
     }
 
     @RequestMapping(params="func=kickout")
-    @WebLog(method="kickout",params="rid,itemType")
+    //@WebLog(method="kickout",params="rid,itemType")
     public void kickout(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         int tid = VWBContext.getCurrentTid();
@@ -237,7 +237,7 @@ public class NineGridController extends BaseController {
     }
 
     @RequestMapping(params="func=recoverResource")
-    @WebLog(method = "recoverResource", params = "rid")
+    //@WebLog(method = "recoverResource", params = "rid")
     public void recoverResource(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         JsonObject json = new JsonObject();

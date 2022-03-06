@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoMeta;
@@ -110,7 +110,7 @@ public class WopiController {
         String s = new String(b);
         return s;
     }
-    @WebLog(method = "PanSSLRedirectView", params = "rid,remotePath")
+    //@WebLog(method = "PanSSLRedirectView", params = "rid,remotePath")
     @RequestMapping("/p")
     public ModelAndView getSSLRedirectView(@RequestParam("remotePath") String remotePath, HttpServletRequest request)
             throws UnsupportedEncodingException, MeePoException {
@@ -133,7 +133,7 @@ public class WopiController {
         return new ModelAndView(new RedirectView(url));
     }
 
-    @WebLog(method = "PanShareSSLRedirectView", params = "panShareId")
+    //@WebLog(method = "PanShareSSLRedirectView", params = "panShareId")
     @RequestMapping("/s")
     public ModelAndView getShareSSLRedirectView(@RequestParam("panShareId") String panShareId, HttpServletRequest request)
             throws UnsupportedEncodingException, MeePoException {
@@ -165,7 +165,7 @@ public class WopiController {
         }
         return tv;
     }
-    @WebLog(method = "PancheckFile", params = "rid,skey")
+    //@WebLog(method = "PancheckFile", params = "rid,skey")
     @ResponseBody
     @RequestMapping("/files/{skey}")
     public JsonObject checkFile(@PathVariable("skey") String skey) {
@@ -182,7 +182,7 @@ public class WopiController {
         obj.addProperty("Version", "GIYDCMRNGEYC2MJREAZDCORQGA5DKNZOGIZTQMBQGAVTAMB2GAYA====");
         return obj;
     }
-    @WebLog(method = "PanFileContent", params = "rid,skey")
+    //@WebLog(method = "PanFileContent", params = "rid,skey")
     @RequestMapping("/files/{skey}/contents")
     public void getFileContent(@PathVariable("skey") String skey, HttpServletRequest request,
                                HttpServletResponse response) {

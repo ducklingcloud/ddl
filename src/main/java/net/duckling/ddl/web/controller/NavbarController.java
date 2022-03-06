@@ -35,7 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequestMapping("/{teamCode}/navbar")
@@ -54,7 +54,7 @@ public class NavbarController {
     }
 
     @RequestMapping(params="func=addItem")
-    @WebLog(method="addNavbarItem",params="title,url")
+    //@WebLog(method="addNavbarItem",params="title,url")
     public void addNavbarItem(HttpServletRequest request, HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         String uid = context.getCurrentUID();
@@ -78,7 +78,7 @@ public class NavbarController {
 
     @SuppressWarnings("unused")
     @RequestMapping(params="func=delete")
-    @WebLog(method="deleteNavbarItem",params="id")
+    //@WebLog(method="deleteNavbarItem",params="id")
     public void deleteNavbar(HttpServletRequest request, HttpServletResponse response,@RequestParam("id") int id){
         navbarService.delete(id);
         JsonUtil.write(response, new JsonObject());

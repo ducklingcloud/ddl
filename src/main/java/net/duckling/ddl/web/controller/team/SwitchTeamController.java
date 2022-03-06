@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * @date 2011-6-15
@@ -249,7 +249,7 @@ public class SwitchTeamController extends BaseController {
                                                                   request.getParameter("team"))));
     }
 
-    @WebLog(method = "personTeam", params = "from")
+    //@WebLog(method = "personTeam", params = "from")
     @RequestMapping(params = "func=person")
     public ModelAndView person(HttpServletRequest request) {
         rememberLastEnter(request);
@@ -265,7 +265,7 @@ public class SwitchTeamController extends BaseController {
                                                  + "?func=switchTeam"));
     }
 
-    @WebLog(method = "updateOneNoticeEmail", params = "messageType,teamId,uid,eventId,targetId")
+    //@WebLog(method = "updateOneNoticeEmail", params = "messageType,teamId,uid,eventId,targetId")
     @RequestMapping(params="func=updateOneNoticeEmail")
     public void updateOneNoticeFromWeb(HttpServletRequest request,
                                        HttpServletResponse response){

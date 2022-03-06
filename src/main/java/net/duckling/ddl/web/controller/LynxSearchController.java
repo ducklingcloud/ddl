@@ -57,7 +57,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * @date 2012-11-7
@@ -86,7 +86,7 @@ public class LynxSearchController extends BaseController {
     }
 
     @RequestMapping
-    @WebLog(method="quickSearch",params=KEYWORD)
+    //@WebLog(method="quickSearch",params=KEYWORD)
     public void quickSearch(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         //Step 1: Load Team information
         String keyword = URLDecoder.decode(request.getParameter(KEYWORD), "UTF-8");
@@ -136,7 +136,7 @@ public class LynxSearchController extends BaseController {
     }
 
     @RequestMapping(params="func=searchResult")
-    @WebLog(method="searchResult",params=KEYWORD)
+    //@WebLog(method="searchResult",params=KEYWORD)
     public ModelAndView searchResult(HttpServletRequest request) {
         VWBContext context = getVWBContext(request);
         String keyword = request.getParameter(KEYWORD);
@@ -150,7 +150,7 @@ public class LynxSearchController extends BaseController {
     }
 
     @RequestMapping(params="func=research")
-    @WebLog(method="search",params="keyword,flag")
+    //@WebLog(method="search",params="keyword,flag")
     public void research(HttpServletRequest request,HttpServletResponse response) {
         VWBContext context = getVWBContext(request);
         TeamQuery query = initQueryParam(request, context);
@@ -185,7 +185,7 @@ public class LynxSearchController extends BaseController {
     }
 
     @RequestMapping(params="func=loadmore")
-    @WebLog(method="loadmore",params="keyword,oper_name")
+    //@WebLog(method="loadmore",params="keyword,oper_name")
     public void loadMoreData(HttpServletRequest request,HttpServletResponse response) {
         VWBContext context = getVWBContext(request);
         TeamQuery query = initQueryParam(request, context);
@@ -302,7 +302,7 @@ public class LynxSearchController extends BaseController {
     }
 
     @RequestMapping(params="func=searchlog")
-    @WebLog(method="searchclick",params="keyword,rank,pid,type")
+    //@WebLog(method="searchclick",params="keyword,rank,pid,type")
     public void getLog(HttpServletRequest request,HttpServletResponse response) {
         int tid = Integer.parseInt(request.getParameter("tid"));
         request.setAttribute("cftid", tid);

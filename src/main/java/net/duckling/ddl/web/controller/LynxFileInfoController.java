@@ -62,7 +62,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 import cn.vlabs.clb.api.SupportedFileFormatForOnLineViewer;
 
 /**
@@ -114,7 +114,7 @@ public class LynxFileInfoController extends BaseController {
     }
 
     @RequestMapping
-    @WebLog(method = "showFileInfo", params = "fid")
+    //@WebLog(method = "showFileInfo", params = "fid")
     public ModelAndView viewFile(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @PathVariable("fid") int fid) {

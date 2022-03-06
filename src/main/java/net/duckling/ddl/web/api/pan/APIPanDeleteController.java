@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 
@@ -54,7 +54,7 @@ public class APIPanDeleteController {
      * @param response
      * 返回信息有三个状态，1为删除成功，0为删除失败，-1为页面有人在编辑等操作被锁定，不能删除
      */
-    @WebLog(method = "apiPanDelete", params = "rid,itemId,itemType")
+    //@WebLog(method = "apiPanDelete", params = "rid,itemId,itemType")
     @RequestMapping
     public void delete(HttpServletRequest request, HttpServletResponse response){
         JsonObject obj = new JsonObject();

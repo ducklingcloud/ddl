@@ -94,7 +94,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 import cn.cnic.esac.clb.util.HttpStatus;
 import cn.vlabs.clb.api.SupportedFileFormatForOnLineViewer;
 
@@ -195,7 +195,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping
-    @WebLog(method = "viewBundle", params = "bid")
+    //@WebLog(method = "viewBundle", params = "bid")
     public ModelAndView display(HttpServletRequest request,
                                 HttpServletResponse response, @PathVariable("bid") int bid) {
         String rid = request.getParameter("rid");
@@ -332,7 +332,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=reorder")
-    @WebLog(method = "reorderBundleItems", params = "bid")
+    //@WebLog(method = "reorderBundleItems", params = "bid")
     @RequirePermission(target = "team", operation = "edit")
     public void reorder(HttpServletRequest request,
                         HttpServletResponse response, @PathVariable("bid") int bid) {
@@ -349,7 +349,7 @@ public class BundleController extends BaseController {
 
     @RequestMapping(params = "func=getUnBundle")
     @RequirePermission(target = "team", operation = "edit")
-    @WebLog(method = "searchUnbundleItems", params = "bid")
+    //@WebLog(method = "searchUnbundleItems", params = "bid")
     public void getUnBundle(HttpServletResponse response,
                             @PathVariable("bid") int bid, @RequestParam("title") String title,
                             @RequestParam("offset") int offset, @RequestParam("size") int size) {
@@ -361,7 +361,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=saveBundleItem")
-    @WebLog(method = "addExistItemToBundle", params = "bid,selectItem[]")
+    //@WebLog(method = "addExistItemToBundle", params = "bid,selectItem[]")
     @RequirePermission(target = "team", operation = "edit")
     public void saveBundleItem(HttpServletRequest request,
                                HttpServletResponse response, @PathVariable("bid") int bid) {
@@ -436,7 +436,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=removeBundleItem")
-    @WebLog(method = "removeItemFromBundle", params = "bid,rid")
+    //@WebLog(method = "removeItemFromBundle", params = "bid,rid")
     @RequirePermission(target = "team", operation = "edit")
     public void removeBundleItem(HttpServletRequest request,
                                  HttpServletResponse response, @PathVariable("bid") int bid) {
@@ -463,7 +463,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=deleteBundleItem")
-    @WebLog(method = "deleteBundleItem", params = "bid,rid")
+    //@WebLog(method = "deleteBundleItem", params = "bid,rid")
     @RequirePermission(target = "team", operation = "edit")
     public ModelAndView deleteBundleItem(HttpServletRequest request,
                                          @PathVariable("bid") int bid) {
@@ -514,7 +514,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=rename")
-    @WebLog(method = "renameBundle", params = "bid")
+    //@WebLog(method = "renameBundle", params = "bid")
     @RequirePermission(target = "team", operation = "edit")
     public void rename(HttpServletRequest request,
                        HttpServletResponse response, @PathVariable("bid") int bid) {
@@ -535,7 +535,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=updateBundleDesc")
-    @WebLog(method = "updateBundleDescription", params = "bid,description")
+    //@WebLog(method = "updateBundleDescription", params = "bid,description")
     @RequirePermission(target = "team", operation = "edit")
     public void updateBundleDesc(HttpServletRequest request,
                                  HttpServletResponse response, @PathVariable("bid") int bid) {
@@ -553,7 +553,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=disbandBundle")
-    @WebLog(method = "disbandBundle", params = "bid")
+    //@WebLog(method = "disbandBundle", params = "bid")
     @RequirePermission(target = "team", operation = "edit")
     public ModelAndView disbandBundle(HttpServletRequest request,
                                       @PathVariable("bid") int bid) {
@@ -578,7 +578,7 @@ public class BundleController extends BaseController {
     }
 
     @RequestMapping(params = "func=deleteBundle")
-    @WebLog(method = "deleteBundle", params = "bid")
+    //@WebLog(method = "deleteBundle", params = "bid")
     @RequirePermission(target = "team", operation = "edit")
     public ModelAndView deleteBundle(HttpServletRequest request,
                                      @PathVariable("bid") int bid) {

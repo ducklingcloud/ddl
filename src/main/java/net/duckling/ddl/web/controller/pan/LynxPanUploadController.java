@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoMeta;
@@ -63,7 +63,7 @@ public class LynxPanUploadController {
     private IPanService service;
     @Autowired
     private AoneUserService aoneUserService;
-    @WebLog(method = "PanUploadFiles", params = "parentRid")
+    //@WebLog(method = "PanUploadFiles", params = "parentRid")
     @RequestMapping(params = "func=uploadFiles", headers = { "X-File-Name" })
     public void uploadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String fileName = getFileNameFromHeader(request);
@@ -85,7 +85,7 @@ public class LynxPanUploadController {
             return "";
         }
     }
-    @WebLog(method = "PanUploadFilesIE", params = "parentRid")
+    //@WebLog(method = "PanUploadFilesIE", params = "parentRid")
     @RequestMapping(method = RequestMethod.POST, params = "func=uploadFiles")
     public void updatePageFile(@RequestParam("qqfile") MultipartFile uplFile, HttpServletRequest request,
                                HttpServletResponse response) throws IOException {

@@ -29,7 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 /**
@@ -44,7 +44,7 @@ import cn.cnic.cerc.dlog.client.WebLog;
 public class APIPageCommentController extends APIBaseCommentController {
 
     @RequestMapping
-    @WebLog(method = "apiShowAllComments", params = "itemId,itemType")
+    //@WebLog(method = "apiShowAllComments", params = "itemId,itemType")
     public void service(HttpServletRequest request, HttpServletResponse response,
                         @RequestParam("itemId")Integer itemId,@RequestParam("itemType")String itemType) {
         VWBContext context = createVWBContext(request, itemId, itemType);

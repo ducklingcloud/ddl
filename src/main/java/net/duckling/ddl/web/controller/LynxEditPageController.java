@@ -80,7 +80,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * 编辑器和浏览的功能都在这里
@@ -128,7 +128,7 @@ public class LynxEditPageController extends BaseController {
     }
 
     @RequestMapping
-    @WebLog(method = "loadEditMode", params = "pid,bid")
+    //@WebLog(method = "loadEditMode", params = "pid,bid")
     public ModelAndView prepareEditPage(HttpServletRequest request, @RequestParam("rid") Integer rid) {
         VWBContext context = getEditPageContext(request, rid);
         int tid = VWBContext.getCurrentTid();
@@ -247,7 +247,7 @@ public class LynxEditPageController extends BaseController {
     }
 
     @RequestMapping(params = "func=cancel")
-    @WebLog(method = "cancelEditPage", params = "pid,bid")
+    //@WebLog(method = "cancelEditPage", params = "pid,bid")
     public ModelAndView cancel(HttpServletRequest request, @RequestParam("rid") Integer rid) throws Exception {
         VWBContext context = getEditPageContext(request, rid);
         int tid = VWBContext.getCurrentTid();
@@ -308,7 +308,7 @@ public class LynxEditPageController extends BaseController {
     }
 
     @RequestMapping(params = "func=save")
-    @WebLog(method = "saveWhenEditing", params = "rid")
+    //@WebLog(method = "saveWhenEditing", params = "rid")
     public void save(HttpServletRequest request, HttpServletResponse response, @RequestParam("rid") Integer rid)
             throws Exception {
         String htmlText = request.getParameter("htmlPageText");
@@ -340,7 +340,7 @@ public class LynxEditPageController extends BaseController {
 
 
     @RequestMapping(params = "func=saveexit")
-    @WebLog(method = "saveAndPublish", params = "rid")
+    //@WebLog(method = "saveAndPublish", params = "rid")
     public ModelAndView saveAndExit(HttpServletRequest request, @RequestParam("rid") Integer rid) throws JDOMException, IOException {
         String htmlText = request.getParameter("fixDomStr");
         String title = request.getParameter("pageTitle");
@@ -385,7 +385,7 @@ public class LynxEditPageController extends BaseController {
 
 
     @RequestMapping(params = "func=preview")
-    @WebLog(method = "previewEditResult", params = "rid")
+    //@WebLog(method = "previewEditResult", params = "rid")
     public ModelAndView preview(HttpServletRequest request, @RequestParam("rid") Integer rid) throws Exception {
         int bid = getPatentRidFromRequest(request);
         VWBContext context = getEditPageContext(request, rid);
@@ -409,7 +409,7 @@ public class LynxEditPageController extends BaseController {
     }
 
     @RequestMapping(params = "func=previewToEdit")
-    @WebLog(method = "previewReturnEdit", params = "rid")
+    //@WebLog(method = "previewReturnEdit", params = "rid")
     public ModelAndView previewToEdit(HttpServletRequest request, @RequestParam("rid") Integer rid) throws Exception {
         int parentRid = getPatentRidFromRequest(request);
         VWBContext context = getEditPageContext(request, rid);

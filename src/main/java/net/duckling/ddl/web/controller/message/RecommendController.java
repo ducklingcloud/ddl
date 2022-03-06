@@ -43,7 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * @date 2011-7-8
@@ -129,7 +129,7 @@ public class RecommendController extends AbstractRecommendContrller {
     }
 
     @RequestMapping(params = "func=prepareRecommend")
-    @WebLog(method = "prepareRecommend", params = "rid")
+    //@WebLog(method = "prepareRecommend", params = "rid")
     public void prepareRecommend(HttpServletRequest request,
                                  HttpServletResponse response) {
         prepareRecommend(response);
@@ -145,7 +145,7 @@ public class RecommendController extends AbstractRecommendContrller {
     }
 
     @RequestMapping(params = "func=addRecommend")
-    @WebLog(method = "addRecommend", params = "rid")
+    //@WebLog(method = "addRecommend", params = "rid")
     public void addRecommend(HttpServletRequest request,
                              HttpServletResponse response) {
         submitRecommend(eventDispatcher, request,

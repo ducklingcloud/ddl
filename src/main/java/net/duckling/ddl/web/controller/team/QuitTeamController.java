@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 /**
@@ -76,7 +76,7 @@ public class QuitTeamController extends BaseController {
     }
 
     @SuppressWarnings("unchecked")
-    @WebLog(method = "quitTeam", params = "teamName")
+    //@WebLog(method = "quitTeam", params = "teamName")
     @RequestMapping
     public void quitTeam(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = getVWBContext(request);
@@ -101,7 +101,7 @@ public class QuitTeamController extends BaseController {
         json.addProperty("tid", tid);
         JsonUtil.write(response, json);
     }
-    @WebLog(method = "quitTeamValidate", params = "teamName")
+    //@WebLog(method = "quitTeamValidate", params = "teamName")
     @RequestMapping(params="func=quitTeamValidate")
     public void quitTeamValidate(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = getVWBContext(request);

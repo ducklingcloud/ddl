@@ -79,10 +79,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.yaml.snakeyaml.util.UriEncoder;
 
-import cn.cnic.cerc.dlog.client.DLogClient;
-import cn.cnic.cerc.dlog.client.WebLog;
-import cn.cnic.cerc.dlog.client.WebLogResolver;
-import cn.cnic.cerc.dlog.domain.LogBean;
+// import cn.cnic.cerc.dlog.client.DLogClient;
+// import cn.cnic.cerc.dlog.client.WebLog;
+// import cn.cnic.cerc.dlog.client.WebLogResolver;
+// import cn.cnic.cerc.dlog.domain.LogBean;
 
 /**
  * 邮箱附件预览
@@ -108,12 +108,12 @@ public class ShareDownloadController extends BaseAttachController{
     private ResourceOperateService resourceOperateService;
     @Autowired
     private AuthorityService authorityService;
-
     @Autowired
     private DucklingProperties properties;
-    @Autowired
-    private WebLogResolver webLogResolver;
-    private DLogClient  dLogClient ;
+
+    // @Autowired
+    // private WebLogResolver webLogResolver;
+    // private DLogClient  dLogClient ;
 
     @Autowired
     private ShareResourceService shareResourceService;
@@ -211,7 +211,7 @@ public class ShareDownloadController extends BaseAttachController{
      * @param originalRidStr
      * @param targetRidStr
      */
-    @WebLog(method = "copyFileTo", params = "targetRid")
+    //@WebLog(method = "copyFileTo", params = "targetRid")
     @RequestMapping(params="func=copy")
     public void copyFileTo(HttpServletRequest request, HttpServletResponse response,
                            @PathVariable("rid")String originalRidStr,
@@ -262,7 +262,7 @@ public class ShareDownloadController extends BaseAttachController{
             JsonObject resourceJSON=LynxResourceUtils.getResourceJson(uid, resource);
             result.addProperty("state", SUCCESS);
             result.addProperty("msg", "“" + originalPath + "” " +
-                       getLocaleMessage(request, "ddl.tip.t15") + " <a href=\"" + url + "\">" + targetPathString + "</a>");
+                               getLocaleMessage(request, "ddl.tip.t15") + " <a href=\"" + url + "\">" + targetPathString + "</a>");
             result.add("resource", resourceJSON);
             JsonUtil.write(response, result);
         } catch (RuntimeException re) {
@@ -309,7 +309,7 @@ public class ShareDownloadController extends BaseAttachController{
      * @param resource
      * @return
      */
-    @WebLog(method = "preview", params = "rid,from")
+    //@WebLog(method = "preview", params = "rid,from")
     public ModelAndView dealFile(HttpServletRequest request, Resource resource) {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE, resource.getRid(), LynxConstants.TYPE_FILE);
         int rid = resource.getRid();
@@ -330,7 +330,7 @@ public class ShareDownloadController extends BaseAttachController{
      * @param resource
      * @return
      */
-    @WebLog(method = "preview", params = "rid,from")
+    //@WebLog(method = "preview", params = "rid,from")
     public ModelAndView dealFolder(HttpServletRequest request, Resource resource) {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE, resource.getRid(), LynxConstants.TYPE_FILE);
         ModelAndView mv = getShareLayout(request, context);
@@ -363,23 +363,23 @@ public class ShareDownloadController extends BaseAttachController{
     }
 
     private void addPreviewLog(HttpServletRequest request){
-        try{
-            DLogClient client = getDLogClient();
-            LogBean aLog = new LogBean();
-            aLog.setHost(request.getLocalAddr());
-            aLog.setMethod("preview");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String time = format.format(new Date());
-            aLog.setTime(time);
-            Map<String,String> params = webLogResolver.buildFixedParameters(request);
-            params.put("from", request.getParameter("from"));
-            aLog.setOption(params);
-            LinkedList<LogBean> ls = new LinkedList<LogBean>();
-            ls.add(aLog);
-            client.sendLogData(client.prepareData(ls));
-        }catch(Exception e){
-            LOG.error("", e);
-        }
+        // try{
+        //     DLogClient client = getDLogClient();
+        //     LogBean aLog = new LogBean();
+        //     aLog.setHost(request.getLocalAddr());
+        //     aLog.setMethod("preview");
+        //     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //     String time = format.format(new Date());
+        //     aLog.setTime(time);
+        //     Map<String,String> params = webLogResolver.buildFixedParameters(request);
+        //     params.put("from", request.getParameter("from"));
+        //     aLog.setOption(params);
+        //     LinkedList<LogBean> ls = new LinkedList<LogBean>();
+        //     ls.add(aLog);
+        //     client.sendLogData(client.prepareData(ls));
+        // }catch(Exception e){
+        //     LOG.error("", e);
+        // }
     }
 
 
@@ -407,16 +407,16 @@ public class ShareDownloadController extends BaseAttachController{
         return result;
     }
 
-    private DLogClient getDLogClient(){
-        if(dLogClient==null){
-            synchronized (LOG) {
-                if(dLogClient==null){
-                    dLogClient = new DLogClient(properties.getProperty("duckling.dlog.application.name"), properties.getProperty("duckling.dlog.server"));
-                }
-            }
-        }
-        return dLogClient;
-    }
+    // private DLogClient getDLogClient(){
+    //     if(dLogClient==null){
+    //         synchronized (LOG) {
+    //             if(dLogClient==null){
+    //                 dLogClient = new DLogClient(properties.getProperty("duckling.dlog.application.name"), properties.getProperty("duckling.dlog.server"));
+    //             }
+    //         }
+    //     }
+    //     return dLogClient;
+    // }
 
     private boolean isValidate(HttpServletRequest request,ShareResource shareRes){
         if(StringUtils.isEmpty(shareRes.getPassword())){
@@ -473,7 +473,7 @@ public class ShareDownloadController extends BaseAttachController{
     }
 
     @RequestMapping(params = "func=getImageStatus")
-    @WebLog(method = "getImageStatus", params = "rid")
+    //@WebLog(method = "getImageStatus", params = "rid")
     public void getImageStatus(HttpServletRequest req, HttpServletResponse resp, @PathVariable("rid")String ridCode){
         String status = "error";
         String type = req.getParameter("type");

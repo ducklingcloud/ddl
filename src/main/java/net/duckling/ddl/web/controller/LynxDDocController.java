@@ -93,7 +93,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 import cn.vlabs.clb.api.SupportedFileFormatForOnLineViewer;
 
 @Controller
@@ -141,7 +141,7 @@ public class LynxDDocController extends BaseController{
     protected static final Logger LOG = Logger.getLogger(LynxPageController.class);
 
     @RequestMapping
-    @WebLog(method="pageView",params="rid")
+    //@WebLog(method="pageView",params="rid")
     public ModelAndView display(HttpServletRequest request,HttpServletResponse response, @PathVariable("rid")Integer rid) {
         if(rid==0){
             //文件夹浏览模式

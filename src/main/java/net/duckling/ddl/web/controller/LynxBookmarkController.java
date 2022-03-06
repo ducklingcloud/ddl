@@ -46,7 +46,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 @Controller
@@ -61,7 +61,7 @@ public class LynxBookmarkController {
     private static final Logger LOG = Logger.getLogger(LynxBookmarkController.class);
 
     @RequestMapping(params="func=newPage")
-    @WebLog(method = "bookmarkNewPage")
+    //@WebLog(method = "bookmarkNewPage")
     public void createNewPage(HttpServletRequest request, HttpServletResponse response){
         String title=request.getParameter("title");
         String content=request.getParameter("content");

@@ -32,7 +32,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 import cn.vlabs.umt.oauth.AccessToken;
 import cn.vlabs.umt.oauth.common.exception.OAuthProblemException;
 
@@ -44,7 +44,7 @@ public class APIAccessTokenUMTController {
     private AuthorizationCodeService authcodeService;
 
     @SuppressWarnings("unchecked")
-    @WebLog(method = " APIAccessTokenUMT", params = "userName")
+    //@WebLog(method = " APIAccessTokenUMT", params = "userName")
     @RequestMapping(method=RequestMethod.POST)
     public void service(HttpServletRequest request,HttpServletResponse response){
         JsonObject obj = new JsonObject();

@@ -29,7 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequestMapping("{teamCode}/statistics/upload")
@@ -49,7 +49,7 @@ public class StatisticController {
      * @param total 文件上传总耗时
      */
     @RequestMapping
-    @WebLog(method = "st.upload",params="uid,rid,fname,size,time1,time2,total")
+    //@WebLog(method = "st.upload",params="uid,rid,fname,size,time1,time2,total")
     public void uploadStatistic(HttpServletRequest request, HttpServletResponse response,
                                 @RequestParam("uid")String uid,
                                 @RequestParam("rid")int rid,
@@ -67,7 +67,7 @@ public class StatisticController {
      * 更新文件时记录日志到dlog
      */
     @RequestMapping(params = "func=update")
-    @WebLog(method = "st.update",params="uid,rid,fname,size,time1,time2,total")
+    //@WebLog(method = "st.update",params="uid,rid,fname,size,time1,time2,total")
     public void updateStatistic(HttpServletRequest request, HttpServletResponse response,
                                 @RequestParam("uid")String uid,
                                 @RequestParam("rid")int rid,

@@ -70,7 +70,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoMeta;
@@ -98,7 +98,7 @@ public class FileMoveCopyController {
 
     private static final Logger LOG = Logger.getLogger(FileMoveCopyController.class);
 
-    @WebLog(method = "moveFileTo", params = "targetRid,originalRid")
+    //@WebLog(method = "moveFileTo", params = "targetRid,originalRid")
     @RequestMapping(params="func=move")
     public void moveFileTo(HttpServletRequest request, HttpServletResponse response,
                            @RequestParam("originalRid")int originalRid,
@@ -145,7 +145,7 @@ public class FileMoveCopyController {
     private boolean haveTeamEditeAuth(int tid,String uid){
         return authorityService.haveTeamEditeAuth(tid, uid);
     }
-    @WebLog(method = "copyFileTo", params = "targetRid,originalRid")
+    //@WebLog(method = "copyFileTo", params = "targetRid,originalRid")
     @RequestMapping(params="func=copy")
     public void copyFileTo(HttpServletRequest request, HttpServletResponse response,
                            @RequestParam("originalRid")String originalRidStr,
@@ -153,7 +153,7 @@ public class FileMoveCopyController {
         copySelected(request, response, originalRidStr, targetRidStr);
     }
 
-    @WebLog(method = "copySelected", params = "targetRid,originalRids")
+    //@WebLog(method = "copySelected", params = "targetRid,originalRids")
     @RequestMapping(params="func=copySelected")
     public void copySelected(HttpServletRequest request, HttpServletResponse response,
                              @RequestParam("originalRids")String originalRidsString,
@@ -241,7 +241,7 @@ public class FileMoveCopyController {
             throw re;
         }
     }
-    @WebLog(method = "moveSelected", params = "targetRid,originalRids")
+    //@WebLog(method = "moveSelected", params = "targetRid,originalRids")
     @RequestMapping(params="func=moveSelected")
     public void moveSelected(HttpServletRequest request, HttpServletResponse response,
                              @RequestParam("originalRids")String originalRidsString,
@@ -309,7 +309,7 @@ public class FileMoveCopyController {
             throw re;
         }
     }
-    @WebLog(method = "list", params = "originalRid,rid")
+    //@WebLog(method = "list", params = "originalRid,rid")
     @RequestMapping(params="func=list")
     public void list(HttpServletRequest request, HttpServletResponse response,
                      @RequestParam("rid") String ridStr,

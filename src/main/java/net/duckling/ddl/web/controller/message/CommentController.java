@@ -31,7 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 /**
  * @date 2011-3-21
@@ -46,7 +46,7 @@ public class CommentController extends AbstactCommentContoller {
     }
 
     @RequestMapping(params = "func=loadComments")
-    @WebLog(method = "loadComments", params = "rid")
+    //@WebLog(method = "loadComments", params = "rid")
     public void loadComments(HttpServletRequest request,
                              HttpServletResponse response,
                              @RequestParam("itemType") String itemType,@RequestParam("rid") Integer rid) {
@@ -54,7 +54,7 @@ public class CommentController extends AbstactCommentContoller {
     }
 
     @RequestMapping(params = "func=showBriefComments")
-    @WebLog(method = "showBriefComments", params = "rid")
+    //@WebLog(method = "showBriefComments", params = "rid")
     public void showBriefComments(HttpServletRequest request,
                                   HttpServletResponse response,
                                   @RequestParam("itemType") String itemType,@RequestParam("rid") Integer rid) {
@@ -62,7 +62,7 @@ public class CommentController extends AbstactCommentContoller {
     }
 
     @RequestMapping(params = "func=showDetailComments")
-    @WebLog(method = "showDetailComments", params = "rid")
+    //@WebLog(method = "showDetailComments", params = "rid")
     public void showDetailComments(HttpServletRequest request,
                                    HttpServletResponse response,
                                    @RequestParam("itemType") String itemType,@RequestParam("rid") Integer rid) {
@@ -71,7 +71,7 @@ public class CommentController extends AbstactCommentContoller {
 
     @RequirePermission(target = "team", authenticated = true)
     @RequestMapping(params = "func=submitComment")
-    @WebLog(method = "submitComment", params = "rid")
+    //@WebLog(method = "submitComment", params = "rid")
     public void submitComment(HttpServletRequest request,
                               HttpServletResponse response,
                               @RequestParam("itemType") String itemType,@RequestParam("rid") Integer rid) {
@@ -80,7 +80,7 @@ public class CommentController extends AbstactCommentContoller {
     }
 
     @RequestMapping(params = "func=removeComment")
-    @WebLog(method = "removeComment", params = "rid")
+    //@WebLog(method = "removeComment", params = "rid")
     public void removeComment(HttpServletRequest request,
                               HttpServletResponse response,
                               @RequestParam("itemType") String itemType,@RequestParam("rid") Integer rid) {

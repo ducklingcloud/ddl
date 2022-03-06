@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequestMapping("/{teamCode}/starmark")
@@ -80,7 +80,7 @@ public class LynxStarmarkController extends BaseController {
     }
 
     @RequestMapping(params = "func=add")
-    @WebLog(method = "addStarmark", params = "rid")
+    //@WebLog(method = "addStarmark", params = "rid")
     public void addStarMark(HttpServletRequest request, HttpServletResponse response) {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_STARTMARK);
         int tid = context.getSite().getId();
@@ -94,7 +94,7 @@ public class LynxStarmarkController extends BaseController {
     }
 
     @RequestMapping(params = "func=remove")
-    @WebLog(method = "removeStarmark", params = "rid")
+    //@WebLog(method = "removeStarmark", params = "rid")
     public void remove(HttpServletRequest request, HttpServletResponse response) {
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_STARTMARK);
         int rid = Integer.parseInt(request.getParameter("rid"));

@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 @Controller
@@ -90,7 +90,7 @@ public class APIPageDeleteController extends APIBaseController {
      * 返回信息有三个状态，1为删除成功，0为删除失败，-1为页面有人在编辑等操作被锁定，不能删除
      */
     @SuppressWarnings("unchecked")
-    @WebLog(method = "apiDelete", params = "rid,itemId,itemType")
+    //@WebLog(method = "apiDelete", params = "rid,itemId,itemType")
     @RequestMapping
     public void service(HttpServletRequest request, HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.DELETE);

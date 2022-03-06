@@ -64,7 +64,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 import cn.cnic.esac.clb.util.HttpStatus;
 
 @Controller
@@ -378,7 +378,7 @@ public class TagController extends BaseController {
 
     @RequestMapping(params="func=batchAdd")
     @RequirePermission(target = "team", operation = "edit")
-    @WebLog(method="addBatchTags",params="rids[],newTags[],existTags[]")
+    //@WebLog(method="addBatchTags",params="rids[],newTags[],existTags[]")
     public void batchAdd(HttpServletRequest request,HttpServletResponse response,
                          @RequestParam("rids[]")int[] rids,
                          @RequestParam(required=false,value="newTags[]")String[] newTags,
@@ -464,7 +464,7 @@ public class TagController extends BaseController {
     }
 
     @RequestMapping
-    @WebLog(method="showResourceList")
+    //@WebLog(method="showResourceList")
     public ModelAndView display(HttpServletRequest request){
         return new ModelAndView(new RedirectView(generator.getAbsoluteURL(VWBContext.getCurrentTid(), UrlPatterns.T_LIST, null, null)));
         //      VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
@@ -538,7 +538,7 @@ public class TagController extends BaseController {
     @SuppressWarnings("unused")
     @RequestMapping(params="func=remove")
     @RequirePermission(target = "team", operation = "edit")
-    @WebLog(method="removeTagFromItem")
+    //@WebLog(method="removeTagFromItem")
     public void remove(HttpServletRequest request,HttpServletResponse response,
                        @RequestParam("rid[]")int[] rids,@RequestParam("tagId")Integer tagId){
         JsonArray array = new JsonArray();

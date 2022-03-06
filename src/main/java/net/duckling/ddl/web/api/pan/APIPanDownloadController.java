@@ -43,7 +43,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoMeta;
@@ -56,7 +56,7 @@ public class APIPanDownloadController {
     @Autowired
     private IPanService panService;
 
-    @WebLog(method = "mobilePanPage", params = "pid,itemType")
+    //@WebLog(method = "mobilePanPage", params = "pid,itemType")
     @RequestMapping
     public void service(@RequestParam("pid") String rid, @RequestParam("itemType") String itemType,
                         HttpServletRequest request, HttpServletResponse response){

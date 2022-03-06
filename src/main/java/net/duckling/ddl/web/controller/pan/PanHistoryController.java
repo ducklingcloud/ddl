@@ -52,7 +52,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoMeta;
@@ -69,7 +69,7 @@ public class PanHistoryController extends BaseController{
     private URLGenerator urlGenerator;
     @Autowired
     private IPanService panService;
-    @WebLog(method = "PanHistory", params = "path")
+    //@WebLog(method = "PanHistory", params = "path")
     @RequestMapping
     public ModelAndView display(HttpServletRequest request,HttpServletResponse response){
         String path = request.getParameter("path");
@@ -117,7 +117,7 @@ public class PanHistoryController extends BaseController{
         }
         return result;
     }
-    @WebLog(method = "PanRollback", params = "path,version")
+    //@WebLog(method = "PanRollback", params = "path,version")
     @RequestMapping(params="func=rollback")
     public void rollback(HttpServletRequest request,HttpServletResponse response,@RequestParam("path")String path,@RequestParam("version")int version) throws IOException{
         PanAcl acl = PanAclUtil.getInstance(request);

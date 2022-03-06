@@ -60,7 +60,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 @Controller
@@ -87,7 +87,7 @@ public class LynxCreateController extends BaseController{
     private AoneUserService aoneUserService;
     @Autowired
     private TeamSpaceSizeService teamSpaceSizeService;
-    @WebLog(method="makeBundle",params="title")
+    //@WebLog(method="makeBundle",params="title")
     @RequestMapping(params="func=makeBundle")
     public void makeBundle(HttpServletRequest request,HttpServletResponse response,
                            @RequestParam("title")String title,@RequestParam("itemKeys[]")int[] rids){

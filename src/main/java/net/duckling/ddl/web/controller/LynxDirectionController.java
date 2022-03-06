@@ -57,7 +57,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 /**
@@ -130,7 +130,7 @@ public class LynxDirectionController extends BaseController{
         addMyTeam(request, m);
         return m;
     }
-    @WebLog(method = "queryFileItem", params = "queryType,keyWord,sortType,type")
+    //@WebLog(method = "queryFileItem", params = "queryType,keyWord,sortType,type")
     @RequestMapping(params="func=query")
     public void queryFileItem(HttpServletRequest request,HttpServletResponse response){
         String queryType =request.getParameter("queryType");
@@ -272,7 +272,7 @@ public class LynxDirectionController extends BaseController{
     }
 
     @RequestMapping(params="func=createFolder")
-    @WebLog(method = "createFolder")
+    //@WebLog(method = "createFolder")
     public void createFolder(HttpServletRequest request,HttpServletResponse response){
         VWBContext context = VWBContext.createContext(request, UrlPatterns.T_TEAM_HOME);
         String uid = context.getCurrentUID();
@@ -317,7 +317,7 @@ public class LynxDirectionController extends BaseController{
         JsonUtil.write(response, j);
     }
     @RequestMapping(params="func=editFileName")
-    @WebLog(method = "editFileName")
+    //@WebLog(method = "editFileName")
     public void editeFileName(HttpServletRequest request,HttpServletResponse response){
         int rid = getInteger(request.getParameter("rid"), 0);
         JsonObject o = new JsonObject();
@@ -392,7 +392,7 @@ public class LynxDirectionController extends BaseController{
         JsonUtil.write(response, j);
     }
     @RequestMapping(params="func=deleteResource")
-    @WebLog(method = "deleteResource",params="rid")
+    //@WebLog(method = "deleteResource",params="rid")
     public void deleteResource(HttpServletRequest request,HttpServletResponse response){
         int rid = getInteger(request.getParameter("rid"), 0);
         JsonObject o = new JsonObject();
@@ -416,7 +416,7 @@ public class LynxDirectionController extends BaseController{
     }
 
     @RequestMapping(params="func=deleteResources")
-    @WebLog(method = "deleteResources",params="rids[]")
+    //@WebLog(method = "deleteResources",params="rids[]")
     public void deleteResources(HttpServletRequest request,HttpServletResponse response){
         String[] ridStrs = request.getParameterValues("rids[]");
         List<Integer> rids = new ArrayList<Integer>();

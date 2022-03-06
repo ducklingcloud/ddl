@@ -30,7 +30,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 /**
@@ -50,7 +50,7 @@ public class RecLoggingController extends BaseController{
      *
      */
     @RequestMapping(params="func=cl")
-    @WebLog(method="recommendLog",params="pid")
+    //@WebLog(method="recommendLog",params="pid")
     public void recordClickLog(HttpServletRequest request,HttpServletResponse response, @PathVariable("teamCode")String teamCode){
         int cftid = teamService.getTeamByName(teamCode).getId();
         request.setAttribute("cftid", cftid);
@@ -58,7 +58,7 @@ public class RecLoggingController extends BaseController{
     }
 
     @RequestMapping(params="func=dapgelog")
-    @WebLog(method="pageoper",params="type,pid,oper_name")
+    //@WebLog(method="pageoper",params="type,pid,oper_name")
     public void getLog(HttpServletRequest request,HttpServletResponse response, @PathVariable("teamCode")String teamCode) {
         String operName = request.getParameter("oper_name");
         String pid = request.getParameter("pid");

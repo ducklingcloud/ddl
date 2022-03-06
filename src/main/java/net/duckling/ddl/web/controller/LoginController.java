@@ -45,7 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 import cn.vlabs.commons.principal.UserPrincipal;
 import cn.vlabs.duckling.common.util.Base64Util;
 import cn.vlabs.umt.oauth.AccessToken;
@@ -111,7 +111,7 @@ public class LoginController{
         response.sendRedirect(getLoginUrl(request)+"&state="+URLEncoder.encode(viewUrl, "UTF-8"));
     }
     @RequestMapping("/embed")
-    @WebLog(method = "moblieLogin")
+    //@WebLog(method = "moblieLogin")
     public void embedBrowser(HttpServletRequest request, HttpServletResponse response) throws IOException, UMTOauthConnectException {
         String theme = request.getParameter("theme");
         String needTeams = request.getParameter("need_teams"); //要求返回teams列表
@@ -128,7 +128,7 @@ public class LoginController{
         Oauth o = new Oauth(config);
         return o.getAuthorizeURL(request);
     }
-    @WebLog(method = "loginToken")
+    //@WebLog(method = "loginToken")
     @RequestMapping("/token")
     public void dealToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         Oauth o = new Oauth(config);

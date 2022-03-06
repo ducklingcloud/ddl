@@ -58,7 +58,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequirePermission(authenticated = true)
@@ -71,7 +71,7 @@ public class SpaceController extends AbstractSpaceController{
     private static final int ERROR = 2;
 
     @RequestMapping
-    @WebLog(method = "spaceManager")
+    //@WebLog(method = "spaceManager")
     public ModelAndView display(HttpServletRequest request){
         String uid = VWBSession.getCurrentUid(request);
         UserExt ext = aoneUserService.getUserExtInfo(uid);

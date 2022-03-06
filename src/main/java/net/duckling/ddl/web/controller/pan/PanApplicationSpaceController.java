@@ -52,7 +52,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoUsage;
@@ -71,7 +71,7 @@ public class PanApplicationSpaceController extends BaseController{
     @Autowired
     private DucklingProperties config;
 
-    @WebLog(method = "PanApplicationSpace", params = "uid")
+    //@WebLog(method = "PanApplicationSpace", params = "uid")
     @RequestMapping
     public ModelAndView display(HttpServletRequest request){
         MeePoUsage use = null;;
@@ -120,7 +120,7 @@ public class PanApplicationSpaceController extends BaseController{
     public boolean canApplicat(long total,long used) {
         return (total-used)<=FileSizeUtils.ONE_GB*5;
     }
-    @WebLog(method = "PanManualApply", params = "uid")
+    //@WebLog(method = "PanManualApply", params = "uid")
     @RequestMapping(params="func=manualApply")
     public void application(HttpServletRequest req,HttpServletResponse resp){
         JsonObject obj = new JsonObject();

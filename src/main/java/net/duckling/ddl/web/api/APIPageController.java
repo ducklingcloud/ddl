@@ -49,7 +49,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 import cn.vlabs.clb.api.AccessForbidden;
 import cn.vlabs.clb.api.ResourceNotFound;
 
@@ -75,7 +75,7 @@ public class APIPageController extends APIBaseController {
     private BrowseLogService browseLogService;
 
     @SuppressWarnings("unchecked")
-    @WebLog(method = "mobilePage", params = "pid,itemType")
+    //@WebLog(method = "mobilePage", params = "pid,itemType")
     @RequestMapping
     public ModelAndView service(@RequestParam("pid") int rid, @RequestParam("itemType") String itemType,
                                 HttpServletRequest request, HttpServletResponse response){

@@ -51,7 +51,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequestMapping("/{teamCode}/downloadResource/{rid}")
@@ -80,7 +80,7 @@ public class LynxFileDownloadResourceController  extends BaseAttachController{
     }
 
     @RequestMapping(params = { "type=pdf", "version" })
-    @WebLog(method = "downloadPdf", params = "rid")
+    //@WebLog(method = "downloadPdf", params = "rid")
     public ModelAndView downloadPdf(HttpServletRequest req, HttpServletResponse res, @PathVariable("rid") int rid)
             throws IOException {
         Site site = VWBContext.findSite(req);
@@ -107,7 +107,7 @@ public class LynxFileDownloadResourceController  extends BaseAttachController{
     }
 
     @RequestMapping(params = "type=doc")
-    @WebLog(method = "downloadDoc", params = "rid")
+    //@WebLog(method = "downloadDoc", params = "rid")
     public ModelAndView previewDoc(HttpServletRequest req, HttpServletResponse res, @PathVariable("rid") int rid)
             throws IOException {
         Site site = VWBContext.findSite(req);
@@ -133,7 +133,7 @@ public class LynxFileDownloadResourceController  extends BaseAttachController{
     }
 
     @RequestMapping
-    @WebLog(method = "download", params = "rid")
+    //@WebLog(method = "download", params = "rid")
     public ModelAndView download(HttpServletRequest req, HttpServletResponse res, @PathVariable int rid)
             throws IOException {
         Site site = VWBContext.findSite(req);
@@ -172,7 +172,7 @@ public class LynxFileDownloadResourceController  extends BaseAttachController{
     }
 
     @RequestMapping(params = "func=cache")
-    @WebLog(method = "downloadCache", params = "rid")
+    //@WebLog(method = "downloadCache", params = "rid")
     public ModelAndView cache(HttpServletRequest req, HttpServletResponse res, @PathVariable int rid)
             throws IOException {
         Site site = VWBContext.findSite(req);
@@ -196,7 +196,7 @@ public class LynxFileDownloadResourceController  extends BaseAttachController{
         return null;
     }
     @RequestMapping(params = "func=getImageStatus")
-    @WebLog(method = "getImageStatus", params = "rid")
+    //@WebLog(method = "getImageStatus", params = "rid")
     public void getImageStatus(HttpServletRequest req, HttpServletResponse resp, @PathVariable int rid){
         String type = req.getParameter("type");
         int version = 0;

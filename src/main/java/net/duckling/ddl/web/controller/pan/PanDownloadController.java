@@ -39,7 +39,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 import com.meepotech.sdk.MeePoException;
 import com.meepotech.sdk.MeePoMeta;
@@ -82,7 +82,7 @@ public class PanDownloadController {
         }
 
     }
-    @WebLog(method = "PanDownload", params = "path")
+    //@WebLog(method = "PanDownload", params = "path")
     @RequestMapping
     public void download(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) {
         if (StringUtils.isEmpty(path)) {
@@ -127,7 +127,7 @@ public class PanDownloadController {
      * @param request
      * @param response
      */
-    @WebLog(method = "PanThumbnails", params = "path,size")
+    //@WebLog(method = "PanThumbnails", params = "path,size")
     @RequestMapping("/thumbnails")
     public void thumbnails(@RequestParam("path") String path, @RequestParam("size") String size,
                            HttpServletRequest request, HttpServletResponse response) {

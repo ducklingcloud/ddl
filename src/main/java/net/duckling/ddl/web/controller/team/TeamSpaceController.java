@@ -67,7 +67,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 @Controller
 @RequestMapping("/{teamCode}/notice")
@@ -198,7 +198,7 @@ public class TeamSpaceController extends AbstractSpaceController{
         temp.setCompositeArray(convertToCompositeNoticeArray(tempGroup));
         return temp;
     }
-    @WebLog(method = "adminSubs")
+    //@WebLog(method = "adminSubs")
     @RequestMapping(params = "func=adminSubs")
     public ModelAndView adminSubs(HttpServletRequest request,
                                   HttpServletResponse response,
@@ -222,7 +222,7 @@ public class TeamSpaceController extends AbstractSpaceController{
             return null;
         }
     }
-    @WebLog(method = "contacts")
+    //@WebLog(method = "contacts")
     @RequestMapping(params = "func=contacts")
     public ModelAndView contacts(HttpServletRequest request,
                                  HttpServletResponse response,
@@ -259,7 +259,7 @@ public class TeamSpaceController extends AbstractSpaceController{
             return null;
         }
     }
-    @WebLog(method = "exportTeamContacts")
+    //@WebLog(method = "exportTeamContacts")
     @RequestMapping(params = "func=exportTeamContacts")
     public void exportTeamContacts(HttpServletRequest request,
                                    HttpServletResponse response) {
@@ -294,7 +294,7 @@ public class TeamSpaceController extends AbstractSpaceController{
         String fileName = "团队通讯录.csv";
         ContactsExportUtil.download(request, response, fileStr, fileName);
     }
-    @WebLog(method = "historyNotice")
+    //@WebLog(method = "historyNotice")
     @RequestMapping(params = "func=historyNotice")
     public ModelAndView historyNotice(HttpServletRequest request,
                                       HttpServletResponse response,
@@ -325,7 +325,7 @@ public class TeamSpaceController extends AbstractSpaceController{
                              @PathVariable("teamCode") String teamCode) throws IOException {
         return teamNotice(request, response, teamCode);
     }
-    @WebLog(method = "monitorNotice")
+    //@WebLog(method = "monitorNotice")
     @RequestMapping(params = "func=monitorNotice")
     public ModelAndView monitorNotice(HttpServletRequest request,
                                       HttpServletResponse response,
@@ -362,7 +362,7 @@ public class TeamSpaceController extends AbstractSpaceController{
             return null;
         }
     }
-    @WebLog(method = "personNotice")
+    //@WebLog(method = "personNotice")
     @RequestMapping(params = "func=personNotice")
     public ModelAndView personNotice(HttpServletRequest request,
                                      HttpServletResponse response,
@@ -390,7 +390,7 @@ public class TeamSpaceController extends AbstractSpaceController{
             return null;
         }
     }
-    @WebLog(method = "teamNotice")
+    //@WebLog(method = "teamNotice")
     @RequestMapping(params = "func=teamNotice")
     public ModelAndView teamNotice(HttpServletRequest request,
                                    HttpServletResponse response,

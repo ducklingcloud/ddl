@@ -39,7 +39,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.cnic.cerc.dlog.client.WebLog;
+//import cn.cnic.cerc.dlog.client.WebLog;
 
 
 @Controller
@@ -67,7 +67,7 @@ public class APIPageRecommendController extends AbstractRecommendContrller {
      * @param request
      * @param response
      */
-    @WebLog(method = "apiAddRecommend", params = "itemId,itemType")
+    //@WebLog(method = "apiAddRecommend", params = "itemId,itemType")
     @RequestMapping("/add")
     public void addRecommend(@RequestParam("itemId")Integer itemId,@RequestParam("itemType")String itemType,
                              HttpServletRequest request, HttpServletResponse response){
