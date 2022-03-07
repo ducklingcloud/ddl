@@ -1,11 +1,13 @@
 package net.duckling.ddl.common;
 
 import net.duckling.common.DucklingProperties;
+import org.junit.Ignore;
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+@Ignore("SQL statements have finished.")
 public class CreateTablesTest {
 
     @BeforeClass
@@ -37,7 +39,7 @@ public class CreateTablesTest {
     public void tearDown() throws Exception {
     }
 
-    // @Test
+    @Test
     public void createTablesInDerby() throws Exception {
         String cfgFile = "src/main/webapp/WEB-INF/conf/vwbconfig.properties";
         DucklingProperties config = new DucklingProperties(cfgFile);
@@ -46,7 +48,7 @@ public class CreateTablesTest {
         assertTrue(new CreateTables(config).createTablesIfNeeded());
     }
 
-    // @Test
+    @Test
     public void createTablesInMysql() {
     }
 

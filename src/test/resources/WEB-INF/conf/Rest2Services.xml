@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceConfig>
+	<service>
+		<name>InfoQuery</name>
+		<class>cn.cnic.uaf.common.http.rest.RestInfoQueryServiceImpl</class>
+	</service>
+	<filter>
+		<name>APIFilter</name>
+		<class>cn.cnic.uaf.common.http.rest.filter.APIFilter</class>
+		<init-param>
+			<param-name>ipconfig</param-name>
+			<param-value>/WEB-INF/conf/accessIPs.txt</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter>APIFilter</filter>
+		<service>InfoQuery</service>
+	</filter-mapping>
+</ServiceConfig>
+  

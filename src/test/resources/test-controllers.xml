@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=
+       "http://www.springframework.org/schema/beans 
+	classpath:org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context 
+	classpath:org/springframework/context/config/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop
+	classpath:org/springframework/aop/config/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/mvc
+	classpath:org/springframework/web/servlet/config/spring-mvc-3.0.xsd">
+
+  <!-- Enables the Spring MVC @Controller programming model -->
+  <mvc:annotation-driven />
+
+  <!-- <context:load-time-weaver /> -->
+  <!-- <context:spring-configured /> -->
+  <!-- <context:annotation-config /> -->
+
+  <context:component-scan base-package="net.duckling.ddl">
+    <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>  
+    <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>  
+    <!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/> -->
+  </context:component-scan>
+
+  <context:property-placeholder
+      location="classpath:WEB-INF/conf/vwbconfig.properties,
+                classpath:WEB-INF/conf/vwbconfig-secret.properties"/>  
+
+  <!-- Maps '/' requests to the 'home' view -->
+  <mvc:view-controller path="/" view-name="home" />
+  
+  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+    <property name="useDefaultSuffixPattern" value="false"/>
+  </bean>
+
+  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+  
+  <bean id="permissionChecker" class="net.duckling.ddl.web.interceptor.access.VWBPermissionChecker">
+    <property name="authorityService" ref="authorityService"/>
+  </bean>
+
+  <bean id="denyListener" class="net.duckling.ddl.web.interceptor.access.VWBDenyListener"/>
+
+  <mvc:interceptors>
+    <mvc:interceptor>
+      <mvc:mapping path="/api/**" />
+      <mvc:mapping path="/v1/**" />
+      <mvc:mapping path="/mobile/**" />
+      <bean id="accessTokenInceptor"
+	    class="net.duckling.ddl.web.interceptor.access.AccessTokenInceptor">
+	<property name="oauthService" ref="oauthService"/>
+	<property name="authenticationService" ref="authenticationService"/>
+	<property name="aoneUserService" ref="aoneUserService"/>
+	<property name="authcodeService" ref="authorizationCodeService"/>
+      </bean>
+    </mvc:interceptor>
+
+    <mvc:interceptor>
+      <mvc:mapping path="/**" />
+      <bean id="securityInterceptor"
+	    class="net.duckling.ddl.web.interceptor.access.SecurityInterceptor" >
+	<property name="param" value="func"/>
+	<property name="permissionChecker" ref="permissionChecker"/>
+	<property name="listener" ref="denyListener"/>
+	<property name="teamService" ref="teamService"/>
+	<property name="urlGenerator" ref="urlGenerator"/>
+      </bean>
+    </mvc:interceptor>
+
+    <mvc:interceptor>
+      <mvc:mapping path="/f/*" />
+      <bean id="fetchCode"
+	    class="net.duckling.ddl.web.interceptor.access.FetchCodeInterceptor" >
+      </bean>
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/ff/*" />
+      <bean id="panFetchCode"
+	    class="net.duckling.ddl.web.interceptor.access.PanFetchCodeInterceptor" >
+      </bean>
+    </mvc:interceptor>
+  </mvc:interceptors>
+  
+  <!-- FileUpload Resolver -->
+  <bean id="multipartResolver"
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <!-- set the max upload size 2G -->
+    <property name="maxUploadSize">
+      <value>2097152000</value>
+    </property>
+    <property name="maxInMemorySize">
+      <value>4096</value>
+    </property>
+  </bean>
+
+  <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
+  <mvc:resources mapping="/resources/**" location="/resources/" />
+  <bean id="tilesViewResolver"
+	class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    <property name="viewClass"
+	      value="org.springframework.web.servlet.view.tiles2.TilesView" />
+    <property name="order" value="0" />
+  </bean>
+
+  <bean id="jspViewResolver"
+	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/jsp/" />
+    <property name="suffix" value=".jsp" />
+    <property name="order" value="1" />
+  </bean>
+
+  <!-- <bean id="tilesConfigurer" -->
+  <!--       class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"> -->
+  <!--   <property name="definitions"> -->
+  <!--     <list> -->
+  <!--       <value>classpath:WEB-INF/tiles-defs.xml</value> -->
+  <!--     </list> -->
+  <!--   </property> -->
+  <!--   <property name="preparerFactoryClass" -->
+  <!--             value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory" /> -->
+  <!-- </bean> -->
+  
+  <bean id="exceptionResolver" class="net.duckling.ddl.web.interceptor.access.CommonExceptionResolver">
+    <property name="exceptionMappings">
+      <props>
+	<prop key="java.sql.SQLException">/aone/errors/showDBError</prop>
+	<prop key="net.duckling.ddl.exception.FileNotFoundException">/aone/errors/fileError</prop>
+	<prop key="net.duckling.ddl.exception.PageNotFoundException">/aone/errors/pageError</prop>
+	<prop key="net.duckling.ddl.exception.ExpiredDownloadRequestException">/aone/errors/expiredError</prop>
+	<prop key="net.duckling.ddl.exception.NoAuthToViewException">/aone/errors/noAuthError</prop>
+	<prop key="net.duckling.ddl.exception.MessageException">json</prop>
+      </props>
+    </property>
+  </bean>
+  
+  <bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="basename" value="i18n.messages"/>
+    <property name="useCodeAsDefaultMessage" value="true"/>
+  </bean>
+  
+</beans>
