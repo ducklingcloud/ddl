@@ -39,10 +39,10 @@ import org.springframework.jdbc.core.RowMapper;
  */
 public class ConsumerDAOImpl extends AbstractBaseDAO implements
                                                      ConsumerDAO {
-    private static final String QUERY_CONSUMER = "select * from vwb_oauth_consumer where `key`=?";
+    private static final String QUERY_CONSUMER = "select * from vwb_oauth_consumer where \"key\"=?";
     private static final String DELETE_CONSUMERS = "delete from vwb_oauth_consumer";
-    private static final String CREATE_CONSUMER = "insert into vwb_oauth_consumer(`key`, secret, callback_url, `enable`, xauth, name, description) values(?,?,?,?,?,?,?)";
-    private static final String UPDATE_CONSUMER = "update vwb_oauth_consumer set secret=?, callback_url=?, `enable`=?, xauth=? , name=?, description=? where `key`=?";
+    private static final String CREATE_CONSUMER = "insert into vwb_oauth_consumer(\"key\", secret, callback_url, enable, xauth, name, description) values(?,?,?,?,?,?,?)";
+    private static final String UPDATE_CONSUMER = "update vwb_oauth_consumer set secret=?, callback_url=?, enable=?, xauth=? , name=?, description=? where \"key\"=?";
 
     public OAuthConsumerExt getConsumer(String consumerKey) {
         List<OAuthConsumerExt> consumers = getJdbcTemplate().query(

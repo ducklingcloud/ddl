@@ -23,7 +23,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +47,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class InvitationDAO extends AbstractBaseDAO {
+
     private static RowMapper<Invitation> rowMapper = new RowMapper<Invitation>() {
             public Invitation mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Invitation instance = new Invitation();
@@ -63,6 +66,7 @@ public class InvitationDAO extends AbstractBaseDAO {
                 return instance;
             }
         };
+
     private static String transferDate(Date d){
         if(d==null){
             return null;
@@ -70,7 +74,6 @@ public class InvitationDAO extends AbstractBaseDAO {
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return s.format(d);
     }
-
 
     private static final String INSERT_AND_UPDATE = "insert into vwb_invitation (encode, inviter, invitee, team, invite_time, status, message) values(?,?,?,?,?,?,?)";
     public int insertInvitation(final Invitation instance) {
@@ -109,8 +112,16 @@ public class InvitationDAO extends AbstractBaseDAO {
     }
 
     public boolean checkInvitation(Invitation instance) {
-        String sql = "select count(*) from vwb_invitation v where v.id=? and encode=? and DATE_ADD(v.invite_time,INTERVAL 30 DAY)>? and v.status='WAITING'";
-        int count = getJdbcTemplate().queryForObject(sql,new Object[] {instance.getId(),instance.getEncode(),AoneTimeUtils.formatToDateTime(new Date())},Integer.class);
+        String sql = "SELECT count(*) FROM vwb_invitation v "+
+                "WHERE v.id=? AND encode=? AND v.invite_time > ? AND "+
+                "      v.status='WAITING'";
+        LocalDate oneMonthAgo = LocalDate.now().minusDays(30);
+        int count = getJdbcTemplate().queryForObject(
+            sql,
+            new Object[] { instance.getId(),
+                instance.getEncode(),
+                Timestamp.valueOf(oneMonthAgo.atStartOfDay()) },
+            Integer.class);
         return count==1;
     }
 

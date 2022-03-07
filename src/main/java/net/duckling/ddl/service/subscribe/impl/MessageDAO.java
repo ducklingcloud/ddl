@@ -88,7 +88,7 @@ public class MessageDAO extends AbstractBaseDAO {
 
     private static final String DELETE_PAGE_MESSAGE_BODY="delete from vwb_message_body where tid=? and rid=?";
 
-    private static final String INSERT_MESSAGE = "insert into vwb_message_body(type, title, digest, rid, time, `from`, remark, tid) values(?,?,?,?,?,?,?, ?)";
+    private static final String INSERT_MESSAGE = "insert into vwb_message_body(type, title, digest, rid, time, \"from\", remark, tid) values(?,?,?,?,?,?,?, ?)";
 
     private static final String QUERY_MESSAGE_IN_DURATION = "select m.*, b.* from vwb_message m" +
             " inner join vwb_message_body b on b.tid=? and m.message_id=b.id" +

@@ -44,7 +44,7 @@ public final class SQLObjectMapper {
             return null;
         }
     }
-  
+
     public static Object writeObject( ResultSet rs,String key){
         ObjectInputStream ois = null;
         try {

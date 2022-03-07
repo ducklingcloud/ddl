@@ -31,7 +31,7 @@ import net.duckling.ddl.util.AbstractBaseDAO;
 @Repository
 public class PageLockDAOImpl extends AbstractBaseDAO implements PageLockDAO {
     private static final String QUERY_ALL="select * from ddl_page_lock";
-    private static final String INSERT="insert ddl_page_lock (rid,tid,uid,last_access,max_version) values(?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO ddl_page_lock (rid,tid,uid,last_access,max_version) VALUES (?,?,?,?,?)";
     private static final String UPDATE = "update ddl_page_lock set last_access=? ,max_version=? ,uid=? where rid=?";
     private static final String DELETE = "delete from ddl_page_lock where rid=?";
     private static final String QUERY_BY_RID_TID ="select * from ddl_page_lock where rid=? and tid=?";

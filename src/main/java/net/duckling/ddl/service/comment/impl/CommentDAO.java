@@ -99,7 +99,7 @@ public class CommentDAO extends AbstractBaseDAO {
             "r.id as r_id,r.uid as r_uid,r.email as r_email,r.name as r_name,r.id as r_uxid "+
             "FROM vwb_comment c left join vwb_user_ext s on c.sender = s.uid " +
             "left join vwb_user_ext r on c.receiver=r.uid " +
-            "WHERE c.tid=? and c.rid=? and c.item_type=? ORDER BY create_time desc limit ?";
+            "WHERE c.tid=? and c.rid=? and c.item_type=? ORDER BY create_time desc "+ TOP_N;
 
     private static final String COUNT_COMMENT = "SELECT COUNT(id) FROM vwb_comment where tid=? and rid=? and item_type=? ";
 

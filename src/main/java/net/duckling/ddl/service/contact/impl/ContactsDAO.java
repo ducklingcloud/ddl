@@ -43,38 +43,51 @@ import org.springframework.stereotype.Repository;
 public class ContactsDAO extends AbstractBaseDAO {
     private static final String QUERY = "select * from vwb_person_contacts where uid=?";
     private static final String QUERY_BY_ID="select * from vwb_person_contacts where id=?";
-    private static final String QUERY_BY_NAME = "select * from vwb_person_contacts where uid=? and name rlike ?";
-    private static final String INSERT = "insert into vwb_person_contacts(`uid`,`main_email`,`option_email`,`name`,`orgnization`,`department`,`sex`,`telephone`," +
-            "`mobile`,`qq`,`msn`,`address`,`photo`,`weibo`,`pinyin`) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String QUERY_BY_NAME =
+            "SELECT * FROM vwb_person_contacts WHERE uid=? AND name LIKE ?";
+    private static final String INSERT = "insert into vwb_person_contacts(uid,main_email,option_email,name,orgnization,department,sex,telephone," +
+            "mobile,qq,msn,address,photo,weibo,pinyin) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String DELETE_BY_NAME = "delete from vwb_person_contacts where and name=?";
     private static final String DELETE_BY_ID = "delete from vwb_person_contacts where id=?";
     private static final String DELETE_BY_UID = "delete from vwb_person_contacts where uid=?";
     private static final String UPDATE_BY_ID = "update vwb_person_contacts set uid=?,main_email=?,option_email=?,name=?,orgnization=?,department=?,sex=?,telephone=?,mobile=?,qq=?,msn=?,address=?,photo=?,weibo=?,pinyin=? where id=?";
     private static final String UPDATE_BY_NAME = "update vwb_person_contacts set main_email=?,option_email=?,orgnization=?,department=?,sex=?,telephone=?,mobile=?,qq=?,msn=?,address=?,photo=?,weibo=?,pinyin=? where uid=? and name=?";
-    private static final String QUERY_BY_PINYIN = "select * from vwb_person_contacts where uid=? and pinyin rlike ?";
-    private static final String QUERY_BY_MAIL = "select * from vwb_person_contacts where uid=? and main_email rlike ?";
+    private static final String QUERY_BY_PINYIN =
+            "SELECT * FROM vwb_person_contacts WHERE uid=? AND pinyin LIKE ?";
+    private static final String QUERY_BY_MAIL =
+            "SELECT * FROM vwb_person_contacts WHERE uid=? AND main_email LIKE ?";
     private static final String QUERY_BY_UNM = "select * from vwb_person_contacts where uid=? and name=? and main_email=?";
+
     public List<Contact> getUserContactsByOwner(String uid) {
         return getJdbcTemplate().query(QUERY, new Object[]{uid}, contactRowMapper);
     }
 
     public List<Contact> getUserContactsByName(String uid, String name) {
-        return getJdbcTemplate().query(QUERY_BY_NAME, new Object[]{uid, name}, contactRowMapper);
+        return getJdbcTemplate().query(QUERY_BY_NAME,
+                                       new Object[]{uid, getLike(name)},
+                                       contactRowMapper);
     }
 
     public List<Contact> getUserContactsByPinyin(String uid, String pinyin) {
-        return getJdbcTemplate().query(QUERY_BY_PINYIN, new Object[]{uid, pinyin}, contactRowMapper);
+        return getJdbcTemplate().query(QUERY_BY_PINYIN,
+                                       new Object[]{uid, getLike(pinyin)},
+                                       contactRowMapper);
     }
+    
     public List<Contact> getUserContactsByMail(String uid, String mail) {
-        return getJdbcTemplate().query(QUERY_BY_MAIL, new Object[]{uid, mail}, contactRowMapper);
+        return getJdbcTemplate().query(QUERY_BY_MAIL,
+                                       new Object[]{uid, getLike(mail)},
+                                       contactRowMapper);
     }
 
     public List<Contact> getContacts(String uid, String name, String mail) {
         return getJdbcTemplate().query(QUERY_BY_UNM, new Object[]{uid, name, mail}, contactRowMapper);
     }
+    
     public List<Contact> getUserContactById(int id) {
         return getJdbcTemplate().query(QUERY_BY_ID, new Object[]{id}, contactRowMapper);
     }
+    
     public void addContactItems(final Contact[] contacts) {
         getJdbcTemplate().batchUpdate(INSERT, new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
@@ -101,6 +114,7 @@ public class ContactsDAO extends AbstractBaseDAO {
                 }
             });
     }
+    
     private boolean exists(Contact contact) {
         List<Contact> contacts = this.getContacts(contact.getUid(), contact.getName(), contact.getMainEmail());
         if(contacts.size()>0) {
@@ -108,6 +122,7 @@ public class ContactsDAO extends AbstractBaseDAO {
         }
         return false;
     }
+    
     public int addContactItem(final Contact instance) {
         if(exists(instance)) {
             return -1;
@@ -158,6 +173,7 @@ public class ContactsDAO extends AbstractBaseDAO {
                 c.getQq(),c.getMsn(),c.getAddress(),c.getPhoto(),c.getWeibo(),c.getPinyin(),c.getId()
             });
     }
+    
     public void updateContactByName(Contact c) {
         getJdbcTemplate().update(UPDATE_BY_NAME, new Object[] {
                 c.getMainEmail(),c.getOptionEmail(),c.getOrgnization(),c.getDepartment(),c.getSex(),c.getTelephone(),c.getMobile(),
@@ -208,7 +224,8 @@ public class ContactsDAO extends AbstractBaseDAO {
                 instance.setSex(rs.getString("sex"));
                 instance.setOrgnization(rs.getString("orgnization"));
                 instance.setTelephone(rs.getString("telephone"));
-                //          instance.setBirthday(rs.getDate("birthday"));        //-----------------------做一个文字处理的辅助类，比如TextUtil，处理日期的格式化
+                // instance.setBirthday(rs.getDate("birthday"));
+                // 做一个文字处理的辅助类，比如TextUtil，处理日期的格式化
                 instance.setDepartment(rs.getString("department"));
                 instance.setWeibo(rs.getString("weibo"));
                 instance.setPinyin(rs.getString("pinyin"));
@@ -216,4 +233,8 @@ public class ContactsDAO extends AbstractBaseDAO {
                 return instance;
             }
         };
+
+    private String getLike(String str) {
+        return "%"+ str +"%";
+    }
 }

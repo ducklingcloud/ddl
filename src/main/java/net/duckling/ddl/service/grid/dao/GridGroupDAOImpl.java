@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import javax.sql.rowset.serial.SerialBlob;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,6 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-
 
 @Repository
 public class GridGroupDAOImpl extends AbstractBaseDAO implements GridGroupDAO {
@@ -76,18 +76,35 @@ public class GridGroupDAOImpl extends AbstractBaseDAO implements GridGroupDAO {
                     ps.setInt(++i,gg.getTid());
                     ps.setString(++i, gg.getUid());
                     ps.setTimestamp(++i, new Timestamp(gg.getLastEditTime().getTime()));
-                    ps.setObject(++i, gg.getGridItemJsonMap());
+                    // setObject() works on mysql, not derby
+                    // ps.setObject(++i, gg.getGridItemJsonMap());
+                    SerialBlob blobdata = new SerialBlob(
+                        SQLObjectMapper.getBytes(gg.getGridItemJsonMap()));
+                    ps.setBlob(++i, blobdata);
                     return ps;
                 }
 
             }, keyHolder);
         Number key = keyHolder.getKey();
-        return (key==null)?-1:key.intValue();
+        return (key==null) ? -1 : key.intValue();
     }
 
     @Override
     public int updateGroup(final GridGroup gg) {
-        return getJdbcTemplate().update(SQL_UPDATE,new Object[]{gg.getLastEditTime(),gg.getGridItemJsonMap(),gg.getUid(),gg.getTid()});
+        try {
+            return getJdbcTemplate().update(
+                SQL_UPDATE,
+                new Object[]{
+                    gg.getLastEditTime(),
+                    new SerialBlob(SQLObjectMapper.getBytes(gg.getGridItemJsonMap())),
+                    gg.getUid(),
+                    gg.getTid()
+                });
+        } catch (SQLException e) {
+            LOG.error("SQL update failed -- "+ e.toString());
+            LOG.debug("updateGroup failure.", e);
+            return -1;
+        }
     }
 
     @Override

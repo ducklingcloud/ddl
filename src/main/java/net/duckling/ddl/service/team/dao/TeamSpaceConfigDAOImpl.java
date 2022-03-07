@@ -57,7 +57,7 @@ public class TeamSpaceConfigDAOImpl extends AbstractBaseDAO implements TeamSpace
         };
     @Override
     public TeamSpaceConfig getTeamSpaceConfig(int tid) {
-        List<TeamSpaceConfig> c = getJdbcTemplate().query(QUERY + " limit 1", new Object[]{tid}, rowMapper);
+        List<TeamSpaceConfig> c = getJdbcTemplate().query(QUERY + LIMIT_1, new Object[]{tid}, rowMapper);
         if(c==null||c.isEmpty()){
             return null;
         }

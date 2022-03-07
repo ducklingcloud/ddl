@@ -41,7 +41,9 @@ import org.springframework.jdbc.core.RowMapper;
 public class TeamMemberDAOImpl extends AbstractBaseDAO implements TeamMemberDAO {
     private static final String UPDATE_TEAM_SEQUENCE = "update vwb_team_member set sequence=? where uid=? and tid=? ";
     private static final String INSERT_SQL = "insert into vwb_team_member(tid, uid,sequence,team_access,person_access,monitor_access,team_notice_count,person_notice_count,monitor_notice_count,team_event_ids,person_event_ids,monitor_event_ids) values(?,?,?,?,?,?,0,0,0,'','','')";
-    private static final String QUERY = "select m.uid,e.name,e.pinyin,e.email,e.id from vwb_team_member m,vwb_user_ext e where m.tid=? and m.uid=e.uid order by convert(e.name using gbk)";
+    // private static final String QUERY = "select m.uid,e.name,e.pinyin,e.email,e.id from vwb_team_member m,vwb_user_ext e where m.tid=? and m.uid=e.uid order by convert(e.name using gbk)";
+    // convert() not used because of derby
+    private static final String QUERY = "select m.uid,e.name,e.pinyin,e.email,e.id from vwb_team_member m,vwb_user_ext e where m.tid=? and m.uid=e.uid order by e.name";
 
     private static final String REMOVE_MEMBER = "delete from vwb_team_member where tid=? and uid=?";
 

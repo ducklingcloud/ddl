@@ -27,6 +27,7 @@
     <param-value>global_resources</param-value>
   </context-param>
 
+  <!-- listeners called in the order here-->
   <listener>
     <listener-class>
       org.springframework.web.util.Log4jConfigListener

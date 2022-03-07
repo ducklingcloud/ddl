@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import net.duckling.ddl.service.resource.ResourceDirectoryTrash;
 import net.duckling.ddl.service.resource.ResourceDirectoryTree;
 import net.duckling.ddl.util.AbstractBaseDAO;
@@ -36,6 +35,7 @@ import net.duckling.ddl.util.AbstractBaseDAO;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
 @Repository
 public class ResourceDirectoryTrashDAOImpl extends AbstractBaseDAO implements ResourceDirectoryTrashDAO {
 

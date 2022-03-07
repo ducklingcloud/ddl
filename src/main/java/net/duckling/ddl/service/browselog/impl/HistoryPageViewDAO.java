@@ -35,11 +35,11 @@ import org.springframework.stereotype.Repository;
 public class HistoryPageViewDAO extends AbstractBaseDAO {
     private BrowseLogRowMapper rowmapper = new BrowseLogRowMapper();
     private static final String INSERT = "insert into a1_page_view(tid, rid, item_type, user_id, display_name,tracking_id, browse_time) values(?,?,?,?,?,?,?)";
-    private static final String QUERY = "select * from a1_page_view where rid=? order by browse_time desc limit ?";
+    private static final String QUERY = "select * from a1_page_view where rid=? order by browse_time desc "+ TOP_N;
     private static final String COUNT_HOTS = "select count(*) from a1_page_view where rid=?";
     private static final String TOP_RESOURCE="select count(p.rid) total, p.rid, p.item_type, title" +
             " from a1_page_view p, a1_resource r" +
-            " where r.id=p.rid and p.tid=? and p.browse_time>? group by p.rid order by total desc limit ?";
+            " where r.id=p.rid and p.tid=? and p.browse_time>? group by p.rid order by total desc "+ TOP_N;
 
     public void savePageView(final List<BrowseLog> list) {
         getJdbcTemplate().batchUpdate(INSERT, new BrowseLogBatchSetter(list));

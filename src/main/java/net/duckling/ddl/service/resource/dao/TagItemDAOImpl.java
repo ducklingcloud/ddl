@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.duckling.ddl.common.DBs;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.service.resource.Resource;
@@ -45,22 +47,20 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public class TagItemDAOImpl extends AbstractBaseDAO implements TagItemDAO {
-
     private static final Logger LOG = Logger.getLogger(TagDAOImpl.class);
 
-    private static final String SQL_CREATE = "insert into a1_tag_item(tid,tgid,rid) select ?,?,? from dual where not exists (select * from " +
-            "a1_tag_item where a1_tag_item.tid=? and a1_tag_item.tgid=? and a1_tag_item.rid=?)";
     private static final String SQL_DELETE = "delete from a1_tag_item";
     private static final String TAGID = " where tgid=?";
     private static final String SQL_UPDATE = "update a1_tag_item set tid=?, tgid=?, rid=? where id=? ";
     private static final String SQL_QUERY = "select * from a1_tag_item ";
     private static final String TAGITEMBYID = " where id=?";
 
-    private RowMapper<TagItem> tagItemRowMapper = new RowMapper<TagItem>(){
+    // For dbms compatibility, set in constructor.
+    private final String SQL_CREATE;
 
+    private RowMapper<TagItem> tagItemRowMapper = new RowMapper<TagItem>() {
             @Override
             public TagItem mapRow(ResultSet rs, int index) throws SQLException {
                 TagItem tagItem = new TagItem();
@@ -70,19 +70,49 @@ public class TagItemDAOImpl extends AbstractBaseDAO implements TagItemDAO {
                 tagItem.setRid(rs.getInt("rid"));
                 return tagItem;
             }
-
         };
+
+    public TagItemDAOImpl() {
+        switch (DBs.getDbms()) {
+            case "mysql":
+                SQL_CREATE =
+                        "INSERT INTO a1_tag_item (tid,tgid,rid) "+
+                        "SELECT ?,?,? FROM DUAL "+
+                        "WHERE NOT EXISTS ( "+
+                        "  SELECT * FROM a1_tag_item "+
+                        "  WHERE a1_tag_item.tid = ? AND a1_tag_item.tgid = ? "+
+                        "    AND a1_tag_item.rid = ? "+
+                        ")";
+                break;
+            case "derby":
+                SQL_CREATE =
+                        "INSERT INTO a1_tag_item (tid, tgid, rid) "+
+                        "SELECT * FROM ( VALUES ( "+
+                        "  CAST(? as int), CAST(? as int), CAST(? as int) "+
+                        "  ) ) AS t "+
+                        "WHERE NOT EXISTS ( "+
+                        "  SELECT * FROM a1_tag_item "+
+                        "  WHERE tid = ? AND tgid = ? "+
+                        "    AND rid = ? "+
+                        ")";
+                break;
+            default:
+                SQL_CREATE = "DBMS Not Supported";
+                LOG.error("Fatal: DBMS not supported. Please check configuration.");
+                break;
+        }
+    }
 
     @Override
     public int create(final TagItem tagItem) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        this.getJdbcTemplate().update(new PreparedStatementCreator(){
-
+        int rows = this.getJdbcTemplate().update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection conn)
                         throws SQLException {
                     PreparedStatement ps = null;
-                    ps = conn.prepareStatement(SQL_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
+                    ps = conn.prepareStatement(SQL_CREATE,
+                                               PreparedStatement.RETURN_GENERATED_KEYS);
                     int i = 0;
                     ps.setInt(++i, tagItem.getTid());
                     ps.setInt(++i, tagItem.getTgid());
@@ -92,10 +122,8 @@ public class TagItemDAOImpl extends AbstractBaseDAO implements TagItemDAO {
                     ps.setInt(++i, tagItem.getRid());
                     return ps;
                 }
-
             }, keyHolder);
-        Number key = keyHolder.getKey();
-        return (key==null)?-1:key.intValue();
+        return (rows > 0) ? keyHolder.getKey().intValue() : -1;
     }
 
     @Override
@@ -111,11 +139,14 @@ public class TagItemDAOImpl extends AbstractBaseDAO implements TagItemDAO {
 
     @Override
     public int batchUpdateWithTag(final int tid, final int tagid, final List<Long> rids) {
-        this.getJdbcTemplate().batchUpdate(SQL_CREATE, new BatchPreparedStatementSetter(){
+        if (rids == null || rids.size() <= 0) {
+            return 0;
+        }
+        this.getJdbcTemplate().batchUpdate(SQL_CREATE, new BatchPreparedStatementSetter() {
 
                 @Override
                 public int getBatchSize() {
-                    return (null==rids||rids.size()<=0)?0:rids.size();
+                    return rids.size();
                 }
 
                 @Override
@@ -176,7 +207,9 @@ public class TagItemDAOImpl extends AbstractBaseDAO implements TagItemDAO {
         }
         String limit = "";
         if(offset>=0 && size>0){
-            limit = " limit "+offset+","+size;
+            limit = DBs.getDbms().equals("mysql") ?
+                    " LIMIT "+ offset +","+ size :
+                    " OFFSET "+ offset +" ROWS FETCH NEXT "+ size +" ROWS ONLY";
         }
         String sql = SQL_QUERY+condition+limit;
         return this.getJdbcTemplate().query(sql, tagItemRowMapper);

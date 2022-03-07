@@ -30,39 +30,45 @@ import net.duckling.ddl.service.search.WeightPair;
  */
 public interface UserAnalysisDAO {
     /**
-     * @return 返回一组用户列表，
-     * 每个list元素包含用户，关注的用户，和权重（浏览关注用户创建页面词素）
+     * @return 返回一组用户列表，每个list元素包含用户，关注的用户，和
+     * 权重（浏览关注用户创建页面词素）
      */
     List<UserInterestRecord> getBrowse();
+    
     /**
-     * @param 将经过处理后所有用户的兴趣重新存储，只负责存储功能
+     * 将经过处理后所有用户的兴趣重新存储，只负责存储功能
      */
     void creatUserInterest(final List<UserInterestRecord> recordList);
+
     /**
      * @param 需要查询的用户名uid
      * @return 该用户关注的所有用户
      */
     List<String> getInterest(String uid);
+
     /**
      * @param 查询词keyword
      * @param 发出查询的用户名uid
      * @return 该用户关注的所有用户产生的文档权重
      */
-    List<WeightPair> getInterestDocWeight(String keyword,String uid);
+    List<WeightPair> getInterestDocWeight(String keyword, String uid);
+
     /**
-     *
      * @return 插入数据的数量
      */
     int creatUserSim();
+
     /**
      * @param 需要查询的用户名uid
      * @return 与该用户相似的所有用户
      */
     List<String> getSim(String uid);
+
     /**
      * @param keyword查询词
      * @param uid发出查询的用户名
      * @return 该用户相似的所有用户产生的文档权重
      */
     List<WeightPair> getSimDocWeight(String keyword,String uid);
+    
 }

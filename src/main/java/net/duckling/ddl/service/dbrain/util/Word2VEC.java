@@ -42,22 +42,18 @@ public class Word2VEC {
     /**
      * 加载模型
      *
-     * @param path
-     *            模型的路径
+     * @param path 模型的路径
      * @throws IOException
      */
     public void loadModel(String path) throws IOException
     {
-        DataInputStream dis = null;
-        BufferedInputStream bis = null;
         double len = 0;
         float vector = 0;
-        try {
-            bis = new BufferedInputStream(new FileInputStream(path));
-            dis = new DataInputStream(bis);
-            // //读取词数
+        try (BufferedInputStream bis =
+             new BufferedInputStream(new FileInputStream(path));
+             DataInputStream dis = new DataInputStream(bis)) {
+            //读取词数
             words = Integer.parseInt(readString(dis));
-            // //大小
             size = Integer.parseInt(readString(dis));
 
             String word;
@@ -79,10 +75,6 @@ public class Word2VEC {
                 wordMap.put(word, vectors);
                 dis.read();
             }
-
-        } finally {
-            bis.close();
-            dis.close();
         }
     }
 

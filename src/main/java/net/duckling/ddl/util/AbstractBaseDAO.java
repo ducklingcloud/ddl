@@ -18,16 +18,28 @@
  */
 package net.duckling.ddl.util;
 
+import net.duckling.common.DucklingProperties;
+import net.duckling.common.db.DbmsCompat;
+import net.duckling.common.db.DbmsCompat.DbmsDialect;
+import net.duckling.ddl.common.DBs;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 public abstract class AbstractBaseDAO {
+    public static final String LIMIT_1 =
+            DbmsCompat.getClause(DbmsDialect.LIMIT_1, DBs.getDbms());
+    public static final String TOP_N =
+            DbmsCompat.getClause(DbmsDialect.TOP_TEN, DBs.getDbms());
+    public static final String LIMIT_OFFSET =
+            DbmsCompat.getClause(DbmsDialect.LIMIT_OFFSET, DBs.getDbms());
 
     @Autowired
+    private DucklingProperties config;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

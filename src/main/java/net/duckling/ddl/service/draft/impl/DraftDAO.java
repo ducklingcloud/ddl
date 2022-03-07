@@ -45,7 +45,7 @@ public class DraftDAO extends AbstractBaseDAO {
     private static final String INSERT = "insert into vwb_dpage_draft(tid,rid,uid,type,title,content,modify_time) values(?,?,?,?,?,?,?)";
     private static final String UPDATE = "update vwb_dpage_draft set content=?,title=?,modify_time=? where id=? ";
     private static final String QUERY = "select * from vwb_dpage_draft where tid=? and rid=? and uid=? and type=?";
-    private static final String QUERY_LATEST="select * from vwb_dpage_draft where tid=? and rid=? and uid=? order by modify_time desc limit 1";
+    private static final String QUERY_LATEST="select * from vwb_dpage_draft where tid=? and rid=? and uid=? order by modify_time desc "+ LIMIT_1;
     private static final String DELETE = "delete from vwb_dpage_draft where tid=? and rid=? and uid=? and type=?";
     private static final String CHECK_EXIST = "select count(id) from vwb_dpage_draft where tid=? and rid=? and uid=? and type=?";
 

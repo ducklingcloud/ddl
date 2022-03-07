@@ -18,6 +18,7 @@
  */
 package net.duckling.ddl.service.resource.dao;
 
+import net.duckling.ddl.common.DBs;
 import org.apache.commons.lang.StringUtils;
 
 public final class ResourceOrderUtils {
@@ -56,6 +57,8 @@ public final class ResourceOrderUtils {
             return "";
         }
 
-        return " limit "+offset+","+size;
+        return DBs.getDbms().equals("mysql") ?
+                " LIMIT "+ offset +","+ size :
+                " OFFSET "+ offset +" ROWS FETCH NEXT "+ size +" ROWS ONLY";
     }
 }

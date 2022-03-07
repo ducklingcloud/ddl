@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import net.duckling.ddl.common.DBs;
 
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.service.file.DFileRef;
@@ -60,7 +61,7 @@ public class FileDAOImpl extends AbstractBaseDAO implements FileDAO {
 
     private static final String SQL_QUERY_EMAIL_ATTACH_BY_MID="select * from a1_file a1 where creator =? and tid=? and status='"+LynxConstants.STATUS_AVAILABLE+"' and fid in(select fid from a1_emailattach em where em.mid=? and a1.tid=em.tid) order by id desc";
 
-    private static final String SQL_QUERY_BY_UID_TID = "select * from a1_file where tid=? and status='"+LynxConstants.STATUS_AVAILABLE+"' order by last_edit_time desc limit ?,?";
+    private static final String SQL_QUERY_BY_UID_TID = "select * from a1_file where tid=? and status='"+LynxConstants.STATUS_AVAILABLE+"' order by last_edit_time desc "+ LIMIT_OFFSET;
     private static final String SQL_QUERY_BY_UID_TID_COUNT = "select count(1) from a1_file where tid=? and status='"+LynxConstants.STATUS_AVAILABLE+"' ";
     private static final String SQL_QUERY_BY_TID_TITLE = "select * from a1_file where tid=? and title=? and status='"+LynxConstants.STATUS_AVAILABLE+"' ";
     private RowMapper<File> fileRowMapper = new RowMapper<File>(){
@@ -176,8 +177,13 @@ public class FileDAOImpl extends AbstractBaseDAO implements FileDAO {
             return null;
         }
         String limit = "";
-        if(offset>=0 && size>0){
-            limit = " limit "+offset+","+size;
+        if (offset>=0 && size>0) {
+            if ("mysql".equals(DBs.getDbms())) {
+                limit = " limit "+offset+","+size;
+            } else {
+                // for Derby. @see net.duckling.common.db.DbmsCompat
+                limit = " OFFSET "+ offset +" ROWS FETCH NEXT "+ size +" ROWS ONLY";
+            }
         }
         return this.getJdbcTemplate().query(SQL_QUERY+BY_TID+limit, new Object[]{tid}, fileRowMapper);
     }
@@ -237,7 +243,7 @@ public class FileDAOImpl extends AbstractBaseDAO implements FileDAO {
             if(tids.length==1){
                 return getJdbcTemplate().query(SQL_QUERY_BY_UID_TID, new Object[]{tids[0],offset,rows}, fileRowMapper);
             }else{
-                String sql = "select * from a1_file where tid in"+StringUtil.getSQLInFromInt(tids)+" and status='"+LynxConstants.STATUS_AVAILABLE+"' order by last_edit_time desc limit ?,?";
+                String sql = "select * from a1_file where tid in"+StringUtil.getSQLInFromInt(tids)+" and status='"+LynxConstants.STATUS_AVAILABLE+"' order by last_edit_time desc "+ LIMIT_OFFSET;
                 return getJdbcTemplate().query(sql, new Object[]{offset,rows}, fileRowMapper);
             }
         }

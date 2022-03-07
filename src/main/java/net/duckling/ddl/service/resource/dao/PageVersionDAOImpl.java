@@ -53,7 +53,7 @@ public class PageVersionDAOImpl extends AbstractBaseDAO implements PageVersionDA
     private static final String BY_ID = " where id=?";
     private static final String BY_TIDRID = " where tid=? and rid=?";
     private static final String BY_PIDVER = " where rid=? and version=?";
-    private static final String SQL_QUERY_LATEST = "select * from a1_page_version where  rid=? order by version desc limit 1 ";
+    private static final String SQL_QUERY_LATEST = "select * from a1_page_version where  rid=? order by version desc "+ LIMIT_1;
     private static final String RECOVER_PAGE_VERSION = "update a1_page_version set status='"+LynxConstants.STATUS_AVAILABLE+"' where tid=? and rid=?";
     private RowMapper<PageVersion> pageVersionRowMapper = new RowMapper<PageVersion>(){
 
@@ -165,7 +165,8 @@ public class PageVersionDAOImpl extends AbstractBaseDAO implements PageVersionDA
 
     @Override
     public List<PageVersion> getVersions(int rid, int tid, int offset, int size) {
-        String sql = "select * from a1_page_version where rid=? and tid=? order by version desc limit ?,?";
+        String sql = "SELECT * FROM a1_page_version WHERE rid=? AND tid=? "+
+                " ORDER BY version DESC "+ LIMIT_OFFSET;
         return getJdbcTemplate().query(sql, new Object[]{rid,tid,offset,size},pageVersionRowMapper);
     }
 

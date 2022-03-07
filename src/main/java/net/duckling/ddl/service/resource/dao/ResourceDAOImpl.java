@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.sql.rowset.serial.SerialBlob;
+import net.duckling.ddl.common.DBs;
 
 import net.duckling.common.util.CommonUtils;
 import net.duckling.ddl.constant.LynxConstants;
@@ -107,14 +108,14 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
                     ps = conn.prepareStatement(
                         SQL_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
                     int i = 0;
-                    // tid, item_type, title, creator, create_time, 
+                    // tid, item_type, title, creator, create_time,
                     ps.setInt(++i, res.getTid());
                     ps.setString(++i, res.getItemType());
                     ps.setString(++i, res.getTitle());
                     ps.setString(++i, res.getCreator());
                     ps.setTimestamp(++i, new Timestamp(
                         res.getCreateTime().getTime()));
-                    // last_editor, last_editor_name, last_edit_time, 
+                    // last_editor, last_editor_name, last_edit_time,
                     ps.setString(++i, res.getLastEditor());
                     ps.setString(++i, res.getLastEditorName());
                     ps.setTimestamp(++i, new Timestamp(
@@ -233,7 +234,10 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
         if(null != title && !"".equals(title)){
             sql = sql+" and title like '%"+title+"%'";
         }
-        sql = sql + " order by last_edit_time desc limit "+offset+", "+size;
+        sql = sql + " order by last_edit_time desc "+
+                ( DBs.getDbms().equals("mysql") ?
+                  " LIMIT "+ offset +","+ size :
+                  " OFFSET "+ offset +" ROWS FETCH NEXT "+ size +" ROWS ONLY" );
         return this.getJdbcTemplate().query(sql, resourceRowMapper);
     }
 
@@ -285,7 +289,10 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
                         throws SQLException {
                     Resource res = resList.get(index);
                     int i=0;
-                    ps.setObject(++i, res.getMarkedUserSet());
+                    // ps.setObject(++i, res.getMarkedUserSet());
+                    SerialBlob blobdata = new SerialBlob(
+                        SQLObjectMapper.getBytes(res.getMarkedUserSet()));
+                    ps.setBlob(++i, blobdata);
                     ps.setInt(++i, res.getRid());
                 }
 
@@ -400,8 +407,12 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
 
     @Override
     public String getAllBundleItemFileType(int bid, int tid){
-        String sql = "select group_concat(distinct(file_type)) from a1_resource where bid=? and tid=? and file_type is not null";
-        return this.getJdbcTemplate().queryForObject(sql, new Object[]{bid, tid}, String.class);
+        // String sql = "select group_concat(distinct(file_type)) from a1_resource where bid=? and tid=? and file_type is not null";
+        // Remove group_concat
+        String sql = "SELECT DISTINCT file_type FROM a1_resource "+
+                " WHERE bid=? AND tid=? AND file_type IS NOT NULL";
+        return this.getJdbcTemplate().queryForObject(
+            sql, new Object[]{bid, tid}, String.class);
     }
 
     @Override
@@ -468,10 +479,10 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
     public List<Resource> queryReferableFiles(String keyword, int[] tid, int offset, int size) {
         if(tid!=null&&tid.length>0){
             if(tid.length==1){
-                String sql = "select * from a1_resource where item_type = 'DFile' and tid=? and  status ='"+LynxConstants.STATUS_AVAILABLE+"' and title like ? order by last_edit_time desc limit ?,? ";
+                String sql = "select * from a1_resource where item_type = 'DFile' and tid=? and  status ='"+LynxConstants.STATUS_AVAILABLE+"' and title like ? order by last_edit_time desc "+ LIMIT_OFFSET;
                 return this.getJdbcTemplate().query(sql, new Object[]{tid[0],"%"+keyword+"%",offset,size}, resourceRowMapper);
             }else{
-                String sql = "select * from a1_resource where item_type = 'DFile' and tid in "+StringUtil.getSQLInFromInt(tid)+" and status ='"+LynxConstants.STATUS_AVAILABLE+"' and title like ? order by last_edit_time desc limit ?,? ";
+                String sql = "select * from a1_resource where item_type = 'DFile' and tid in "+StringUtil.getSQLInFromInt(tid)+" and status ='"+LynxConstants.STATUS_AVAILABLE+"' and title like ? order by last_edit_time desc "+ LIMIT_OFFSET;
                 return this.getJdbcTemplate().query(sql, new Object[]{"%"+keyword+"%",offset,size}, resourceRowMapper);
             }
         }

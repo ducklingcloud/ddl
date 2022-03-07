@@ -21,9 +21,13 @@ package net.duckling.ddl.service.resource.dao;
 import com.google.gson.reflect.TypeToken;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.ResultSetMetaData;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import net.duckling.ddl.common.DBs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.duckling.ddl.service.resource.Resource;
 import net.duckling.ddl.util.JsonUtil;
@@ -31,11 +35,14 @@ import net.duckling.ddl.util.SQLObjectMapper;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class ResourceRowMapper implements RowMapper<Resource>{
+public class ResourceRowMapper implements RowMapper<Resource> {
+    private final Logger log =
+            LoggerFactory.getLogger(ResourceRowMapper.class);
     private String prefix;
 
-    public ResourceRowMapper(String s){
-        this.prefix = s;
+    public ResourceRowMapper(String s) {
+        this.prefix = DBs.getDbms().equals("mysql") ?
+                s : "";
     }
 
     private Map<Integer,String> parseSerialize(String src){
@@ -50,6 +57,13 @@ public class ResourceRowMapper implements RowMapper<Resource>{
     @Override
     public Resource mapRow(ResultSet rs, int index) throws SQLException {
         Resource r = new Resource();
+
+        // ResultSetMetaData md = rs.getMetaData();
+        // for (int i=1; i <= md.getColumnCount(); i++) {
+        //     log.error("{} name:{} label:{}", i, md.getColumnName(i),
+        //               md.getColumnLabel(i));
+        // }
+        
         r.setRid(rs.getInt(prefix+"rid"));
         r.setTid(rs.getInt(prefix+"tid"));
         r.setItemType(rs.getString(prefix+"item_type"));

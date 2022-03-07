@@ -34,19 +34,23 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 
-/**系统参数的JDBC实现*/
-
+/**
+ * 系统参数的JDBC实现
+ */
 @Repository
 public class ParamDAOImpl extends AbstractBaseDAO implements ParamDAO{
-    public static final String INSERT_PARAM="insert into a1_param(`item_id`,`key`,`value`,`type`) values(?,?,?,?)";
-    public static final String UPDATE_PARAM="update a1_param set `item_id`=?,`key`=?,`value`=?,`type`=? where `id`=?";
-    public static final String SELECT_PARAM="select * from a1_param where 1=1";
+    public static final String INSERT_PARAM =
+            "INSERT INTO a1_param (item_id, \"key\", value, type) VALUES (?,?,?,?)";
+    public static final String UPDATE_PARAM =
+            "UPDATE a1_param SET item_id=?, \"key\"=?, value=?, type=? where id=?";
+    public static final String SELECT_PARAM =
+            "SELECT * FROM a1_param WHERE 1=1";
 
-    public static final String BY_TYPE=" and `type`=?";
-    public static final String BY_KEY=" and `key`=?";
-    public static final String BY_VALUE=" and `value`=?";
-    public static final String BY_ITEM_ID=" and `item_id`=?";
-    public static final String BY_ID=" and `id`=?";
+    public static final String BY_TYPE=" and type=?";
+    public static final String BY_KEY=" and \"key\"=?";
+    public static final String BY_VALUE=" and value=?";
+    public static final String BY_ITEM_ID=" and item_id=?";
+    public static final String BY_ID=" and id=?";
 
     //rowMapper BEGIN
     private RowMapper<Param> paramMapper = new RowMapper<Param>() {

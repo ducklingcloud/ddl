@@ -18,6 +18,10 @@
  */
 package net.duckling.ddl.service.browselog.impl;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +35,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TodayPageViewDAO extends AbstractBaseDAO {
 
-    private static final String COUNT_HOTS = "select count(*) from a1_browse_log where rid=? and  browse_time >= ?";
+    private static final String COUNT_HOTS =
+            "SELECT count(*) FROM a1_browse_log "+
+            "WHERE rid=? AND  browse_time >= ?";
 
     /* Fix ONLY_FULL_GROUP_BY issue
      * kai.nan@yahoo.com <2022-01-15 Sat>
@@ -44,9 +50,9 @@ public class TodayPageViewDAO extends AbstractBaseDAO {
             "  FROM a1_browse_log GROUP BY tracking_id ) AS t2 " +
             "  ON  t1.tracking_id = t2.tracking_id and " +
             "  t1.id = t2.last_one " +
-            "ORDER BY browse_time DESC LIMIT ?";
+            "ORDER BY browse_time DESC "+ TOP_N;
     // private static final String QUERY_RESOURCE_VISITOR = "select tid, rid, max(browse_time) browse_time, user_id, display_name "
-    //         + " from a1_browse_log where rid=? and browse_time>=? GROUP by tracking_id order by browse_time desc limit ?";
+    //         + " from a1_browse_log where rid=? and browse_time>=? GROUP by tracking_id order by browse_time desc "+ TOP_N;
 
     /* Fix only_full_group_by */
     private static final String GRAB_PAGE_VIEW =
@@ -54,7 +60,7 @@ public class TodayPageViewDAO extends AbstractBaseDAO {
             "       display_name, t1.tracking_id as tracking_id "+
             "FROM ( "+
             "  SELECT * FROM  a1_browse_log "+
-            "  WHERE browse_time>=? and browse_time<=? "+
+            "  WHERE browse_time>=? and browse_time<? "+
             ") AS t1 "+
             "INNER JOIN ( "+
             "  SELECT tracking_id, max(id) last_one "+
@@ -70,31 +76,41 @@ public class TodayPageViewDAO extends AbstractBaseDAO {
 
     private BrowseLogRowMapper rowmapper = new BrowseLogRowMapper();
 
-    private String today() {
-        Date date = new Date();
-        String today = DateUtils.format(date, "yyyy-MM-dd");
-        return today;
+    private Timestamp today() {
+        return Timestamp.valueOf(LocalDate.now().atStartOfDay());
     }
 
     public int countHots(int rid) {
-        return getJdbcTemplate().queryForObject(COUNT_HOTS,
-                                                new Object[] { rid, today() }, Integer.class);
+        return getJdbcTemplate().queryForObject(
+            COUNT_HOTS,
+            new Object[] { rid, today() },
+            Integer.class);
     }
 
     public List<BrowseLog> getResourceVisitor(int rid, int count) {
-        return getJdbcTemplate().query(QUERY_RESOURCE_VISITOR,
-                                       new Object[] { rid, today(), count }, rowmapper);
+        return getJdbcTemplate().query(
+            QUERY_RESOURCE_VISITOR,
+            new Object[] { rid, today(), count },
+            rowmapper);
     }
 
     public List<BrowseLog> getPageViewAt(Date day) {
-        String dayStart = DateUtils.format(day, "yyyy-MM-dd");
-        String dayEnd = dayStart+" 23:59:59";
-        return getJdbcTemplate().query(GRAB_PAGE_VIEW,
-                                       new Object[] { dayStart, dayEnd }, rowmapper);
+        LocalDate dayStart = LocalDateTime.ofInstant(
+            day.toInstant(), ZoneId.systemDefault()).toLocalDate();
+        LocalDate dayEnd = dayStart.plusDays(1);
+        return getJdbcTemplate().query(
+            GRAB_PAGE_VIEW,
+            new Object[] {
+                Timestamp.valueOf(dayStart.atStartOfDay()),
+                Timestamp.valueOf(dayEnd.atStartOfDay())
+            },
+            rowmapper);
     }
 
     public void batchSave(final Collection<BrowseLog> browseLogs) {
-        getJdbcTemplate().batchUpdate(INSERT_SQL,
-                                      new BrowseLogBatchSetter(browseLogs));
+        getJdbcTemplate().batchUpdate(
+            INSERT_SQL,
+            new BrowseLogBatchSetter(browseLogs));
     }
+
 }

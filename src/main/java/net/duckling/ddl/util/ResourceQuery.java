@@ -16,6 +16,7 @@
  * limitations under the License.
  *
  */
+
 package net.duckling.ddl.util;
 
 import java.sql.Timestamp;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.duckling.ddl.common.DBs;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -321,10 +323,14 @@ public abstract class ResourceQuery {
         return queryString;
     }
 
-
-
-    private String getLimit(){
-        return " limit "+offset+","+size;
+    private String getLimit() {
+        switch (DBs.getDbms()) {
+            case "mysql":
+                return " LIMIT "+offset+","+size;
+            default:
+                // SQL standard, including Derby
+                return " OFFSET "+ offset +" ROWS FETCH NEXT "+ size +" ROWS ONLY";
+        }
     }
 
     private String buildOrderSql(String tableAlias, String orderStr) {

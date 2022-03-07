@@ -77,9 +77,9 @@ public class NoticeDAOImpl extends AbstractBaseDAO implements NoticeDAO{
             "  ) as t2 " +
             "  ON t1.target_id = t2.target_id and t1.target_type " +
             "    = t2.target_type and t1.occur_time = t2.last_time " +
-            "ORDER BY t1.id DESC LIMIT ?;";
+            "ORDER BY t1.id DESC "+ TOP_N;
     // private static final String GET_TOP_K_NOTICE = "SELECT * FROM (SELECT * FROM vwb_notice WHERE recipient=? and tid=? and notice_type=? and occur_time>=? and occur_time<? and event_id in(??) ORDER BY occur_time DESC) n " +
-    //         "GROUP BY n.target_id,n.target_type ORDER BY n.id DESC LIMIT ?;";
+    //         "GROUP BY n.target_id,n.target_type ORDER BY n.id DESC "+ TOP_N;
 
     private static final String COUNT_UNREAD_NOTICE = "select count(n.id) from (select id from vwb_notice where recipient=? and tid=? and notice_type=? and occur_time>=? and occur_time<? " +
             "Group BY target_id,target_type ORDER BY occur_time DESC) n";
@@ -201,7 +201,7 @@ public class NoticeDAOImpl extends AbstractBaseDAO implements NoticeDAO{
     @Override
     public Notice getUserLatestNotice(String uid, List<Integer> eventId) {
         String sql = "select * from vwb_notice where recipient=? and event_id in"+StringUtil.getSQLInFromInt(eventId)
-                +" order by id desc limit 1";
+                +" order by id desc "+ LIMIT_1;
         List<Notice> result = getJdbcTemplate().query(sql,new Object[]{uid},mapper);
         if(result!=null&&!result.isEmpty()){
             return result.get(0);

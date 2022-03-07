@@ -27,6 +27,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import net.duckling.ddl.common.DBs;
 
 import net.duckling.ddl.service.subscribe.impl.SubscriptionDAO;
 import net.duckling.ddl.service.team.Team;
@@ -158,7 +159,9 @@ public class TeamDAOImpl extends AbstractBaseDAO implements TeamDAO{
         String sql = "select * from vwb_team where state='work' and access_type in('"+Team.ACCESS_PUBLIC+"','"+Team.ACCESS_PROTECTED+"') order by id desc";
         String limit = "";
         if(offset>=0 && size>0){
-            limit = " limit "+offset+","+size;
+            limit = DBs.getDbms().equals("mysql") ?
+                    " LIMIT "+ offset +","+ size :
+                    " OFFSET "+ offset +" ROWS FETCH NEXT "+ size +" ROWS ONLY";
         }
         return this.getJdbcTemplate().query(sql+limit, rowMapper);
     }
@@ -184,7 +187,7 @@ public class TeamDAOImpl extends AbstractBaseDAO implements TeamDAO{
 
     @Override
     public List<Team> queryByTeamCode(String queryWord) {
-        String sql = "select * from vwb_team where `name` like ? and state!='hangup' order by id desc";
+        String sql = "select * from vwb_team where name like ? and state!='hangup' order by id desc";
         return getJdbcTemplate().query(sql,new Object[]{"%"+queryWord+"%"}, rowMapper);
     }
 
@@ -208,7 +211,7 @@ public class TeamDAOImpl extends AbstractBaseDAO implements TeamDAO{
         result.setBegin(offset);
         result.setTotal(i);
         result.setSize(size);
-        String sql = "select * from vwb_team where state='work' and access_type in('"+Team.ACCESS_PUBLIC+"','"+Team.ACCESS_PROTECTED+"') and display_name like ? order by id desc limit ?,?";
+        String sql = "select * from vwb_team where state='work' and access_type in('"+Team.ACCESS_PUBLIC+"','"+Team.ACCESS_PROTECTED+"') and display_name like ? order by id desc "+ LIMIT_OFFSET;
         List<Team> r = getJdbcTemplate().query(sql, new Object[]{"%"+queryWord+"%",offset,size}, rowMapper);
         result.setData(r);
         return result;

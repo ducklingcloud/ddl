@@ -50,7 +50,7 @@ public class EmailAttachmentDAOImpl extends AbstractBaseDAO implements EmailAtta
     private static final String SQL_UPDATE = "update a1_emailattach set tid=?,item_type=?,mid=?,creator=?,create_time=?,title=?,rid=? where id=?";
     private static final String SQL_DELETE = "delete from a1_emailattach where id = ?";
     private static final String SQL_QUERY_BY_UID_TID="select * from a1_emailattach where uid=? and tid=?";
-    private static final String SQL_QUERY_RESOURCE_BY_UID_TID = "select a1.* from a1_resource a1 where tid=? and status='"+LynxConstants.STATUS_AVAILABLE+"' and item_type='"+LynxConstants.TYPE_FILE+"' order by last_edit_time desc limit ?,?";
+    private static final String SQL_QUERY_RESOURCE_BY_UID_TID = "select a1.* from a1_resource a1 where tid=? and status='"+LynxConstants.STATUS_AVAILABLE+"' and item_type='"+LynxConstants.TYPE_FILE+"' order by last_edit_time desc "+ LIMIT_OFFSET;
 
     private static final String SQL_QUERY_BY_MID = "select * from a1_emailattach where mid=?";
     private static final String SQL_QUERY_EMAIL_ATTACH_BY_MID="select a1.* from a1_resource a1 where creator =? and tid=? and status='"+LynxConstants.STATUS_AVAILABLE+"' and item_type='"+LynxConstants.TYPE_FILE+"' and a1.rid in(select rid from a1_emailattach em where em.mid=? and em.tid=a1.tid) order by a1.rid desc";
@@ -143,7 +143,7 @@ public class EmailAttachmentDAOImpl extends AbstractBaseDAO implements EmailAtta
             if(tids.length==1){
                 return getJdbcTemplate().query(SQL_QUERY_RESOURCE_BY_UID_TID, new Object[]{tids[0],offset,rows}, resourceRowMapper);
             }else{
-                String sql = "select a1.* from a1_resource a1 where tid in"+StringUtil.getSQLInFromInt(tids)+" and status='"+LynxConstants.STATUS_AVAILABLE+"' and item_type='"+LynxConstants.TYPE_FILE+"' order by last_edit_time desc limit ?,?";
+                String sql = "select a1.* from a1_resource a1 where tid in"+StringUtil.getSQLInFromInt(tids)+" and status='"+LynxConstants.STATUS_AVAILABLE+"' and item_type='"+LynxConstants.TYPE_FILE+"' order by last_edit_time desc "+ LIMIT_OFFSET;
                 return getJdbcTemplate().query(sql, new Object[]{offset,rows}, resourceRowMapper);
             }
         }

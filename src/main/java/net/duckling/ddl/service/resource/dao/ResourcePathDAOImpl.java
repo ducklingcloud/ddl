@@ -202,7 +202,7 @@ public class ResourcePathDAOImpl extends AbstractBaseDAO implements ResourcePath
     public List<Resource> getPathsByTitle(int tid, String folderTitle){
         String sql = "select r.* from (select fp2.ancestor_rid,fp2.length from a1_resource as r2 INNER JOIN ddl_folder_path fp2"
                 + " on fp2.rid = r2.rid where r2.tid=? and r2.item_type='"+LynxConstants.TYPE_FOLDER
-                + "' and r2.title=? and r2.`status`='" + LynxConstants.STATUS_AVAILABLE
+                + "' and r2.title=? and r2.status='" + LynxConstants.STATUS_AVAILABLE
                 + "' ORDER BY fp2.rid desc, fp2.length desc) fp inner join a1_resource r on fp.ancestor_rid = r.rid and fp.length>=0";
         return getJdbcTemplate().query(sql, new Object[]{tid, folderTitle},resourceRowMapper);
     }

@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import net.duckling.ddl.common.DBs;
 
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.service.bundle.Bundle;
@@ -162,7 +163,9 @@ public class BundleDAOImpl extends AbstractBaseDAO implements BundleDAO {
         }
         String limit = "";
         if(offset>=0 && size>0){
-            limit = " limit "+offset+","+size;
+            limit = DBs.getDbms().equals("mysql") ?
+                    " LIMIT "+ offset +","+ size :
+                    " OFFSET "+ offset +" ROWS FETCH NEXT "+ size +" ROWS ONLY";
         }
         return this.getJdbcTemplate().query(SQL_QUERY_BUNDLE+BY_TID+limit,
                                             new Object[]{tid}, bundleRowMapper);

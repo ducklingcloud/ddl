@@ -25,6 +25,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import net.duckling.common.db.DbmsCompat;
+import net.duckling.ddl.common.DBs;
 
 import net.duckling.ddl.service.devent.NoticeRule;
 import net.duckling.ddl.service.team.TeamPreferences;
@@ -37,11 +39,16 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 
-public class TeamPreferenceDAOImpl extends AbstractBaseDAO implements
-                                                           TeamPreferenceDAO {
-    private static final String INCREASE_MONITOR_COUNT = "update vwb_team_member set monitor_notice_count=monitor_notice_count+1 ,monitor_event_ids=CONCAT(monitor_event_ids,?) where uid=? and tid=?";
-    private static final String INCREASE_PERSON_COUNT = "update vwb_team_member set person_notice_count=person_notice_count+1 ,person_event_ids=CONCAT(person_event_ids,?) where uid=? and tid=?";
-    private static final String INCREASE_TEAM_COUNT = "update vwb_team_member set team_notice_count=team_notice_count+1 ,team_event_ids=CONCAT(team_event_ids,?) where uid=? and tid=?";
+public class TeamPreferenceDAOImpl extends AbstractBaseDAO
+        implements TeamPreferenceDAO {
+    /*
+     * To have CONCAT() compatible with different DBMS, these will be
+     * set in the constructor.
+     */
+    private final String INCREASE_MONITOR_COUNT,
+        INCREASE_PERSON_COUNT,
+        INCREASE_TEAM_COUNT;
+    
     private static final String UPDATE_MONITOR_ACCESS = "update vwb_team_member set monitor_access=?,monitor_notice_count=0,monitor_event_ids='' where uid=? and tid=?";
     private static final String UPDATE_PERSON_ACCESS = "update vwb_team_member set person_access=?,person_notice_count=0,person_event_ids='' where uid=? and tid=?";
     private static final String UPDATE_TEAM_ACCESS = "update vwb_team_member set team_access=?,team_notice_count=0,team_event_ids='' where uid=? and tid=? ";
@@ -52,6 +59,31 @@ public class TeamPreferenceDAOImpl extends AbstractBaseDAO implements
     private static final String QUERY_USER_NOTICE_COUNT = "select uid,sum(team_notice_count)as team_notice_count,sum(person_notice_count)as person_notice_count,sum(monitor_notice_count) as monitor_notice_count from vwb_team_member where uid=? ";
     private static final String UPDATE_TEAM_PREFERENCE = "update vwb_team_member set tid=?,uid=?,sequence=?,team_access=?,person_access=?,monitor_access=?,team_notice_count=?,person_notice_count=?,monitor_notice_count=?,"
             + "team_event_ids=?,person_event_ids=?,monitor_event_ids=? where id=?";
+
+    public TeamPreferenceDAOImpl() {
+        String dbms = DBs.getDbms();
+        
+        INCREASE_MONITOR_COUNT =
+                "UPDATE vwb_team_member "+
+                "SET monitor_notice_count = monitor_notice_count + 1, "+
+                "    monitor_event_ids = "+
+                DbmsCompat.getCONCAT(dbms, "monitor_event_ids", "?") +
+                "WHERE uid=? AND tid=?";
+
+        INCREASE_PERSON_COUNT =
+                "UPDATE vwb_team_member "+
+                "SET person_notice_count = person_notice_count + 1, "+
+                "    person_event_ids = "+
+                DbmsCompat.getCONCAT(dbms, "person_event_ids", "?") +
+                "WHERE uid=? AND tid=?";
+        
+        INCREASE_TEAM_COUNT =
+                "UPDATE vwb_team_member "+
+                "SET team_notice_count = team_notice_count + 1, "+
+                "    team_event_ids = "+
+                DbmsCompat.getCONCAT(dbms, "team_event_ids", "?") +
+                "WHERE uid=? AND tid=?";
+    }
 
     private String chooseSQLByType(String type) {
         if (NoticeRule.TEAM_NOTICE.equals(type))

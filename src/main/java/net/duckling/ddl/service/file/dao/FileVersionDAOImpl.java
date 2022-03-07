@@ -54,9 +54,9 @@ public class FileVersionDAOImpl extends AbstractBaseDAO implements FileVersionDA
     private static final String BY_RIDTID = " where rid=? and tid=?";
     private static final String BY_RIDTIDVER = " where rid=? and tid=? and version=?";
     private static final String SQL_QUERY_LATEST = "select * from a1_file_version where " +
-            "rid=? and tid=? order by version desc limit 1";
+            "rid=? and tid=? order by version desc "+ LIMIT_1;
     private static final String SQL_QUERY_FIRST = "select * from a1_file_version where " +
-            "rid=? and tid=? order by version ASC limit 1";
+            "rid=? and tid=? order by version ASC "+ LIMIT_1;
     private static final String RECOVER_FILE_VERSION = "update a1_file_version set status='"+LynxConstants.STATUS_AVAILABLE+"' where tid=? and rid=?";
 
     private RowMapper<FileVersion> fileVersionRowMapper = new RowMapper<FileVersion>(){
@@ -202,7 +202,7 @@ public class FileVersionDAOImpl extends AbstractBaseDAO implements FileVersionDA
 
     @Override
     public List<FileVersion> getFileVersions(int rid, int tid,int offset,int pageSize) {
-        String sql=SQL_QUERY+BY_RIDTID+" and version>0 order by version desc limit ?,?";
+        String sql=SQL_QUERY+BY_RIDTID+" and version>0 order by version desc "+ LIMIT_OFFSET;
         return getJdbcTemplate().query(sql, new Object[]{rid,tid,offset,pageSize}, fileVersionRowMapper);
     }
 

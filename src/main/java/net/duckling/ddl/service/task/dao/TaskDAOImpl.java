@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.duckling.common.db.DbmsCompat;
 
 import javax.sql.DataSource;
 
@@ -89,20 +90,23 @@ public class TaskDAOImpl extends AbstractBaseDAO implements TaskDAO {
     public static final String GET_SHARE_ITEMS = "select * "
             + "from vwb_task_share_item si " + "where 1=1";
 
-    public static final String GET_PROCESS = "select r.item_id, "
-            + "CONCAT((select count(*) "
-            + "                 from vwb_task_ref r "
-            + "                 where r.item_id=i.item_id "
-            + "                 and r.task_id=? "
-            + "                 and r.status='" + TaskTaker.STATUS_FINISH
-            + "' ),'/',COUNT(*)) as pro "
-            + "from vwb_task_item i,vwb_task_ref r "
-            + "where i.item_id=r.item_id " + "and i.task_id=? "
-            + "group by r.item_id";
+    public static final String GET_PROCESS =
+            "SELECT r.item_id, "+
+            DbmsCompat.getCONCAT(
+                "(SELECT count(*) "
+                +"FROM vwb_task_ref r "
+                +"WHERE r.item_id = i.item_id AND r.task_id = ? "
+                +"  AND r.status = '"+ TaskTaker.STATUS_FINISH +"' )",
+                "'/'",
+                "count(*)") + " AS pro "+
+            "FROM vwb_task_item i, vwb_task_ref r "+
+            "WHERE i.item_id = r.item_id AND i.task_id = ? "+
+            "GROUP BY r.item_id";
+
     public static final String GET_ALL_USER_PROCESS = "select user_id , "
-            + "(select count(*) from vwb_task_ref r1 where r1.task_id=r.task_id and r1.user_id=r.user_id and r1.`status`='undo')  'undo', "
-            + "(select count(*) from vwb_task_ref r1 where r1.task_id=r.task_id and r1.user_id=r.user_id and r1.`status`='doing') 'doing', "
-            + "(select count(*) from vwb_task_ref r1 where r1.task_id=r.task_id and r1.user_id=r.user_id and r1.`status`='finish') 'finish' "
+            + "(select count(*) from vwb_task_ref r1 where r1.task_id=r.task_id and r1.user_id=r.user_id and r1.status='undo')  'undo', "
+            + "(select count(*) from vwb_task_ref r1 where r1.task_id=r.task_id and r1.user_id=r.user_id and r1.status='doing') 'doing', "
+            + "(select count(*) from vwb_task_ref r1 where r1.task_id=r.task_id and r1.user_id=r.user_id and r1.status='finish') 'finish' "
             + "from vwb_task_ref r where task_id=? " + "group by user_id";
     public static final String GET_REFS = "select * from vwb_task_ref r "
             + "where 1=1";

@@ -54,15 +54,17 @@ public class UserExtDAOImpl extends AbstractBaseDAO implements UserExtDAO {
     public static final String CHECK_EXIST = "select count(id) from vwb_user_ext where uid=?";
     public static final String UPDATE = "update";
 
-    public static final String SEARCH_BY_NAME = "select * from vwb_user_ext where name rlike ?";
-    public static final String SEARCH_BY_PINYIN = "select * from vwb_user_ext where pinyin rlike ?";
-    public static final String SEARCH_BY_MAIL = "select * from vwb_user_ext where uid rlike ?";
-    private static final String SEARCH_BY_USER_TEAM_AND_NAME = "select distinct e.* from vwb_user_ext e,vwb_team_acl a where e.uid=a.uid and a.tid in(select tid from vwb_team_acl where uid=? )and e.uid<>? and name rlike ?";
-    private static final String SEARCH_BY_USER_PINYIN_AND_NAME = "select distinct e.* from vwb_user_ext e,vwb_team_acl a where e.uid=a.uid and a.tid in(select tid from vwb_team_acl where uid=? )and e.uid<>? and (pinyin rlike ? or e.uid rlike ?)";
+    public static final String SEARCH_BY_NAME = "select * from vwb_user_ext where name like ?";
+    public static final String SEARCH_BY_PINYIN = "select * from vwb_user_ext where pinyin like ?";
+    public static final String SEARCH_BY_MAIL = "select * from vwb_user_ext where uid like ?";
+    private static final String SEARCH_BY_USER_TEAM_AND_NAME = "select distinct e.* from vwb_user_ext e,vwb_team_acl a where e.uid=a.uid and a.tid in(select tid from vwb_team_acl where uid=? )and e.uid<>? and name like ?";
+    private static final String SEARCH_BY_USER_PINYIN_AND_NAME = "select distinct e.* from vwb_user_ext e,vwb_team_acl a where e.uid=a.uid and a.tid in(select tid from vwb_team_acl where uid=? )and e.uid<>? and (pinyin like ? or e.uid like ?)";
 
     @Override
     public List<UserExt> searchUserByName(String name) {
-        return getJdbcTemplate().query(SEARCH_BY_NAME, new Object[] { name }, rowMapper);
+        return getJdbcTemplate().query(SEARCH_BY_NAME,
+                                       new Object[]{ getLike(name) },
+                                       rowMapper);
     }
 
     private RowMapper<UserExt> rowMapper = new RowMapper<UserExt>() {
@@ -101,23 +103,32 @@ public class UserExtDAOImpl extends AbstractBaseDAO implements UserExtDAO {
 
     @Override
     public List<UserExt> searchUserByUserTeamAndName(String uid, String name) {
-        return getJdbcTemplate().query(SEARCH_BY_USER_TEAM_AND_NAME, new Object[] { uid, uid, name }, rowMapper);
+        return getJdbcTemplate().query(SEARCH_BY_USER_TEAM_AND_NAME,
+                                       new Object[]{ uid, getLike(uid),
+                                           getLike(name) },
+                                       rowMapper);
     }
 
     @Override
     public List<UserExt> searchUserByUserPinyinAndName(String uid, String name) {
-        return getJdbcTemplate()
-                .query(SEARCH_BY_USER_PINYIN_AND_NAME, new Object[] { uid, uid, name, name }, rowMapper);
+        return getJdbcTemplate().query(SEARCH_BY_USER_PINYIN_AND_NAME,
+                                       new Object[]{ uid, getLike(uid),
+                                           getLike(name), getLike(name) },
+                                       rowMapper);
     }
 
     @Override
     public List<UserExt> searchUserByPinyin(String pinyin) {
-        return getJdbcTemplate().query(SEARCH_BY_PINYIN, new Object[] { pinyin }, rowMapper);
+        return getJdbcTemplate().query(SEARCH_BY_PINYIN,
+                                       new Object[]{ getLike(pinyin) },
+                                       rowMapper);
     }
 
     @Override
     public List<UserExt> searchUserByMail(String mail) {
-        List<UserExt> users = getJdbcTemplate().query(SEARCH_BY_MAIL, new Object[] { mail }, rowMapper);
+        List<UserExt> users = getJdbcTemplate()
+                .query(SEARCH_BY_MAIL, new Object[]{ getLike(mail) },
+                       rowMapper);
         return users;
     }
 
@@ -269,4 +280,8 @@ public class UserExtDAOImpl extends AbstractBaseDAO implements UserExtDAO {
         return getJdbcTemplate().query(sql, s, rowMapper);
     }
 
+    private String getLike(String str) {
+        return "%"+ str +"%";
+    }
+    
 }

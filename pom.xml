@@ -34,6 +34,7 @@
       <version>1.7.33</version>
     </dependency>
 
+    <!-- 10.15 requires Java 9 -->
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
@@ -135,19 +136,14 @@
       <artifactId>spring-webmvc</artifactId>
       <version>${springframework.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-aspects</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
+    <!-- <dependency> -->
+    <!--   <groupId>org.springframework</groupId> -->
+    <!--   <artifactId>spring-aspects</artifactId> -->
+    <!--   <version>${springframework.version}</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
       <version>${springframework.version}</version>
     </dependency>
     <!-- This is special classloader for tomcat -->
@@ -248,6 +244,13 @@
     <!-- Test Dependencies jaxb-api.jar jaxp-api.jar stax-api.jar
          mysql-connector-java.jar -->
     <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <!-- <version>${springframework.version}</version> -->
+      <version>3.2.18.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
       <version>3.1</version>
@@ -337,11 +340,11 @@
     <!-- </dependency> -->
     
     <!-- TODO: Check and update -->
-    <dependency>
-      <groupId>net.duckling</groupId>
-      <artifactId>dlog-client</artifactId>
-      <version>2.2.1</version>
-    </dependency>
+    <!-- <dependency> -->
+    <!--   <groupId>net.duckling</groupId> -->
+    <!--   <artifactId>dlog-client</artifactId> -->
+    <!--   <version>2.2.1</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>net.duckling</groupId>
       <artifactId>meepo-api</artifactId>
