@@ -113,7 +113,7 @@ public class CLBFileStorage implements FileStorage {
 
     @Override
     public int createFile(String filename, long length, InputStream in) {
-        CreateDocInfo   info = new CreateDocInfo ();
+        CreateDocInfo info = new CreateDocInfo();
         info.title = filename;
         DocumentService dService = CLBServiceFactory.getDocumentService(conn);
         StreamInfo stream = new StreamInfo();
@@ -121,13 +121,18 @@ public class CLBFileStorage implements FileStorage {
         stream.setLength(length);
         stream.setInputStream(in);
         int docid = dService.createDocument(info, stream).docid;
-        if (SupportedFileFormatForOnLineViewer.isSupported(MimeType
-                                                           .getSuffix(info.title).toLowerCase())) {
-            sendPdfTransformEvent(docid, "1");
-        }
-        if(FileTypeUtils.isClbDealImage(info.title)){
-            resizeImage(docid,"1");
-        }
+
+        /*
+         * TODO: pdf & image service will be restored soon. <2022-03-08 Tue>
+         */
+        // if (SupportedFileFormatForOnLineViewer.isSupported
+        //     (MimeType.getSuffix(info.title).toLowerCase())) {
+        //     sendPdfTransformEvent(docid, "1");
+        // }
+        // if (FileTypeUtils.isClbDealImage(info.title)) {
+        //     resizeImage(docid,"1");
+        // }
+        
         return docid;
     }
 
@@ -256,7 +261,8 @@ public class CLBFileStorage implements FileStorage {
     }
 
     @Override
-    public ClbUrlTypeBean getImageDirevtURL(int clbId, String version, String type) {
+    public ClbUrlTypeBean getImageDirevtURL(
+        int clbId, String version, String type) {
         if (StringUtils.isEmpty(version)) {
             version = "latest";
         }

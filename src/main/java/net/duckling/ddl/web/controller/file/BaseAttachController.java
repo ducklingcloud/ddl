@@ -31,6 +31,7 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import net.duckling.ddl.common.Site;
 import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.common.VWBSession;
@@ -39,6 +40,7 @@ import net.duckling.ddl.service.file.FileVersion;
 import net.duckling.ddl.service.file.FileVersionService;
 import net.duckling.ddl.service.file.ZipAttSaver;
 import net.duckling.ddl.service.file.ZipResourceTree;
+import net.duckling.ddl.service.file.impl.CLBFileStorage;
 import net.duckling.ddl.service.resource.FolderPathService;
 import net.duckling.ddl.service.resource.IResourceService;
 import net.duckling.ddl.service.resource.Resource;
@@ -145,46 +147,60 @@ public class BaseAttachController extends BaseController{
         downloadLog(VWBSession.getCurrentUid(req),f.getTitle(),f.getClbId(),f.getClbVersion()+"");
     }
 
-    private void downloadPictureContentFromCLB(HttpServletRequest req, HttpServletResponse resp, FileVersion f,
-                                               String type, boolean useCache) throws IOException {
+    private void downloadPictureContentFromCLB(
+        HttpServletRequest req, HttpServletResponse resp, FileVersion f,
+        String type, boolean useCache)
+            throws IOException {
         String version = f.getClbVersion() + "";
         int clbVersion = f.getClbVersion();
-        MetaInfo meta = resourceOperateService.getMetaInfo(f.getClbId(), version);
+        MetaInfo meta = resourceOperateService.getMetaInfo(
+            f.getClbId(), version);
         try {
             // 附件在浏览器上保存的最长时间
             if (isModified(meta, req)) {
                 if (NginxAgent.isNginxMode()) {
-                    ClbUrlTypeBean url = resourceOperateService.getImageDirevtURL(f.getClbId(), clbVersion + "", type);
+                    ClbUrlTypeBean url = resourceOperateService
+                            .getImageDirevtURL(f.getClbId(),
+                                               clbVersion + "", type);
                     if (url == null || StringUtils.isEmpty(url.getUrl())) {
                         resp.setStatus(404);
                     } else {
                         if (!url.isStatus()) {
-                            String u = req.getContextPath() + "/" + VWBContext.getCurrentTeamCode()
-                                    + "/downloadResource/" + f.getRid() + "?type=doc&imageType=original&version="
-                                    + f.getVersion();
+                            String u = req.getContextPath() +"/"+
+                                    VWBContext.getCurrentTeamCode()
+                                    +"/downloadResource/"+ f.getRid()
+                                    +"?type=doc&imageType=original&version="+
+                                    f.getVersion();
                             resp.sendRedirect(u);
                         } else {
-                            NginxAgent.setRedirectUrl(req, resp, f.getTitle(), meta.size, url.getUrl());
+                            NginxAgent.setRedirectUrl(
+                                req, resp, f.getTitle(), meta.size, url.getUrl());
                         }
                     }
                 } else {
                     setModifiedHeader(CACHABLE_MAX_AGE, meta, resp);
                     AttSaver fs = new AttSaver(resp, req, f.getTitle());
                     try {
-                        resourceOperateService.getImageContent(f.getClbId(), clbVersion, type, fs);
+                        resourceOperateService.getImageContent(
+                            f.getClbId(), clbVersion, type, fs);
                     } catch (ResourceNotFound e) {
                         resp.setStatus(404);
-                        LOGGER.error(f + " type=" + type + " not fount");
+                        if (type.equals(CLBFileStorage.IMAGE_TYPE_FIXSMALL)) {
+                            LOGGER.warn(f +" has no thumbnail(small image).");
+                        } else {
+                            LOGGER.error(f +" type="+ type +" not found.");
+                        }
                     }
                 }
             } else {
-                sendNotModifiedHeader(useCache ? CACHABLE_MAX_AGE : ATTACH_MAX_AGE, meta, resp);
+                sendNotModifiedHeader(
+                    useCache ? CACHABLE_MAX_AGE : ATTACH_MAX_AGE,
+                    meta, resp);
             }
         } catch (Exception e) {
             dealException(e, f.getClbId(), useCache, resp);
         }
     }
-
 
     protected void getPdfContent(HttpServletRequest req, HttpServletResponse res, int docID, String version,
                                  String fileName, boolean useCache) throws IOException {

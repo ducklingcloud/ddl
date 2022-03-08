@@ -1079,63 +1079,81 @@ public class ResourceOperateServiceImpl implements ResourceOperateService {
     }
 
     @Override
-    public FileVersion upload(String uid, Integer tid, Integer parentRid,String fileName,
-                              long size, InputStream in)throws NoEnoughSpaceException {
-        return upload(uid,tid,parentRid,fileName,size,in,true);
+    public FileVersion upload(String uid, Integer tid, Integer parentRid,
+                              String fileName, long size, InputStream in)
+            throws NoEnoughSpaceException {
+        return upload(uid, tid, parentRid, fileName, size, in, true);
     }
 
     @Override
-    public FileVersion upload(String uid, Integer tid, Integer parentRid,String fileName,
-                              long size, InputStream in,boolean addDefaultTag) throws NoEnoughSpaceException {
-
-        return upload(uid, tid, parentRid, fileName, size, in, addDefaultTag, true, false, null);
+    public FileVersion upload(
+        String uid, Integer tid, Integer parentRid, String fileName,
+        long size, InputStream in, boolean addDefaultTag)
+            throws NoEnoughSpaceException {
+        return upload(uid, tid, parentRid, fileName, size, in,
+                      addDefaultTag, true, false, null);
     }
 
     @Override
-    public FileVersion upload(String uid, Integer tid, Integer parentRid,String fileName,
-                              long size, InputStream in,boolean addDefaultTag,boolean sendEvent) throws NoEnoughSpaceException {
-        return upload(uid, tid, parentRid, fileName, size, in, addDefaultTag, sendEvent, false, null);
+    public FileVersion upload(
+        String uid, Integer tid, Integer parentRid, String fileName,
+        long size, InputStream in,boolean addDefaultTag, boolean sendEvent)
+            throws NoEnoughSpaceException {
+        return upload(uid, tid, parentRid, fileName, size, in,
+                      addDefaultTag, sendEvent, false, null);
     }
 
     @Override
-    public FileVersion upload(String uid, Integer tid, Integer parentRid,String fileName,
-                              long size, InputStream in,boolean addDefaultTag,boolean sendEvent,
-                              boolean fileNameSerial, String folderName) throws NoEnoughSpaceException {
-        return upload(uid, tid, parentRid, fileName, size, in, addDefaultTag, sendEvent,  fileNameSerial, folderName, null);
+    public FileVersion upload(
+        String uid, Integer tid, Integer parentRid,String fileName,
+        long size, InputStream in,boolean addDefaultTag, boolean sendEvent,
+        boolean fileNameSerial, String folderName)
+            throws NoEnoughSpaceException {
+        return upload(uid, tid, parentRid, fileName, size, in,
+                      addDefaultTag, sendEvent, fileNameSerial,
+                      folderName, null);
     }
 
     @Override
-    public FileVersion upload(String uid, Integer tid, Integer parentRid,String fileName,
-                              long size, InputStream in,boolean addDefaultTag,boolean sendEvent,
-                              boolean fileNameSerial, String folderName, String device) throws NoEnoughSpaceException {
-        Integer pid = (folderName==null) ? parentRid : getFolderAtRoot(folderName, tid, uid).getRid();
-
+    public FileVersion upload(
+        String uid, Integer tid, Integer parentRid,String fileName,
+        long size, InputStream in,boolean addDefaultTag,boolean sendEvent,
+        boolean fileNameSerial, String folderName, String device)
+            throws NoEnoughSpaceException {
+        Integer pid = (folderName==null) ?
+                parentRid : getFolderAtRoot(folderName, tid, uid).getRid();
         List<Resource> name = getFileResourceByTitile(tid, pid, fileName);
         //文件是否存在重名
-        if(name.size()>0){
+        if (name.size()>0) {
             //是否序列自增文件名
-            if(fileNameSerial){
+            if (fileNameSerial) {
                 fileName = getSerialFileName(tid, pid, fileName);
-            }else{
+            } else {
                 //文件更新版本
-                return updateCLBFile(name.get(0).getRid(), tid, uid, fileName, size, in, device);
+                return updateCLBFile(name.get(0).getRid(), tid, uid,
+                                     fileName, size, in, device);
             }
         }
         teamSpaceSizeService.validateTeamSizes(tid,size);
         long begin = System.currentTimeMillis();
         int clbId = storage.createFile(fileName, size, in);
-        FileVersion fv = createFileAndFileVersion(tid,pid, uid, clbId,1, fileName, size);
-        if(addDefaultTag){
+        FileVersion fv = createFileAndFileVersion(
+            tid, pid, uid, clbId, 1, fileName, size);
+        if (addDefaultTag) {
             addDefaultTag(fv.getRid());
         }
         teamSpaceSizeService.resetTeamResSize(tid);
-        if(sendEvent){
-            eventDispatcher.sendFileUploadEvent(fileName, fv.getRid(), uid, tid);
+        if (sendEvent) {
+            eventDispatcher.sendFileUploadEvent(
+                fileName, fv.getRid(), uid, tid);
         }
 
-        jounalService.add(tid, fv.getRid(), fv.getVersion(), device, Jounal.OPERATION_ADD, false, jounalService.getPathString(fv.getRid()));
+        jounalService.add(
+            tid, fv.getRid(), fv.getVersion(), device, Jounal.OPERATION_ADD,
+            false, jounalService.getPathString(fv.getRid()));
 
-        LOG.info("uid:"+uid+",upload filename="+fileName+";size="+size+";spend time:"+(System.currentTimeMillis()-begin)+"ms");
+        LOG.info("uid:"+ uid +",upload filename="+ fileName +";size="+ size
+                 +";spend time:"+ (System.currentTimeMillis() - begin) +"ms");
         return fv;
     }
 

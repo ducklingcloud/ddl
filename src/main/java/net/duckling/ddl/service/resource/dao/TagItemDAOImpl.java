@@ -310,7 +310,8 @@ public class TagItemDAOImpl extends AbstractBaseDAO implements TagItemDAO {
         Map<String,Object> paramMap=new HashMap<String,Object>();
         paramMap.put("tid", tid);
         String countSql = "select count(distinct r.rid) from a1_tag_item a,a1_resource r where a.tid=:tid and a.tgid in "+StringUtil.getSQLInFromInt(tagIds)+" and r.rid=a.rid and (r.status='"+LynxConstants.STATUS_AVAILABLE+"' or r.status is null) ";
-        String sql = "select distinct r.* from a1_tag_item a,a1_resource r where a.tid=:tid and a.tgid in"+StringUtil.getSQLInFromInt(tagIds)+" and r.rid=a.rid and (r.status='"+LynxConstants.STATUS_AVAILABLE+"' or r.status is null) ";
+        // DISTINCT is removed due to Derby's limit wrt CLOB <2022-03-08 Tue>
+        String sql = "select r.* from a1_tag_item a,a1_resource r where a.tid=:tid and a.tgid in"+StringUtil.getSQLInFromInt(tagIds)+" and r.rid=a.rid and (r.status='"+LynxConstants.STATUS_AVAILABLE+"' or r.status is null) ";
         if(!StringUtils.isBlank(keyWord)){
             String s = ResourceQueryKeywordUtil.getKeyWordString(keyWord, paramMap,"r.");
             countSql+=s;

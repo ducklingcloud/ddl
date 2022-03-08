@@ -114,10 +114,19 @@ public class LynxFileUploadController extends BaseController {
                        getParentRid(request), vwbcontext,response);
     }
 
-    @RequestMapping(params="func=uploadFiles", headers={"X-File-Name"}) //Support for Firefox
-    public void uploadFiles(HttpServletRequest request,HttpServletResponse response) throws IOException  {
-        VWBContext vwbcontext = VWBContext.createContext(request, UrlPatterns.T_ATTACH);
-        createDocument(getFileNameFromHeader(request), request.getInputStream(), request.getContentLength(),getParentRid(request), vwbcontext, response);
+    // Support for Firefox
+    @RequestMapping(params="func=uploadFiles", headers={"X-File-Name"})
+    public void uploadFiles(HttpServletRequest request,
+                            HttpServletResponse response)
+            throws IOException  {
+        VWBContext vwbcontext = VWBContext.createContext(
+            request, UrlPatterns.T_ATTACH);
+        createDocument(getFileNameFromHeader(request),
+                       request.getInputStream(),
+                       request.getContentLength(),
+                       getParentRid(request),
+                       vwbcontext,
+                       response);
     }
 
     @RequestMapping(method=RequestMethod.POST, params="func=uploadFiles") //Support for IE
@@ -224,18 +233,24 @@ public class LynxFileUploadController extends BaseController {
         }
     }
 
-    private void createDocument(String fileName,InputStream in, long fileSize, int parentRid, VWBContext vwbcontext, HttpServletResponse response) throws IOException {
-        if(StringUtil.illTitle(response, fileName)){
+    private void createDocument(
+        String fileName, InputStream in, long fileSize, int parentRid,
+        VWBContext vwbcontext, HttpServletResponse response)
+            throws IOException {
+        if (StringUtil.illTitle(response, fileName)) {
             return;
         }
         String uid = vwbcontext.getCurrentUID();
         int tid = vwbcontext.getSite().getId();
         try {
-            FileVersion fv = resourceOperateService.upload(uid,tid, parentRid,fileName, fileSize, in);
-            Resource resource=resourceService.getResource(fv.getRid());
-            writeUploadJSONResult(vwbcontext.getTid(),uid,response, fv,resource);
+            FileVersion fv = resourceOperateService.upload(
+                uid,tid, parentRid,fileName, fileSize, in);
+            Resource resource = resourceService.getResource(fv.getRid());
+            writeUploadJSONResult(vwbcontext.getTid(),
+                                  uid, response, fv, resource);
         } catch (NoEnoughSpaceException e) {
-            writeNoEnoughSpaceError(uid, e.getTid(), fileName, "上传", response);
+            writeNoEnoughSpaceError(uid, e.getTid(), fileName,
+                                    "上传", response);
         } finally{
             in.close();
         }

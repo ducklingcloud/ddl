@@ -561,7 +561,10 @@ public abstract class ResourceQuery {
         }
         @Override
         String getQuerySelect() {
-            return "select distinct r.* ";
+            /*
+             * Derby not support DISTINCT on CLOB, so avoid 'r.*' */
+            // return "select distinct r.* ";
+            return "SELECT r.* ";
         }
         @Override
         String getFrom() {

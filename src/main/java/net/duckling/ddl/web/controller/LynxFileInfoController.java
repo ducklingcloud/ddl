@@ -420,9 +420,17 @@ public class LynxFileInfoController extends BaseController {
         } else {
             currentVersion = fileVersionService.getLatestFileVersion(rid, tid);
         }
-        resourceOperateService.sendPdfTransformEvent(
-            currentVersion.getClbId(), "" + currentVersion.getClbVersion());
-        JsonUtil.write(response, new JsonObject());
+
+        /*
+         * TODO: disabled temporarily <2022-03-08 Tue>
+         */
+        /* resourceOperateService.sendPdfTransformEvent( */
+        /*     currentVersion.getClbId(), "" + currentVersion.getClbVersion()); */
+
+        /* JsonUtil.write(response, new JsonObject()); */
+        JsonObject obj = new JsonObject();
+        obj.addProperty("status", false);
+        JsonUtil.write(response, obj);
     }
 
     private boolean isSupportedFileType(String fileType) {

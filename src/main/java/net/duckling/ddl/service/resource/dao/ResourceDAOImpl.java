@@ -66,8 +66,12 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
             "last_version,tags,file_type,marked_users,bid,order_type,"+
             "status,size,shared)"+
             " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    
+    private static final String SQL_DELETE =
+            "UPDATE a1_resource SET tags='', marked_users=?, status='"+
+            LynxConstants.STATUS_DELETE +"'";
+
     //modify by lvly@2012-07-20
-    private static final String SQL_DELETE = "update a1_resource set tags='',marked_users='',status='"+LynxConstants.STATUS_DELETE+"'";
     private static final String SQL_UPDATE = "update a1_resource set title=?,last_editor=?,last_editor_name=?, last_edit_time=?," +
             " last_version=?,file_type=?,bid=? ,status=?,size=?";
     private static final String SQL_QUERY = "select * from a1_resource";
@@ -145,7 +149,20 @@ public class ResourceDAOImpl extends AbstractBaseDAO implements ResourceDAO {
 
     @Override
     public int delete(int rid, int tid) {
-        return this.getJdbcTemplate().update(SQL_DELETE+" where rid=? and tid=? ", new Object[]{rid, tid});
+        try {
+            return this.getJdbcTemplate().update(
+                SQL_DELETE +" WHERE rid=? AND tid=? ",
+                new Object[] {
+                    // an empty blob for 'marked_users'
+                    new SerialBlob(new byte[]{}),
+                    rid, tid
+                });
+        } catch (SQLException e) {
+            LOG.error("Failed to delete resource. "+
+                      e.toString());
+            LOG.debug("delete failed.", e);
+            return -1;
+        }
     }
 
     @Override
