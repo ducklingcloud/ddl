@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="">
-    <Loader loaderClass="org.springframework.instrument.classloading.tomcat.TomcatInstrumentableClassLoader"/>
+
+  <!-- For aspect weaver -->
+  <!-- <Loader loaderClass="org.springframework.instrument.classloading.tomcat.TomcatInstrumentableClassLoader"/> -->
+
+  <!-- 50M cache for TLDs etc.; default is 10M, while raising warnings. -->
+  <Resources cachingAllowed="true" cacheMaxSize="51200" />
+
 </Context>

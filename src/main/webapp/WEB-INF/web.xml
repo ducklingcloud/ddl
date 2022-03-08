@@ -237,6 +237,11 @@
       <taglib-uri>http://java.sun.com/jsp/jstl/functions</taglib-uri>
       <taglib-location>/WEB-INF/tld/fn.tld</taglib-location>
     </taglib>
+    <taglib>
+      <taglib-uri>http://tiles.apache.org/tags-tiles</taglib-uri>
+      <taglib-location>/WEB-INF/tld/tiles-jsp.tld</taglib-location>
+    </taglib>
+
   </jsp-config>
 
   <session-config>

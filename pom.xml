@@ -146,12 +146,12 @@
       <artifactId>spring-jdbc</artifactId>
       <version>${springframework.version}</version>
     </dependency>
-    <!-- This is special classloader for tomcat -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-instrument-tomcat</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
+    <!-- This is special classloader for tomcat, in order for aspect weaver -->
+    <!-- <dependency> -->
+    <!--   <groupId>org.springframework</groupId> -->
+    <!--   <artifactId>spring-instrument-tomcat</artifactId> -->
+    <!--   <version>${springframework.version}</version> -->
+    <!-- </dependency> -->
 
     <!-- Redis Java client with features of In-Memory Data Grid -->
     <dependency>
@@ -238,6 +238,7 @@
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-jsp</artifactId>
       <version>2.2.2</version>
+      <!-- <version>3.0.8</version> -->
       <scope>runtime</scope>
     </dependency>
 
@@ -434,16 +435,49 @@
         <configuration>
           <container>
             <dependencies>
-              <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-instrument-tomcat</artifactId>
-              </dependency>
+              <!-- <dependency> -->
+              <!--   <groupId>org.springframework</groupId> -->
+              <!--   <artifactId>spring-instrument-tomcat</artifactId> -->
+              <!-- </dependency> -->
             </dependencies>
           </container>
+          <configuration>
+            <properties>
+              <!-- <cargo.servlet.port>8090</cargo.servlet.port> -->
+            </properties>
+          </configuration>
         </configuration>
       </plugin>
 
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>skinny</id>
+      <build>
+        <finalName>ddl-skinny</finalName>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.3.2</version>
+            <configuration>
+              <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+              <archive>
+                <manifest>
+                  <addClasspath>true</addClasspath>
+                  <!-- <classpathPrefix>lib/</classpathPrefix> -->
+                  <classpathLayoutType>repository</classpathLayoutType>
+                </manifest>
+              </archive>
+            </configuration>
+          </plugin>
+          
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
