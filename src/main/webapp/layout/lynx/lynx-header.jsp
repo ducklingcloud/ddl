@@ -62,8 +62,9 @@ request.setAttribute("contextPath", request.getContextPath());
 	    <ul>
 		<li><a href="<vwb:Link context="dashboard" format='url'/>?func=profile">个人资料</a></li>
 		<li><a href="<vwb:Link context="dashboard" format='url'/>?func=preferences">个人偏好</a></li>
-		<li><a target="_blank" href="<vwb:Link context="toDhome" format='url'/>">学术主页</a></li>
-		<li><a href="http://support.ddl.escience.cn/" target="_blank">帮助</a></li>
+                <!-- disabled; someday... maybe -->
+		<!-- <li><a target="_blank" href="<vwb:Link context="toDhome" format='url'/>">学术主页</a></li> -->
+		<li><a href="https://github.com/ducklingcloud/ddl" target="_blank">GitHub</a></li>
 		<li><a href="<vwb:Link context="logout" format='url'/>"
 		    title="注销">注销</a>
 		</li>

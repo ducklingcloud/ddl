@@ -1,11 +1,10 @@
-<%@ page language="java" pageEncoding="UTF-8"%>
-<%@ page import="net.duckling.ddl.common.*"%>
+<%@ page language="java" pageEncoding="UTF-8" %>
+<%@ page import="net.duckling.ddl.common.*" %>
 <%@ page import="java.net.URLEncoder"%>
 <%@ page import="net.duckling.ddl.util.UrlUtil" %>
-<%@ taglib uri="WEB-INF/tld/vwb.tld" prefix="vwb"%>
-<%@ taglib uri="WEB-INF/tld/vwb.tld" prefix="vwb"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="/WEB-INF/tld/vwb.tld" prefix="vwb" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
 pageContext.setAttribute("contextPath", request.getContextPath());
@@ -110,8 +109,8 @@ if ((request.getServerPort() == 80)
 		    <ul>
 			<li><a href="<vwb:Link context="dashboard" format='url'/>?func=profile">个人资料</a></li>
 			<li><a href="<vwb:Link context="dashboard" format='url'/>?func=preferences">个人偏好</a></li>
-			<li><a target="_blank" href="<vwb:Link context="toDhome" format='url'/>">学术主页</a></li>
-			<li><a href="http://support.ddl.escience.cn/">帮助</a></li>
+			<!-- <li><a target="_blank" href="<vwb:Link context="toDhome" format='url'/>">学术主页</a></li> -->
+			<li><a href="https://github.com/ducklingcloud/ddl">查看GitHub</a></li>
 			<li><a href="<vwb:Link context="logout" format='url'/>"
 			    title="注销">注销</a>
 			</li>
@@ -121,11 +120,11 @@ if ((request.getServerPort() == 80)
 		    <li class="active"><a id="ddlNav-index" href="${contextPath}/index.jsp">首页</a></li>
 		    <li><a id="ddlNav-feature" href="${contextPath}/ddlFeature.jsp">功能特性</a></li>					
 		    <li><a id="ddlNav-scene" class="current-nav" href="${contextPath}/ddlScene.jsp">应用场景</a></li>
-                    <%-- 					<li><a id="ddlNav-qa" href="${contextPath}/ddlQA.jsp">常见问题</a></li>
+                    <%-- <li><a id="ddlNav-qa" href="${contextPath}/ddlQA.jsp">常见问题</a></li>
 		    <li><a id="ddlNav-updateLog" href="${contextPath}/ddlUpdateLog.jsp">更新日志</a></li>  --%>
-		    <li><a id="ddlNav-help" href="http://support.ddl.escience.cn/cases/">用户案例</a></li>			
-		    <li><a id="ddlNav-help" href="http://support.ddl.escience.cn/">帮助中心</a></li>
-		    <li><a id="ddlNav-news" href="${contextPath}/ddlNews.jsp">动态</a></li>
+		    <!-- <li><a id="ddlNav-help" href="http://support.ddl.escience.cn/cases/">用户案例</a></li> -->
+		    <li><a id="ddlNav-help" href="https://github.com/ducklingcloud/ddl/wiki/DDL">项目Wiki</a></li>
+		    <!-- <li><a id="ddlNav-news" href="${contextPath}/ddlNews.jsp">动态</a></li> -->
 		    <li><a id="ddlNav-download" href="${contextPath}/download.jsp">客户端</a></li>
 		    
 		    <%-- 	

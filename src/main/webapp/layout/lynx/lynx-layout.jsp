@@ -71,7 +71,7 @@
 			<tiles:insertAttribute name="footer"/>
 		</div>
 		
-		<a id="getFeedback" class="ui-sideTouch" href="http://iask.cstnet.cn/?/home/explore/category-11" target="_blank">意见反馈</a>
+		<a id="getFeedback" class="ui-sideTouch" href="mailto:kai.nan@icloud.com" target="_blank">意见反馈</a>
 		<jsp:include page="/jsp/aone/QRCode.jsp" />
 		
 	<script type="text/javascript">

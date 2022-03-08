@@ -508,10 +508,11 @@ $("#showHotCode").live('click',function(){
 			<br>
 			${ copyLog.userName} 从 团队 [${copyLog.fromTeamName}]复制了页面 [${copyLog.rTitle }] 版本：${copyLog.fromVersion}
 		</c:if>
-		<c:if test="${officeSupported == 'true' && pdfstatus != 'original_pdf'}">
-			|&nbsp; <a class="btn btn-mini btn-primary" style="color:#fff;border:none;" target="_blank" href="<vwb:Link context='teamHome'  format='url'/>/preview/${curVersion.rid}?version=${curVersion.version }&redirect=redirect&from=web">Office 预览</a>
-			
-		</c:if>
+                <!-- TODO: disabled temporarily -->
+		<!-- <c:if test="${officeSupported == 'true' && pdfstatus != 'original_pdf'}">
+		     |&nbsp; <a class="btn btn-mini btn-primary" style="color:#fff;border:none;" target="_blank" href="<vwb:Link context='teamHome'  format='url'/>/preview/${curVersion.rid}?version=${curVersion.version }&redirect=redirect&from=web">Office 预览</a>
+		     
+		     </c:if> -->
 	</div>
 	</div>
 	

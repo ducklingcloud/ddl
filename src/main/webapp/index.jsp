@@ -315,34 +315,35 @@
 	    </div>
 	</div>
 	
-	<div class="chooseus">
-	    <div class="ui-wrap">
-		<h1>为什么选择我们？</h1>
-		<ul>
-		    <li class="chooseus chooseus-1"  style="margin-left:10px">快速上传下载</li>
-		    <li class="chooseus chooseus-2">放心品质保证</li>
-		    <li class="chooseus chooseus-3">数据安全</li>
-		    <li class="chooseus chooseus-4" style="margin-right:10px">贴心的服务</li>
-		</ul>
-	    </div>
-	</div>
+	<!-- <div class="chooseus">
+	     <div class="ui-wrap">
+	     <h1>为什么选择我们？</h1>
+	     <ul>
+	     <li class="chooseus chooseus-1"  style="margin-left:10px">快速上传下载</li>
+	     <li class="chooseus chooseus-2">放心品质保证</li>
+	     <li class="chooseus chooseus-3">数据安全</li>
+	     <li class="chooseus chooseus-4" style="margin-right:10px">贴心的服务</li>
+	     </ul>
+	     </div>
+	     </div> -->
 	
-	<div class="linkus">
-	    <div class="ui-wrap">
-		<h1>把建议和想法告诉我们</h1>
-		<ul>
-		    <li><a class="linkus linkus-1" style="margin-left:10px" href="tencent://message/?uin=2813954364&Uin=2813954364&Site=QQ%E5%92%A8%E8%AF%A2&Menu=yes" target="_blank">2813954364</a></li>
-		    <li><a class="linkus linkus-2" href="http://e.weibo.com/dcloud" target="_blank">@科研在线</a></li>
-		    <li><a class="linkus linkus-3" href="mailto:vlab@cnic.cn">vlab@cnic.cn</a></li>
-		    <li><a class="linkus linkus-4">010-58812378</a></li>
-		    <li><a class="linkus linkus-5" style="margin-right:10px" href="http://iask.cstnet.cn/?/home/explore/category-11" target="_blank">在线问答</a></li>
-		</ul>
-	    </div>
-	</div>
+	<!-- <div class="linkus">
+	     <div class="ui-wrap">
+	     <h1>把建议和想法告诉我们</h1>
+	     <ul>
+	     <li><a class="linkus linkus-1" style="margin-left:10px" href="tencent://message/?uin=2813954364&Uin=2813954364&Site=QQ%E5%92%A8%E8%AF%A2&Menu=yes" target="_blank">2813954364</a></li>
+	     <li><a class="linkus linkus-2" href="http://e.weibo.com/dcloud" target="_blank">@科研在线</a></li>
+	     <li><a class="linkus linkus-3" href="mailto:vlab@cnic.cn">vlab@cnic.cn</a></li>
+	     <li><a class="linkus linkus-4">010-58812378</a></li>
+	     <li><a class="linkus linkus-5" style="margin-right:10px" href="http://iask.cstnet.cn/?/home/explore/category-11" target="_blank">在线问答</a></li>
+	     </ul>
+	     </div>
+	     </div> -->
 	
 	<div id="footer">
 	    <jsp:include page="/Version.jsp"></jsp:include>
 	</div>
+
 	<div id="mobileInfo"
 		 style="display: none; position: absolute; font-size: 1.5em; left: 0; top: 0; width: 102% !important; z-index: 200; padding: 10px 0; background: -webkit-gradient(linear, left top, left bottom, from(whiteSmoke), to(#D2D2D2) ); border-bottom: 1px white solid">
 	    <a class="closeMobileInfo" href="javascript:void(0)"></a>
