@@ -446,7 +446,9 @@ $(document).ready(function(){
     		<a id ="share" class="btn btn-large"><i class="icon-share" style="margin-left:25px"></i> 分享</a>
     	</div>
     	<div class="sideCenter">
-    		<a class="btn btn-large" href="<vwb:Link context='f' page='${rid}' format='url'/>?func=exportPdf"><span class="icon-pdf" style="margin-left:25px"></span>&nbsp;&nbsp;导出</a>
+            <!-- Disabled temporarily <2022-03-09 Wed> -->
+    	    <!-- <a class="btn btn-large" href="<vwb:Link context='f' page='${rid}' format='url'/>?func=exportPdf"><span class="icon-pdf" style="margin-left:25px"></span>&nbsp;&nbsp;导出</a> -->
+    	    <a class="btn btn-large"><span class="icon-pdf" style="margin-left:25px"></span>&nbsp;&nbsp;导出</a>
     	</div>
     	<h4 class="sideTitle"><span>文件操作</span></h4>
     	<c:if test="${resource.status!='unpublish' }">
