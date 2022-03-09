@@ -23,6 +23,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -130,11 +133,13 @@ public final class TeamInitServiceImpl implements TeamInitService {
             Tag system = addTagToTeam(tid, uid, 0, "系统示例");
             addTagToPage(tid, note, system);
             addTagToPage(tid, project, system);
-            String classDir = TeamInitServiceImpl.class.getResource("/").getFile();
-            File cDir = new File(classDir);
-            File inf = new File(cDir.getParentFile(), "teaminit/科研在线团队文档库-用户使用手册-V4.0.pdf");
-            in = new FileInputStream(inf);
-            FileVersion v = addFileToTeam(tid, uid, "科研在线团队文档库-用户使用手册-V4.0.pdf", in);
+            Path classDir = Paths.get(
+                TeamInitServiceImpl.class.getResource("/").toURI());
+            Path inf = classDir.resolveSibling("teaminit")
+                    .resolve("科研在线团队文档库-用户使用手册-V4.0.pdf");
+            in = Files.newInputStream(inf);
+            FileVersion v = addFileToTeam(
+                tid, uid, "科研在线团队文档库-用户使用手册-V4.0.pdf", in);
             addTagToFile(tid, v, system);
         } catch (FileNotFoundException e) {
             LOG.error("", e);
@@ -150,7 +155,6 @@ public final class TeamInitServiceImpl implements TeamInitService {
             }
         }
     }
-
 
     private static final String p = "<p>项目 名称：</p<p>&nbsp;</p><table width=\"80%\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">"
             +"<tbody><tr><td width=\"101\">阶段</td><td width=\"177\">任务描述</td><td width=\"147\">时间计划</td><td width=\"131\">负责人</td><td width=\"81\">完成状态</td>"
