@@ -99,8 +99,8 @@ public class UserAnalysisDAOImpl extends AbstractBaseDAO implements UserAnalysis
     /* Fix only_full_group_by
      * Remove 'item_type' which seems not-in-use */
     private static final String INSERT_USER_SIM =
-            "INSERT INTO a1_user_sim "+
-            "  SELECT NULL, uid, simuid, sum(score), NULL "+
+            "INSERT INTO a1_user_sim (uid, simuid, score) "+
+            "  SELECT uid, simuid, sum(score) "+
             "  FROM ( "+
             "    SELECT a.user_id AS uid, b.user_id AS simuid, "+
             "           CASE WHEN a.count < b.count THEN a.count "+
@@ -224,7 +224,7 @@ public class UserAnalysisDAOImpl extends AbstractBaseDAO implements UserAnalysis
         }
 
     }
-    
+
     public List<WeightPair> getInterestDocWeight(String keyword,String uid) {
         try{
             return this.getJdbcTemplate()
@@ -248,13 +248,13 @@ public class UserAnalysisDAOImpl extends AbstractBaseDAO implements UserAnalysis
                     return weightPair;
                 }
             };
-    
+
     public int creatUserSim() {
         // getJdbcTemplate().update(CREAT_SIM_TABLE);
         getJdbcTemplate().update(CLEAN_SIM);
         LocalDate startDay = LocalDate.now().minusDays(150);
         Timestamp ts = Timestamp.valueOf(startDay.atStartOfDay());
-        return this.getJdbcTemplate().update(INSERT_USER_SIM, ts, ts);            
+        return this.getJdbcTemplate().update(INSERT_USER_SIM, ts, ts);
     }
 
     public List<String> getSim (String uid) {
@@ -267,7 +267,7 @@ public class UserAnalysisDAOImpl extends AbstractBaseDAO implements UserAnalysis
             return null;
         }
     }
-    
+
     public List<WeightPair> getSimDocWeight(String keyword, String uid) {
         try {
             return this.getJdbcTemplate()
@@ -278,5 +278,5 @@ public class UserAnalysisDAOImpl extends AbstractBaseDAO implements UserAnalysis
             return null;
         }
     }
-    
+
 }

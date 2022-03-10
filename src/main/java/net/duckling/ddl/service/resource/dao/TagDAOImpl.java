@@ -264,8 +264,12 @@ public class TagDAOImpl extends AbstractBaseDAO implements TagDAO {
 
     @Override
     public List<Tag> getNotRelatedTags(int rid, int tid) {
-        String sql = "select a.* from a1_tag a where a.tid=? and not exists (select null from a1_tag_item b where b.tgid = a.id and b.tid=? and b.rid=?)";
-        return this.getJdbcTemplate().query(sql, new Object[]{tid,tid,rid},tagRowMapper);
+        String sql = "SELECT a.* FROM a1_tag a "+
+                "WHERE a.tid=? AND NOT EXISTS ( "+
+                "  SELECT 1 FROM a1_tag_item b "+
+                "  WHERE b.tgid = a.id AND b.tid=? AND b.rid=? )";
+        return this.getJdbcTemplate().query(
+            sql, new Object[]{tid,tid,rid}, tagRowMapper);
     }
 
     @Override
