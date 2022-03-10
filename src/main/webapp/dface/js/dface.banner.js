@@ -19,7 +19,8 @@ $(document).ready(function() {
 	  "#macroNav a#logo"  //ddl
 	 ).click(function() {
              // Disabled temporarily <2022-03-08 Tue>
-	     // $("ul.headerBar").toggle();
+             // $("ul.headerBar").toggle();
+             // window.location.href = "/ddl";
 	 } );
 	$(".headerBar").click(function() {
 	    $(".headerBar").hide();
