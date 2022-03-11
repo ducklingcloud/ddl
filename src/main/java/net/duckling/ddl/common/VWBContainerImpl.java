@@ -92,7 +92,7 @@ public class VWBContainerImpl implements VWBContainer {
     }
 
     public String getDefaultDomain() {
-        return systemProperty.getProperty("duckling.baseURL");
+        return systemProperty.getProperty("duckling.ddl.baseURL");
     }
 
     //  public String getFrontPage() {

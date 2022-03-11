@@ -13,7 +13,7 @@
 	request.setAttribute("aoneVersion", aoneVersion);
 	VWBContext context = VWBContext.createContext(request, "error");
 	String umtPath = context.getContainer().getProperty(
-			"duckling.umt.site");
+			"duckling.umt.baseURL");
 	request.setAttribute("umtPath", umtPath);
 	String ddlPath = context.getContainer().getBaseURL();
 	String umtReturnURI = umtPath + "/login?appname=dct&WebServerURL="

@@ -105,7 +105,7 @@ public class PanPreviewController extends BaseController {
         if(version>0){
             verStr = "&version="+version;
         }
-        mv.addObject("clbPreviewUrl", properties.getProperty("duckling.baseURL") + "/wopi/p?remotePath=" + MyURLEncoder.encodeURIComponent(path) +verStr);
+        mv.addObject("clbPreviewUrl", properties.getProperty("duckling.ddl.baseURL") + "/wopi/p?remotePath=" + MyURLEncoder.encodeURIComponent(path) +verStr);
         mv.addObject("itemType", "DFile");
         mv.addObject("remotePath", URLEncoder.encode(path, "UTF-8"));
         mv.addObject("downloadURL", getDownloadURL(path, version));

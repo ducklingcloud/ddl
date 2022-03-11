@@ -37,7 +37,7 @@ public class KeyConstants {
     public static final String SITE_UMT_VO_KEY = "duckling.umt.vo";
 
     public static final String SITE_DOMAIN_KEY = "duckling.domain";
-    public static final String SITE_BASEURL_KEY = "duckling.baseURL";
+    public static final String SITE_BASEURL_KEY = "duckling.ddl.baseURL";
     public static final String SITE_NAME_KEY = "duckling.site.name";
     public static final String SITE_DISPLAY_NAME = "duckling.site.displayname";
     public static final String SKIN_NAME = "duckling.skin.name";

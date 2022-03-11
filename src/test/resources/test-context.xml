@@ -93,14 +93,14 @@
   </bean>
 
   <bean id="containerUrlConstructor" class="net.duckling.ddl.service.url.ContainerURLConstructor">
-    <constructor-arg value="${duckling.baseURL}" />
+    <constructor-arg value="${duckling.ddl.baseURL}" />
     <constructor-arg value="${duckling.referenceStyle}" />
   </bean>
 
   <!-- VwbContainer -->
   <bean id="container" class="net.duckling.ddl.common.VWBContainerImpl">
     <property name="teamService" ref="teamService" />
-    <property name="baseURL" value="${duckling.baseURL}" />
+    <property name="baseURL" value="${duckling.ddl.baseURL}" />
     <property name="urlConstructor" ref="containerUrlConstructor" />
     <property name="systemProperty" ref="systemProperty" />
   </bean>
@@ -145,8 +145,8 @@
 
   <bean id="emailNoticeThread" class="net.duckling.ddl.service.mail.thread.EmailNoticeThread"
 	init-method="start" destroy-method="shutdown">
-    <property name="baseUrl" value="${duckling.baseURL}" />
-    <property name="baseAddress" value="${duckling.baseAddress}" />
+    <property name="baseUrl" value="${duckling.ddl.baseURL}" />
+    <property name="baseAddress" value="${duckling.ddl.baseURL}" />
     <property name="triggerWeek" value="${duckling.emailnotice.triggerdayofweek}" />
     <property name="wordVectorPath" value="${dbrain.wordvector.path}" />
     <property name="teamService" ref="teamService" />
@@ -191,7 +191,7 @@
   </bean>
 
   <bean id="urlGenerator" class="net.duckling.ddl.service.url.URLGenerator">
-    <property name="baseUrl" value="${duckling.baseURL}" />
+    <property name="baseUrl" value="${duckling.ddl.baseURL}" />
     <property name="teamService" ref="teamService" />
   </bean>
 

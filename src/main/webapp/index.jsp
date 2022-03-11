@@ -13,7 +13,7 @@
 	String aoneVersion = Constant.getVersion(basePath);
 	request.setAttribute("aoneVersion", aoneVersion);
 	VWBContext context = VWBContext.createContext(request, "error");
-	String umtPath = context.getContainer().getProperty("duckling.umt.site");
+	String umtPath = context.getContainer().getProperty("duckling.umt.baseURL");
 	request.setAttribute("umtPath", umtPath);
 	String ddlPath = context.getContainer().getBaseURL();
 	request.setAttribute("ddlPath", ddlPath);

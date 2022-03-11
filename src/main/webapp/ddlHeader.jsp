@@ -13,7 +13,7 @@ request.setAttribute("requestScheme",
     ? request.getScheme()
     : request.getHeader("x-forwarded-proto"));
 VWBContext context = VWBContext.createContext(request, "error");
-String umtPath = context.getContainer().getProperty("duckling.umt.site");
+String umtPath = context.getContainer().getProperty("duckling.umt.baseURL");
 Object scheme = request.getAttribute("requestScheme");
 if (scheme == null) scheme = request.getScheme();
 
@@ -28,7 +28,7 @@ String currentReqUrl = context.getBaseURL() + request.getRequestURI();
 currentReqUrl = UrlUtil.changeSchemeToHttps(currentReqUrl, request);
 String loginUri=UrlUtil.changeSchemeToHttps(VWBContainerImpl.findContainer().getURL("login", null, "action=saveprofile", true),request)+"&sussessUrl="+URLEncoder.encode(currentReqUrl,"utf-8");
 String ddlPath = loginUri;
-//String ddlPath = context.getContainer().getProperty("duckling.baseURL");
+//String ddlPath = context.getContainer().getProperty("duckling.ddl.baseURL");
 request.setAttribute("ddlPath", ddlPath);
 
 /* this seems not-in-use */

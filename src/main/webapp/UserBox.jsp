@@ -69,7 +69,7 @@ function showmygroupList(){
 	<vwb:SubPage pageid="1(7,6,5,4,3);2"/> 
 	</div>
 	<c:if test="${PORTAL_SESSION!=null&&PORTAL_SESSION.currentUser.authBy!=null&&'umt'!=PORTAL_SESSION.currentUser.authBy}">
-	    <% String umt = VWBContainerImpl.findContainer().getConfig().getProperty("duckling.umt.site");
+	    <% String umt = VWBContainerImpl.findContainer().getConfig().getProperty("duckling.umt.baseURL");
 	        request.setAttribute("logincstnetURL",umt+"/user/loginThirdPartyApp");
 	        request.setAttribute("loginOnlineStorageURL",umt+"/user/onlineStorageLoginServlet");
 	     %>

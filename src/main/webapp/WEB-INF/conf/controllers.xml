@@ -23,8 +23,17 @@
 
   <context:annotation-config />
 
-  <context:property-placeholder location="/WEB-INF/conf/vwbconfig.properties,
-                                          /WEB-INF/conf/vwbconfig-secret.properties"/>  
+  <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>/WEB-INF/conf/vwbconfig.properties</value>
+        <value>/WEB-INF/conf/vwbconfig-secret.properties</value>
+      </list>
+    </property>
+    <property name="systemPropertiesModeName"
+              value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+  </bean>
 
   <!-- Maps '/' requests to the 'home' view -->
   <mvc:view-controller path="/" view-name="home" />

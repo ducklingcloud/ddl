@@ -201,7 +201,7 @@ public class WopiController {
     }
 
     private String getServerDomain() {
-        return systemProperty.getProperty("duckling.baseURL") ;
+        return systemProperty.getProperty("duckling.ddl.baseURL") ;
     }
 
     private String getOwaServerDomain() {

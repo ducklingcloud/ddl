@@ -677,7 +677,7 @@ public class ShareDownloadController extends BaseAttachController{
      * @return
      */
     private String getShareUrl(String ridCode){
-        return UriEncoder.encode(properties.getProperty("duckling.baseAddress")+"/"+UrlPatterns.T_VIEW_R+"/" + ridCode);
+        return UriEncoder.encode(properties.getProperty("duckling.ddl.baseURL")+"/"+UrlPatterns.T_VIEW_R+"/" + ridCode);
     }
 
 }

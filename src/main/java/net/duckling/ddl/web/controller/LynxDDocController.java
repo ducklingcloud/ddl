@@ -133,7 +133,7 @@ public class LynxDDocController extends BaseController{
     private TeamService teamService;
     @Autowired
     private RenderingService renderingService;
-    //@Value("${duckling.baseAddress}")
+    //@Value("${duckling.ddl.baseURL}")
     //private String baseAddress;
     @Autowired
     private DucklingProperties config;
@@ -632,7 +632,7 @@ public class LynxDDocController extends BaseController{
      */
     private String processImagePath(String html, String teamName, List<String> imagePathList, HttpServletRequest request){
         String cachePath = getImageCachePath(request);
-        String baseAddress = config.getProperty("duckling.baseAddress");
+        String baseAddress = config.getProperty("duckling.ddl.baseURL");
         String patternString = "src=\"(("+ baseAddress + request.getContextPath() +"/|/)"+teamName+"/downloadResource/(\\d+))\"";
 
         Pattern pattern = Pattern.compile(patternString);
