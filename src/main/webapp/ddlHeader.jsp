@@ -17,8 +17,6 @@ String umtPath = context.getContainer().getProperty("duckling.umt.baseURL");
 Object scheme = request.getAttribute("requestScheme");
 if (scheme == null) scheme = request.getScheme();
 
-/* request.setAttribute("escienceDomain", scheme + "://www.escience.cn"); */
-
 if("https".equals(scheme)){
     umtPath = UrlUtil.changeSchemeToHttps(umtPath, 443);
 }
@@ -26,14 +24,13 @@ request.setAttribute("umtPath", umtPath);
 
 String currentReqUrl = context.getBaseURL() + request.getRequestURI();
 currentReqUrl = UrlUtil.changeSchemeToHttps(currentReqUrl, request);
-String loginUri=UrlUtil.changeSchemeToHttps(VWBContainerImpl.findContainer().getURL("login", null, "action=saveprofile", true),request)+"&sussessUrl="+URLEncoder.encode(currentReqUrl,"utf-8");
+String loginUri = UrlUtil.changeSchemeToHttps(
+    VWBContainerImpl.findContainer().getURL(
+        "login", null, "action=saveprofile", true),
+    request) +"&sussessUrl="+ URLEncoder.encode(currentReqUrl,"utf-8");
 String ddlPath = loginUri;
 //String ddlPath = context.getContainer().getProperty("duckling.ddl.baseURL");
 request.setAttribute("ddlPath", ddlPath);
-
-/* this seems not-in-use */
-/* String umtReturnURI=umtPath+"/login?appname=dct&WebServerURL="+URLEncoder.encode(ddlPath, "utf-8");
-   request.setAttribute("umtReturnURI", umtReturnURI); */
 
 String baseURL = null;
 if ((request.getServerPort() == 80)
@@ -103,7 +100,7 @@ if ((request.getServerPort() == 80)
 		</div>
 		<ul class="nav-right" id="login">
 		    <li><a href="<vwb:Link context='switchTeam' absolute='true' format='url'/>">登录</a></li>
-		    <li><a href="<vwb:Link context='regist' absolute='true' format='url'/>">注册</a></li>
+		    <li><a href="${umtPath}/regist.jsp">注册</a></li>
 		</ul>
 		<div id="userMeMenu" class="pulldownMenu">
 		    <ul>
@@ -126,10 +123,7 @@ if ((request.getServerPort() == 80)
 		    <li><a id="ddlNav-help" href="https://github.com/ducklingcloud/ddl/wiki/DDL">项目Wiki</a></li>
 		    <!-- <li><a id="ddlNav-news" href="${contextPath}/ddlNews.jsp">动态</a></li> -->
 		    <li><a id="ddlNav-download" href="${contextPath}/download.jsp">客户端</a></li>
-		    
-		    <%-- 	
-		    <li><a id="ddlNav-share" href="<vwb:Link context='shareFile' format='url'/>">快速分享</a></li>
-		    --%>	
+		    <%-- <li><a id="ddlNav-share" href="<vwb:Link context='shareFile' format='url'/>">快速分享</a></li> --%>	
 		</ul>
 	    </div>
 	</div>
