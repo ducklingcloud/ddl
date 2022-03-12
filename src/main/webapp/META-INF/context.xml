@@ -7,4 +7,10 @@
   <!-- 50M cache for TLDs etc.; default is 10M, while raising warnings. -->
   <Resources cachingAllowed="true" cacheMaxSize="51200" />
 
+  <JarScanner>
+    <JarScanFilter defaultTldScan="false"
+                   tldScan="jstl-*.jar, tiles-jsp-*.jar"
+                   />
+  </JarScanner>
+
 </Context>

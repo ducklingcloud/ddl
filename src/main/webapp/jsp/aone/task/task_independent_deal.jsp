@@ -2,7 +2,7 @@
 <%@taglib uri="WEB-INF/tld/vwb.tld" prefix="vwb"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script type="text/javascript"
 	src="${contextPath}/scripts/jquery/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript"

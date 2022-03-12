@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib uri="WEB-INF/tld/vwb.tld" prefix="vwb"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <div id="shortcutShow" style="display: none; height:1%;overflow:hidden;">
 	<span id="ShortcutSpanTitle">推荐阅读：</span>
