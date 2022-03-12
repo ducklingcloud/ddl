@@ -11,6 +11,9 @@
     <JarScanFilter defaultTldScan="false"
                    tldScan="jstl-*.jar, tiles-jsp-*.jar"
                    />
+    <!-- Note: tiles-jsp-2.2.2.jar doesn't work in this method because
+         the .tld file locates in a wrong place. Putting tiles-jsp.tld
+         under WEB-INF/ is still required. -->
   </JarScanner>
 
 </Context>
