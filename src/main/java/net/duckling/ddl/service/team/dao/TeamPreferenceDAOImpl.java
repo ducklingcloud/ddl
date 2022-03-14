@@ -48,7 +48,7 @@ public class TeamPreferenceDAOImpl extends AbstractBaseDAO
     private final String INCREASE_MONITOR_COUNT,
         INCREASE_PERSON_COUNT,
         INCREASE_TEAM_COUNT;
-    
+
     private static final String UPDATE_MONITOR_ACCESS = "update vwb_team_member set monitor_access=?,monitor_notice_count=0,monitor_event_ids='' where uid=? and tid=?";
     private static final String UPDATE_PERSON_ACCESS = "update vwb_team_member set person_access=?,person_notice_count=0,person_event_ids='' where uid=? and tid=?";
     private static final String UPDATE_TEAM_ACCESS = "update vwb_team_member set team_access=?,team_notice_count=0,team_event_ids='' where uid=? and tid=? ";
@@ -62,7 +62,7 @@ public class TeamPreferenceDAOImpl extends AbstractBaseDAO
 
     public TeamPreferenceDAOImpl() {
         String dbms = DBs.getDbms();
-        
+
         INCREASE_MONITOR_COUNT =
                 "UPDATE vwb_team_member "+
                 "SET monitor_notice_count = monitor_notice_count + 1, "+
@@ -76,7 +76,7 @@ public class TeamPreferenceDAOImpl extends AbstractBaseDAO
                 "    person_event_ids = "+
                 DbmsCompat.getCONCAT(dbms, "person_event_ids", "?") +
                 "WHERE uid=? AND tid=?";
-        
+
         INCREASE_TEAM_COUNT =
                 "UPDATE vwb_team_member "+
                 "SET team_notice_count = team_notice_count + 1, "+

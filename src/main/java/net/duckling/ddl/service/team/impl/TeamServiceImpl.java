@@ -258,7 +258,7 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
             handle.dealVmtUserMessage(tid);
         }
     }
-    
+
     @Override
     public boolean addUserToVmt(int tid, String uid) {
         Team team = getTeamByID(tid);
@@ -473,7 +473,7 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
             return false;
         }
     }
-    
+
     @Override
     public boolean removeMembers(int tid, String[] uids, boolean noticeVMT) {
         try {

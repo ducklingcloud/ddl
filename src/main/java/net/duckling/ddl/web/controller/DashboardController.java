@@ -412,8 +412,8 @@ public class DashboardController extends AbstractSpaceController {
             int tid = pref.getTid();
             Team t = teamService.getTeamByID(tid);
             if (StringUtils.isNotEmpty(t.getCreator())) {
-                SimpleUser user = aoneUserService.getSimpleUserByUid(t
-                                                                     .getCreator());
+                SimpleUser user = aoneUserService
+                        .getSimpleUserByUid(t.getCreator());
                 result.put(tid, user);
             }
         }

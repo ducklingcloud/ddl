@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 import net.duckling.ddl.common.DBs;
 
-import net.duckling.ddl.service.subscribe.impl.SubscriptionDAO;
 import net.duckling.ddl.service.team.Team;
 import net.duckling.ddl.service.team.TeamState;
 import net.duckling.ddl.service.team.impl.TeamDAO;
@@ -49,8 +48,8 @@ import org.springframework.jdbc.support.KeyHolder;
  * @date 2011-3-1
  * @author Clive Lee
  */
-public class TeamDAOImpl extends AbstractBaseDAO implements TeamDAO{
-    protected static final Logger log = Logger.getLogger(SubscriptionDAO.class);
+public class TeamDAOImpl extends AbstractBaseDAO implements TeamDAO {
+    protected static final Logger log = Logger.getLogger(TeamDAOImpl.class);
 
     private RowMapper<Team> rowMapper = new RowMapper<Team>() {
             public Team mapRow(ResultSet rs, int index) throws SQLException {
@@ -73,24 +72,31 @@ public class TeamDAOImpl extends AbstractBaseDAO implements TeamDAO{
 
     public Team getTeamByName(String name) {
         String sql = "select * from vwb_team where name=?";
-        return getJdbcTemplate().query(sql, new Object[] { name },
-                                       new ResultSetExtractor<Team>() {
-                                           public Team extractData(ResultSet rs) throws SQLException,
-                                                   DataAccessException {
-                                               if (rs.next()) {
-                                                   return rowMapper.mapRow(rs, 0);
-                                               } else{
-                                                   return null;
-                                               }
-
-                                           }
-
-                                       });
+        return getJdbcTemplate().query(
+            sql, new Object[]{name},
+            new ResultSetExtractor<Team>() {
+                public Team extractData(ResultSet rs) throws SQLException,
+                        DataAccessException {
+                    if (rs.next()) {
+                        return rowMapper.mapRow(rs, 0);
+                    } else{
+                        return null;
+                    }
+                }
+            });
     }
 
     public Team getTeamById(int tid) {
-        String sql = "select * from vwb_team where id=?";
-        return  getJdbcTemplate().queryForObject(sql,new Object[] { tid }, rowMapper);
+        String sql = "SELECT * FROM vwb_team WHERE id=?";
+        try {
+            return getJdbcTemplate().queryForObject(
+                sql, new Object[]{tid}, rowMapper);
+        } catch (Exception e) {
+            log.error("Failed to getTeamById id="+ tid +"\n"+
+                      e.toString());
+            log.debug("Failed to getTeamById", e);
+            return null;
+        }
     }
 
     public void updateBasicInfo(String tid, String title, String description, String accessType, String defaultMemberAuth,Date time,String defaultView) {
