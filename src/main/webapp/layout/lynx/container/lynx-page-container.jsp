@@ -5,12 +5,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <link href="${contextPath}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 <link href="${contextPath}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
-<link href="${contextPath}/scripts/bootstrap/css/todc-bootstrap.css" rel="stylesheet"/>	
+<link href="${contextPath}/scripts/bootstrap/css/todc-bootstrap.css" rel="stylesheet"/>
 <fmt:setBundle basename="templates.default" />
 
 <script type="text/javascript" src="${contextPath}/jsp/aone/js/fileuploader.js?v=${aoneVersion}"></script>
 
-<link href="${contextPath}/jsp/aone/css/fileuploader.css" rel="stylesheet" type="text/css">	
+<link href="${contextPath}/jsp/aone/css/fileuploader.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="${contextPath}/jsp/aone/css/tokenInput.css" type="text/css" />
 <script type="text/javascript" src="${contextPath}/jsp/aone/js/toker-jQuery-forTag.js"></script>
 <script type="text/javascript" src="${contextPath}/jsp/aone/js/global.js"></script>
@@ -41,10 +41,10 @@ $(document).ready(function(){
 		}
 		else {
 			menu.css('display', 'none');
-			menu.css('position', ''); 
+			menu.css('position', '');
 		}
 	});
-	
+
 	$('input.tagPoolAutoShow').tokenInput("<vwb:Link context='tag' format='url'/>?func=loadTeamTags&type=nogroup", {
 		theme:"facebook",
 		hintText: "输入标签名称，以逗号或回车结束",
@@ -52,32 +52,32 @@ $(document).ready(function(){
 		noResultsText: "没有该标签，输入逗号或回车添加",
 		preventDuplicates: true,
 	});
-	
-	
+
+
 	var url = '<vwb:Link context="reclogging" format="url"/>';
 	var cur_url ;
-	
+
 	$(".related-click-log").live("click",function(){
 		var json = new Object();
 		json['func'] = "cl";
 		json['pid'] = $(this).attr("pid");
 		json['type'] = 'click';
 		json['tid'] = $(this).attr("tid");
-		
-		cur_url = $(this).attr("cur_url");  
-		
+
+		cur_url = $(this).attr("cur_url");
+
 		ajaxRequest(url,json,afterRecordLog);
 	});
-	
+
 	function afterRecordLog(data){
 		//do nothing
-		//window.location.href = cur_url;   
+		//window.location.href = cur_url;
 	};
-	
-	
+
+
 });
 $(document).ready(function(){
-	
+
 	function placeEdge() {
 		var cont = $('#DCT_viewcontent');
 		var major = $('#content-major');
@@ -93,12 +93,12 @@ $(document).ready(function(){
 	var contentWidth = DOMobj.scrollWidth + jQobj.outerWidth(true) - jQobj.width();
 	var w = DOMobj.scrollWidth;
 	var m = jQobj.outerWidth(true) - jQobj.width();
-	
+
 	$("a[name='movePage']").live("click",function(){
 		var url = "<vwb:Link context='configCollection' format='url'/>?func=loadCollectionList&cid=${collection.resourceId}";
 		ajaxRequest(url,null,afterLoadCollections);
 	});
-	
+
 	function afterLoadCollections(data){
 		$("#candidats-container ul").html("");
 		if(data!=null){
@@ -112,14 +112,14 @@ $(document).ready(function(){
 			}
 		}
 	};
-	
+
 	var upload_base_url = "<vwb:Link context='upload' format='url'/>";
 	var upload_url = "<vwb:Link context='upload' format='url'/>?func=uploadFiles";
-	
+
 	var uploadedFiles = [];
 	var index = 0;
-	
-	function createUploader(){  
+
+	function createUploader(){
          var uploader = new qq.FileUploader({
              element: document.getElementById('file-uploader-demo1'),
              action: upload_url,
@@ -129,15 +129,15 @@ $(document).ready(function(){
              	index ++;
              },
              debug: true
-         });           
+         });
      };
-     
+
      createUploader();
-    
+
     $("a[name='cancel']").live("click",function(){
     	ui_hideDialog("upload-attach-dialog");
     });
-    
+
     $("#attach-to-this-page").live("click",function(){
     	 var fids = [];
 	   	 for(var i=0;i<uploadedFiles.length;i++){
@@ -157,7 +157,7 @@ $(document).ready(function(){
 	   	 index = 0;
 	   	 ui_hideDialog("upload-attach-dialog");
     });
-    
+
     $("a.delete-tag-link").live('click',function(){
     	var rids = new Array();
  		rids[0] = $(this).attr("rid");
@@ -168,11 +168,11 @@ $(document).ready(function(){
     		$a.parent().remove();
     	},notEnoughAuth);
     });
-    
+
     function notEnoughAuth(){
 		alert("您无权进行此操作！");
 	};
-    
+
 /*----------- add tag dialog begin ---------------*/
 	function getNewTags(){
 		var results = [];
@@ -181,10 +181,10 @@ $(document).ready(function(){
 			results[i] = $(this).text();
 			i++;
 		});
-		
+
 		return results;
 	}
-	
+
 	function getExistTags(){
 		var results = [];
 		var i = 0;
@@ -214,20 +214,20 @@ $(document).ready(function(){
   				});
   			}
 		};
-	
+
 	var tPool = new tagPool({
 		pool: $('.tagGroupHorizon'),
 		scroller: $('.tG-scroll'),
 		blockClass: 'tG-block'
 	});
 	tag_handler.loadAllTeamTags();
-	
+
 	var aTBox = new addTagBox({
 		input: $('input[name="typeTag"]'),
 		tagList: $('.existTags ul.tagList'),
 		tagPool: tPool,
 	});
-	
+
 	var addSingleTagDialog = new lynxDialog({
 		'instanceName': 'addSnglTag',
 		'dialog': $('#addSingleTagDialog'),
@@ -248,7 +248,7 @@ $(document).ready(function(){
 	$("#addSingleTagDialog .saveThis").click(function(){
 		var feedback = tag_handler.addTagForSingleRecord();
 	});
-	
+
 	$('ul.tagList li.newTag')
 	.unbind('.lynx.callAddSingleTagDialog')
 	.bind('click.lynx.callAddSingleTagDialog', function(event){
@@ -257,14 +257,14 @@ $(document).ready(function(){
 		addSingleTagDialog.$dialog.removeClass('multiple');
 		addSingleTagDialog.show();
 	});
-  
-    
+
+
 /*---------------add tag dialog end---------------*/
 	$('div.icon-checkStar').each(function(){
  		$(this).checkItem({
  			'makeUrl': function(obj){
  				var tempURL = site.getURL("starmark",null);
- 				if (obj.hasClass('checked')) 
+ 				if (obj.hasClass('checked'))
  					return tempURL+"?func=remove&rid="+obj.attr("rid");
  				else
  					return tempURL+"?func=add&rid="+obj.attr("rid");
@@ -278,8 +278,8 @@ $(document).ready(function(){
  			}
 	  	});
  	});
- 	
- 	
+
+
 	function afterSubscription(data){
 		var str = '您已关注了：';
 		$("input[name='publisher']").each(function(){
@@ -290,7 +290,7 @@ $(document).ready(function(){
 		   hideMsg(3000);
 		$(".icon-checkSub").addClass("checked");
 	};
-	
+
 	function afterRemoveSubscription(data){
 		var str='';
 		if(data.status=='noExist'){
@@ -306,7 +306,7 @@ $(document).ready(function(){
 		}
 		$("input[name='existItemSize']").attr('value',data.size);
 	};
- 	
+
 	$(".icon-checkSub").live('click',function(){
 		if(!$(this).hasClass("checked")){
 			ajaxRequest("<vwb:Link context='feed' format='url'/>",{"func":"addPageFeed","pid":"${rid}"},afterSubscription);
@@ -317,7 +317,7 @@ $(document).ready(function(){
 	$("#showHotCode").live('click',function(){
 		$("#visitor").toggle();
 	});
-	
+
 	$('#fullScreen').click(function(){
 		if($("#content-major").hasClass("fullScreenView")){
 			exitFullscreen();
@@ -335,7 +335,7 @@ $(document).ready(function(){
 		$("#content-major").removeClass("fullScreenView");
 		$("#content-side").show();
 		$("#macroNav,#masthead,#tagSelector,#footer").show();
-		$('#fullScreen').html('<i class="icon-fullscreen" ></i> 全屏阅读');	
+		$('#fullScreen').html('<i class="icon-fullscreen" ></i> 全屏阅读');
 	}
 	$(document).keyup(function(KEY){
 		if (KEY.which=='27' && $("#content-major").hasClass("fullScreenView")) {
@@ -403,7 +403,7 @@ $(document).ready(function(){
 		<div class="ui-clear"></div>
 		<div id="version">
 			<a href="<vwb:Link context='userguide'  format='url'/>?func=redirect&uid=${pageDetail.editor}" class="uidToolTip" rel="tooltip" data-placement="bottom" data-original-title="${pageDetail.editor}" target="_blank">${editor}</a> | 修改于
-			<fmt:formatDate value="${resource.lastEditTime}" type="both" dateStyle="medium"/> 
+			<fmt:formatDate value="${resource.lastEditTime}" type="both" dateStyle="medium"/>
 			|&nbsp;<vwb:fileSize size="${pageDetail.size }"/>
 			<c:if test="${!empty copyLog}">
 				<br>
@@ -417,7 +417,7 @@ $(document).ready(function(){
 		<div class="ui-clear"></div>
 	</div>
 	<div id="overflowShade"></div>
-	
+
 	<%-- <div id="readTool">
 		<jsp:include page="/jsp/aone/pageBar.jsp"></jsp:include>
 	</div> --%>
@@ -442,14 +442,13 @@ $(document).ready(function(){
 	    		<a class="btn btn-large btn-success editPage"><i class="icon-edit icon-white" style="margin-left:25px"></i> &nbsp;编辑</a>
     		</c:if>
     	</div>
-    	<div class="sideCenter">
-    		<a id ="share" class="btn btn-large"><i class="icon-share" style="margin-left:25px"></i> 分享</a>
-    	</div>
-    	<div class="sideCenter">
-            <!-- Disabled temporarily <2022-03-09 Wed> -->
-    	    <!-- <a class="btn btn-large" href="<vwb:Link context='f' page='${rid}' format='url'/>?func=exportPdf"><span class="icon-pdf" style="margin-left:25px"></span>&nbsp;&nbsp;导出</a> -->
-    	    <a class="btn btn-large"><span class="icon-pdf" style="margin-left:25px"></span>&nbsp;&nbsp;导出</a>
-    	</div>
+        <!-- Disabled <2022-03-15 Tue> -->
+    	<!-- <div class="sideCenter">
+    	     <a id ="share" class="btn btn-large"><i class="icon-share" style="margin-left:25px"></i> 分享</a>
+    	     </div> -->
+    	<!-- <div class="sideCenter">
+    	     <a class="btn btn-large" href="<vwb:Link context='f' page='${rid}' format='url'/>?func=exportPdf"><span class="icon-pdf" style="margin-left:25px"></span>&nbsp;&nbsp;导出</a>
+    	     </div> -->
     	<h4 class="sideTitle"><span>文件操作</span></h4>
     	<c:if test="${resource.status!='unpublish' }">
 	    	<div class="sideOper"><a id="fileMove" href="javascript:void(0);"><i class="icon-move"></i> 移动</a></div>
@@ -499,8 +498,8 @@ $(document).ready(function(){
 		    	<div class="sideOper"><a id="fileDeleteSub" href="javascript:void(0);"><i class="icon-trash"></i> 删除</a></div>
 	    </div>
 	</div>
-	
-	
+
+
 </div>
 
 <div class="ui-dialog" id="move-page-dialog" style="width:400px;">
@@ -530,7 +529,7 @@ $(document).ready(function(){
 
 <div class="ui-dialog" id="upload-attach-dialog" style="width:400px;">
 		<p class="ui-dialog-title">上传附件</p>
-	
+
 		<div id="file-uploader-demo1">
 			<div class="qq-uploader">
 				<div class="qq-upload-button">上传附件
@@ -539,7 +538,7 @@ $(document).ready(function(){
 				<ul class="qq-upload-list fileList"></ul>
 			</div>
 		</div>
-		
+
 		<div class="ui-dialog-control">
 			<input type="button" id="attach-to-this-page" value="完成"/>
 			<a name="cancel">取消</a>
@@ -633,12 +632,12 @@ $(function(){
 				ridArr.push(n);
 			}
 		});
-		
+
 		if(ridArr.length==0){
 			this.close();
 			return;
 		}
-		
+
 		var params = { "fids[]": ridArr,
 				"rid": "${resource.rid}",
 				"title":$("#pageTitle").html(),
@@ -656,8 +655,8 @@ $(function(){
 						var res = resourceModal.getRecordById(n);
 						var downloadStr = res.itemType =='DFile' ? "<a style=\"float:left;margin-left:5px;\" href=\"<vwb:Link context='download' format='url'/>"+
 								n +"?type=doc&imageType=original\"> <i class=\"icon-download-alt\"></i></a>" : "";
-						$("#exist-attach-list").append("<li><span class=\"headImg " + res.itemType + " " + res.fileType +"\"></span><a class=\"file ellipsis\" rid=\""+ n 
-						           +"\" href=\"${teamHome}/r/"+ n +"\" title='"+ res.fileName +"'>"+ res.fileName +"</a>" 
+						$("#exist-attach-list").append("<li><span class=\"headImg " + res.itemType + " " + res.fileType +"\"></span><a class=\"file ellipsis\" rid=\""+ n
+						           +"\" href=\"${teamHome}/r/"+ n +"\" title='"+ res.fileName +"'>"+ res.fileName +"</a>"
 						           + downloadStr +
 									" <a class=\"lightDel\" rid=\""+ n +"\"> </a></li>");
 					}
@@ -672,7 +671,7 @@ $(function(){
 		   }
 		});
 	};
-	
+
 	$("#exist-attach-list .lightDel").live("click",function(){
 		$.ajax({
 		   type: "POST",
@@ -689,7 +688,7 @@ $(function(){
 		   },
 		});
 	});
-	
+
 	function isExistedResTag(rid){
 		var r = false;
 		$("#exist-attach-list li a").each(function(){
@@ -700,7 +699,7 @@ $(function(){
 		});
 		return r;
 	}
-	
+
 	$("#attachFile-button").bind("click",function(){
 		resourceModal.open();
 	});
@@ -719,7 +718,7 @@ $(document).ready(function(){
 	$('.toolDelete').click(function(){
 		$('#delete-attach-dialog').attr('style','width:400px; position:fixed; top:30%; left:30%;').fadeIn();
 	});
-	
+
 	$("#delPageButton").click(function(){
 		ui_hideDialog("delete-attach-dialog");
 		$.ajax({
@@ -747,9 +746,9 @@ $(document).ready(function(){
 				403:function(){alert('您没有权限进行该操作');}
 			}
 		});
-		
+
 	})
-	
+
 	$('a[name=cancel]').click(function(){
 		$(this).parents('div.ui-dialog').fadeOut();
 	});
@@ -792,7 +791,7 @@ $("#fileCopy,#fileCopySub").live("click", function(){
 	$("#fileBrowserModal").modal();
 	original_rid = "${resource.rid}";
 	file_operation = 'copy';
-	
+
 	$("#teamSelWrapper").show();
 	$("#teamSel").val("${teamCode}");
 });
@@ -823,7 +822,7 @@ function loadBrowserTree(teamCode){
 						},
 						"success" : function(data){
 							if(data && data.length>0){
-								data[0].attr.id = data[0].attr.rid; 
+								data[0].attr.id = data[0].attr.rid;
 							}
 						}
 					}
@@ -867,13 +866,13 @@ function loadBrowserTree(teamCode){
 $("#newNodeBtn").click(function(){
 	var fileBrowser = $.jstree._reference("#file_browser");
 	var selectedNode = fileBrowser.get_selected();
-	
+
 	var editedNode = $("#file_browser").find("li[rid=-1]");
 	if(editedNode.attr("rid")){
 		editedNode.find('.fileNameInput').select();
 		return;
 	}
-	
+
 	fileBrowser.open_node(selectedNode,function(){
 		var newNode = fileBrowser.create_node(selectedNode, "inside", { "attr" : { "rel" : "folder","rid":"-1"},"data":" "});
 		newNode.find("a")[0].lastChild.nodeValue = "";
@@ -889,7 +888,7 @@ $("#newNodeBtn").click(function(){
 		 "</span>";
 		 newNode.append(editor);
 		 fileBrowser.open_node(selectedNode);
-		 
+
 		 newNode.find('.updateFolder').bind("click",function(){
 			 addNode(newNode);
 		 });
@@ -902,11 +901,11 @@ $("#newNodeBtn").click(function(){
 		newNode.find('a.cancelFolder').bind("click",function(){
 			newNode.remove();
 		});
-			
+
 		newNode.find('.fileNameInput').select();
 	},true);
-	
-	
+
+
 	function addNode(newNode){
 		var span = newNode.children('span.editFileName');
 		var fileName = $.trim(span.find('input.fileNameInput').val());
@@ -949,7 +948,7 @@ $("#newNodeBtn").click(function(){
 			},
 		});
 	}
-	
+
 });
 
 //团队ID
@@ -980,7 +979,7 @@ $("#moveToBtn").live('click', function(){
 				}, 1500);
 				return;
 			}
-			
+
 			file_manager_url = "${teamHome}/fileManager";
 			if(file_operation == 'move'){
 				$("#opareteFileMessage").removeClass();
@@ -1006,7 +1005,7 @@ $("#moveToBtn").live('click', function(){
 						} else if (data.state==2) {
 							$("#opareteFileMessage").addClass("alert alert-error");
 						}
-						
+
 						$("#opareteFileMessage").html(data.msg);
 						$("#opareteFileMessage").show();
 						window.setTimeout(function(){
@@ -1157,7 +1156,7 @@ $('#content-title .updateFolder').die().live('click',function(){
 			$("#fileRename").removeClass("clicked");
 			$(span).parent().find(".origanName").show();
 			$(span).remove();
-			
+
 		},
 		statusCode:{
 			450:function(){alert('会话已过期,请重新登录');},

@@ -107,7 +107,7 @@
 	 //var tid=tidStr.substring(tidStr.indexOf("tid=")+4,tidStr.indexOf("&"));
 	 
 	 var contactList={"tids":t_ids};
-	 alert(JSON.stringify(contactList));
+	 /* alert(JSON.stringify(contactList)); */
 	 window.location.href = exportBasicURL +"&contactList="+
                                 encodeURIComponent(JSON.stringify(contactList));
      });

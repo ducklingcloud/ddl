@@ -4,8 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <link href="${contextPath}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 <link href="${contextPath}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
-<link href="${contextPath}/scripts/bootstrap/css/todc-bootstrap.css" rel="stylesheet"/>	
-<link href="${contextPath}/jsp/aone/css/fileuploader.css" rel="stylesheet" type="text/css">	
+<link href="${contextPath}/scripts/bootstrap/css/todc-bootstrap.css" rel="stylesheet"/>
+<link href="${contextPath}/jsp/aone/css/fileuploader.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="${contextPath}/jsp/aone/css/tokenInput.css" type="text/css" />
 <link rel="stylesheet" href="${contextPath}/jsp/aone/css/lynx.css?v=${aoneVersion}" type="text/css" />
 <link rel="stylesheet" href="${contextPath}/jsp/aone/css/lion.css?v=${aoneVersion}" type="text/css" />
@@ -24,12 +24,15 @@
             </li>
 		    <li><a id="showTeamRecentChang"  queryType="teamRecentChangeFiles" href="javascript:void(0)">最近更新</a></li>
 		    <li><a id="showMyRecentFiles"  queryType="myRecentFiles" href="javascript:void(0)">我常用的</a></li>
-		    <li><a id="showMyCreateFiles"  queryType="myCreate" href="javascript:void(0)">我创建的</a></li>			
+		    <li><a id="showMyCreateFiles"  queryType="myCreate" href="javascript:void(0)">我创建的</a></li>
 			<li><a id="showMyStarFiles" queryType="myStarFiles"  href="javascript:void(0)">已加星标</a></li>
 		</ul>
-		<ul class="myNavList myShare">
-			<li><a href="${teamHome }/shareManage">分享历史</a></li>
-		</ul>
+
+                <!-- Disabled <2022-03-15 Tue> -->
+		<!-- <ul class="myNavList myShare">
+		     <li><a href="${teamHome }/shareManage">分享历史</a></li>
+		     </ul> -->
+
 		<div class="tagDiv">
 			<jsp:include page="/jsp/aone/tag/featureTags.jsp"></jsp:include>
 		</div>
@@ -47,19 +50,19 @@
 				</div>
 				<a class="btn btn-large btn-yellow" name="addFolder" style="display:none" id="addFolder"><i class="icon-folder-open"></i> 新建文件夹</a>
 				<a class="btn btn-large btn-success" name="createNewDDoc" id="createNewDDoc"><i class="icon-list-alt icon-white"></i> 新建协作文档</a>
-			</div>	
+			</div>
 			</div>
 		<div class="fixMenuBar">
 			<div id="opareteFileMessage" class="alert alert-success" style="display: none;z-index:9999"></div>
 			<div class="toolBar">
 			 	<input type='checkbox' name="checkAllFiles" id="checkAllFiles" class="showSelectedOperate" value=""/>
 				<span class="selectedOperGroup" style="display:none">
-					<span id="checkedMessage">&nbsp;已选中<span class="checkedNum"></span>项</span>	
+					<span id="checkedMessage">&nbsp;已选中<span class="checkedNum"></span>项</span>
 					<a class="btn btn-small btn-primary selectedOper" id="downLoadSelected" title="下载" ><i class="icon-download-alt icon-white"></i>下载</a>
 					<a class="btn btn-small btn-primary selectedOper" id="moveSelected" title="移动" ><i class="icon-move icon-white"></i> 移动</a>
 					<a class="btn btn-small btn-primary selectedOper" id="copySelected" title="复制" ><i class="icon-copy icon-white"></i> 复制</a>
-					<a class="btn btn-small btn-primary selectedOper" id="deleteSelected" title="删除" ><i class="icon-trash icon-white"></i> 删除</a> 
-					<a class="btn btn-small btn-primary selectedOper" id="addTags" title="添加标签" ><i class=" icon-tags icon-white"></i> 添加标签</a> 
+					<a class="btn btn-small btn-primary selectedOper" id="deleteSelected" title="删除" ><i class="icon-trash icon-white"></i> 删除</a>
+					<a class="btn btn-small btn-primary selectedOper" id="addTags" title="添加标签" ><i class=" icon-tags icon-white"></i> 添加标签</a>
 					<!--相应js未完成<a class="btn btn-small btn-primary selectedOper" id="shareFiles" title="分享" ><i class="icon-trash icon-white"></i> 分享</a> -->
 				</span>
 			 	<div class="filterBoard">
@@ -99,22 +102,22 @@
 			 	</div>
 			</div>
 			<div class="tableHeader"  style="display:none">
-				<div class="title-col col">  
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标题       
-				</div>   
-				<div class="creator-col col">    
-					<span>修改人</span>   
-				</div>        
+				<div class="title-col col">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标题
+				</div>
+				<div class="creator-col col">
+					<span>修改人</span>
+				</div>
 				<div class="time-col col">
 					<span>修改时间</span>
-				</div>   
-				<div class="version-col col">    
-					<span  style="color:#666">大小</span>   
-				</div>        
-				<div class="col">标签</div>  
+				</div>
+				<div class="version-col col">
+					<span  style="color:#666">大小</span>
+				</div>
+				<div class="col">标签</div>
 			</div>
 		</div>
-		
+
 		<div id="fileItemDisplay" >
 			<ul id="resourceList" class="readyHighLight1 asTight"> </ul>
 			<p id="notice" class="NA large  readyHighLight1 loading"  style="float:left">正在载入...</p>
@@ -126,7 +129,7 @@
 					</a></li>
 					<li><a class="upLoadFile" href="javascript:void(0)">
 							<div id="file-uploader-link">上传文件</div>
-							<span class="iconLynx icon-upload hover"></span> 
+							<span class="iconLynx icon-upload hover"></span>
 					</a></li>
 				</ul>
 			</div>
@@ -150,7 +153,7 @@
 				<c:forEach items="${myTeamList}" var="item">
 					<option value="${item.name }" id="teamSel_${item.id }" <c:if test="${teamType eq item.name}">selected="selected" class='currentTeam'</c:if>>${fn:escapeXml(item.displayName)}</option>
 				</c:forEach>
-			</select> 
+			</select>
 			<span class="ui-text-note" style="color:#999;">支持跨团队复制</span>
 		</div>
 		<div id="file_browser"></div>
@@ -172,8 +175,8 @@
 			<ul id="upload-list" style="list-style:none"></ul>
 		</div>
 	</div>
-	
-	
+
+
 <div id="alertModel" class="modal hide fade">
   <div class="modal-header">
     <button type="button" class="close closeUpload" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -207,7 +210,7 @@
     <button class="btn closeAlertModel initShow"  data-dismiss="modal" aria-hidden="true">取消</button>
   </div>
 </div>
-	
+
 <div id="tip" style="display:none">按住Ctrl键多选</div>
 
 <jsp:include page="/jsp/aone/recommend/shareResourceToTeam.jsp"></jsp:include>
@@ -226,25 +229,29 @@
 		{{/if}}
 		<input type='hidden' class='rid' value='{{= rid}}'/>
 		<input class='parentRid' value='{{= parentRid}}'type='hidden' />
-	</div> 
-	
-       <span class="file-commands">
-			{{if $data.itemType!='Folder'}}		
-				<a class="view-file" href="{{= previewUrl}}" target="_blank" title="预览" style="float:left"></a>  
-			{{/if}}
+	</div>
+
+        <span class="file-commands">
+            <!-- Disabled 预览 <2022-03-15 Tue> -->
+	    <!-- {{if $data.itemType!='Folder'}}
+		<a class="view-file" href="{{= previewUrl}}" target="_blank" title="预览" style="float:left"></a>
+		{{/if}} -->
 			{{if $data.rid!=0}}
-			{{if $data.status!='unpublish'}}
-			{{if $data.itemType =='DPage'}}		
-					<a class="share-file" title="分享" style="float:left"></a>
-			{{else}}
-				<div class="dropdown share" style="float:left; height:25px;">
-          			<a class="dropdown-toggle" data-toggle="dropdown"  title="分享" href="#"></a>
-					<ul class="dropdown-menu lion" role="menu" aria-labelledby="dLabel">
-            			<li class="share-file">团队内分享</li>
-             		  	<li class="share-Resource">公开链接</li>            
-           			 </ul>
-          		</div> 
-			{{/if}}            
+			        {{if $data.status!='unpublish'}}
+
+                                <!-- Disable 分享 <2022-03-15 Tue> -->
+			        <!-- {{if $data.itemType =='DPage'}}
+				     <a class="share-file" title="分享" style="float:left"></a>
+			             {{else}}
+				     <div class="dropdown share" style="float:left; height:25px;">
+          			     <a class="dropdown-toggle" data-toggle="dropdown"  title="分享" href="#"></a>
+				     <ul class="dropdown-menu lion" role="menu" aria-labelledby="dLabel">
+            			     <li class="share-file">团队内分享</li>
+             		  	     <li class="share-Resource">公开链接</li>
+           			     </ul>
+          		             </div>
+			             {{/if}}             -->
+
            	<!--<a class="share-file" title="分享" style="float:left"></a>-->
 			{{if $data.itemType =='DFile'||$data.itemType =='Folder' }}
            	<a class="down-file" title="下载" style="float:left"></a>
@@ -260,9 +267,9 @@
 				{{/if}}
                <li class="rename_item">重命名</li>
 				{{/if}}
-               <li class="delete_item">删除</li>            
+               <li class="delete_item">删除</li>
              </ul>
-          </div>   
+          </div>
 			{{/if}}
 		</span>
 
@@ -278,11 +285,11 @@
             {{/if}}
             </a>
 		</h2>
-     
+
    </div>
 		<div class='creator-col col'>
 			<span>{{if $data.lastEditor }}<a class="uidTooltip" href="javascript:void(0)" trigger="hover" rel="tooltip" data-placement="bottom" data-original-title="{{= lastEditorUid}}">{{= lastEditor}}</a>{{else}}-{{/if}}</span>
-			
+
 		</div>
        <div class='time-col col'><span>{{= modofyTime}}</span></div>
 		<div class='version-col col'>
@@ -383,12 +390,12 @@
 </div>
 
 <div id="intro_common_4" class="intro_step">
-	<div class="title">新建文件夹，组织文件更方便！您可以<br>新建协作文档和上传文件，立即开始您<br>的云端之旅！</div>											
+	<div class="title">新建文件夹，组织文件更方便！您可以<br>新建协作文档和上传文件，立即开始您<br>的云端之旅！</div>
 	<a class="Iknow" id="Iknow_common_4">下一功能</a>
 	<a class="closeMe">跳过</a>
 </div>
 <div id="intro_common_5" class="intro_step">
-	<div class="title">左侧文件导航栏，快捷查看团队最近<br><br>更新和您个人常用文件。</div>											
+	<div class="title">左侧文件导航栏，快捷查看团队最近<br><br>更新和您个人常用文件。</div>
 	<a class="Iknow" id="Iknow_common_5">完成</a>
 </div> -->
 <div id="mask_common_1" class="intro_mask"></div>

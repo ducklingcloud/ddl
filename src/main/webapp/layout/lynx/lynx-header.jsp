@@ -10,7 +10,7 @@ request.setAttribute("contextPath", request.getContextPath());
 <link href="${contextPath}/dface/css/dface.banner.css" rel="stylesheet" type="text/css"/>
 <script src="${contextPath}/dface/js/dface.banner.js" type="text/javascript" ></script>
 <div id="macroNav" class="ui-wrap wrapperFull">
-    <a id="logo" title="团队文档库"><b class="caret"></b></a>
+    <a id="logo" title="团队文档库" style="pointer-events: none"><b class="caret"></b></a>
     
     <div id="macro-innerWrapper" class="wrapper1280">
 	<vwb:TeamPreferences/>
@@ -164,8 +164,8 @@ request.setAttribute("contextPath", request.getContextPath());
 	    </c:if>
 	</div>
     </div>
-    
 </div>
+
 <div id="search-title" class="ui-wrap wrapper1280" style="display:none;">
     <h2 style="margin:-40px 0 10px 13px;">文档库搜索</h2>
 </div>
@@ -301,6 +301,7 @@ request.setAttribute("contextPath", request.getContextPath());
      }
  });
 </script>
+
 <script type="text/javascript">
  function addResource(url){
      try{
@@ -320,7 +321,13 @@ request.setAttribute("contextPath", request.getContextPath());
 	 window.location.href=url;
      }
  }
- $(document).ready(function(){
+
+
+ $(document).ready(function() {
+
+     /* Disabled <2022-03-15 Tue> */
+     return;
+     
      /* GLOBAL SEARCH */
      var globalSearch = new SearchBox('globalSearch', '搜索', false, false, false);
      
@@ -330,6 +337,7 @@ request.setAttribute("contextPath", request.getContextPath());
 	 globalSearch.container.addClass('loaded');
 	 globalSearch.container.parent().addClass('loaded');
      });
+     
      globalSearch.searchInput.blur(function(){
 	 if (globalSearch.searchResultState==false) {
 	     globalSearch.container.removeClass('loaded');
@@ -337,7 +345,7 @@ request.setAttribute("contextPath", request.getContextPath());
 	 globalSearch.container.parent().removeClass('loaded');
      });
      
-     function renderCollectionResult(data){
+     function renderCollectionResult(data) {
 	 var html = '<li class="type">集合（'+data.size+'）</li>';
 	 for(var i=0;i<data.content.length;i++)
 	     html += '<li><a href="' + data["content"][i].url + '">' + data["content"][i].title + '</a></li>';
@@ -418,6 +426,7 @@ request.setAttribute("contextPath", request.getContextPath());
      }, 200);
  });
 </script>
+
 <script type="text/javascript">
  $(document).ready(function(){
      function init(){

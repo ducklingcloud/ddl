@@ -42,7 +42,7 @@ public class ViewPortTitleTag extends VWBBaseTag {
         try {
             String pageTitle = (String)vwbcontext.getHttpRequest().getAttribute(LynxConstants.PAGE_TITLE);
             title = CommonUtils.isNullOrEmptyOrBlankOrLiteralNull(pageTitle) ?
-                    null : (pageTitle+" : ");
+                    null : (pageTitle+"&nbsp;:&nbsp;");
             if (title==null){
                 if (vwbcontext.getResource()!=null)
                 {

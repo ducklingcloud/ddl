@@ -27,9 +27,9 @@ public final class HTMLConvertUtil {
         return null;
     }
 
-    public static String replaceQuto(String title){
+    public static String replaceQuot(String title){
         if(title!=null){
-            String result = title.replaceAll("\"", "&quto;");
+            String result = title.replaceAll("\"", "&quot;");
             return result;
         }
         return null;

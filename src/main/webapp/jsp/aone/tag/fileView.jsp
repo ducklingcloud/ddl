@@ -12,7 +12,7 @@
 <link href="${contextPath}/scripts/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css"/>
 <link id="coreCss" href="${contextPath}/scripts/syntaxhighlighter/styles/shCoreEclipse.css" rel="stylesheet" type="text/css"/>
 <link id="themeCss" href="${contextPath}/scripts/syntaxhighlighter/styles/shThemeEclipse.css" rel="stylesheet" type="text/css"/>
-<link href="${contextPath}/jsp/aone/css/fileuploader.css" rel="stylesheet" type="text/css">	
+<link href="${contextPath}/jsp/aone/css/fileuploader.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="${contextPath}/jsp/aone/css/tokenInput.css" type="text/css" />
 <script type="text/javascript" src="${contextPath}/jsp/aone/js/toker-jQuery-forTag.js"></script>
 <script type="text/javascript" src="${contextPath}/jsp/aone/js/pv-timing.js"></script>
@@ -42,14 +42,14 @@ $(document).ready(function(){
 			menu.css('position', '');
 		}
 	}); */
-	
+
 	$('input.tagPoolAutoShow').tokenInput("<vwb:Link context='tag' format='url'/>?func=loadTeamTags&type=nogroup", {
 		theme:"facebook",
 		hintText: "输入标签名称，以逗号或回车结束",
 		searchingText: "正在搜索……",
 		noResultsText: "没有该标签，输入逗号或回车添加",
 		preventDuplicates: true,
-	}); 
+	});
 	$(".recoverPageVersion").live("click",function(){
 		var version = $(this).find("input[name='version']").val();
 		var tid = $(this).find("input[name='tid']").val();
@@ -58,66 +58,66 @@ $(document).ready(function(){
 			window.location.href="<vwb:Link page='${resource.rid}' context='file' format='url'/>"+"?func=recoverFileVersion&tid="+tid+"&version="+version+"&rid="+${resource.rid};
 		}
 	});
-//-- ----------------------------- SyntaxHighlighter Config Start  -----------------------------------  
+//-- ----------------------------- SyntaxHighlighter Config Start  -----------------------------------
 	var fileType = "${strFileType}";
 	function initPreTag(){
 		$('#directShowFile').addClass('brush: '+fileType+';');
 	}
 	initPreTag();
-	
+
 	function path(){
 	  var args = arguments,
 	      result = [];
-	       
+
 	  for(var i = 0; i < args.length; i++)
 	      result.push(args[i].replace('@', '${contextPath}/scripts/syntaxhighlighter/scripts/'));
-	       
+
 	  return result;
 	};
-	 
+
 	SyntaxHighlighter.autoloader.apply(null, path(
 		  'xml xhtml xslt html    @shBrushXml.js'
-			
+
 	));
 	SyntaxHighlighter.all();
 	SyntaxHighlighter.defaults['toolbar']=false;
-	
-	
-// ----------------------------- SyntaxHighlighter Config End  -----------------------------------  
 
-//***************     
 
-     
-     
+// ----------------------------- SyntaxHighlighter Config End  -----------------------------------
+
+//***************
+
+
+
       $("#open-upload-form-button").live("click",function(){
     	 ui_showDialog("upload-attach-dialog");
      });
-     
+
      $("a[name='cancel']").live("click",function(){
      	ui_hideDialog("upload-attach-dialog");
      });
-     
+
      $("#attach-to-bundle").click(function(){
  		window.location.reload();
      });
-     
+
      $("#delete-submit").click(function(){
-    	 
+
      });
-     
+
      $("#delete-cancel").click(function(){
     	 ui_hideDialog("delete-attach-dialog");
      });
-     
+
      $("#open-delete-form-button").click(function(){
     	 ui_showDialog("delete-attach-dialog");
      });
-     
+
  	$("#open-move-form-button").live("click",function(){
 		var url = "<vwb:Link context='configCollection' format='url'/>?func=loadCollectionList";
 		ajaxRequest(url,null,afterLoadCollections);
 	});
-	
+
 	function afterLoadCollections(data){
 		$("#candidats-container ul").html("");
 		if(data!=null){
@@ -131,20 +131,20 @@ $(document).ready(function(){
 			}
 		}
 	};
-	
+
 	$('#photoInfo img').bind('contextmenu', function(event){ event.preventDefault(); });
-	
+
 	var fulScrA = $('a#fullScreen');
 	var fulScrD = $('div#fullScreenEdge');
 	function fullscreen(FULL) {
-		var full; 
+		var full;
 		if (typeof(FULL)!='undefined') {
 			full = FULL;
 		}
 		else {
 			full = (fulScrA.attr('isFull')=='true')? false : true;
 		}
-		
+
 		if (full) {
 			$('body').addClass('fullScreen');
 			fulScrA.attr('isFull', 'true').html('退出全屏').attr('title', 'ESC键退出全屏');
@@ -173,14 +173,14 @@ $(document).ready(function(){
 		/*	Support for FF4
 		 *	Resize when browser size changes */
 	});
-	
+
 	var transformUrl="<vwb:Link page='${resource.rid}' context='file' format='url'/>?func=pdfTransform&version=${curVersion.version}";
 	$('.pdfTransform').click(function(){
 		ajaxRequest(transformUrl,"", function(){
 			window.alert("文件已在后台转换，稍等几分钟后刷新即可进行在线浏览！");
 		});
 	});
-	
+
 	/*-------------delete---------------*/
 	$("a.delete-tag-link").live('click',function(){
 		var rids = new Array();
@@ -192,11 +192,11 @@ $(document).ready(function(){
     		$a.parent().remove();
     	},notEnoughAuth);
     });
-	
+
 	function notEnoughAuth(){
 		alert("您无权进行此操作！");
 	};
-	
+
 	/*----------- add tag dialog begin ---------------*/
 	function getNewTags(){
 		var results = [];
@@ -205,11 +205,11 @@ $(document).ready(function(){
 			results[i] = $(this).text();
 			i++;
 		});
-		
+
 		return results;
 	}
-	
-	
+
+
   	var _tagCache = null;
   	var tag_handler = {
   			addTagForSingleRecord:function(){
@@ -237,20 +237,20 @@ $(document).ready(function(){
   				});
   			}
 		};
-	
+
 	var tPool = new tagPool({
 		pool: $('.tagGroupHorizon'),
 		scroller: $('.tG-scroll'),
 		blockClass: 'tG-block'
 	});
 	tag_handler.loadAllTeamTags();
-	
+
 	var aTBox = new addTagBox({
 		input: $('input[name="typeTag"]'),
 		tagList: $('.existTags ul.tagList'),
 		tagPool: tPool,
 	});
-	
+
 	var addSingleTagDialog = new lynxDialog({
 		'instanceName': 'addSnglTag',
 		'dialog': $('#addSingleTagDialog'),
@@ -271,14 +271,14 @@ $(document).ready(function(){
 	$("#addSingleTagDialog .saveThis").click(function(){
 		var feedback = tag_handler.addTagForSingleRecord();
 	});
-	
+
 	$('#resAction-tag a').click(function(){
 		aTBox.prepare({ ridArr: selector.getItem() });
 		addSingleTagDialog.$dialog.addClass('multiple');
 		addSingleTagDialog.show();
 	});
-	
-	
+
+
 	$('li.newTag')
 	.unbind('.lynx.callAddSingleTagDialog')
 	.bind('click.lynx.callAddSingleTagDialog', function(event){
@@ -287,15 +287,15 @@ $(document).ready(function(){
 		addSingleTagDialog.$dialog.removeClass('multiple');
 		addSingleTagDialog.show();
 	});
-  
-    
+
+
 /*---------------add tag dialog end---------------*/
-	
+
 	$('.icon-checkStar').each(function(){
  		$(this).checkItem({
  			'makeUrl': function(obj){
  				var tempURL = site.getURL("starmark",null);
- 				if (obj.hasClass('checked')) 
+ 				if (obj.hasClass('checked'))
  					return tempURL+"?func=remove&rid="+obj.attr("rid");
  				else
  					return tempURL+"?func=add&rid="+obj.attr("rid");
@@ -309,7 +309,7 @@ $(document).ready(function(){
  			}
 	  	});
  	});
-	
+
 });
 
 //重命名
@@ -486,10 +486,10 @@ $("#showHotCode").live('click',function(){
 			</ul>
 		</div>
 		<div class="ui-clear"></div>
-		
+
 		<%-- 是否是可以预览的文件 --%>
-		<c:set var="isPreview"  value="${pdfstatus == 'success' || pdfstatus == 'original_pdf'||pdfstatus=='convert_success_and_has_more'}" /> 
-		
+		<c:set var="isPreview"  value="${pdfstatus == 'success' || pdfstatus == 'original_pdf'||pdfstatus=='convert_success_and_has_more'}" />
+
 		<div id="version">
 		<a href="<vwb:Link context='userguide'  format='url'/>?func=redirect&uid=${curVersion.editor}" class="uidToolTip" rel="tooltip" data-placement="bottom" data-original-title="${curVersion.editor}" target="_blank">${editorName}</a> |上传于 <fmt:formatDate value="${curVersion.editTime}" type="both" dateStyle="medium" />
 		|&nbsp;<vwb:fileSize size="${curVersion.size }"/>
@@ -511,11 +511,11 @@ $("#showHotCode").live('click',function(){
                 <!-- TODO: disabled temporarily -->
 		<!-- <c:if test="${officeSupported == 'true' && pdfstatus != 'original_pdf'}">
 		     |&nbsp; <a class="btn btn-mini btn-primary" style="color:#fff;border:none;" target="_blank" href="<vwb:Link context='teamHome'  format='url'/>/preview/${curVersion.rid}?version=${curVersion.version }&redirect=redirect&from=web">Office 预览</a>
-		     
+
 		     </c:if> -->
 	</div>
 	</div>
-	
+
 	<div class="ui-clear"></div>
 	<c:choose>
 		<c:when test="${fileExtend eq 'FILE'}">
@@ -526,7 +526,7 @@ $("#showHotCode").live('click',function(){
 							<th><div class="fileIcon <vwb:FileExtend  fileName='${curVersion.title}'/>"></div></th>
 						</c:if>
 						<td>
-							
+
 							<!-- <p class="fileNote"></p> -->
 							<div class="largeButtonHolder">
 								<c:if test="${!isPreview }">
@@ -544,7 +544,7 @@ $("#showHotCode").live('click',function(){
 											<p style="margin:-5px 0 5px">Office系列文件只能预览100页，该文件超过100页，请<a href="${downloadURL}">下载查看全文</a></p>
 										</c:if>
 										<div id="viewerWrapper" style="z-index:100;width:800px; height:600px;">
-   											
+
 										</div>
 									</c:when>
 									<c:when test="${pdfstatus == 'fail' && enableDConvert}">
@@ -614,15 +614,18 @@ $("#showHotCode").live('click',function(){
 
 <div id="content-side">
 	<div class="sideBlock">
-		<div class="sideCenter">
+	    <div class="sideCenter">
     		<a class="btn btn-large btn-success" href="${downloadURL}${fileExtend == 'IMAGE' ? '&imageType=original' : ''}"><i class="icon-download-alt icon-white"></i> 下载 <span style="font-size:12px;">(${sizeShort})</span></a>
-    	</div>
-    	<div class="sideCenter">
-			<a id="shareFile" href="javascript:void(0);" class="btn btn-large"><i class="icon-share"></i> 团队内分享</a>
-		</div>
-    	<div class="sideCenter">
-			<a id="shareResourceCode" href="javascript:void(0);" class="btn btn-large"><i class="icon-share"></i> 公开链接</a>
-		</div>
+    	    </div>
+
+        <!-- Disabled <2022-03-15 Tue> -->
+    	<!-- <div class="sideCenter">
+	     <a id="shareFile" href="javascript:void(0);" class="btn btn-large"><i class="icon-share"></i> 团队内分享</a>
+	     </div>
+    	     <div class="sideCenter">
+	     <a id="shareResourceCode" href="javascript:void(0);" class="btn btn-large"><i class="icon-share"></i> 公开链接</a>
+	     </div> -->
+
     	<div class="sideCenter">
     		<vwb:CLBCanUse />
     		<div id="file-uploader-file" <c:if test='${!clbCanUse }'>style="display:none;"</c:if>>
@@ -642,7 +645,7 @@ $("#showHotCode").live('click',function(){
 			<c:forEach items="${refView}" var="item">
 				<c:set var="fileFullname" value="${item.pageName}${item.dfileRef.itemType == 'DPage'? '.ddoc' : ''}" />
 				<li>
-					<span class="${item.dfileRef.itemType} headImg  ${item.dfileRef.fileType}"></span><a class="file ellipsis" rid="${item.dfileRef.fileRid}" href="${teamHome}/r/${item.dfileRef.fileRid}" title='${fileFullname }'><c:out value="${fileFullname }"/></a> 
+					<span class="${item.dfileRef.itemType} headImg  ${item.dfileRef.fileType}"></span><a class="file ellipsis" rid="${item.dfileRef.fileRid}" href="${teamHome}/r/${item.dfileRef.fileRid}" title='${fileFullname }'><c:out value="${fileFullname }"/></a>
 					<c:if test="${item.dfileRef.itemType == 'DFile'}">
 						<a style="float:left;margin-left:5px;" href="<vwb:Link context='download' format='url'/>${item.dfileRef.fileRid}?type=doc&imageType=original"> <i class="icon-download-alt"></i></a>
 					</c:if>
@@ -702,7 +705,7 @@ $("#showHotCode").live('click',function(){
 <c:set var='deleteItemURL' scope='request' value=''></c:set>
 <c:set var="fileBarBid" value="0" scope="request"></c:set>
 <%-- <jsp:include page="/jsp/aone/tag/lynxFileBar.jsp"></jsp:include> --%>
-	
+
 <script id="single-collection-template" type="text/html">
 	<li><label><input type="radio" name="cid" value="{{= cid}}"/>{{= title}}</label></li>
 </script>
@@ -774,12 +777,12 @@ $(function(){
 				ridArr.push(n);
 			}
 		});
-		
+
 		if(ridArr.length==0){
 			this.close();
 			return;
 		}
-		
+
 		var params = { "fids[]": ridArr,
 				"rid": "${resource.rid}",
 				"title":"",
@@ -797,7 +800,7 @@ $(function(){
 						var res = resourceModal.getRecordById(n);
 						var downloadStr = res.itemType =='DFile' ? "<a style=\"float:left;margin-left:5px;\" href=\"<vwb:Link context='download' format='url'/>"+
 								n +"?type=doc&imageType=original\"> <i class=\"icon-download-alt\"></i></a>" : "";
-						$("#exist-attach-list").append("<li><span class=\"headImg " + res.itemType + " " + res.fileType +"\"></span><a class=\"file ellipsis\" rid=\""+ n 
+						$("#exist-attach-list").append("<li><span class=\"headImg " + res.itemType + " " + res.fileType +"\"></span><a class=\"file ellipsis\" rid=\""+ n
 						           +"\" href=\"${teamHome}/r/"+ n +"\" title='"+ res.fileName +"'>"+ res.fileName +"</a>"
 						           + downloadStr +
 									" <a class=\"lightDel\" rid=\""+ n +"\"> </a></li>");
@@ -807,7 +810,7 @@ $(function(){
 		   error:function(xhr){
 			   if(xhr.status==403){
 				   showMsg("对不起，您没有权限执行此操作！","error");
-				   hideMsg(5000); 
+				   hideMsg(5000);
 			   }
 		   },
 		   complete:function(){
@@ -815,7 +818,7 @@ $(function(){
 		   }
 		});
 	};
-	
+
 	$("#exist-attach-list .lightDel").live("click",function(){
 		$.ajax({
 		   type: "POST",
@@ -834,7 +837,7 @@ $(function(){
 		   },
 		});
 	});
-	
+
 	function isExistedResTag(rid){
 		var r = false;
 		$("#exist-attach-list li a").each(function(){
@@ -848,7 +851,7 @@ $(function(){
 	$("#attachFile-button").bind("click",function(){
 		resourceModal.open();
 	});
-	
+
 	if('${pdfstatus}' == 'converting'){
 		window.setInterval(function(){
 			$.ajax({
@@ -878,43 +881,43 @@ $(function(){
 	var upload_url = "<vwb:Link context='upload' format='url'/>?func=updateFile";
 	var uploadedFiles = [];
 	var index = 0;
-	
-	function createUploader(){  
+
+	function createUploader(){
 		qq.extend(qq.FileUploader.prototype,{
 			_addToList: function(id, fileName){
-		        var item = qq.toElement(this._options.fileTemplate);                
+		        var item = qq.toElement(this._options.fileTemplate);
 		        item.qqFileId = id;
-	
-		        var fileElement = this._find(item, 'file');        
+
+		        var fileElement = this._find(item, 'file');
 		        qq.setText(fileElement, this._formatFileName(fileName));
-		        this._find(item, 'size').style.display = 'none';        
-	
+		        this._find(item, 'size').style.display = 'none';
+
 		        this._listElement.appendChild(item);
 		        $("#popupUpload").show();
 	        	//$("#fileListDiv").slideUp(5000);
 		        $("#fileListDiv").show();
 	        	//$("#fileListDiv").fadeIn(1000);
 	        	//$("#fileListDiv").fadeOut(5000);
-		    }, 
+		    },
 		    _onComplete: function(id, fileName, result){
 		        qq.FileUploaderBasic.prototype._onComplete.apply(this, arguments);
-	
+
 		        // mark completed
-		        var item = this._getItemByFileId(id);                
+		        var item = this._getItemByFileId(id);
 		        qq.remove(this._find(item, 'cancel'));
 		        qq.remove(this._find(item, 'spinner'));
-		        
+
 		        if (result.success){
 		            qq.addClass(item, this._classes.success);
-		            
+
 		            showMsg("上传新版本成功！");
 		            window.setTimeout(function(){
 						window.location.reload();
 					}, 1500);
-		            
+
 		        } else {
 		            qq.addClass(item, this._classes.fail);
-		        }         
+		        }
 		        if(this._filesInProgress==0){
 		      	  hideFilesList();
 		        }
@@ -927,23 +930,23 @@ $(function(){
 			                self._handler.cancel(item.qqFileId);
 			                qq.remove(item);
 		        } );
-		     /*    qq.attach(list, 'click', function(e){            
+		     /*    qq.attach(list, 'click', function(e){
 		            e = e || window.event;
 		            var target = e.target || e.srcElement;
 		            alert("ssssdddd");
-		            if (qq.hasClass(target, self._classes.cancel)){                
+		            if (qq.hasClass(target, self._classes.cancel)){
 		                qq.preventDefault(e);
-		               
+
 		                var item = target.parentNode;
 		                self._handler.cancel(item.qqFileId);
 		                qq.remove(item);
 		            }
 		        });  */
-		    }   
+		    }
 		});
 	     var uploader = new qq.FileUploader({
 	         element: document.getElementById('file-uploader-file'),
-	         template: '<div class="qq-uploader">' + 
+	         template: '<div class="qq-uploader">' +
 	         '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
 	         '<div class="qq-upload-button"><i class="icon-refresh"></i> 上传新版本</div><br/>'+ '</div>',
 	         listElement: document.getElementById("upload-list"),
@@ -953,7 +956,7 @@ $(function(){
 	         '<span class="qq-upload-size"></span>' +
 	         '<a class="qq-upload-cancel" href="#">取消</a>' +
 	         '<span class="qq-upload-failed-text">失败,您没有上传权限</span>' +
-	    	 '</li>', 
+	    	 '</li>',
 	         action: upload_url,
 	         statisticAction: site.getTeamURL("statistics/upload"),
 	         params:{cid:"${cid}",rid:"${curVersion.rid}",version:"${curVersion.version}"},
@@ -966,40 +969,40 @@ $(function(){
 	         },
 	         debug: true,
 	         multiple: false
-	     });  
-	     
+	     });
+
 	    return uploader;
 	 };
 	var uploader=createUploader();
 	$("input[type=file]").attr("title","上传文件");
-	 
+
 	$(".upLoadFile").click("click",function(){
 		$("div.qq-upload-button [type=file]").trigger("click");
 	 });
-	 
-	 
+
+
 	function hideFilesList(){
 		 $("#fileListDiv").slideUp(2000);
 	 	 var obj=$("i.icon-minus");
 	 	 obj.removeClass("icon-minus");
 	 	 obj.addClass(" icon-resize-full");
 	}
-	
+
 	function showFilesList(){
 		 $("#fileListDiv").show();
 	 	 var obj=$("i.icon-resize-full");
 	 	 obj.removeClass("icon-resize-full");
 	 	 obj.addClass("icon-minus");
 	}
-	
+
 	$("i.icon-resize-full").live("click",function(){
 		 showFilesList();
 	});
-	
+
 	$("i.icon-minus").live("click",function(){
 		 hideFilesList();
 	});
-	
+
 	$("i.icon-remove").live("click",function(){
 		  if(uploader._filesInProgress>0){
 			  $("#alertModel").modal("show");
@@ -1010,22 +1013,22 @@ $(function(){
 	     $("#upload-list").html("");
 	     $("#popupUpload").hide();
 	});
-	
+
 	$(".closeUpload").live("click",function(){
 		  $("#alertModel").modal("hide");
 	});
-	
+
 	$("#okAlertContent").live("click",function(){
 		  	$("#alertModel").modal("hide");
 	});
-	
+
 	$(".cancleAllOk").live("click",function(){
 		 uploader._CancelAll();
 		  uploader._filesInProgress=0;
 	     $("#upload-list").html("");
 	     $("#popupUpload").hide();
 	});
- 
+
 });
 <%--------- file upload end----------%>
 
@@ -1060,7 +1063,7 @@ $("#fileMove").live("click",function(){
 	$("#fileBrowserModal").modal();
 	original_rid = "${resource.rid}";
 	file_operation = 'move';
-	
+
 	$("#teamSel_pan").hide();
 });
 $("#fileCopy").live("click", function(){
@@ -1069,10 +1072,10 @@ $("#fileCopy").live("click", function(){
 	$("#fileBrowserModal").modal();
 	original_rid = "${resource.rid}";
 	file_operation = 'copy';
-	
+
 	$("#teamSelWrapper").show();
 	$("#teamSel").val("${teamCode}");
-	
+
 	$("#teamSel_pan").show();
 });
 
@@ -1102,7 +1105,7 @@ function loadBrowserTree(teamCode){
 						},
 						"success" : function(data){
 							if(data && data.length>0){
-								data[0].attr.id = data[0].attr.rid; 
+								data[0].attr.id = data[0].attr.rid;
 							}
 						}
 					}
@@ -1146,13 +1149,13 @@ function loadBrowserTree(teamCode){
 $("#newNodeBtn").click(function(){
 	var fileBrowser = $.jstree._reference("#file_browser");
 	var selectedNode = fileBrowser.get_selected();
-	
+
 	var editedNode = $("#file_browser").find("li[rid=-1]");
 	if(editedNode.attr("rid")){
 		editedNode.find('.fileNameInput').select();
 		return;
 	}
-	
+
 	fileBrowser.open_node(selectedNode,function(){
 		var newNode = fileBrowser.create_node(selectedNode, "inside", { "attr" : { "rel" : "folder","rid":"-1"},"data":" "});
 		newNode.find("a")[0].lastChild.nodeValue = "";
@@ -1168,7 +1171,7 @@ $("#newNodeBtn").click(function(){
 		 "</span>";
 		 newNode.append(editor);
 		 fileBrowser.open_node(selectedNode);
-		 
+
 		 newNode.find('.updateFolder').bind("click",function(){
 			 addNode(newNode);
 		 });
@@ -1181,10 +1184,10 @@ $("#newNodeBtn").click(function(){
 		newNode.find('a.cancelFolder').bind("click",function(){
 			newNode.remove();
 		});
-			
+
 		newNode.find('.fileNameInput').select();
 	},true);
-	
+
 	function addNode(newNode){
 		var span = newNode.children('span.editFileName');
 		var fileName = $.trim(span.find('input.fileNameInput').val());
@@ -1201,7 +1204,7 @@ $("#newNodeBtn").click(function(){
 		d.func=opType;
 		d.tid = getSelectedTid();
 		var opUrl="<vwb:Link context='files' format='url'/>";
-		
+
 		if(file_operation!='move'){
 			var teamCode = $("#teamSel").val();
 			if(teamCode=='pan'){
@@ -1265,7 +1268,7 @@ $("#moveToBtn").live('click', function(){
 				}, 1500);
 				return;
 			}
-			
+
 			file_manager_url = "${teamHome}/fileManager";
 			if(file_operation == 'move'){
 				$("#opareteFileMessage").removeClass();
@@ -1291,7 +1294,7 @@ $("#moveToBtn").live('click', function(){
 						} else if (data.state==2) {
 							$("#opareteFileMessage").addClass("alert alert-error");
 						}
-						
+
 						$("#opareteFileMessage").html(data.msg);
 						$("#opareteFileMessage").show();
 						window.setTimeout(function(){
@@ -1318,7 +1321,7 @@ $("#moveToBtn").live('click', function(){
 					dataType:"json",
 				   	success: function(data){
 				   		$("#opareteFileMessage").removeClass();
-				   		
+
 				   		if(data.type=='meepoCopy'){
 						   $("#opareteFileMessage").hide();
 						   if(!data.taskId){
@@ -1334,7 +1337,7 @@ $("#moveToBtn").live('click', function(){
 						   d.getCoyeStatus();
 						   return;
 					   }
-				   		
+
 						if (data.state == 0) {
 							$("#opareteFileMessage").addClass("alert alert-success");
 						} else if (data.state == 1) {
@@ -1384,7 +1387,7 @@ $("#fileDelete").live('click',function(){
 <jsp:include page="/jsp/aone/recommend/shareResourceToTeam.jsp"></jsp:include>
 <script type="text/javascript">
 <!--
-function checkHtml5(){   
+function checkHtml5(){
 	return (typeof(Worker) !== "undefined") ? true : false;
 }
 var isIE9=function(){
@@ -1392,7 +1395,7 @@ var isIE9=function(){
 }
 
 $(function(){
-	
+
 	<%--------- file share start ----------%>
 	$("#shareFile").click(function(){
 		prepareRecommend("<vwb:Link context='recommend' format='url'/>?func=prepareRecommend&itemType=${resource.itemType}&rid=${resource.rid }","${resource.rid }","${resource.title }","${resource.itemType }");
@@ -1400,15 +1403,15 @@ $(function(){
 	<%--------- file share end ----------%>
 	//share resouce code start
 	$("#shareResourceCode").click(function(){
-		
-		
+
+
 		prepareShareResource("<vwb:Link context='team' format='url'/>/shareResource","${resource.rid}","${resource.title}","opareteFileMessage");
 	});
-	
-	
+
+
 	//share resource code end
-	
-	
+
+
 	if("${isPreview}" == "true"){
 		if(checkHtml5()||isIE9()){
 			$("#viewerWrapper").append("<iframe src=\"<vwb:Link page='${resource.rid}' context='f' format='url'/>?func=onlineViewer&version=${curVersion.version}\"" +
