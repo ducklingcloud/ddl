@@ -274,7 +274,7 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
     }
 
     private boolean bundlingTeamVmtdn(Team team) {
-        if (vmtReady
+        if (! vmtReady
             || StringUtils.isNotEmpty(team.getVmtdn())
             || Team.PESONAL_TEAM.equals(team.getType())) {
             return true;
@@ -536,8 +536,9 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
         vmtReady = vmtTeamManager.ready();
     }
 
-    public void updateBasicInfo(String teamName, String title,
-                                String description, String accessType, String defaultMemberAuth,String defaultView) {
+    public void updateBasicInfo(
+        String teamName, String title, String description, String accessType,
+        String defaultMemberAuth,String defaultView) {
         Team t = this.getTeamByName(teamName);
         if (t != null) {
             t.setDisplayName(title);
@@ -549,9 +550,11 @@ public class TeamServiceImpl implements TeamService, VmtUserManager{
             updateTeam(t);
             updateTeamCache(t);
             teamDao.updateBasicInfo(teamName, title, description, accessType,
-                                    defaultMemberAuth, t.getCreateTime(),defaultView);
+                                    defaultMemberAuth, t.getCreateTime(),
+                                    defaultView);
         }
     }
+
     @Override
     public void updateMembersAuthority(int tid, String[] uids, String[] auths,
                                        boolean isVmt) {
