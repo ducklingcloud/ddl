@@ -72,7 +72,8 @@
 		</div>
 		
 		<a id="getFeedback" class="ui-sideTouch" href="mailto:kai.nan@icloud.com" target="_blank">意见反馈</a>
-		<jsp:include page="/jsp/aone/QRCode.jsp" />
+
+		<%-- <jsp:include page="/jsp/aone/QRCode.jsp" /> --%>
 		
 	<script type="text/javascript">
 		$(document).ready(function(){
