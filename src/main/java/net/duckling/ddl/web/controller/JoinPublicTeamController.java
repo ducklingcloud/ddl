@@ -19,7 +19,9 @@
 package net.duckling.ddl.web.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -213,21 +215,22 @@ public class JoinPublicTeamController extends BaseController {
      * @param myApplicant 我申请的团队集合
      * @return
      */
-    private JsonArray checkStatus(List<Team> all, List<Team> my, List<TeamApplicant> myApplicant){
-        if(isEmpty(all)){
+    private List<Map<String,String>> checkStatus(List<Team> all, List<Team> my,
+                                  List<TeamApplicant> myApplicant) {
+        if (isEmpty(all)) {
             return null;
         }
         int size = all.size();
-        JsonArray status = initStatusMap(size);
-        if(isEmpty(my) && isEmpty(myApplicant)){
+        List<Map<String,String>> status = initStatusMap(size);
+        if (isEmpty(my) && isEmpty(myApplicant)) {
             return status;
         }
-        for(int i=0; i<size; i++){
+        for (int i=0; i<size; i++) {
             int tid = all.get(i).getId();
-            JsonObject obj = (JsonObject)status.get(i);
+            Map<String,String> obj = status.get(i);
             boolean isTeamMember = amITeamMemberOfThisTeam(my, tid);
-            obj.addProperty("status", (isTeamMember)?TEAM_MEMBER:OUTSIDE);
-            if(!isTeamMember){
+            obj.put("status", isTeamMember ? TEAM_MEMBER : OUTSIDE);
+            if (! isTeamMember) {
                 updateStatusIfIApplied(myApplicant, tid, obj);
             }
         }
@@ -252,17 +255,19 @@ public class JoinPublicTeamController extends BaseController {
     }
 
     /**
-     * 如果我的申请记录表(ta)中,包含申请加入该团队(tid)的记录，则更新obj的status以及reason
+     * 如果我的申请记录表(ta)中,包含申请加入该团队(tid)的记录，则更新
+     * obj的status以及reason
      * @param ta 我的申请记录表
      * @param tid 目标团队
      * @param obj 返回给前台的信息
      */
-    private void updateStatusIfIApplied(List<TeamApplicant> ta, int tid, JsonObject obj){
-        if(null != ta && ta.size()>0){
-            for(TeamApplicant temp : ta){
-                if(tid==temp.getTid()){
-                    obj.addProperty("status", temp.getStatus());
-                    obj.addProperty("reason", temp.getReason());
+    private void updateStatusIfIApplied(List<TeamApplicant> ta, int tid,
+                                        Map<String,String> obj) {
+        if (null != ta && ta.size() > 0) {
+            for (TeamApplicant temp : ta) {
+                if (tid == temp.getTid()) {
+                    obj.put("status", temp.getStatus());
+                    obj.put("reason", temp.getReason());
                     return;
                 }
             }
@@ -271,15 +276,14 @@ public class JoinPublicTeamController extends BaseController {
 
     /**
      * 初始化每个团队的状态为未加入
-     * @param size
-     * @return
      */
-    private JsonArray initStatusMap(int size){
-        JsonArray maps = new JsonArray();
-        for(int i=0; i<size; i++){
-            JsonObject obj = new JsonObject();
-            obj.addProperty("status", OUTSIDE);
-            obj.addProperty("reason", "");
+    private List<Map<String, String>> initStatusMap(int size) {
+        List<Map<String, String>> maps =
+                new ArrayList<Map<String, String>>();
+        for (int i=0; i<size; i++) {
+            Map<String, String> obj = new HashMap<String, String>();
+            obj.put("status", OUTSIDE);
+            obj.put("reason", "");
             maps.add(obj);
         }
         return maps;
