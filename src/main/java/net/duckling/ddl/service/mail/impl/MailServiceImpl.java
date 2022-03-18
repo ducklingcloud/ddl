@@ -30,6 +30,7 @@ import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -56,22 +57,124 @@ import com.sun.mail.smtp.SMTPMessage;
  * @author xiejj@cnic.cn
  */
 public class MailServiceImpl implements MailService {
+
+    public static final String EMAIL_CONTENT_TYPE="text/html;charset=UTF-8";
+
+    private static final String PROP_EMAIL_DISPLAYNAME = "email.displayName";
+    private static final String PROP_EMAIL_FROMADDRESS = "duckling.email.smtp.from";
+    private static final String PROP_EMAIL_PASSWORD = "duckling.email.smtp.password";
+    private static final String PROP_EMAIL_USERID = "duckling.email.smtp.username";
+    private static final String UTF_8="UTF-8";
+
+    private static final Logger LOG = Logger.getLogger(MailService.class);
     private DucklingProperties systemProperty;
     private static class ValueBag{
-        public Authenticator m_authenticator;
+        public EmailAuthenticator m_authenticator;
         public InternetAddress m_fromAddress;
         public Properties m_mailProperties;
     }
     private ValueBag m_bag;
-    
-    private static final Logger LOG = Logger.getLogger(MailService.class);
-    private static final String PROP_EMAIL_DISPLAYNAME = "email.displayName";
-    private static final String PROP_EMAIL_FROMADDRESS = "email.fromAddress";
-    private static final String PROP_EMAIL_PASSWORD = "email.password";
-    private static final String PROP_EMAIL_USERID = "email.username";
-    private static final String UTF_8="UTF-8";
 
-    public static final String EMAIL_CONTENT_TYPE="text/html;charset=UTF-8";
+    public void init() {
+        m_bag = readProperties();
+    }
+
+    public void destroy(){
+        m_bag = null;
+    }
+
+    public void sendMail(Mail mail) {
+        LOG.debug("sendEmail() to: " + mail.getRecipient());
+        try {
+            Session session = Session.getInstance(
+                m_bag.m_mailProperties, m_bag.m_authenticator);
+            session.setDebug(false);
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(m_bag.m_fromAddress);
+            msg.setRecipient(Message.RecipientType.TO,
+                             new InternetAddress(mail.getRecipient()));
+            msg.setSubject(mail.getSubject());
+            msg.setSentDate(new Date());
+
+            Multipart mp = new MimeMultipart();
+            MimeBodyPart txtmbp = new MimeBodyPart();
+            txtmbp.setContent(mail.getMessage(), EMAIL_CONTENT_TYPE);
+            mp.addBodyPart(txtmbp);
+
+            List<String> attachments = mail.getAttachments();
+            for (Iterator<String> it=attachments.iterator(); it.hasNext(); ) {
+                MimeBodyPart mbp = new MimeBodyPart();
+                String filename = it.next();
+                FileDataSource fds = new FileDataSource(filename);
+                mbp.setDataHandler(new DataHandler(fds));
+                mbp.setFileName(MimeUtility.encodeText(fds.getName()));
+                mp.addBodyPart(mbp);
+            }
+
+            msg.setContent(mp);
+
+            if ((m_bag.m_fromAddress != null)
+                && (m_bag.m_fromAddress.getAddress() != null)
+                && (m_bag.m_fromAddress.getAddress().indexOf("@") != -1)) {
+                cheat(msg, m_bag.m_fromAddress.getAddress()
+                      .substring(m_bag.m_fromAddress.getAddress().indexOf("@")));
+            }
+
+            Transport.send(msg);
+            LOG.info("Successfully send the mail to " + mail.getRecipient());
+        } catch (AuthenticationFailedException e) {
+            String userid = m_bag.m_authenticator.getPasswordAuthentication()
+                    .getUserName();
+            LOG.error("Failed to send email from "+ userid
+                      +". Please verify your account information in configuration.\n"
+                      +"Notice: If DDL is launched by dklboot, "
+                      +"you can also use 'dklboot.properties'.\n"+
+                      e.toString());
+        } catch (Exception e) {
+            LOG.error("Exception occured while trying to send notification to: "+
+                      mail.getRecipient() +"\n"+ e.toString());
+            LOG.debug("Failed to send email:", e);
+        }
+    }
+
+    @Override
+    public void sendSimpleMail(String[] address, String title,
+                               String content) {
+        sendSimpleMail(address, null, title, content);
+    }
+
+    @Override
+    public void sendSimpleMail(String[] address, String from,String title,
+                               String content) {
+        LOG.debug("sendEmail() to: " +Arrays.toString(address));
+        if(address==null||address.length==0){
+            LOG.error("the address is empty!");
+            return ;
+        }
+        try {
+            Address[] addressArray=new Address[address.length];
+            int index=0;
+            for(String str:address){
+                addressArray[index++]=new InternetAddress(str);
+            }
+            MimeMessage msg=getMessage(addressArray,from,content, title);
+            if (m_bag.m_fromAddress!=null
+                && (m_bag.m_fromAddress.getAddress().indexOf("@") != -1)) {
+                cheat(msg, m_bag.m_fromAddress.getAddress()
+                      .substring(m_bag.m_fromAddress.getAddress().indexOf("@")));
+            }
+            Transport.send(msg);
+            LOG.info("Successfully send the mail to " + Arrays.toString(address));
+        } catch (MessagingException e) {
+            LOG.error("Exception occured while trying to send notification to: "+
+                      Arrays.toString(address), e);
+            LOG.debug("Details:", e);
+        }
+    }
+
+    public void setSystemProperty(DucklingProperties systemProperty){
+        this.systemProperty = systemProperty;
+    }
 
     private void cheat(MimeMessage mimeMessage, String serverDomain)
             throws MessagingException {
@@ -111,11 +214,11 @@ public class MailServiceImpl implements MailService {
         msg.setContent(content, EMAIL_CONTENT_TYPE);
         return msg;
     }
-    
+
     private ValueBag readProperties() {
         ValueBag bag = new ValueBag();
         bag.m_mailProperties = new Properties();
-        bag.m_mailProperties.put("mail.smtp.host", systemProperty.getProperty("email.mail.smtp.host"));
+        bag.m_mailProperties.put("mail.smtp.host", systemProperty.getProperty("duckling.email.smtp.host"));
         bag.m_mailProperties.put("mail.smtp.auth", systemProperty.getProperty("email.mail.smtp.auth"));
         String userId = systemProperty.getProperty(PROP_EMAIL_USERID);
         String password = systemProperty.getProperty(PROP_EMAIL_PASSWORD);
@@ -130,96 +233,6 @@ public class MailServiceImpl implements MailService {
             LOG.error("Property 'email.displayName' encoding error", e);
         }
         return bag;
-    }
-
-    public void destroy(){
-        m_bag=null;
-    }
-    public void init() {
-        m_bag = readProperties();
-    }
-
-    public void sendMail(Mail mail) {
-        LOG.debug("sendEmail() to: " + mail.getRecipient());
-        try {
-            Session session = Session.getInstance(m_bag.m_mailProperties, m_bag.m_authenticator);
-            session.setDebug(false);
-            MimeMessage msg = new MimeMessage(session);
-            msg.setFrom(m_bag.m_fromAddress);
-            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(mail
-                                                                           .getRecipient()));
-            msg.setSubject(mail.getSubject());
-            msg.setSentDate(new Date());
-
-            Multipart mp = new MimeMultipart();
-
-            MimeBodyPart txtmbp = new MimeBodyPart();
-            txtmbp.setContent(mail.getMessage(), EMAIL_CONTENT_TYPE);
-            mp.addBodyPart(txtmbp);
-
-            List<String> attachments = mail.getAttachments();
-            for (Iterator<String> it=attachments.iterator(); it.hasNext(); ) {
-                MimeBodyPart mbp = new MimeBodyPart();
-                String filename = it.next();
-                FileDataSource fds = new FileDataSource(filename);
-                mbp.setDataHandler(new DataHandler(fds));
-                mbp.setFileName(MimeUtility.encodeText(fds.getName()));
-                mp.addBodyPart(mbp);
-            }
-
-            msg.setContent(mp);
-
-            if ((m_bag.m_fromAddress != null) && (m_bag.m_fromAddress.getAddress() != null)
-                && (m_bag.m_fromAddress.getAddress().indexOf("@") != -1)){
-                cheat(msg, m_bag.m_fromAddress.getAddress().substring(m_bag.m_fromAddress.getAddress().indexOf("@")));
-            }
-
-
-            Transport.send(msg);
-
-            LOG.info("Successfully send the mail to " + mail.getRecipient());
-
-        } catch (Throwable e) {
-
-            LOG.error("Exception occured while trying to send notification to: "+ mail.getRecipient(),e);
-            LOG.debug("Details:", e);
-        }
-    }
-
-    @Override
-    public void sendSimpleMail(String[] address, String title, String content) {
-        sendSimpleMail(address, null, title, content);
-    }
-
-    @Override
-    public void sendSimpleMail(String[] address, String from,String title, String content) {
-        LOG.debug("sendEmail() to: " +Arrays.toString(address));
-        if(address==null||address.length==0){
-            LOG.error("the address is empty!");
-            return ;
-        }
-        try {
-            Address[] addressArray=new Address[address.length];
-            int index=0;
-            for(String str:address){
-                addressArray[index++]=new InternetAddress(str);
-            }
-            MimeMessage msg=getMessage(addressArray,from,content, title);
-            if (m_bag.m_fromAddress!=null
-                && (m_bag.m_fromAddress.getAddress().indexOf("@") != -1)) {
-                cheat(msg, m_bag.m_fromAddress.getAddress().substring(m_bag.m_fromAddress.getAddress().indexOf("@")));
-            }
-            Transport.send(msg);
-            LOG.info("Successfully send the mail to " + Arrays.toString(address));
-
-        } catch (MessagingException e) {
-            LOG.error("Exception occured while trying to send notification to: " + Arrays.toString(address),e);
-            LOG.debug("Details:", e);
-        }
-    }
-
-    public void setSystemProperty(DucklingProperties systemProperty){
-        this.systemProperty = systemProperty;
     }
 
 }

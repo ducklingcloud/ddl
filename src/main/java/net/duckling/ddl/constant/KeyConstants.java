@@ -42,13 +42,12 @@ public class KeyConstants {
     public static final String SITE_DISPLAY_NAME = "duckling.site.displayname";
     public static final String SKIN_NAME = "duckling.skin.name";
     public static final String SKIN_GLOBAL = "duckling.skin.global";
-    public static final String SITE_MAIL_KEY = "email.address";
-    public static final String SITE_MAIL_USERNAME = "email.username";
-    public static final String SITE_MAIL_PASSWORD = "email.password";
-    public static final String SITE_MAIL_FORMADDRESS = "email.fromAddress";
+    public static final String SITE_MAIL_USERNAME = "duckling.email.smtp.username";
+    public static final String SITE_MAIL_PASSWORD = "duckling.email.smtp.password";
+    public static final String SITE_MAIL_FORMADDRESS = "duckling.email.smtp.from";
     public static final String SITE_MAIL_AUTH_KEY = "email.mail.smtp.auth";
     public static final String SITE_LOCAL_USER="duckling.clb.localuser";
-    public static final String SITE_SMTP_HOST_KEY = "email.mail.smtp.host";
+    public static final String SITE_SMTP_HOST_KEY = "duckling.email.smtp.host";
     public static final String SITE_ACCESS_OPTION_KEY = "site.access.option";
     public static final String SITE_DATE_FORMAT = "duckling.dateformat";
     public static final String PROP_DLOG="app.dlog.service";

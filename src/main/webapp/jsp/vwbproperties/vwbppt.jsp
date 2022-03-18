@@ -111,12 +111,12 @@
 	 	// bvalue=obj.value
 	  	if(bvalue!='true'){
 	  		document.getElementsByName("email.address")[0].disabled='disabled';
-	  		document.getElementsByName("email.username")[0].disabled='disabled';
-	  		document.getElementsByName("email.password")[0].disabled='disabled';
+	  		document.getElementsByName("duckling.email.smtp.username")[0].disabled='disabled';
+	  		document.getElementsByName("duckling.email.smtp.password")[0].disabled='disabled';
 	  	}else{
 	  		document.getElementsByName("email.address")[0].removeAttribute('disabled'); 
-	  		document.getElementsByName("email.username")[0].removeAttribute('disabled'); 
-	  		document.getElementsByName("email.password")[0].removeAttribute('disabled'); 
+	  		document.getElementsByName("duckling.email.smtp.username")[0].removeAttribute('disabled'); 
+	  		document.getElementsByName("duckling.email.smtp.password")[0].removeAttribute('disabled'); 
 	  	}
 	  }
 	  
@@ -457,10 +457,10 @@ height: 220px;"
 		  		</tr>
 				<tr>
 					<td width="50%" nowrap="nowrap">
-						<fmt:message key="email.mail.smtp.host" />
+						<fmt:message key="duckling.email.smtp.host" />
 					</td>
 					<td nowrap="nowrap" width="50%" align="left">
-						<input type="text" name="email.mail.smtp.host" value= "<c:out value='${allmap["email.mail.smtp.host"]}'/>">
+						<input type="text" name="duckling.email.smtp.host" value= "<c:out value='${allmap["duckling.email.smtp.host"]}'/>">
 					</td>
 				</tr>
 				<tr>
@@ -494,10 +494,10 @@ height: 220px;"
 		  		</tr>
 		  		<tr>
 					<td width="50%" nowrap="nowrap">
-						<fmt:message key="email.fromAddress" />
+						<fmt:message key="duckling.email.smtp.from" />
 					</td>
 					<td nowrap="nowrap" width="50%" align="left">
-						<input type="text" name="email.fromAddress" value= "<c:out value='${allmap["email.fromAddress"]}'/>">
+						<input type="text" name="duckling.email.smtp.from" value= "<c:out value='${allmap["duckling.email.smtp.from"]}'/>">
 					</td>
 				</tr>
 				<tr>
@@ -516,10 +516,10 @@ height: 220px;"
 		  		</tr>
 		  		<tr>
 					<td width="50%" nowrap="nowrap">
-						<fmt:message key="email.username" />
+						<fmt:message key="duckling.email.smtp.username" />
 					</td>
 					<td nowrap="nowrap" width="50%" align="left">
-						<input type="text" name="email.username" value= "<c:out value='${allmap["email.username"]}'/>">
+						<input type="text" name="duckling.email.smtp.username" value= "<c:out value='${allmap["duckling.email.smtp.username"]}'/>">
 					</td>
 				</tr>
 				<tr>
@@ -527,10 +527,10 @@ height: 220px;"
 		  		</tr>
 		  		<tr>
 					<td width="50%" nowrap="nowrap">
-						<fmt:message key="email.password" />
+						<fmt:message key="duckling.email.smtp.password" />
 					</td>
 					<td nowrap="nowrap" width="50%" align="left">
-						<input type="password" name="email.password" value= "<c:out value='${allmap["email.password"]}'/>">
+						<input type="password" name="duckling.email.smtp.password" value= "<c:out value='${allmap["duckling.email.smtp.password"]}'/>">
 					</td>
 				</tr>
 				<tr>
