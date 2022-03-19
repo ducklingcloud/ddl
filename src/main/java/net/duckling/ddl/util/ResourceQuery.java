@@ -344,10 +344,10 @@ public abstract class ResourceQuery {
                 return " order by " + tableAlias + "order_type asc ,last_edit_time desc";
             }
             case ORDER_SORT_TITLE: {
-                return " order by " + tableAlias + "order_type asc,convert(title using gb2312)";
+                return " ORDER BY " + tableAlias + "order_type ASC, title";
             }
             case ORDER_SORT_TITLE_DESC: {
-                return " order by " + tableAlias + "order_type asc,convert(title using gb2312) desc";
+                return " ORDER BY " + tableAlias + "order_type ASC, title DESC";
             }
             default:
                 return " order by order_type asc ";

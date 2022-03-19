@@ -182,7 +182,7 @@ public final class TeamQueryUtil {
             result += "order by last_edit_time ";
             result += isAsc(orderDate, "date")?"asc":"desc";
         }else if(!titleEmpty){
-            result += "order by convert(title using gb2312) ";
+            result += "ORDER BY title";
             result += isAsc(orderTitle, "title")?"asc":"desc";
         }else{
             result += "order by last_edit_time desc";

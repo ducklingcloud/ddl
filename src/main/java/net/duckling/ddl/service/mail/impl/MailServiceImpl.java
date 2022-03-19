@@ -195,7 +195,8 @@ public class MailServiceImpl implements MailService {
         if (StringUtils.isNotEmpty(from)) {
             InternetAddress ss;
             try {
-                ss = new InternetAddress(m_bag.m_fromAddress.getAddress(), MimeUtility.encodeText(from, "gb2312", "b"));
+                ss = new InternetAddress(m_bag.m_fromAddress.getAddress(),
+                                         MimeUtility.encodeText(from, "gb2312", "b"));
                 msg.setFrom(ss);
             } catch (UnsupportedEncodingException e) {
                 msg.setFrom(m_bag.m_fromAddress);

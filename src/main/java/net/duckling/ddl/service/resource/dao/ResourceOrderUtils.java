@@ -42,10 +42,12 @@ public final class ResourceOrderUtils {
                 return " order by "+tableAlies+"order_type asc ,"+tableAlies+"last_edit_time desc";
             }
             case ORDER_SORT_TITLE:{
-                return " order by "+tableAlies+" order_type asc,convert("+tableAlies+"title using gb2312)";
+                return " ORDER BY "+ tableAlies +"order_type ASC, "+
+                        tableAlies +"title";
             }
             case ORDER_SORT_TITLE_DESC:{
-                return " order by "+tableAlies+"order_type asc,convert("+tableAlies+"title using gb2312) desc";
+                return " ORDER BY "+ tableAlies +"order_type ASC, "+
+                        tableAlies +"title DESC";
             }
             default:
                 return " order by "+tableAlies+"order_type asc ";
