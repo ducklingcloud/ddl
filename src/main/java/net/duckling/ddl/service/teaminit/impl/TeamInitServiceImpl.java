@@ -136,10 +136,10 @@ public final class TeamInitServiceImpl implements TeamInitService {
             Path classDir = Paths.get(
                 TeamInitServiceImpl.class.getResource("/").toURI());
             Path inf = classDir.resolveSibling("teaminit")
-                    .resolve("科研在线团队文档库-用户使用手册-V4.0.pdf");
+                    .resolve("DDL Scenarios.pdf");
             in = Files.newInputStream(inf);
             FileVersion v = addFileToTeam(
-                tid, uid, "科研在线团队文档库-用户使用手册-V4.0.pdf", in);
+                tid, uid, "如何使用团队文档库.pdf", in);
             addTagToFile(tid, v, system);
         } catch (FileNotFoundException e) {
             LOG.error("", e);
