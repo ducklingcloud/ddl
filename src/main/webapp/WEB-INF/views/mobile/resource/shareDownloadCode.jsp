@@ -7,7 +7,7 @@
 <fmt:setBundle basename="templates.default" />
 
 <div id="macroNav" class="simpleMobileNav">
-	<a id="logo" title="科研在线-团队文档库"></a>
+	<a id="logo" title="团队文档库"></a>
 </div>
 
 <div id="content-major" class="mobileContent" style="padding:1em">

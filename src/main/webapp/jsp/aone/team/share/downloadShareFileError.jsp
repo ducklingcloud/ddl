@@ -36,8 +36,8 @@ $(document).ready(function(){
 			<c:if test="${not isLogin }">
 				<a class="largeButton" href="https://ddl.escience.cn/system/regist">注册</a>
 			</c:if>
-			<a class="largeButton dim" href="http://support.ddl.escience.cn/">了解科研在线</a>
+			<a class="largeButton dim" href="http://support.ddl.escience.cn/">了解团队文档库</a>
 		</p>
-		<h3>加入科研在线，享受更多便捷服务！</h3>
+		<h3>加入团队文档库，享受更多便捷服务！</h3>
 	</div>
 </div>

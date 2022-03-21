@@ -115,7 +115,7 @@ public class AoneMailServiceImpl implements AoneMailService {
             + "<td style=\"width:100px;text-align:right;\"><a href=\""+ BASE_URL +"\" target=\"_blank\" style=\"font-size:16px; color:#fff;text-decoration:none; padding-right:10px;\">进入主页</a></td>"
             + "</tr></table></td></tr>";
     private static final String INVITE_TEMPLATE = CONTAINER_BEGIN + BANNER + CONTENT_BEGIN + P_USER + INVITEE + "，您好" + P
-            + "用户" + INVITER + " 邀请您加入科研在线团队文档库上的团队\"" + TEAM
+            + "用户" + INVITER + " 邀请您加入团队文档库上的团队\"" + TEAM
             + "\"，您可以点击下面的链接接受邀请：<br/><a href='" + INVITE_URL + "'>"
             + INVITE_URL + "</a> （该邀请链接将于七天后过期）<br/>" + INVITE_MESSAGE
             + "<br/><br/>科研在线·团队文档库<BR><DIV>&nbsp;</DIV>"
@@ -125,7 +125,7 @@ public class AoneMailServiceImpl implements AoneMailService {
             + CONTENT_END+CONTAINER_END;
 
     private static final String REGIST_TEMPLATE = CONTAINER_BEGIN + BANNER + CONTENT_BEGIN + P_USER + USER_NAME + P
-            + "您在科研在线团队文档库上注册了一个新用户，" + "账号为：" + ACCOUNT + BR
+            + "您在团队文档库上注册了一个新用户，" + "账号为：" + ACCOUNT + BR
             + "请点下面链接以激活您的账号：" + BR + "<h3><a href='" + ACTIVATION_URL + "'>"
             + ACTIVATION_URL + "</a></h3><br/><br/>科研在线·团队文档库<BR><DIV>&nbsp;</DIV>"
             +"<DIV style=\"FONT-SIZE: 10pt; COLOR: #969696;text-align:right\">本邮件由系统发出，请勿直接回复。如有疑问，可致信"

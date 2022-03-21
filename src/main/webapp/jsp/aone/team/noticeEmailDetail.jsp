@@ -11,7 +11,7 @@
 		<li><a view="defaultTag" href="#">邮件通知-按团队设置</a></li>
 	</ul>
 </div>
-<p style="margin:30px 30px 0px 30px;font-family: \5FAE\8F6F\96C5\9ED1;">当发生以下事件，科研在线将会以邮件的方式通知您
+<p style="margin:30px 30px 0px 30px;font-family: \5FAE\8F6F\96C5\9ED1;">当发生以下事件，团队文档库将会以邮件的方式通知您
 <c:if test="${!empty showDetailNoticeEmail }">
 	<a id="cancel" onclick="javascript:window.history.back();" style="margin-left:250px">返回</a>
 </c:if>

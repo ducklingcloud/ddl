@@ -34,7 +34,7 @@ $(document).ready(function(){
 	$("#ddlNav-scene").parent("li").addClass("active");
 });
 </script>
-<title>应用场景-科研在线文档库</title>
+<title>应用场景-团队文档库</title>
 </head>
 <body class="texure">
 <jsp:include page="/ddlHeader.jsp"></jsp:include>

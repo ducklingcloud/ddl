@@ -40,7 +40,7 @@
 		$("#ddlNav-feature").parent("li").addClass("active");
 	});
 </script>
-<title>功能特性-科研在线团队文档库</title>
+<title>功能特性-团队文档库</title>
 </head>
 <body class="texure">
 	<jsp:include page="/ddlHeader.jsp"></jsp:include>

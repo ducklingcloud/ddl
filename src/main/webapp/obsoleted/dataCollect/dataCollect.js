@@ -216,7 +216,7 @@ function startMainThread() {
 			if ($('#DC_loginHref').length==0) {
 				$("body").append(
 						"<div id='DC_loginHref'>" +
-						"	<p id='DC_login_p'>您需要<a href='" + urlJumpOutLogin + "' target='_blank'>登录中国科技网通行证</a>，才可以继续使用协同数据采集器。</p>" +
+						"	<p id='DC_login_p'>您需要<a href='" + urlJumpOutLogin + "' target='_blank'>登录Duckling通行证</a>，才可以继续使用协同数据采集器。</p>" +
 						"   <div id='closeLoginBox'></div>" +
 						"</div>"
 				);

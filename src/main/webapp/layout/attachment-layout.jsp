@@ -59,7 +59,7 @@ a.btn-warning.btn-mini.downSave:hover {border-top:none;background-color:#FB8333;
 	<body>
 		<div id="macroNav" class="ui-wrap wrapperFull">
 	
-			<a title="科研在线-团队文档库" id="logo" href="${siteURL}"></a>
+			<a title="团队文档库" id="logo" href="${siteURL}"></a>
 			<div class="container">
 				<span class="fileInfo">
 					<span class="headImgContainer">

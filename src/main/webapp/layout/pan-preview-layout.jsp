@@ -68,7 +68,7 @@ span.headImgContainer span.headImg {display:block;float:left;}
 	<body>
 		<div id="macroNav" class="ui-wrap wrapperFull">
 	
-			<a title="科研在线-团队文档库" id="logo" href="${siteURL}"></a>
+			<a title="团队文档库" id="logo" href="${siteURL}"></a>
 			<div class="container">
 				<span class="fileInfo">
 					<span class="headImgContainer">

@@ -206,9 +206,9 @@ $(document).ready(function(){
 			</c:otherwise>
 	</c:choose>
 	</h1>
-	<!-- <p class="ui-text-note" style="margin-left:3em">注册为<span class="">中国科技网通行证</span></p> -->
+	<!-- <p class="ui-text-note" style="margin-left:3em">注册为<span class="">Duckling通行证</span></p> -->
 	 <div class="ui-RTCorner" style="margin-top:-1em; margin-right:10px">
-		已经注册过，或拥有中国科技网通行证？请
+		已经注册过，或拥有Duckling通行证？请
 		<vwb:Link context='login' >登录</vwb:Link>
 	</div> 
 </div>--%>

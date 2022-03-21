@@ -19,7 +19,7 @@
 	%>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link href="${contextPath}/jsp/aone/css/index.css" rel="stylesheet" type="text/css"/>
-<link href="${contextPath}/jsp/aone/css/index-may2012.css" rel="stylesheet" type="text/css"/>
+<link href="${contextPath}/jsp/aone/css/index-nov2013.css" rel="stylesheet" type="text/css"/>
 <link href="${contextPath}/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <script type="text/javascript" src="${contextPath}/scripts/jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript">
@@ -33,7 +33,7 @@ $(document).ready(function(){
 	$("#ddl-nav").remove();
 });
 </script>
-<title>科研在线文档库-标签使用帮助</title>
+<title>团队文档库-标签使用帮助</title>
 </head>
 <body class="texure">
 	<div class="ui-wrap">

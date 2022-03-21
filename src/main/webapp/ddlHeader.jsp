@@ -96,7 +96,9 @@ if ((request.getServerPort() == 80)
 	<div class="container">
 	    <div class="nav-collapse collapse">
 		<div class="brand ddl-logo" id="macroNav">
-		    <a title="团队文档库" id="logo"><b class="caret"></b></a>
+		    <a title="团队文档库" id="logo" style="pointer-events: none">
+                        <b class="caret"></b>
+                    </a>
 		</div>
 		<ul class="nav-right" id="login">
 		    <li><a href="<vwb:Link context='switchTeam' absolute='true' format='url'/>">登录</a></li>
@@ -122,7 +124,7 @@ if ((request.getServerPort() == 80)
 		    <!-- <li><a id="ddlNav-help" href="http://support.ddl.escience.cn/cases/">用户案例</a></li> -->
 		    <li><a id="ddlNav-help" href="https://github.com/ducklingcloud/ddl/wiki/DDL">项目Wiki</a></li>
 		    <!-- <li><a id="ddlNav-news" href="${contextPath}/ddlNews.jsp">动态</a></li> -->
-		    <li><a id="ddlNav-download" href="${contextPath}/download.jsp">客户端</a></li>
+		    <!-- <li><a id="ddlNav-download" href="${contextPath}/download.jsp">客户端</a></li> -->
 		    <%-- <li><a id="ddlNav-share" href="<vwb:Link context='shareFile' format='url'/>">快速分享</a></li> --%>	
 		</ul>
 	    </div>

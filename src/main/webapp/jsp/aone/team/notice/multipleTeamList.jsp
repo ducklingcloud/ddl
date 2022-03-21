@@ -88,7 +88,7 @@ $(document).ready(function(){
 			<div class="pointDown"></div>
 		</div>
 		<div id="msg-whyteam" class="msgFloat" style="left:30%; width:30em; text-indent:2em; ">
-			<p>科研在线是一个支持科研团队协作的系统，通过实现内容发布、组织、分享和沟通而展现价值。</p>
+			<p>团队文档库是一个支持团队协作的系统，通过实现内容发布、组织、分享和沟通而展现价值。</p>
 			<p>因此首先，您需要一个<strong>团队</strong>。</p>
 			<a class="ui-RTCorner msg-close">关闭</a>
 		</div>

@@ -21,11 +21,11 @@ $(document).ready(function(){
 <c:choose>
 	<c:when test="${isFirst}">
 		<div class="procedureHolder largeButtonHolder holderCenter">
-			<h3>科研在线已经为您创建了帐号，并为您创建了属于自己的个人空间。</h3>
-			<p>您可以通过邮箱激活帐号，并开始使用科研在线的完整功能。</p>
+			<h3>团队文档库已经为您创建了帐号，并为您创建了属于自己的个人空间。</h3>
+			<p>您可以通过邮箱激活帐号，并开始使用团队文档库的完整功能。</p>
 			<p>
 				<a class="largeButton" href="<vwb:Link context='switchTeam' format='url'/>">查看我的团队</a>
-				<a class="largeButton dim" href="http://support.ddl.escience.cn/">了解科研在线</a>
+				<a class="largeButton dim" href="http://support.ddl.escience.cn/">了解团队文档库</a>
 			</p>
 		</div>
 	</c:when>

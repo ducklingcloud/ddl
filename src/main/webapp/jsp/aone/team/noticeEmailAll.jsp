@@ -14,7 +14,7 @@
 	<div id="default-home-page-display" class="content-menu-body">
 		<table id="profileTable" class="ui-table-form"  style="width:575px;">
 			<tr class="titleRow">
-				<th width="520" style=" vertical-align:bottom;">当发生以下事件，科研在线将会以邮件的方式通知您</th>
+				<th width="520" style=" vertical-align:bottom;">当发生以下事件，团队文档库将会以邮件的方式通知您</th>
 				<th width="100" style="text-align:right; font-weight:normal;"><a href="<vwb:Link context='dashboard' format='url'/>?func=noticeEmail&showDetailNoticeEmail=true">按团队设置</a></th>
 			</tr>
 			<tr>

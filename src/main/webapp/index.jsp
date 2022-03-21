@@ -117,7 +117,7 @@
 	     $("#index_prev").click(function(){
 		 clearInterval(bannerAuto);
 		 var INDEX = parseInt($('div.ddl-detail:visible').attr("id").substring(15,16)) - 1;
-		 if (INDEX < 1) {INDEX = 4;}
+		 if (INDEX < 1) {INDEX = 3;}
 		 $("ul.bannerNav li").removeClass("current");
 		 $("ul.bannerNav li#" + INDEX ).addClass("current");
 		 $('div.ddl-detail:visible').fadeOut(1000);
@@ -127,7 +127,7 @@
 	     $("#index_next").click(function(){
 		 clearInterval(bannerAuto);
 		 var INDEX = parseInt($('div.ddl-detail:visible').attr("id").substring(15,16)) + 1;
-		 if (INDEX > 4) {INDEX = 1;}
+		 if (INDEX > 3) {INDEX = 1;}
 		 $("ul.bannerNav li").removeClass("current");
 		 $("ul.bannerNav li#" + INDEX ).addClass("current");
 		 $('div.ddl-detail:visible').fadeOut(1000);
@@ -149,7 +149,7 @@
 	     var bannerAuto;
 	     function setBanner() {
 		 bannerAuto = setInterval(function(){
-		     banner = (banner==4) ? 1 : (banner+1);
+		     banner = (banner>=3) ? 1 : (banner+1);
 		     switchBanner(banner);
 		 }, 10000);
 	     }
@@ -234,10 +234,10 @@
 	<div class="ddl-detail ddl-detail-second pink index-carousel" id="index-carousel-2" style="display:none">
 	    <div class="ui-wrap">
 		<div class="left-intro">
-		    <h2>安全可靠的云存储服务</h2>
-		    <p>个人空间无上限，免费创建多个团队空间。您可以放心的将文档资料上传至云端，轻松<br />
-                        管理和共享文档。注重文档协作，支持在线预览、协作编辑、版本管理、讨论和动态消<br />
-                        息，让文档协作简单高效！</p>
+		    <h2>安全方便的云存储服务</h2>
+		    <p>除了个人空间，还可以随心创建多个团队空间。您可以放心的将文档资料上传至云端，轻松<br />
+                        管理和共享文档。注重文档协作，支持在线预览、协作编辑、版本管理、讨论和动态消息，<br />
+                        让文档协作简单高效！</p>
 		    <p class="ddl-active-info"></p>
 		</div>
 	    </div>
@@ -254,33 +254,34 @@
 	    </div>
 	</div>
 	
-	<div class="ddl-detail ddl-detail-second green index-carousel" id="index-carousel-4" style="display:none">
-	    <div class="ui-wrap">
-		<div class="left-intro">
-		    <h2>多客户端随时随地移动工作</h2>
-		    <p>告别U盘吧！无论您身处何地，您都可以使用我们的网页端、PC客户端、手机端轻松<br />
-                        共享资源，快速进行协作，体验移动工作的美妙。</p>
-		    <p class="ddl-active-info"></p>
-		</div>
-	    </div>
-	</div>
+	<%-- <div class="ddl-detail ddl-detail-second green index-carousel" id="index-carousel-4" style="display:none">
+	     <div class="ui-wrap">
+	     <div class="left-intro">
+	     <h2>多客户端随时随地移动工作</h2>
+	     <p>告别U盘吧！无论您身处何地，您都可以使用我们的网页端、PC客户端、手机端轻松<br />
+             共享资源，快速进行协作，体验移动工作的美妙。</p>
+	     <p class="ddl-active-info"></p>
+	     </div>
+	     </div>
+	     </div> --%>
 	
 	<div class="ui-wrap" style="position:relative;">
 	    <div class="right-login fixed">
 		<p><a id="ddl-regist" class="login-regist" href="<%=umtPath%>/regist.jsp">创建账号</a></p>
 		<p><a class="login-regist" href="<vwb:Link context='switchTeam' absolute='true' format='url'/>">直接登录</a></p>
-		<p class="mobileLink">
-		    <a class="iphone_icon" href="http://itunes.apple.com/cn/app/ke-yan-zai-xian/id495109931"
-                       target="_blank" title="iOS版本"><span>iPhone</span></a> 
-		    <a class="android_apk" href="http://www.escience.cn/apks/ddl-latest.apk" target="_blank"
-                       title="Android版本"><span>Android</span></a>
-		</p>
+                
+		<!-- <p class="mobileLink">
+		     <a class="iphone_icon" href="http://itunes.apple.com/cn/app/ke-yan-zai-xian/id495109931"
+                     target="_blank" title="iOS版本"><span>iPhone</span></a> 
+		     <a class="android_apk" href="http://www.escience.cn/apks/ddl-latest.apk" target="_blank"
+                     title="Android版本"><span>Android</span></a>
+		     </p> -->
 	    </div>
 	    <ul class="bannerNav">
 		<li class="current" id="1">&nbsp;</li>
 		<li id="2">&nbsp;</li>
 		<li id="3">&nbsp;</li>
-		<li id="4">&nbsp;</li>
+		<!-- <li id="4">&nbsp;</li> -->
 	    </ul>
 	</div>
 	<div class="arrowBotton">
@@ -288,22 +289,22 @@
 	    <a id="index_next" style=""></a>
 	</div>
 	
-	<div class="downloadDiv">
-	    <div class="ui-wrap">
-		<div class="leftText">
-		    <h2>为你提供多种客户端，完美贴心的满足您的每一种需求，在云端极速同步~</h2>
-		    <h3>----快速、自动同步文件，让您随时随地轻松查看，实现设备之间的无限连通！</h3>
-		    <p><a class="btn btn-large btn-success" href="${contextPath}/download.jsp" target="_blank">
-                        查看更多客户端下载</a></p>
-		</div>
-		<div class="rightImg">
-		    <p style="text-align: center;">
-			<img class="mobileCode" src="images/mobileRcode3.png" />
-			<!--QR：http://update.escience.cn/download/ddl.html --><br />手机扫描下载客户端</p>
-		</div>
-		<div class="clear"></div>
-	    </div>
-	</div>
+	<%-- <div class="downloadDiv">
+	     <div class="ui-wrap">
+	     <div class="leftText">
+	     <h2>为你提供多种客户端，完美贴心的满足您的每一种需求，在云端极速同步~</h2>
+	     <h3>----快速、自动同步文件，让您随时随地轻松查看，实现设备之间的无限连通！</h3>
+	     <p><a class="btn btn-large btn-success" href="${contextPath}/download.jsp" target="_blank">
+             查看更多客户端下载</a></p>
+	     </div>
+	     <div class="rightImg">
+	     <p style="text-align: center;">
+	     <img class="mobileCode" src="images/mobileRcode3.png" />
+             <br />手机扫描下载客户端</p>
+	     </div>
+	     <div class="clear"></div>
+	     </div>
+	     </div> --%>
 	
 	<div class="featureDiv">
 	    <div class="ui-wrap">
@@ -341,7 +342,7 @@
 	    </div>
 	</div>
 	
-	<!-- <div class="chooseus">
+	<%-- <div class="chooseus">
 	     <div class="ui-wrap">
 	     <h1>为什么选择我们？</h1>
 	     <ul>
@@ -351,9 +352,9 @@
 	     <li class="chooseus chooseus-4" style="margin-right:10px">贴心的服务</li>
 	     </ul>
 	     </div>
-	     </div> -->
+	     </div>
 	
-	<!-- <div class="linkus">
+	     <div class="linkus">
 	     <div class="ui-wrap">
 	     <h1>把建议和想法告诉我们</h1>
 	     <ul>
@@ -364,7 +365,7 @@
 	     <li><a class="linkus linkus-5" style="margin-right:10px" href="http://iask.cstnet.cn/?/home/explore/category-11" target="_blank">在线问答</a></li>
 	     </ul>
 	     </div>
-	     </div> -->
+	     </div> --%>
 	
 	<div id="footer">
 	    <jsp:include page="/Version.jsp"></jsp:include>

@@ -64,7 +64,7 @@ function commonBanner() {
 	    '	<li>'+
 	    '		<a class="header-block nav" href="http://www.escience.cn/site" target="_blank">'+
 	    '			<span class="logo"></span> '+
-	    '			<span class="header-text" style="font-size:12px">中国科技网资源导航</span>'+
+	    '			<span class="header-text" style="font-size:12px">资源导航</span>'+
 	    '		</a>'+
 	    '	</li>'+
 	    '	<li>'+

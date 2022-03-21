@@ -33,7 +33,7 @@ $(document).ready(function(){
 	$("#ddl-nav").remove();
 });
 </script>
-<title>科研在线文档库-文档检索使用帮助</title>
+<title>团队文档库-文档检索使用帮助</title>
 </head>
 <body class="texure">
 	<div class="ui-wrap">

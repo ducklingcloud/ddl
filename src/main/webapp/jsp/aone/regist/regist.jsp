@@ -195,11 +195,11 @@ $(document).ready(function(){
 			</c:otherwise>
 	</c:choose>
 	</h1>
-	<p class="ui-text-note" style="margin-left:3em">注册为<span class="">中国科技网通行证</span></p>
-	<%-- <div class="ui-RTCorner" style="margin-top:-1em; margin-right:10px">
-		已经注册过，或拥有中国科技网通行证？请
-		<vwb:Link context='login' >登录</vwb:Link>
-	</div> --%>
+
+        <p class="ui-text-note" style="margin-left:3em">
+            <!-- 注册为<span class="">Duckling通行证</span> -->
+            已有账号？请 <vwb:Link context='login'>登录</vwb:Link>
+        </p>
 </div>
 
 <div id="mask_config_1" class="intro_mask"></div>
@@ -281,10 +281,6 @@ $(document).ready(function(){
 					<c:otherwise>
 						<form:input  path="uid" class="ui-textInput-long" />
 						<br/><span id="uidHint" class="ui-text-note">请使用有效的邮箱注册</span>
-						<!--<br/> <span class="ui-text-note">注册激活、系统通知、团队活动通知等都将发送到该邮箱</span> -->
-						<%-- 屏蔽escience邮箱注册链接
-						  &nbsp&nbsp<span><a id="userEscienceEmail" href="<vwb:Link context='escienceRegist' format='url'/>">使用escience邮箱</a></span> 
-						--%>
 					</c:otherwise>
 				</c:choose>
 				</td>
@@ -356,64 +352,49 @@ $(document).ready(function(){
 	<!-- <div class="toolHolder holderMerge"></div> -->
 	</div>
 	
-	<div id="content-side" class="cst-rightside" style="width:347px">
-		<p class="header">
-			已有中国科技网通行证？
-			<br></br>
-			<c:choose>
-				<c:when test="${not empty umtLoginURL }">
-					<a href="${umtLoginURL }" style="text-decoration:none">
-						 <span class="btn btn-success">
-					 	 立即登录
-						 </span>
-					 </a>
-				</c:when>
-				<c:otherwise>
-					<a href="${requestScheme}://passport.escience.cn/login">
-						 <span class="btn btn-success">
-					 	 立即登录
-						 </span>
-					 </a>
-				</c:otherwise>
-			</c:choose>
-		</p>
-		<p class="sub-header">
-			第三方账号登录：
-			<a href="${requestScheme}://passport.escience.cn/thirdParty/login?type=weibo&WebServerURL=http%3A%2F%2Fddl.escience.cn%2F"><img src="${requestScheme}://passport.escience.cn/images/login/weibo.png" alt="用新浪微博登录" /></a>
-		</p>
-		<h3 class="cst-define">什么是中国科技网通行证？</h3>
-		<p class="sub-gray-text">中国科技网通行证是基于中国科技网的统一账号系统，可以用于登录各类科研应用服务，包括：
-		<a href="${requestScheme}://www.escience.cn" target="_blank">科研在线</a>、
-		<a href="${requestScheme}://ddl.escience.cn" target="_blank">文档库</a>、
-		<a href="http://csp.escience.cn" target="_blank">国际会议服务平台</a>、
-		<a href="${requestScheme}://www.escience.cn/people" target="_blank">科研主页</a>、
-		<a href="${requestScheme}://mail.escience.cn" target="_blank">中科院邮件系统</a>等，以及今后将逐步扩展的更多应用服务。</p>
-		<p><strong>原<span class="duckling-logo"></span>Duckling通行证升级为中国科技网通行证。</strong></p>
-		<p><strong>中科院邮件系统账号可作为中国科技网通行证账号直接
-			<c:choose>
-				<c:when test="${not empty umtLoginURL }">
-					<a href="${umtLoginURL }">登录</a> 
-				</c:when>
-				<c:otherwise>
-					<a href="${requestScheme}://passport.escience.cn/login">登录</a> 
-				</c:otherwise>
-			</c:choose>
-		 	。</strong></p>
-	</div>
+	<!-- <div id="content-side" class="cst-rightside" style="width:347px">
+	     <p class="header">
+	     已有通行证？
+	     <br></br>
+	     <c:choose>
+	     <c:when test="${not empty umtLoginURL }">
+	     <a href="${umtLoginURL }" style="text-decoration:none">
+	     <span class="btn btn-success">
+	     立即登录
+	     </span>
+	     </a>
+	     </c:when>
+	     <c:otherwise>
+	     <a href="${requestScheme}://passport.escience.cn/login">
+	     <span class="btn btn-success">
+	     立即登录
+	     </span>
+	     </a>
+	     </c:otherwise>
+	     </c:choose>
+	     </p>
+	     <p class="sub-header">
+	     第三方账号登录：
+	     <a href="${requestScheme}://passport.escience.cn/thirdParty/login?type=weibo&WebServerURL=http%3A%2F%2Fddl.escience.cn%2F"><img src="${requestScheme}://passport.escience.cn/images/login/weibo.png" alt="用新浪微博登录" /></a>
+	     </p>
+	     <h3 class="cst-define">什么是通行证？</h3>
+	     <p class="sub-gray-text">通行证是……</p>
+	     </div> -->
 	
 	<div class="ui-clear"></div>
 </div>
+
 <div class="ui-dialog" id="existerUser">
-		<span class="ui-dialog-x"></span>
-		<p class="ui-dialog-title">
-			
-		</p>
-		<div class="ui-dialog-body">
-			<p id="interest-tips">
-				
-			</p>
-		</div>
-		<div class="ui-dialog-control">
-			<input style="display:none" type="button" value="确定" class="ui-dialog-close refresh-button" />
-		</div>
-	</div>
+    <span class="ui-dialog-x"></span>
+    <p class="ui-dialog-title">
+	
+    </p>
+    <div class="ui-dialog-body">
+	<p id="interest-tips">
+	    
+	</p>
+    </div>
+    <div class="ui-dialog-control">
+	<input style="display:none" type="button" value="确定" class="ui-dialog-close refresh-button" />
+    </div>
+</div>
