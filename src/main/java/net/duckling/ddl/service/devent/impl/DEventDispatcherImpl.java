@@ -29,8 +29,8 @@ import net.duckling.ddl.service.devent.DEvent;
 import net.duckling.ddl.service.devent.DEventBody;
 import net.duckling.ddl.service.devent.EventDispatcher;
 import net.duckling.ddl.service.resource.Resource;
-import net.duckling.ddl.service.task.Task;
-import net.duckling.ddl.service.task.TaskTaker;
+// import net.duckling.ddl.service.task.Task;
+// import net.duckling.ddl.service.task.TaskTaker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -212,6 +212,7 @@ public class DEventDispatcherImpl implements EventDispatcher {
      * @param action 执行动作
      * @param noticeType 任务类型
      * */
+    /*
     public void sendTaskActionEvent(int tid,List<TaskTaker> takers,Task task,String action,String actor, String noticeType){
         StringBuffer recipients=new StringBuffer();
         for(TaskTaker taker:takers){
@@ -224,6 +225,7 @@ public class DEventDispatcherImpl implements EventDispatcher {
         DEventBody body=initEventBody(tid,actor,task.getTaskId(),noticeType,task.getTitle(),0,action,null,recipients.toString());
         sendEvent(tid,body,TASK_EVENT);
     }
+    */
 
     @Override
     public void sendFolderRecommendEvent(int tid, int fid,String title,String author,int version,String message,String recipients,String emailSendType) {

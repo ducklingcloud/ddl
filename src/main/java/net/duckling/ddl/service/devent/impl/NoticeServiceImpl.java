@@ -36,7 +36,7 @@ import net.duckling.ddl.service.devent.NoticeRule;
 import net.duckling.ddl.service.mobile.impl.MobileNoticeQueue;
 import net.duckling.ddl.service.resource.PageRender;
 import net.duckling.ddl.service.resource.ResourceOperateService;
-import net.duckling.ddl.service.task.TaskService;
+// import net.duckling.ddl.service.task.TaskService;
 import net.duckling.ddl.service.team.TeamPreferenceService;
 import net.duckling.ddl.service.team.TeamPreferences;
 import net.duckling.ddl.service.url.URLGenerator;
@@ -177,6 +177,10 @@ public class NoticeServiceImpl implements INoticeService {
                     .getURL(UrlPatterns.USER, ext.getId() + "", null);
         }
         // add by lvly@2012-6-25
+        /*
+         * Disabled the 'task' feature <2022-03-22 Tue>
+         */
+        /*
         if (DEntity.DTASK_SHARE.equals(t.getType())) {
             String param = null;
             if (DAction.OVER_TASK.equals(e.getOperation())) {
@@ -199,6 +203,7 @@ public class NoticeServiceImpl implements INoticeService {
                     + TaskService.TYPE_INDEPENDENT
                     + StringUtils.trimToEmpty(param);
         }
+        */
 
         return null;
     }

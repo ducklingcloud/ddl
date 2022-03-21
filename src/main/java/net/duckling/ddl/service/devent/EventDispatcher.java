@@ -21,8 +21,8 @@ package net.duckling.ddl.service.devent;
 import java.util.List;
 
 import net.duckling.ddl.service.resource.Resource;
-import net.duckling.ddl.service.task.Task;
-import net.duckling.ddl.service.task.TaskTaker;
+// import net.duckling.ddl.service.task.Task;
+// import net.duckling.ddl.service.task.TaskTaker;
 
 public interface EventDispatcher {
     void sendFileDeleteEvent(int tid, Resource file, String actor);
@@ -95,8 +95,9 @@ public interface EventDispatcher {
      *            任务类型
      * @deprecated
      * */
-    void sendTaskActionEvent(int tid, List<TaskTaker> takers, Task task,
-                             String action, String actor, String noticeType);
+    // Disabled 'task' <2022-03-22 Tue>
+    // void sendTaskActionEvent(int tid, List<TaskTaker> takers, Task task,
+    //                          String action, String actor, String noticeType);
 
     void sendFolderRecommendEvent(int tid, int rid, String title, String currUser, int lastVersion, String remark,
                                   String combineRecipients, String sendType);
