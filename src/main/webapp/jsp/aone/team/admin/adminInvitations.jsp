@@ -420,7 +420,10 @@ $(document).ready(function(){
 	<div id="opareteUserMessage" class="alert alert-success" style="display: none;z-index:9999"></div>
 	<form id="inviteForm" action="<vwb:Link context='configTeam'  jsp='${currTeam.name}' format='url'/>" method="POST">
 		<input type="hidden" value="sendTeamInvite" name="func"/>
-		<h4 class="invite">通过邮箱添加新成员</h4>
+		<h4 class="invite">
+                    添加新成员
+                    <a href="${contextPath}/ddlInviteHelp.jsp" target="_blank" class="ui-iconButton help inviteHelp"></a>
+                </h4>
 		<div id="nav" class="nav">
 
 		<ul class="nav-list">

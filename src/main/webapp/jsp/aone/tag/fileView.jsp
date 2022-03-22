@@ -749,7 +749,7 @@ $("#showHotCode").live('click',function(){
 	<div class="modal-body" style="height: 345px;">
 		<div id="teamSelWrapper" style="display:none;">
 			<select id="teamSel">
-				<option value="pan" id="teamSel_pan" >个人空间同步版</option>
+			    <!-- <option value="pan" id="teamSel_pan" >个人空间同步版</option> -->
 				<option value="${myTeamCode}" id="teamSel_${myTeamId }" <c:if test="${teamType eq 'myspace'}">selected="selected"</c:if>>个人空间</option>
 				<c:forEach items="${myTeamList}" var="item">
 					<option value="${item.name }" id="teamSel_${item.id }" <c:if test="${teamType eq item.name}">selected="selected"</c:if>><c:out value="${item.displayName}"/></option>

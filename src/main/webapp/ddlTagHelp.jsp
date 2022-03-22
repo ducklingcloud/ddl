@@ -71,16 +71,16 @@ $(document).ready(function(){
 				<p>点击图1-1所示的钳子按钮，进入标签管理界面。在建立标签及使用标签集对其归类整理后，可以达到如下效果。每个标签只能属于一个标签集。</p>
 				<p><img src="${contextPath}/jsp/aone/images/TH_tagShow.png"/></p>
 				
-				<!--h2>使用技巧</h2>
+				<h2>使用技巧</h2>
 				<p>除了“归类整理”的作用，标签还可以帮助您快速检索文档。选中一个标签（如下图中“论文”），将显示所有贴有该标签的文档。点击其它标签右侧的加号，进行多选。</p>
 				<p><img src="${contextPath}/jsp/aone/images/TH_tagTrick.png"/></p>
-				<p>通过标签组合，可以更准确的定位文档，效果如下图。您还可以点击右上角的按钮，将该标签组合保存到快捷导航栏中，作为您私人的常用检索条件。</p>
-				<p><img src="${contextPath}/jsp/aone/images/TH_tagTrick2.png"/></p-->
+				<!-- <p>通过标签组合，可以更准确的定位文档，效果如下图。您还可以点击右上角的按钮，将该标签组合保存到快捷导航栏中，作为您私人的常用检索条件。</p>
+				     <p><img src="${contextPath}/jsp/aone/images/TH_tagTrick2.png"/></p> -->
 			</div>
 		
 		</div>
 		
-		<jsp:include page="/help/footer.jsp"></jsp:include>
+		<%-- <jsp:include page="/help/footer.jsp"></jsp:include> --%>
 		<div id="footer">
 			<jsp:include page="/Version.jsp"></jsp:include>
 		</div> 
