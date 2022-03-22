@@ -464,7 +464,7 @@
             <artifactId>maven-war-plugin</artifactId>
             <version>3.3.2</version>
             <configuration>
-              <warSourceExcludes>obsoleted/**</warSourceExcludes>
+              <warSourceExcludes>obsolete/**</warSourceExcludes>
               <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
               <archive>
                 <manifest>
