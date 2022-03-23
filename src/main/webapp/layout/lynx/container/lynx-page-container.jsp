@@ -484,12 +484,13 @@ $(document).ready(function(){
 		    		<a class="editPage"><i class="icon-edit"></i> 编辑</a>
 	    		</c:if>
 	    	</div>
-	    	<div class="sideOper">
-	    		<a id ="shareSub" ><i class="icon-share"></i> 分享</a>
-	    	</div>
-	    	<div class="sideOper">
-	    		<a href="<vwb:Link context='f' page='${rid}' format='url'/>?func=exportPdf"><span class="icon-pdf"></span> 导出</a>
-	    	</div>
+                <!-- Disabled <2022-03-23 Wed> -->
+                <!-- <div class="sideOper">
+                     <a id ="shareSub" ><i class="icon-share"></i> 分享</a>
+                     </div>
+                     <div class="sideOper">
+                     <a href="<vwb:Link context='f' page='${rid}' format='url'/>?func=exportPdf"><span class="icon-pdf"></span> 导出</a>
+                     </div> -->
 	    	<c:if test="${resource.status!='unpublish' }">
 		    	<div class="sideOper"><a id="fileMoveSub" href="javascript:void(0);"><i class="icon-move"></i> 移动</a></div>
 		    	<div class="sideOper"><a id="fileCopySub" href="javascript:void(0);"><i class="icon-copy"></i> 复制</a></div>
