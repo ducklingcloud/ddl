@@ -132,7 +132,7 @@ public class CLBFileStorage implements FileStorage {
         // if (FileTypeUtils.isClbDealImage(info.title)) {
         //     resizeImage(docid,"1");
         // }
-        
+
         return docid;
     }
 

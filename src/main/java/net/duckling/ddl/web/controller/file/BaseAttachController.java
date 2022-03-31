@@ -208,8 +208,10 @@ public class BaseAttachController extends BaseController{
         downloadLog(VWBSession.getCurrentUid(req), fileName, docID, version);
     }
 
-    private void downloadFileContentFromCLB(HttpServletRequest req, HttpServletResponse resp, int docID, String version,
-                                            String fileName, boolean useCache) throws IOException {
+    private void downloadFileContentFromCLB(
+        HttpServletRequest req, HttpServletResponse resp,
+        int docID, String version, String fileName, boolean useCache)
+            throws IOException {
         int age = useCache ? CACHABLE_MAX_AGE : ATTACH_MAX_AGE;
         try {
             MetaInfo meta = getResourceMeta(docID, version);
@@ -219,7 +221,8 @@ public class BaseAttachController extends BaseController{
                 meta.setFilename(fileName);
             }
             if (NginxAgent.isNginxMode()) {
-                String url = resourceOperateService.getDirectURL(docID, version, false);
+                String url = resourceOperateService.getDirectURL(
+                    docID, version, false);
                 NginxAgent.setRedirectUrl(req, resp, fileName, meta.size, url);
                 return;
             }
@@ -227,6 +230,10 @@ public class BaseAttachController extends BaseController{
             if (isModified(meta, req)) {
                 setModifiedHeader(age, meta, resp);
                 AttSaver fs = new AttSaver(resp, req, meta.getFilename());
+
+                // Fix range_download <2022-04-01 Fri>
+                fs.setLength(meta.getSize());
+
                 resourceOperateService.getContent(docID, version, fs);
             } else {
                 sendNotModifiedHeader(age, meta, resp);
