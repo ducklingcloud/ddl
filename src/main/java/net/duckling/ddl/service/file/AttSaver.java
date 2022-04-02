@@ -68,15 +68,11 @@ public class AttSaver implements DFileSaver {
             m_res.setContentType(mimetype);
             setContentLength();
 
-            // TODO: error when multiple "."
-            String suffix = filename.substring(
-                filename.indexOf(".") + 1, filename.length());
+            String suffix = MimeType.getSuffix(filename);
             m_res.setContentType(MimeType.getContentType(suffix));
 
-            if (filename.indexOf("swf") != -1) {
+            if (! "swf".equals(suffix)) {
                 // flash不能设置filename,否则无法播放
-                m_res.setContentType("application/x-shockwave-flash");
-            } else {
                 m_res.setHeader("Content-Disposition",
                                 Browser.encodeFileName(m_req.getHeader("USER-AGENT"),
                                                        filename));

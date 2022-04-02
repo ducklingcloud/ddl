@@ -257,19 +257,20 @@ public class LynxDDocController extends BaseController{
         }
         return result;
     }
+    
     /**
      * 文件浏览处理
-     * @param request
-     * @param response
-     * @param resource
-     * @return
      */
-    private ModelAndView dealFile(HttpServletRequest request, HttpServletResponse response, Resource resource) {
-        VWBContext context = VWBContext.createContext(request, UrlPatterns.T_FILE, resource.getRid(), LynxConstants.TYPE_FILE);
+    private ModelAndView dealFile(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  Resource resource) {
+        VWBContext context = VWBContext.createContext(
+            request, UrlPatterns.T_FILE, resource.getRid(), LynxConstants.TYPE_FILE);
         String uid = context.getCurrentUID();
         int tid = context.getSite().getId();
         int rid = resource.getRid();
-        ModelAndView mv = layout(ELayout.LYNX_MAIN, context, "/jsp/aone/tag/fileView.jsp");
+        ModelAndView mv = layout(ELayout.LYNX_MAIN, context,
+                                 "/jsp/aone/tag/fileView.jsp");
         int version = getCurrentVersion(request);
         FileVersion currentVersion;
         if (version > 0) {
@@ -284,31 +285,49 @@ public class LynxDDocController extends BaseController{
         } else {
             mv.addObject("starmark", false);
         }
-        mv.addObject("editorName", aoneUserService.getUserNameByID(currentVersion.getEditor()));
-        mv.addObject("deleteFileURL",urlGenerator.getURL(tid,UrlPatterns.T_FILE, rid + "", "func=moveToTrash&bid=0"));
-        mv.addObject("validateURL", urlGenerator.getURL(tid,UrlPatterns.T_FILE, rid + "", "func=removeValidate"));
+        mv.addObject("editorName",
+                     aoneUserService.getUserNameByID(currentVersion.getEditor()));
+        mv.addObject("deleteFileURL",
+                     urlGenerator.getURL(tid, UrlPatterns.T_FILE, rid +"",
+                                         "func=moveToTrash&bid=0"));
+        mv.addObject("validateURL",
+                     urlGenerator.getURL(tid, UrlPatterns.T_FILE, rid +"",
+                                         "func=removeValidate"));
         mv.addObject("cid",  currentVersion.getClbId());
-        mv.addObject("copyLog", copyService.getCopyedDisplay(resource.getRid(), currentVersion.getVersion()));
+        mv.addObject("copyLog",
+                     copyService.getCopyedDisplay(resource.getRid(),
+                                                  currentVersion.getVersion()));
         mv.addObject("curVersion", currentVersion);
         mv.addObject("latestVersion", currentVersion.getVersion());
-        mv.addObject("sizeShort", FileSizeUtils.getFileSize(currentVersion.getSize()));
-        mv.addObject("fileExtend", getFileExtend(currentVersion.getTitle(), currentVersion.getSize()));
-        request.setAttribute(LynxConstants.PAGE_TITLE, currentVersion.getTitle());
+        mv.addObject("sizeShort",
+                     FileSizeUtils.getFileSize(currentVersion.getSize()));
+        mv.addObject("fileExtend",
+                     getFileExtend(currentVersion.getTitle(),
+                                   currentVersion.getSize()));
+        request.setAttribute(LynxConstants.PAGE_TITLE,
+                             currentVersion.getTitle());
         String downType = "type=doc";
         if (version > 0) {
-            downType+="&version=" + version;
+            downType += "&version="+ version;
         }
-        mv.addObject("downloadURL", urlGenerator.getURL(tid, "download", Integer.toString(rid), downType));
+        mv.addObject("downloadURL",
+                     urlGenerator.getURL(tid, "download",
+                                         Integer.toString(rid), downType));
         // Load Version List
-        List<FileVersion> versionList = fileVersionService.getFileVersions(rid, tid);
+        List<FileVersion> versionList =
+                fileVersionService.getFileVersions(rid, tid);
         mv.addObject("versionList", versionList);
+
         loadRefViewList(mv, rid, tid, currentVersion.getTitle());
         gridService.clickItem(uid, tid, rid, LynxConstants.TYPE_FILE);
         String strFilename = currentVersion.getTitle();
         int index = strFilename.lastIndexOf('.');
         fileOnlineShow(mv, currentVersion, strFilename, index);
-        browseLogService.resourceVisited(tid, rid, uid, context.getCurrentUserName(), LynxConstants.TYPE_FILE);
-        String enableDConvert = context.getContainer().getProperty(KeyConstants.DCONVERT_SERVICE_ENABLE);
+        browseLogService.resourceVisited(tid, rid, uid,
+                                         context.getCurrentUserName(),
+                                         LynxConstants.TYPE_FILE);
+        String enableDConvert = context.getContainer().getProperty(
+            KeyConstants.DCONVERT_SERVICE_ENABLE);
         mv.addObject("enableDConvert", Boolean.valueOf(enableDConvert));
         mv.addObject("uid", context.getCurrentUID());
         return mv;
@@ -365,14 +384,21 @@ public class LynxDDocController extends BaseController{
         }
         return version;
     }
+    
     private String getFileExtend(String filename, long size) {
         if (MimeType.isImage(filename)) {
             return "IMAGE";
+        } else if (MimeType.isAudio(filename)) {
+            return "AUDIO";
+        } else if (MimeType.isVideo(filename)) {
+            return "VIDEO";
         } else if (PlainTextHelper.isSupported(MimeType.getSuffix(filename))
-                   && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {// 文件超过给定大小时不直接显示
+                   // 文件超过给定大小时不直接显示
+                   && size < LynxConstants.MAXFILESIZE_CODEREVIEW) {
             return "TEXT";
+        } else {
+            return "FILE";
         }
-        return "FILE";
     }
 
     /**

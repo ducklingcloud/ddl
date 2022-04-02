@@ -439,7 +439,7 @@
     <div id="content-title">
 	<input type="hidden" value="${uid }" id="currentUid"/>
 	<c:choose>
-	    <c:when test="${fileExtend eq 'FILE' or fileExtend eq 'TEXT'}">
+	    <c:when test="${fileExtend != 'IMAGE'}">
 		<h1 class="fileName">
 		    <div class="title-right" style="width:190px">
 			<a id="showHotCode" class="hotCode smallBtn" rel="popover" data-placement="top" >热度  <span class="count"><vwb:VisitCount rid="${rid }" /></span> <span id="hotCode"></span></a>
@@ -485,7 +485,7 @@
 	<div class="ui-clear"></div>
 
 	<%-- 是否是可以预览的文件 --%>
-	<c:set var="isPreview"  value="${pdfstatus == 'success' || pdfstatus == 'original_pdf'||pdfstatus=='convert_success_and_has_more'}" />
+	<c:set var="isPreview"  value="${pdfstatus == 'success' || pdfstatus == 'original_pdf' || pdfstatus=='convert_success_and_has_more'}" />
 
 	<div id="version">
 	    <a href="<vwb:Link context='userguide'  format='url'/>?func=redirect&uid=${curVersion.editor}" class="uidToolTip" rel="tooltip" data-placement="bottom" data-original-title="${curVersion.editor}" target="_blank">${editorName}</a> |上传于 <fmt:formatDate value="${curVersion.editTime}" type="both" dateStyle="medium" />
@@ -498,7 +498,7 @@
 		    | <a>恢复版本</a>
 		</span>
 	    </c:if>
-	    <c:if test="${fileExtend != 'TEXT' && fileExtend != 'FILE'}">
+	    <c:if test="${fileExtend == 'IMAGE'}">
 		|&nbsp;<a target="_blank" href="<vwb:Link context='originalImage' page='${resource.rid }' format='url'/>?version=${curVersion.version}">查看原图</a>
 	    </c:if>
 	    <c:if test="${!empty copyLog}">
@@ -515,7 +515,7 @@
 
     <div class="ui-clear"></div>
     <c:choose>
-	<c:when test="${fileExtend eq 'FILE'}">
+	<c:when test="${fileExtend == 'FILE'}">
 	    <div id="fileInfo">
 		<table class="fileContainer" style="border:none;">
 		    <tr>
@@ -523,7 +523,6 @@
 			    <th><div class="fileIcon <vwb:FileExtend fileName='${curVersion.title}'/>"></div></th>
 			</c:if>
 			<td>
-
 			    <!-- <p class="fileNote"></p> -->
 			    <div class="largeButtonHolder">
 				<c:if test="${!isPreview }">
@@ -584,9 +583,21 @@
 		</table>
 	    </div>
 	</c:when>
-	<c:when test="${fileExtend eq 'TEXT'}">
+	<c:when test="${fileExtend == 'TEXT'}">
 	    <div id="codeMode">
 		<pre id="directShowFile"><vwb:DirectShowFile rid="${resource.rid }" version="${curVersion.version }"/></pre>
+	    </div>
+	</c:when>
+	<c:when test="${fileExtend == 'AUDIO'}">
+            <!-- TODO: audioMode -->
+	    <div id="audioMode" style="margin: 2em">
+                    <audio controls src="${downloadURL}"></audio>
+	    </div>
+	</c:when>
+	<c:when test="${fileExtend == 'VIDEO'}">
+            <!-- TODO: videoMode -->
+	    <div id="videoMode" style="margin: 2em">
+                <video controls width="640" src="${downloadURL}"></video>
 	    </div>
 	</c:when>
 	<c:otherwise>

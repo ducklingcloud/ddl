@@ -16,47 +16,66 @@
  * limitations under the License.
  *
  */
+
 package net.duckling.ddl.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public final class MimeType {
-    private MimeType(){}
-    public static String getContentType(String suffix){
-        String newPost=suffix.toLowerCase();
-        String type=mappings.get(newPost);
-        if (type==null){
-            type="application/octet-stream";
-        }
 
+    private MimeType(){}
+
+    public static String getContentType(String suffix) {
+        String newPost = suffix.toLowerCase();
+        String type = mappings.get(newPost);
+        if (type == null) {
+            type = "application/octet-stream";
+        }
         return type;
     }
 
-    public static String getSuffix(String fname){
+    public static String getSuffix(String fname) {
         String suffix="";
-        int dotPos=fname.lastIndexOf('.');
-        if (dotPos!=-1){
-            suffix= fname.substring(dotPos+1);
+        int dotPos = fname.lastIndexOf('.');
+        if (dotPos != -1) {
+            suffix = fname.substring(dotPos + 1);
         }
         return suffix;
     }
-    public static boolean isImage(String filename){
-        String suffix = getSuffix(filename);
-        String contentType=getContentType(suffix);
-        return contentType.startsWith("image");
+
+    public static boolean isImage(String filename) {
+        return isType("image", filename);
     }
+
+    public static boolean isAudio(String filename) {
+        return isType("audio", filename);
+    }
+
+    public static boolean isVideo(String filename) {
+        return isType("video", filename);
+    }
+
     public static boolean isFlash(String filename){
         String suffix = getSuffix(filename);
-        String contentType=getContentType(suffix);
+        String contentType = getContentType(suffix);
         return contentType.endsWith("x-shockwave-flash");
     }
+
+    private static boolean isType(String type, String filename) {
+        String suffix = getSuffix(filename);
+        String contentType = getContentType(suffix);
+        return contentType.startsWith(type);
+    }
+
     private static Map<String,String> mappings;
-    static{
+    static {
         mappings=new HashMap<String,String>();
+
         mappings.put("html", "text/html");
         mappings.put("txt", "text/plain");
         mappings.put("xml", "text/xml");
+
         //Office
         mappings.put("doc", "application/msword");
         mappings.put("dot", "application/msword");
@@ -66,8 +85,6 @@ public final class MimeType {
         mappings.put("dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template");
         mappings.put("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
         mappings.put("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-
-
 
         //Acrobat
         mappings.put("pdf", "application/pdf");
@@ -87,7 +104,10 @@ public final class MimeType {
         mappings.put("avi", "video/x-msvideo");
         mappings.put("mpg", "video/mpeg");
         mappings.put("mpeg", "video/mpeg");
-        mappings.put("mp3", "audio/x-mpeg");
+        mappings.put("mp4", "video/mp4");
+        mappings.put("webm", "video/webm");
+        mappings.put("mp3", "audio/mpeg");
+        mappings.put("wav", "audio/wav");
         mappings.put("rm", "application/vnd.rn-realmedia");
         mappings.put("rmvb", "application/vnd.rn-realmedia");
 
