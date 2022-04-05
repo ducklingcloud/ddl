@@ -27,11 +27,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import net.duckling.ddl.service.file.TransferSaver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import net.duckling.common.util.CommonUtils;
 import net.duckling.ddl.common.Site;
 import net.duckling.ddl.common.VWBContext;
 import net.duckling.ddl.common.VWBSession;
@@ -46,11 +47,11 @@ import net.duckling.ddl.service.resource.IResourceService;
 import net.duckling.ddl.service.resource.Resource;
 import net.duckling.ddl.service.resource.ResourceOperateService;
 import net.duckling.ddl.util.Browser;
+import net.duckling.ddl.util.MimeType;
 import net.duckling.ddl.web.bean.ClbUrlTypeBean;
 import net.duckling.ddl.web.bean.NginxAgent;
 import net.duckling.ddl.web.controller.BaseController;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -136,11 +137,13 @@ public class BaseAttachController extends BaseController{
         downloadLog(VWBSession.getCurrentUid(req),fileName,docID,version);
     }
 
-    protected void getContent(HttpServletRequest req, HttpServletResponse res, int docID, String version,String fileName,
+    protected void getContent(HttpServletRequest req, HttpServletResponse res,
+                              int docID, String version,String fileName,
                               boolean useCache) throws IOException {
-        downloadFileContentFromCLB(req, res, docID, version,fileName, useCache);
+        downloadFileContentFromCLB(req, res, docID, version, fileName, useCache);
         downloadLog(VWBSession.getCurrentUid(req),fileName,docID,version);
     }
+    
     protected void getPictureContext(HttpServletRequest req,HttpServletResponse resp,FileVersion f,boolean useCache) throws IOException{
         String type = req.getParameter("imageType");
         downloadPictureContentFromCLB(req, resp, f, type, useCache);
@@ -162,7 +165,8 @@ public class BaseAttachController extends BaseController{
                     ClbUrlTypeBean url = resourceOperateService
                             .getImageDirevtURL(f.getClbId(),
                                                clbVersion + "", type);
-                    if (url == null || StringUtils.isEmpty(url.getUrl())) {
+                    if (url == null ||
+                        CommonUtils.isNullOrEmpty(url.getUrl())) {
                         resp.setStatus(404);
                     } else {
                         if (!url.isStatus()) {
@@ -220,21 +224,63 @@ public class BaseAttachController extends BaseController{
             } else {
                 meta.setFilename(fileName);
             }
+            long length = meta.getSize();
+            
             if (NginxAgent.isNginxMode()) {
                 String url = resourceOperateService.getDirectURL(
                     docID, version, false);
-                NginxAgent.setRedirectUrl(req, resp, fileName, meta.size, url);
+                NginxAgent.setRedirectUrl(req, resp, fileName, length,
+                                          url);
                 return;
             }
+            
             // 附件在浏览器上保存的最长时间
             if (isModified(meta, req)) {
                 setModifiedHeader(age, meta, resp);
-                AttSaver fs = new AttSaver(resp, req, meta.getFilename());
 
-                // Fix range_download <2022-04-01 Fri>
-                fs.setLength(meta.getSize());
+                // Need this?
+                // filename = java.net.URLDecoder.decode(filename, "UTF-8"); 
+                String suffix = MimeType.getSuffix(fileName);
+                resp.setContentType(MimeType.getContentType(suffix));
+                if (! "swf".equals(suffix)) {
+                    // flash不能设置filename,否则无法播放
+                    resp.setHeader("Content-Disposition",
+                                   Browser.encodeFileName(
+                                       req.getHeader("USER-AGENT"),
+                                       fileName));
+                }
+                TransferSaver fs = new TransferSaver(
+                    resp.getOutputStream());
 
-                resourceOperateService.getContent(docID, version, fs);
+                String range = req.getHeader("range");
+                if (CommonUtils.isNullOrBlank(range)) {
+                    resp.setHeader("Content-Length", String.valueOf(length));
+                    resourceOperateService.getContent(docID, version, fs);
+                } else {
+                    // http range, supports two types:
+                    // 1) 100-200
+                    // 2) 500-
+                    String v[] = range.toLowerCase().substring(
+                        "bytes ".length()).split("-", 2);
+                    if (v.length < 2) {
+                        LOGGER.error("Request Header Range is invalid -- "+
+                                     range);
+                        return;
+                    }
+                    long position = Long.valueOf(v[0]);
+                    long count = CommonUtils.isNullOrBlank(v[1]) ?
+                            length - position :
+                            Long.valueOf(v[1]) - position + 1;
+                    // TODO: "bytes="? check RFC
+                    String contentRange = "bytes "+ position +"-"+
+                            (position + count - 1) +"/"+ length;
+                    resp.setHeader("Content-Range", contentRange);
+                    resp.setHeader("Content-Length",
+                                   String.valueOf(count));
+                    resp.setStatus(206);
+                    resourceOperateService.getContentRange(
+                        docID, position, count, fs);
+                }
             } else {
                 sendNotModifiedHeader(age, meta, resp);
             }

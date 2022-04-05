@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.duckling.ddl.service.file.TransferSaver;
 
 import net.duckling.ddl.constant.LynxConstants;
 import net.duckling.ddl.constant.ParamConstants;
@@ -653,6 +654,13 @@ public class ResourceOperateServiceImpl implements ResourceOperateService {
         }
         storage.getContent(docid, Integer.parseInt(version), fs);
     }
+    
+    @Override
+    public void getContentRange(int docid, long position, long count,
+                                TransferSaver fs) {
+        storage.getContentRange(docid, position, count, fs);
+    }
+    
     @Override
     public List<Resource> getDDoc(int tid, List<Integer> rids) {
         return resourceService.getDDoc(tid, rids);

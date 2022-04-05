@@ -64,8 +64,10 @@ public class AttSaver implements DFileSaver {
         }
         try {
             filename = java.net.URLDecoder.decode(filename, "UTF-8");
-            String mimetype = getMimeType(m_req, filename);
-            m_res.setContentType(mimetype);
+
+            /* This gets MIME from the servlet container. Why duplicate? */
+            // String mimetype = getMimeType(m_req, filename);
+            // m_res.setContentType(mimetype);
             setContentLength();
 
             String suffix = MimeType.getSuffix(filename);

@@ -29,6 +29,7 @@ import net.duckling.ddl.service.draft.Draft;
 import net.duckling.ddl.service.file.AttSaver;
 import net.duckling.ddl.service.file.DFileSaver;
 import net.duckling.ddl.service.file.FileVersion;
+import net.duckling.ddl.service.file.TransferSaver;
 import net.duckling.ddl.web.bean.ClbUrlTypeBean;
 
 public interface ResourceOperateService {
@@ -227,8 +228,17 @@ public interface ResourceOperateService {
      * @param version
      */
     void sendPdfTransformEvent(int clbId, String version);
+
     void getContent(int docid, String version, DFileSaver fs);
     void getContent(int docid, AttSaver fs);
+
+    /**
+     * Http range download
+     * @date <2022-04-04 Mon>
+     */
+    void getContentRange(int docid, long position, long count,
+                         TransferSaver fs);
+
     /**
      * 根据类型获取图片状态，如果图片不合规格，返回not_ready并重新压缩
      * @param clbId

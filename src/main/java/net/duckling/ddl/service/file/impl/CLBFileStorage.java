@@ -163,6 +163,16 @@ public class CLBFileStorage implements FileStorage {
         }
     }
 
+    // Supports http range <2022-04-04 Mon>
+    @Override
+    public void getContentRange(int docid, long position, long count,
+                                DFileSaver fs) {
+        DocumentService dService =
+                CLBServiceFactory.getDocumentService(conn);
+        FileSaverBridge bridge = new FileSaverBridge(fs);
+        dService.getContentRange(docid, position, count, bridge);
+    }
+
     public void getPdfContent(int docid, int version, DFileSaver fs) {
         IPdfService pdfService = CLBServiceFactory.getPdfServie(conn);
         FileSaverBridge bridge = new FileSaverBridge(fs);

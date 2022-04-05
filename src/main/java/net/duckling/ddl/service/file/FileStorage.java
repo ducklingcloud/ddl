@@ -85,6 +85,12 @@ public interface FileStorage {
     void getContent(int docid, int version, DFileSaver fs);
 
     /**
+     * Range download
+     */
+    void getContentRange(int docid, long position, long count,
+                         DFileSaver fs);
+
+    /**
      * 获取文件的元信息
      * @param docid     文件的ID号
      * @return          文件的元信息（文档ID，文档的最新版本，更新时间等）
