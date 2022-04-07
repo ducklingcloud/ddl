@@ -26,8 +26,10 @@ public class TransferSaver implements DFileSaver {
     }
 
     @Override
-    public void save(String filename, InputStream in) {
-        try {
+    public void save(String filename, InputStream _in) {
+        // Two streams (in/out) will be closed by try-with-resource
+        try (InputStream in = _in;
+             OutputStream out = this.out) {
             byte buf[] = new byte[4096];
             int read;
             while ((read = in.read(buf, 0, 4096)) != -1) {

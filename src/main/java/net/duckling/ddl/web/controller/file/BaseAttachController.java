@@ -254,8 +254,13 @@ public class BaseAttachController extends BaseController{
 
                 String range = req.getHeader("range");
                 if (CommonUtils.isNullOrBlank(range)) {
-                    resp.setHeader("Content-Length", String.valueOf(length));
+                    resp.setContentLengthLong(length);
+
+                    long start = System.currentTimeMillis();
                     resourceOperateService.getContent(docID, version, fs);
+                    long end = System.currentTimeMillis();
+                    LOGGER.info("getContent "+ fileName +", len "+
+                                length +", took "+ (end - start) +"ms");
                 } else {
                     // http range, supports two types:
                     // 1) 100-200
@@ -275,16 +280,20 @@ public class BaseAttachController extends BaseController{
                     String contentRange = "bytes "+ position +"-"+
                             (position + count - 1) +"/"+ length;
                     resp.setHeader("Content-Range", contentRange);
-                    resp.setHeader("Content-Length",
-                                   String.valueOf(count));
+                    resp.setContentLengthLong(count);
                     resp.setStatus(206);
+
+                    long start = System.currentTimeMillis();
                     resourceOperateService.getContentRange(
                         docID, position, count, fs);
+                    long end = System.currentTimeMillis();
+                    LOGGER.info("getContentRange "+ fileName +", "+
+                                contentRange +", took "+ (end - start) +"ms");
                 }
             } else {
                 sendNotModifiedHeader(age, meta, resp);
             }
-            LOGGER.info(meta);
+            // LOGGER.info(meta);
         } catch (Exception e) {
             dealException(e, docID, useCache, resp);
         }
